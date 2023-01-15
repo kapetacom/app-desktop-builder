@@ -9,12 +9,13 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import {app, BrowserWindow, shell, ipcMain, Tray, Menu, MenuItemConstructorOptions} from 'electron';
+import {app, BrowserWindow, shell, Tray, Menu, MenuItemConstructorOptions} from 'electron';
 import {autoUpdater} from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import {resolveHtmlPath} from './util';
 import MenuItem = Electron.MenuItem;
+import LocalClusterService from '@blockware/local-cluster-service';
 
 class AppUpdater {
   constructor() {
@@ -24,14 +25,9 @@ class AppUpdater {
   }
 }
 
+let localClusterInfo:{host:string, port:number} | null = null;
 let mainWindow: BrowserWindow | null = null;
 let tray: Tray | null = null;
-
-ipcMain.on('ipc-example', async (event, arg) => {
-  const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
-  console.log(msgTemplate(arg));
-  event.reply('ipc-example', msgTemplate('pong'));
-});
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -66,11 +62,17 @@ const installExtensions = async () => {
     .catch(console.log);
 };
 
-const ensureWindow = () => {
+const ensureWindow = async () => {
   if (mainWindow === null) {
-    createWindow();
+    await createWindow();
   } else {
     mainWindow.focus();
+  }
+}
+
+const ensureLocalCluster = async () => {
+  if (!localClusterInfo) {
+    localClusterInfo = await LocalClusterService.start();
   }
 }
 
@@ -79,8 +81,10 @@ const refreshTray = () => {
     tray = new Tray(getAssetPath('icons/16x16.png'));
     tray.setToolTip('Blockware Desktop')
   }
+
+  const isRunning = LocalClusterService.isRunning();
   const menuItems: Array<(MenuItemConstructorOptions) | (MenuItem)> = [
-    {label: 'Blockware is running', enabled: false},
+    {label: isRunning ? `Local cluster: http://${localClusterInfo?.host}:${localClusterInfo?.port}` : 'Local cluster is stopped', enabled: false},
     {type: 'separator'},
     {
       label: 'Dashboard',
@@ -105,6 +109,22 @@ const refreshTray = () => {
     },
     {type: 'separator'},
     {
+      label: isRunning ? 'Stop local cluster' : 'Start local cluster', click: async () => {
+        if (isRunning) {
+          localClusterInfo = null;
+          if (mainWindow) {
+            mainWindow.close()
+          }
+          await LocalClusterService.stop();
+        } else {
+          await ensureLocalCluster();
+        }
+
+        refreshTray();
+      }
+    },
+    {type: 'separator'},
+    {
       label: 'Open Blockware Cloud', click: () => {
         shell.openExternal(
           'https://app.blockware.com'
@@ -123,7 +143,6 @@ const showDock = async () => {
     return;
   }
   app.dock.setIcon(getAssetPath('icon.png'));
-  app.dock.setBadge('Blockware');
   await app.dock.show();
 };
 
@@ -140,6 +159,8 @@ const createWindow = async () => {
     await installExtensions();
   }
 
+  await ensureLocalCluster();
+  await showDock();
   mainWindow = new BrowserWindow({
     show: false,
     icon: getAssetPath('icon.png'),
@@ -153,26 +174,18 @@ const createWindow = async () => {
   });
 
   refreshTray();
-  await hideDock();
 
   mainWindow.maximize();
-  await mainWindow.loadURL(resolveHtmlPath('index.html'));
+  const clusterService = encodeURIComponent(`http://${localClusterInfo?.host}:${localClusterInfo?.port}`);
+  await mainWindow.loadURL(resolveHtmlPath(`index.html`) + `#cluster_service=${clusterService}`);
 
   mainWindow.on('show', showDock);
 
-  mainWindow.on('ready-to-show', () => {
+  mainWindow.on('ready-to-show', async () => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
     }
-
-    if (process.env.START_MINIMIZED) {
-      mainWindow.minimize();
-      hideDock();
-    } else {
-      mainWindow.show();
-      showDock();
-    }
-
+    mainWindow.show();
   });
 
   mainWindow.on('closed', () => {
@@ -201,16 +214,15 @@ const createWindow = async () => {
  */
 
 app.on('window-all-closed', () => {
-  //Do not close app when windows close. We have the tray still
+  //Do not close app when windows close. We still have the tray
 });
 
+app.on('quit', () => {
+  LocalClusterService.stop();
+})
 app
   .whenReady()
-  .then(() => {
-    hideDock();
-    createWindow();
-    refreshTray();
-
-    app.on('activate', ensureWindow);
-  })
+  .then(() => createWindow())
+  .then(() => refreshTray())
+  .then(() => app.on('activate', ensureWindow))
   .catch(console.log);
