@@ -110,7 +110,9 @@ const refreshTray = () => {
           'https://app.blockware.com'
         );
       }
-    }
+    },
+    {type: 'separator'},
+    { label: 'Quit Blockware', click: () => app.quit()}
   ]
   const contextMenu = Menu.buildFromTemplate(menuItems);
   tray.setContextMenu(contextMenu);
@@ -145,6 +147,8 @@ const createWindow = async () => {
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')
         : path.join(__dirname, '../../.erb/dll/preload.js'),
+      nodeIntegration: false,
+      contextIsolation: true
     },
   });
 
@@ -152,7 +156,7 @@ const createWindow = async () => {
   await hideDock();
 
   mainWindow.maximize();
-  mainWindow.loadURL(resolveHtmlPath('index.html'));
+  await mainWindow.loadURL(resolveHtmlPath('index.html'));
 
   mainWindow.on('show', showDock);
 
@@ -197,11 +201,7 @@ const createWindow = async () => {
  */
 
 app.on('window-all-closed', () => {
-  // Respect the OSX convention of having the application in memory even
-  // after all windows have been closed
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
+  //Do not close app when windows close. We have the tray still
 });
 
 app

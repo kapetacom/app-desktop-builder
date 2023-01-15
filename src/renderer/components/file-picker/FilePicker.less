@@ -1,0 +1,160 @@
+@import '../../styles/values.less';
+@import '../../styles/functions.less';
+
+.file-picker-container {
+    display: block;
+    background-color: @gray-light;
+    padding:15px;
+    position: relative;
+    width:320px;
+
+    .mouse-catcher {
+        cursor: pointer;
+        position: absolute;
+        top:0;
+        left:0;
+        right:0;
+        bottom:0;
+        z-index: 10;
+    }
+
+    .instructions {
+        .transition();
+        display: block;
+        position: relative;
+        height: 120px;
+        box-sizing: border-box;
+        border: 1px solid transparent;
+
+        .main-icon {
+            .transition(transform 100ms, font-size 100ms;);
+            position: absolute;
+            top:0;
+            left: 132px;
+            width: 56px;
+            text-align: center;
+            font-size: 44px;
+            display: block;
+            line-height: 65px;
+        }
+
+        .description {
+            .transition(transform 100ms, right 100ms;);
+            box-sizing: border-box;
+            display: block;
+            position: absolute;
+            top:65px;
+            left:0;
+            width:320px;
+            text-align: center;
+            font-size: 12px;
+            line-height: 44px;
+        }
+    }
+
+    .files,
+    .files li {
+        list-style: none;
+        padding:0;
+        margin:0;
+    }
+
+    .files {
+        max-height: 250px;
+        overflow-y: auto;
+        display: block;
+        margin:10px 0;
+        background-color: @gray-xlight;
+        padding: 5px 10px;
+        box-sizing: border-box;
+
+        li {
+            display: flex;
+            flex-direction: row;
+            width:100%;
+            padding:5px 0;
+            line-height: 20px;
+            border-bottom: 1px solid @gray;
+
+            &:last-child {
+                border-bottom: 0;
+            }
+
+            .info {
+                flex:1;
+                padding-right: 5px;
+                overflow:hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+
+                .name {
+                    font-size: 13px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                .type,.size {
+                    font-size: 10px;
+                }
+
+                .label {
+                    font-weight: bold;
+                    display: inline-block;
+                    padding:0 5px;
+
+                }
+
+                .type {
+                    display: block;
+                }
+            }
+
+            .actions {
+                width: 20px;
+                vertical-align: top;
+            }
+        }
+    }
+
+    input[type=file] {
+        display: none;
+    }
+
+    &.selection {
+        .instructions {
+            height: 46px;
+            background-color: @gray-xlight;
+
+            .description {
+                .transform(translate(10px,-63px));
+                right: auto;
+            }
+
+            .main-icon {
+                .transform(translate(-132px,-10px));
+                font-size: 18px;
+            }
+        }
+    }
+
+    &.file-over-page {
+        .instructions {
+            border-color: @green-xxlight;
+        }
+    }
+
+    &.file-over {
+        .instructions {
+            background-color: @green-xxlight;
+            color: white;
+        }
+    }
+
+    &.invalid {
+        .instructions {
+            background-color: @red-light;
+            border-color: @red-light;
+            color: white;
+        }
+    }
+}

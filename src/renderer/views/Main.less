@@ -1,0 +1,109 @@
+@import "~@blockware/ui-web-components/styles/values.less";
+@import "~@blockware/ui-web-components/styles/functions.less";
+
+.main-container {
+  height: 100%;
+  width: 100%;
+
+  .react-tabs {
+    border: none;
+    background-color: #E7E2DD;
+    color: #C0BAB7;
+    height: 100%;
+    width: 100%;
+
+    .react-tabs__tab-panel {
+      box-sizing: border-box;
+      padding-top: 35px;
+      height: 100%;
+      width: 100%;
+      overflow: auto;
+    }
+
+    > .react-tabs__tab-list {
+      margin: 0;
+      border: none;
+      position: fixed;
+      height: 35px;
+      width: 100vw;
+      z-index: 100000;
+      background-color: @gray-background;
+    }
+
+    .react-tabs__tab {
+      .drop-shadow(#000);
+      cursor: pointer;
+      border: none;
+      border-right: 2px solid #ddd;
+
+      .separator {
+        border-right: 1px solid #ccc;
+        i {
+          margin-right: 10px;
+        }
+      }
+
+      .close-plan {
+        font-size: 12px;
+        padding: 5px;
+        font-weight: 700;
+        border-radius: 3px;
+        color: @gray-xdark;
+        opacity: 0;
+      }
+
+      &:hover {
+
+        //skew outwards on hover
+        .close-plan {
+          opacity: 1;
+
+          &:hover {
+            background-color: @gray;
+          }
+        }
+      }
+    }
+
+    .react-tabs__tab:focus {
+      border: none;
+      box-shadow: 0 -4px 5px #00000030;
+    }
+
+    .react-tabs__tab--selected {
+      i {
+        border-right: none;
+        margin-left: 0px;
+      }
+
+      background-color: @bw-planner-background;
+      box-shadow: 0 -5px 6px #00000040;
+      border: none;
+
+      .close-plan {
+        font-size: 12px;
+        padding: 5px;
+        font-weight: 700;
+        border-radius: 3px;
+        color: @gray-xdark;
+        opacity: 1;
+
+        &:hover {
+          background-color: @gray;
+        }
+      }
+
+      &:after {
+        content: "";
+        background-color: transparent;
+      }
+    }
+
+    .add-plan {
+      color: @gray-xdark;
+      font-size: 16px;
+      font-weight: 400;
+    }
+  }
+
+}

@@ -1,0 +1,29 @@
+@import "~@blockware/ui-web-components/styles/values";
+@import "~@blockware/ui-web-components/styles/functions";
+
+
+.block-form{
+    .form-container > .form-element-container:first-of-type {
+        margin-top: -10px;
+        margin-bottom: 30px;
+    }
+
+    .tab-page.current {
+        padding: 0;
+        background-color: @btn-text-w;
+
+        >.form-element-container {
+            margin: 25px auto;
+            width: calc(100% - 103px);
+        }
+
+        >.form-element-container:first-of-type {
+            margin-top: 45px;
+        }
+
+        >.form-element-container:last-of-type {
+            margin-bottom: 30px;
+        }
+    }
+}
+

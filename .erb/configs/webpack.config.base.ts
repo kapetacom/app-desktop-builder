@@ -15,8 +15,8 @@ const configuration: webpack.Configuration = {
   module: {
     rules: [
       {
-        test: /\.[jt]sx?$/,
-        exclude: /node_modules/,
+        test: /\.tsx?$/,
+        //exclude: /node_modules/,
         use: {
           loader: 'ts-loader',
           options: {
@@ -43,10 +43,21 @@ const configuration: webpack.Configuration = {
    * Determine the array of extensions that should be used to resolve modules.
    */
   resolve: {
-    extensions: ['.js', '.jsx', '.json', '.ts', '.tsx'],
+    extensions: [
+      '.js',
+      '.jsx',
+      '.json',
+      '.ts',
+      '.tsx',
+      '.css',
+      '.less',
+      '.yml',
+      '.yaml'
+    ],
     modules: [webpackPaths.srcPath, 'node_modules'],
     // There is no need to add aliases here, the paths in tsconfig get mirrored
     plugins: [new TsconfigPathsPlugins()],
+    fallback: { "path": require.resolve("path-browserify") }
   },
 
   plugins: [
