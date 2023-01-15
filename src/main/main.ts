@@ -9,11 +9,12 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, BrowserWindow, shell, ipcMain } from 'electron';
-import { autoUpdater } from 'electron-updater';
+import {app, BrowserWindow, shell, ipcMain, Tray, Menu, MenuItemConstructorOptions} from 'electron';
+import {autoUpdater} from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
-import { resolveHtmlPath } from './util';
+import {resolveHtmlPath} from './util';
+import MenuItem = Electron.MenuItem;
 
 class AppUpdater {
   constructor() {
@@ -24,6 +25,7 @@ class AppUpdater {
 }
 
 let mainWindow: BrowserWindow | null = null;
+let tray: Tray | null = null;
 
 ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
@@ -43,6 +45,14 @@ if (isDebug) {
   require('electron-debug')();
 }
 
+const RESOURCES_PATH = app.isPackaged
+  ? path.join(process.resourcesPath, 'assets')
+  : path.join(__dirname, '../../assets');
+
+const getAssetPath = (...paths: string[]): string => {
+  return path.join(RESOURCES_PATH, ...paths);
+};
+
 const installExtensions = async () => {
   const installer = require('electron-devtools-installer');
   const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
@@ -56,23 +66,80 @@ const installExtensions = async () => {
     .catch(console.log);
 };
 
+const ensureWindow = () => {
+  if (mainWindow === null) {
+    createWindow();
+  } else {
+    mainWindow.focus();
+  }
+}
+
+const refreshTray = () => {
+  if (!tray) {
+    tray = new Tray(getAssetPath('icons/16x16.png'));
+    tray.setToolTip('Blockware Desktop')
+  }
+  const menuItems: Array<(MenuItemConstructorOptions) | (MenuItem)> = [
+    {label: 'Blockware is running', enabled: false},
+    {type: 'separator'},
+    {
+      label: 'Dashboard',
+      click: ensureWindow
+    },
+    {
+      type: 'submenu',
+      label: 'hofmeister',
+      submenu: [
+        {
+          label: 'Account Settings',
+          click: () => {
+            shell.openExternal(
+              'https://app.blockware.com/hofmeister/iam'
+            );
+          }
+        },
+        {
+          label: 'Sign out'
+        }
+      ]
+    },
+    {type: 'separator'},
+    {
+      label: 'Open Blockware Cloud', click: () => {
+        shell.openExternal(
+          'https://app.blockware.com'
+        );
+      }
+    }
+  ]
+  const contextMenu = Menu.buildFromTemplate(menuItems);
+  tray.setContextMenu(contextMenu);
+}
+
+const showDock = async () => {
+  if (!app.dock) {
+    return;
+  }
+  app.dock.setIcon(getAssetPath('icon.png'));
+  app.dock.setBadge('Blockware');
+  await app.dock.show();
+};
+
+const hideDock = () => {
+  if (!app.dock) {
+    return;
+  }
+
+  app.dock.hide();
+}
+
 const createWindow = async () => {
   if (isDebug) {
     await installExtensions();
   }
 
-  const RESOURCES_PATH = app.isPackaged
-    ? path.join(process.resourcesPath, 'assets')
-    : path.join(__dirname, '../../assets');
-
-  const getAssetPath = (...paths: string[]): string => {
-    return path.join(RESOURCES_PATH, ...paths);
-  };
-
   mainWindow = new BrowserWindow({
     show: false,
-    width: 1024,
-    height: 728,
     icon: getAssetPath('icon.png'),
     webPreferences: {
       preload: app.isPackaged
@@ -81,21 +148,33 @@ const createWindow = async () => {
     },
   });
 
+  refreshTray();
+  await hideDock();
+
+  mainWindow.maximize();
   mainWindow.loadURL(resolveHtmlPath('index.html'));
+
+  mainWindow.on('show', showDock);
 
   mainWindow.on('ready-to-show', () => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
     }
+
     if (process.env.START_MINIMIZED) {
       mainWindow.minimize();
+      hideDock();
     } else {
       mainWindow.show();
+      showDock();
     }
+
   });
 
   mainWindow.on('closed', () => {
     mainWindow = null;
+    hideDock();
+    refreshTray();
   });
 
   const menuBuilder = new MenuBuilder(mainWindow);
@@ -104,13 +183,14 @@ const createWindow = async () => {
   // Open urls in the user's browser
   mainWindow.webContents.setWindowOpenHandler((edata) => {
     shell.openExternal(edata.url);
-    return { action: 'deny' };
+    return {action: 'deny'};
   });
 
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
   new AppUpdater();
 };
+
 
 /**
  * Add event listeners...
@@ -127,11 +207,10 @@ app.on('window-all-closed', () => {
 app
   .whenReady()
   .then(() => {
+    hideDock();
     createWindow();
-    app.on('activate', () => {
-      // On macOS it's common to re-create a window in the app when the
-      // dock icon is clicked and there are no other windows open.
-      if (mainWindow === null) createWindow();
-    });
+    refreshTray();
+
+    app.on('activate', ensureWindow);
   })
   .catch(console.log);

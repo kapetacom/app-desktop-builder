@@ -54,17 +54,17 @@ export default class MenuBuilder {
 
   buildDarwinTemplate(): MenuItemConstructorOptions[] {
     const subMenuAbout: DarwinMenuItemConstructorOptions = {
-      label: 'Electron',
+      label: 'Blockware',
       submenu: [
         {
-          label: 'About ElectronReact',
+          label: 'About Blockware',
           selector: 'orderFrontStandardAboutPanel:',
         },
         { type: 'separator' },
         { label: 'Services', submenu: [] },
         { type: 'separator' },
         {
-          label: 'Hide ElectronReact',
+          label: 'Hide Blockware',
           accelerator: 'Command+H',
           selector: 'hide:',
         },
@@ -157,29 +157,17 @@ export default class MenuBuilder {
         {
           label: 'Learn More',
           click() {
-            shell.openExternal('https://electronjs.org');
+            shell.openExternal('https://blockware.com');
           },
         },
         {
           label: 'Documentation',
           click() {
             shell.openExternal(
-              'https://github.com/electron/electron/tree/main/docs#readme'
+              'https://docs.blockware.com'
             );
           },
-        },
-        {
-          label: 'Community Discussions',
-          click() {
-            shell.openExternal('https://www.electronjs.org/community');
-          },
-        },
-        {
-          label: 'Search Issues',
-          click() {
-            shell.openExternal('https://github.com/electron/electron/issues');
-          },
-        },
+        }
       ],
     };
 
@@ -258,29 +246,17 @@ export default class MenuBuilder {
           {
             label: 'Learn More',
             click() {
-              shell.openExternal('https://electronjs.org');
+              shell.openExternal('https://blockware.com');
             },
           },
           {
             label: 'Documentation',
             click() {
               shell.openExternal(
-                'https://github.com/electron/electron/tree/main/docs#readme'
+                'https://docs.blockware.com'
               );
             },
-          },
-          {
-            label: 'Community Discussions',
-            click() {
-              shell.openExternal('https://www.electronjs.org/community');
-            },
-          },
-          {
-            label: 'Search Issues',
-            click() {
-              shell.openExternal('https://github.com/electron/electron/issues');
-            },
-          },
+          }
         ],
       },
     ];

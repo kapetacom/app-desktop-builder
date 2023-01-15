@@ -20,8 +20,8 @@ if (process.env.NODE_ENV === 'production') {
 const port = process.env.PORT || 1212;
 const manifest = path.resolve(webpackPaths.dllPath, 'renderer.json');
 const skipDLLs =
-  module.parent?.filename.includes('webpack.config.renderer.dev.dll') ||
-  module.parent?.filename.includes('webpack.config.eslint');
+  require.main?.filename.includes('webpack.config.renderer.dev.dll') ||
+  require.main?.filename.includes('webpack.config.eslint');
 
 /**
  * Warn if the DLL is not built
@@ -45,16 +45,18 @@ const configuration: webpack.Configuration = {
 
   target: ['web', 'electron-renderer'],
 
-  entry: [
-    `webpack-dev-server/client?http://localhost:${port}/dist`,
-    'webpack/hot/only-dev-server',
-    path.join(webpackPaths.srcRendererPath, 'index.tsx'),
-  ],
+  entry: {
+    index: [
+      `webpack-dev-server/client?http://localhost:${port}/dist`,
+      'webpack/hot/only-dev-server',
+      path.join(webpackPaths.srcRendererPath, 'index.tsx'),
+    ]
+  },
 
   output: {
     path: webpackPaths.distRendererPath,
     publicPath: '/',
-    filename: 'renderer.dev.js',
+    filename: '[name].dev.js',
     library: {
       type: 'umd',
     },
@@ -151,6 +153,7 @@ const configuration: webpack.Configuration = {
 
     new HtmlWebpackPlugin({
       filename: path.join('index.html'),
+      chunks: ['index'],
       template: path.join(webpackPaths.srcRendererPath, 'index.ejs'),
       minify: {
         collapseWhitespace: true,
