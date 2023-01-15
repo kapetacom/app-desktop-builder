@@ -65,6 +65,20 @@ const configuration: webpack.Configuration = {
   module: {
     rules: [
       {
+        test: /\.tsx?$/,
+        //exclude: /node_modules/,
+        use: {
+          loader: 'ts-loader',
+          options: {
+            // Remove this line to enable type checking in webpack builds
+            transpileOnly: true,
+            compilerOptions: {
+              module: 'esnext',
+            },
+          },
+        },
+      },
+      {
         test: /\.s?(c|a)ss$/,
         use: [
           'style-loader',

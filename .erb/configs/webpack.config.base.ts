@@ -12,24 +12,6 @@ const configuration: webpack.Configuration = {
 
   stats: 'errors-only',
 
-  module: {
-    rules: [
-      {
-        test: /\.tsx?$/,
-        //exclude: /node_modules/,
-        use: {
-          loader: 'ts-loader',
-          options: {
-            // Remove this line to enable type checking in webpack builds
-            transpileOnly: true,
-            compilerOptions: {
-              module: 'esnext',
-            },
-          },
-        },
-      },
-    ],
-  },
 
   output: {
     path: webpackPaths.srcPath,

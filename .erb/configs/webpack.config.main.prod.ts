@@ -35,6 +35,26 @@ const configuration: webpack.Configuration = {
     },
   },
 
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        exclude: /node_modules/,
+        include: /src\/main\//,
+        use: {
+          loader: 'ts-loader',
+          options: {
+            // Remove this line to enable type checking in webpack builds
+            transpileOnly: true,
+            compilerOptions: {
+              module: 'esnext',
+            },
+          },
+        },
+      },
+    ],
+  },
+
   optimization: {
     minimizer: [
       new TerserPlugin({

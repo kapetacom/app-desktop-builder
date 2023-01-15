@@ -1,9 +1,14 @@
 {
-  "name": "@blockware/ui-web-desktop",
+  "name": "@blockware/app-desktop-builder",
   "description": "Blockware Desktop Application",
   "version": "0.0.1",
   "homepage": "https://blockware.com",
   "license": "MIT",
+  "author": {
+    "url": "https://blockware.com",
+    "email": "info@blockware.com",
+    "name": "Blockware Inc."
+  },
   "main": "./src/main/main.ts",
   "scripts": {
     "build": "concurrently \"npm run build:main\" \"npm run build:renderer\"",

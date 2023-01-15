@@ -3,6 +3,11 @@
   "version": "0.0.1",
   "description": "Blockware Desktop Application",
   "homepage": "https://blockware.com",
+  "author": {
+    "url": "https://blockware.com",
+    "email": "info@blockware.com",
+    "name": "Blockware Inc."
+  },
   "main": "./dist/main/main.js",
   "license": "MIT",
   "scripts": {
@@ -10,5 +15,8 @@
     "postinstall": "npm run rebuild && npm run link-modules",
     "link-modules": "node -r ts-node/register ../../.erb/scripts/link-modules.ts"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@blockware/local-cluster-config": "<2",
+    "@blockware/local-cluster-service": "<2"
+  }
 }
