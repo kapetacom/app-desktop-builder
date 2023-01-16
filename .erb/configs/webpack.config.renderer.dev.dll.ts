@@ -14,6 +14,9 @@ checkNodeEnv('development');
 
 const dist = webpackPaths.dllPath;
 
+const entries = Object.keys(dependencies || {});
+
+
 const configuration: webpack.Configuration = {
   context: webpackPaths.rootPath,
 
@@ -31,7 +34,7 @@ const configuration: webpack.Configuration = {
   module: require('./webpack.config.renderer.dev').default.module,
 
   entry: {
-    renderer: Object.keys(dependencies || {}),
+    renderer: entries,
   },
 
   output: {
