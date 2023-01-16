@@ -14,6 +14,11 @@
         }
       };
     </script>
+    <style>
+        body,html {
+          background-color: #F5F1EE;
+        }
+    </style>
     <!-- <script src="http://127.0.0.1:35100/providers/all.js" type="application/javascript"></script>-->
     <script>
       if (location.hash && location.hash.length > 1) {
@@ -27,7 +32,7 @@
 <script src="${clusterBase}/providers/all.js" type="application/javascript"></scri`+`pt>
     <meta
             http-equiv="Content-Security-Policy"
-            content="script-src 'self' https://cdn.jsdelivr.net ${clusterBase}"
+            content="script-src 'self' https://cdn.jsdelivr.net ${clusterBase};worker-src blob: 'self' https://cdn.jsdelivr.net ${clusterBase}"
     />
     `)
         }

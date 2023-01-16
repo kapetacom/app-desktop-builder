@@ -4,6 +4,7 @@
 .main-container {
   height: 100%;
   width: 100%;
+  background-color: @bw-planner-background;
 
   .react-tabs {
     border: none;
@@ -70,13 +71,16 @@
       box-shadow: 0 -4px 5px #00000030;
     }
 
+    .react-tabs__tab--selected,
+    .react-tabs__tab-panel--selected {
+      background-color: @bw-planner-background;
+    }
+
     .react-tabs__tab--selected {
       i {
         border-right: none;
         margin-left: 0px;
       }
-
-      background-color: @bw-planner-background;
       box-shadow: 0 -5px 6px #00000040;
       border: none;
 
