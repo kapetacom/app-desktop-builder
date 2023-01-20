@@ -102,6 +102,7 @@
     "@blockware/ui-web-plan-editor": "<2",
     "@blockware/ui-web-types": "<2",
     "@blockware/ui-web-utils": "<2",
+    "@blockware/nodejs-api-client": "<2",
     "@electron/notarize": "^1.2.3",
     "@electron/rebuild": "^3.2.10",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",

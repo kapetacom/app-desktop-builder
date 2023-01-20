@@ -9,13 +9,16 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import {app, BrowserWindow, shell, Tray, Menu, MenuItemConstructorOptions} from 'electron';
+import {app, BrowserWindow, shell, Tray, Menu, MenuItemConstructorOptions, dialog} from 'electron';
 import {autoUpdater} from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import {resolveHtmlPath} from './util';
 import MenuItem = Electron.MenuItem;
 import LocalClusterService from '@blockware/local-cluster-service';
+import {BlockwareAPI} from '@blockware/nodejs-api-client';
+
+type TrayMenuItem = (MenuItemConstructorOptions) | (MenuItem);
 
 class AppUpdater {
   constructor() {
@@ -25,7 +28,7 @@ class AppUpdater {
   }
 }
 
-let localClusterInfo:{host:string, port:number} | null = null;
+let localClusterInfo: { host: string, port: number } | null = null;
 let mainWindow: BrowserWindow | null = null;
 let tray: Tray | null = null;
 
@@ -76,37 +79,119 @@ const ensureLocalCluster = async () => {
   }
 }
 
-const refreshTray = () => {
+const refreshTray = async () => {
   if (!tray) {
     tray = new Tray(getAssetPath('icons/16x16.png'));
     tray.setToolTip('Blockware Desktop')
   }
 
+
+  const api = new BlockwareAPI();
+
+  let userMenu: TrayMenuItem[];
+
+  try {
+    const identity:any = await api.getCurrentIdentity();
+    const context:any = await api.getCurrentContext();
+    const memberships:any[] = await api.getCurrentMemberships();
+    userMenu = [
+      {
+        type: 'submenu',
+        label: identity.name || identity.handle,
+        submenu: [
+          {
+            label: 'Account Settings',
+            click: () => {
+              shell.openExternal(
+                `${api.getBaseUrl()}/${identity.handle}/iam`
+              );
+            }
+          },
+          {
+            label: 'Sign out',
+            click: async () => {
+              api.removeToken();
+              await refreshTray();
+            }
+          }
+        ]
+      }
+    ];
+
+    if (memberships.length > 0) {
+      const contextMenus:MenuItemConstructorOptions[] = [];
+      const membershipMenu:TrayMenuItem = {
+        type: 'submenu',
+        label: context ? context.identity.name || context.identity.handle : '<no context>',
+        submenu: contextMenus
+      };
+
+      memberships.forEach(membership => {
+        const isCurrent = !!(context && context.identity.id === membership.identity.id);
+        if (isCurrent) {
+          return;
+        }
+
+        let label = membership.identity.name;
+        contextMenus.push({
+          label,
+          click: async () => {
+            await api.switchContextTo(membership.identity.handle);
+            await refreshTray();
+          }
+        });
+      });
+
+      if (context) {
+        contextMenus.push({
+          label: 'Remove context',
+          click: async () => {
+            await api.removeContext();
+            await refreshTray();
+          }
+        });
+      }
+
+
+      userMenu.push(membershipMenu);
+    }
+  } catch (e) {
+    userMenu = [{
+      label: 'Sign in',
+      click: async () => {
+        try {
+          await api.doDeviceAuthentication({
+            onVerificationCode: (url:string) => {
+              shell.openExternal(url);
+            }
+          });
+          await refreshTray();
+          const identity = await api.getCurrentIdentity();
+          dialog.showMessageBoxSync({
+            type: 'info',
+            message: `You were signed in as ${identity.name || identity.handle}!`,
+            title: 'Signed in!'
+          });
+        } catch (e:any) {
+          //Failed to complete
+          dialog.showErrorBox('Failed to authenticate', e.message || e.error || 'Unknown error');
+        }
+      }
+    }];
+  }
+
   const isRunning = LocalClusterService.isRunning();
-  const menuItems: Array<(MenuItemConstructorOptions) | (MenuItem)> = [
-    {label: isRunning ? `Local cluster: http://${localClusterInfo?.host}:${localClusterInfo?.port}` : 'Local cluster is stopped', enabled: false},
+  const menuItems: Array<TrayMenuItem> = [
+    {
+      label: isRunning ? `Local cluster: http://${localClusterInfo?.host}:${localClusterInfo?.port}` : 'Local cluster is stopped',
+      enabled: false
+    },
     {type: 'separator'},
     {
       label: 'Dashboard',
       click: ensureWindow
     },
-    {
-      type: 'submenu',
-      label: 'hofmeister',
-      submenu: [
-        {
-          label: 'Account Settings',
-          click: () => {
-            shell.openExternal(
-              'https://app.blockware.com/hofmeister/iam'
-            );
-          }
-        },
-        {
-          label: 'Sign out'
-        }
-      ]
-    },
+    ...userMenu,
     {type: 'separator'},
     {
       label: isRunning ? 'Stop local cluster' : 'Start local cluster', click: async () => {
@@ -120,7 +205,7 @@ const refreshTray = () => {
           await ensureLocalCluster();
         }
 
-        refreshTray();
+        await refreshTray();
       }
     },
     {type: 'separator'},
@@ -132,7 +217,7 @@ const refreshTray = () => {
       }
     },
     {type: 'separator'},
-    { label: 'Quit Blockware', click: () => app.quit()}
+    {label: 'Quit Blockware', click: () => app.quit()}
   ]
   const contextMenu = Menu.buildFromTemplate(menuItems);
   tray.setContextMenu(contextMenu);
@@ -173,7 +258,7 @@ const createWindow = async () => {
     },
   });
 
-  refreshTray();
+  await refreshTray();
 
   mainWindow.maximize();
   const clusterService = encodeURIComponent(`http://${localClusterInfo?.host}:${localClusterInfo?.port}`);
@@ -188,10 +273,10 @@ const createWindow = async () => {
     mainWindow.show();
   });
 
-  mainWindow.on('closed', () => {
+  mainWindow.on('closed', async () => {
     mainWindow = null;
     hideDock();
-    refreshTray();
+    await refreshTray();
   });
 
   const menuBuilder = new MenuBuilder(mainWindow);
