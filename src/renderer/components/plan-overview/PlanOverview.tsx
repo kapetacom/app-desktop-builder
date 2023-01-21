@@ -39,7 +39,7 @@ interface PlanOverviewWrapperState {
 @observer
 export default class PlanOverview extends Component<PlanOverviewWrapperProps, PlanOverviewWrapperState>{
 
-    private containerSize: { width: number, height: number };
+    private readonly containerSize: { width: number, height: number };
 
     @observable
     private open:boolean = true;

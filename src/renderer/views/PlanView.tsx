@@ -68,7 +68,7 @@ export const PlanView = (props: PlanViewProps) => {
         <div className={'plan-view'}>
           <Planner plan={model}
                    systemId={props.planRef}
-                   blockStore={() => <BlockStore/>}
+                   blockStore={BlockStore}
                    enableInstanceListening={true}/>
           <Menu menuCategoryItems={[
             {

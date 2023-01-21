@@ -6,11 +6,13 @@ import { toClass } from "@blockware/ui-web-utils";
 import {BlockNode} from "@blockware/ui-web-plan-editor";
 
 import './BlockStoreItem.less';
+import {observer} from "mobx-react";
 
 interface BlockStoreItemProps {
     item: Asset<BlockKind>
 }
 
+@observer
 class BlockStoreItem extends React.Component<BlockStoreItemProps> {
 
     private placeholderElement: SVGSVGElement | null = null;
@@ -21,7 +23,7 @@ class BlockStoreItem extends React.Component<BlockStoreItemProps> {
                 <BlockNode
                     height={150}
                     width={150}
-                    valid={true}//Blocks in the blockstore are always valid for the sort life of drag and drop 
+                    valid={true}//Blocks in the blockstore are always valid for the sort life of drag and drop
                     instanceName={this.props.item.data.metadata.title || this.props.item.data.metadata.name}
                     typeName={this.props.item.data.metadata.name}
                     name={this.props.item.data.metadata.name}

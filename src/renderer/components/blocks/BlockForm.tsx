@@ -36,10 +36,10 @@ function emptyBlock(): BlockKind<any> {
 class BlockForm extends React.Component<BlockFormProps> {
 
     @observable
-    block: BlockKind<any> = emptyBlock();
+    private block: BlockKind<any> = emptyBlock();
 
     @observable
-    kind: string = this.block.kind.toLowerCase();
+    private kind: string = this.block.kind.toLowerCase();
 
     constructor(props: any) {
         super(props);

@@ -20,12 +20,10 @@ interface MenuWrapperState {
 
 }
 
-@observer
 export default class Menu extends Component<MenuWrapperProps, MenuWrapperState>  {
 
     constructor(props: MenuWrapperProps) {
         super(props);
-        makeObservable(this);
         this.state = {
             menuOpen: false,
             categoryItemState: CategoryState.CLOSED,
@@ -34,8 +32,6 @@ export default class Menu extends Component<MenuWrapperProps, MenuWrapperState> 
         };
     }
 
-
-    @action
     private toggleNextCategory = (expanding: boolean) => {
 
         if (expanding && this.state.activeIndex < this.state.menuCategoryItems.length) {

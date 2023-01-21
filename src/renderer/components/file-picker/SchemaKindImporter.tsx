@@ -20,15 +20,12 @@ interface SchemaKindImporterProps {
     onChange?: (schemas:SchemaKind[]) => void;
 }
 
-@observer
 export class SchemaKindImporter extends React.Component<SchemaKindImporterProps> {
 
     constructor(props:SchemaKindImporterProps) {
         super(props);
-        makeObservable(this);
     }
 
-    @action
     onChange = (files: FileWrapper[]) => {
         if (!this.props.onChange) {
             return;
