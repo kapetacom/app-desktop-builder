@@ -78,10 +78,12 @@ export const PlanView = (props: PlanViewProps) => {
       {model && asset &&
         <div className={containerClass}>
           <TopMenu plan={model} version={version} systemId={props.planRef} />
-          <Planner plan={model}
-                   systemId={props.planRef}
-                   blockStore={BlockStore}
-                   enableInstanceListening={true}/>
+          <div className={'planner'}>
+            <Planner plan={model}
+                     systemId={props.planRef}
+                     blockStore={BlockStore}
+                     enableInstanceListening={true}/>
+          </div>
         </div>}
     </SimpleLoader>
   );
