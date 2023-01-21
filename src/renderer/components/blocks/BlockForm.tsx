@@ -43,7 +43,6 @@ class BlockForm extends React.Component<BlockFormProps> {
 
     constructor(props: any) {
         super(props);
-        makeObservable(this);
 
         if (this.props.block) {
             this.block = this.props.block;
@@ -54,7 +53,7 @@ class BlockForm extends React.Component<BlockFormProps> {
         }
 
         this.kind = this.block.kind.toLowerCase();
-
+        makeObservable(this);
     }
 
     cancel() {

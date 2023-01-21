@@ -15,9 +15,10 @@ import {useList} from 'react-use';
 import {toClass} from "@blockware/ui-web-utils";
 import {useLocalStorage} from "../utils/localStorage";
 import {showToasty, SimpleLoader, ToastType} from "@blockware/ui-web-components";
+import {observer} from "mobx-react-lite";
 
 
-export default function Main() {
+export default observer(function Main() {
 
   const [activeTab, setActiveTab] = useLocalStorage<number>('$main_activeTab', 0);
   const [openPlanRefs, setOpenPlanRefs] = useLocalStorage<string[]>('$main_openPlans', []); // might need manual serialization
@@ -163,4 +164,4 @@ export default function Main() {
       </div>
     </SimpleLoader>
   )
-}
+});

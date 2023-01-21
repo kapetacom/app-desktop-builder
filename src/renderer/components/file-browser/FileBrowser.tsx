@@ -1,7 +1,7 @@
 import * as Path from "path";
 import React from "react";
 import type { ChangeEvent, KeyboardEvent } from "react";
-import { action, makeObservable, observable, toJS } from "mobx";
+import {action, makeObservable, observable, runInAction, toJS} from "mobx";
 import { observer } from "mobx-react";
 
 import { toClass } from "@blockware/ui-web-utils";
@@ -60,9 +60,8 @@ export class FileBrowser extends React.Component<FileBrowserProps> {
 
     constructor(props: FileBrowserProps) {
         super(props);
-        makeObservable(this);
-
         this.root = { file: { path: this.currentPath, folder: true }, open: true, depth: 0 };
+        makeObservable(this);
     }
 
     @action
@@ -71,18 +70,22 @@ export class FileBrowser extends React.Component<FileBrowserProps> {
             this.root.loading) {
             return;
         }
+
+        const currentPath = this.currentPath;
+        const root = this.root;
         //Use the users home dir as root
-        if (!this.currentPath ||
-            this.currentPath === '/') {
-            this.setCurrentPath(await this.props.service.getHomeFolder());
+        if (!currentPath ||
+             currentPath === '/') {
+            const homeFolder = await this.props.service.getHomeFolder();
+            runInAction(() => this.setCurrentPath(homeFolder));
         }
 
         this.setRootFile({
-            path: this.currentPath,
-            folder: true
+          path: currentPath,
+          folder: true
         })
 
-        await this.loadFolder(this.root);
+        await this.loadFolder(root);
     }
 
     @action
@@ -126,21 +129,24 @@ export class FileBrowser extends React.Component<FileBrowserProps> {
             folder.loading = true;
             try {
                 const files = await this.props.service.listFilesInFolder(folder.file.path);
-                //TODO: prevent the UI from double triggering the .. (parent directory)                
-                if (Array.isArray(files)) {
-                    folder.children = files.map((file) => {
-                        return {
-                            file,
-                            depth: folder.depth + 1
-                        };
-                    }).sort(fileSorter);
-                }
+                //TODO: prevent the UI from double triggering the .. (parent directory)
+                runInAction(() => {
+                    if (Array.isArray(files)) {
+                        folder.children = files.map((file) => {
+                            return {
+                                file,
+                                depth: folder.depth + 1
+                            };
+                        }).sort(fileSorter);
+                    }
+                })
             } catch (e) {
                 console.log(e);
-
             } finally {
-                folder.loaded = true;
-                folder.loading = false;
+                runInAction(() => {
+                  folder.loaded = true;
+                  folder.loading = false;
+                })
             }
         }
     }
@@ -236,7 +242,7 @@ export class FileBrowser extends React.Component<FileBrowserProps> {
     private async toggleFolder(file: FileStructureElement) {
         if (!file.file.folder ) {
             //If it's not a folder - select file
-           
+
             this.toggleSelection(file);
             return;
         }
@@ -343,7 +349,7 @@ export class FileBrowser extends React.Component<FileBrowserProps> {
         if(!this.props.skipFiles){
             return false;
         }
-        return this.props.skipFiles.filter((ref:string)=>{            
+        return this.props.skipFiles.filter((ref:string)=>{
             return ref=== ("file://"+file.file.path);
         }).length >0
     }
@@ -427,7 +433,7 @@ export class FileBrowser extends React.Component<FileBrowserProps> {
                         }
 
                         {
-                            
+
                             files.map((file, ix) => {
                                 const selectable = this.isSelectable(file) && !this.isSkippedFile(file);
                                 const hidden = this.isHidden(file)
@@ -441,7 +447,7 @@ export class FileBrowser extends React.Component<FileBrowserProps> {
                                     'unselectable': !selectable,
                                     'exists': this.isSkippedFile(file)
                                 });
-                                
+
                                 const indent = (FOLDER_INDENT * (file.depth - 1)) + 'px';
 
                                 return (

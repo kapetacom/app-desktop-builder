@@ -23,6 +23,14 @@ const skipDLLs =
   module.parent?.filename.includes('webpack.config.renderer.dev.dll') ||
   module.parent?.filename.includes('webpack.config.eslint');
 
+const packageJson = require('../../package.json');
+
+//We do this to ensure any linked dependencies uses the node modules from here
+const alias:{[key:string]:string} = {};
+Object.entries(packageJson.devDependencies).forEach(([key,value]) => {
+  alias[key] = path.resolve(__dirname, `../../node_modules/${key}`);
+})
+
 /**
  * Warn if the DLL is not built
  */
@@ -188,6 +196,9 @@ const configuration: webpack.Configuration = {
       nodeModules: webpackPaths.appNodeModulesPath,
     }),
   ],
+  resolve: {
+    alias
+  },
 
   node: {
     __dirname: false,
