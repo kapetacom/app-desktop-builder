@@ -15,8 +15,8 @@ import log from 'electron-log';
 import MenuBuilder from './menu';
 import {resolveHtmlPath} from './util';
 import MenuItem = Electron.MenuItem;
-import LocalClusterService from '@blockware/local-cluster-service';
 import {BlockwareAPI} from '@blockware/nodejs-api-client';
+import {ClusterInfo, ClusterService} from "./ClusterService";
 
 type TrayMenuItem = (MenuItemConstructorOptions) | (MenuItem);
 
@@ -28,9 +28,10 @@ class AppUpdater {
   }
 }
 
-let localClusterInfo: { host: string, port: number } | null = null;
+let localClusterInfo: ClusterInfo | null = null;
 let mainWindow: BrowserWindow | null = null;
 let tray: Tray | null = null;
+const clusterService = new ClusterService();
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -75,7 +76,7 @@ const ensureWindow = async () => {
 
 const ensureLocalCluster = async () => {
   if (!localClusterInfo) {
-    localClusterInfo = await LocalClusterService.start();
+    localClusterInfo = await clusterService.start();
   }
 }
 
@@ -180,7 +181,7 @@ const refreshTray = async () => {
     }];
   }
 
-  const isRunning = LocalClusterService.isRunning();
+  const isRunning = clusterService.isRunning();
   const menuItems: Array<TrayMenuItem> = [
     {
       label: isRunning ? `Local cluster: http://${localClusterInfo?.host}:${localClusterInfo?.port}` : 'Local cluster is stopped',
@@ -200,7 +201,7 @@ const refreshTray = async () => {
           if (mainWindow) {
             mainWindow.close()
           }
-          await LocalClusterService.stop();
+          await clusterService.stop();
         } else {
           await ensureLocalCluster();
         }
@@ -302,8 +303,8 @@ app.on('window-all-closed', () => {
   //Do not close app when windows close. We still have the tray
 });
 
-app.on('quit', () => {
-  LocalClusterService.stop();
+app.on('quit', async () => {
+  await clusterService.stop();
 })
 app
   .whenReady()
