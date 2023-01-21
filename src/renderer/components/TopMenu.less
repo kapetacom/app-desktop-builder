@@ -1,0 +1,64 @@
+@import '~@blockware/ui-web-components/styles/values.less';
+@import '~@blockware/ui-web-components/styles/functions.less';
+
+.top-menu {
+  .container();
+  background-color: @gray-xdark;
+  color: @bw-planner-background;
+  padding:0 10px;
+  position: absolute;
+  top:0;
+  left:0;
+  right:300px;
+  height: 52px;
+  line-height: 52px;
+  z-index: 10;
+  box-sizing: border-box;
+
+  &.read-only {
+    right:0;
+  }
+  .name {
+    display: inline-block;
+    float: left;
+    margin-right: 25px;
+  }
+
+  button {
+    .transition();
+    filter: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block;
+    margin-right: 10px;
+    border:0;
+    padding:5px;
+    font-size: 14px;
+    line-height: 20px;
+    height: 30px;
+    vertical-align: middle;
+    background-color: white;
+    appearance: none;
+    color: @gray-xxdark;
+    box-sizing: border-box;
+    i {
+      margin-right: 5px;
+      line-height: inherit;
+      font-size: inherit;
+      color: inherit;
+    }
+
+    &:hover {
+      background-color: @bw-orange;
+      color: white;
+    }
+
+    &[disabled] {
+      background-color: @gray;
+      color: @gray-dark;
+      cursor: default;
+    }
+
+
+  }
+}
