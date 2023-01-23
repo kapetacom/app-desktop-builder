@@ -26,7 +26,7 @@ export const TopMenu = observer((props:Props) => {
       if (result && result.error) {
         throw new Error(result.error)
       }
-      setPlaying(true);
+
     } catch (e) {
       showToasty({
         title: errorMsg,
@@ -57,7 +57,10 @@ export const TopMenu = observer((props:Props) => {
       <div className={'buttons'}>
         <button disabled={playing || processing} onClick={async () => {
           await doProcess(
-            async () => InstanceService.startInstances(props.systemId),
+            async () => {
+              await InstanceService.startInstances(props.systemId);
+              setPlaying(true);
+            },
             'Failed to start plan'
           );
         }}>
@@ -66,7 +69,10 @@ export const TopMenu = observer((props:Props) => {
         </button>
         <button disabled={!playing || processing}  onClick={async () => {
           await doProcess(
-            async () => InstanceService.stopInstances(props.systemId),
+            async () => {
+              await InstanceService.stopInstances(props.systemId)
+              setPlaying(false);
+            },
             'Failed to stop plan'
           );
         }}>
