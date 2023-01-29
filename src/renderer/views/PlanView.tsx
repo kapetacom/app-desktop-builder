@@ -52,7 +52,7 @@ export const PlanView = (props: PlanViewProps) => {
 
     if (!version || version.toLowerCase() !== 'local') {
       //We can only edit local versions
-      modelData.setMode(PlannerMode.VIEW);
+      modelData.setMode(PlannerMode.CONFIGURATION);
     }
 
     cleanupObserver();
