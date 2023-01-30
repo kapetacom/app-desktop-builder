@@ -4,7 +4,7 @@ import {observer} from "mobx-react";
 
 import './TopMenu.less';
 import {toClass} from "@blockware/ui-web-utils";
-import {InstanceService} from "@blockware/ui-web-context";
+import {InstanceEventType, InstanceService} from "@blockware/ui-web-context";
 import {showToasty, ToastType} from "@blockware/ui-web-components";
 
 interface Props {
@@ -44,13 +44,15 @@ export const TopMenu = observer((props:Props) => {
     playing
   });
 
-  useEffect(() => {
-    InstanceService.getInstanceCurrentStatus().then(status => {
-      console.log('status', status);
-      setPlaying(status.length > 0);
-    });
-  }, [])
+  const updateState = async () => {
+    const status = await InstanceService.getInstanceStatusForPlan(props.systemId);
+    setPlaying(status.filter(s => s.status !== 'stopped').length > 0);
+  }
 
+  useEffect(() => {
+    updateState().catch(() => {});
+    return InstanceService.subscribe(props.systemId, InstanceEventType.EVENT_INSTANCE_CHANGED, updateState);
+  }, [])
 
   return (
     <div className={containerClass}>
