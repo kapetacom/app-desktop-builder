@@ -35,7 +35,7 @@ import BlockForm from "../BlockForm";
 import './BlockStore.less';
 import './BlockStoreSection.less';
 
-interface BlockStoreState {
+interface State {
     importing: boolean
     blocks: Asset<SchemaKind<BlockServiceSpec, BlockMetadata>>[]
     newEntity: SchemaKind
@@ -45,8 +45,12 @@ interface BlockStoreState {
     searchTerm: string
 }
 
+interface Props {
+  onBlockAdded?:(asset:Asset) => void
+}
+
 @observer
-class BlockStore extends React.Component<{}, BlockStoreState> {
+class BlockStore extends React.Component<Props, State> {
 
     private createPanel = createRef<SidePanel>();
 
@@ -54,7 +58,7 @@ class BlockStore extends React.Component<{}, BlockStoreState> {
 
     private mounted:boolean = false;
 
-    constructor(props: any) {
+    constructor(props: Props) {
         super(props);
         makeObservable(this);
 
@@ -75,7 +79,8 @@ class BlockStore extends React.Component<{}, BlockStoreState> {
         return {
             kind: BlockTypeProvider.getDefaultKind(),
             metadata: {
-
+              name: '',
+              title: ''
             },
             spec: {
                 target: {
@@ -129,10 +134,6 @@ class BlockStore extends React.Component<{}, BlockStoreState> {
         this.resetNewEntity();
     };
 
-    private onAssetsChanged = async () => {
-        await this.loadBlocks();
-    };
-
     componentDidMount() {
         this.mounted = true;
         this.loadBlocks();
@@ -145,16 +146,22 @@ class BlockStore extends React.Component<{}, BlockStoreState> {
     private onFileSelection = async (file: FileInfo) => {
         this.setState({ filePath: file.path })
         try {
+            let assets:Asset[];
             if (this.state.importing) {
-                await AssetService.import('file://' + file.path);
+                assets = await AssetService.import('file://' + file.path);
                 this.closeAssetImport();
             } else {
-                await AssetService.create(Path.join(file.path, '/blockware.yml'), this.state.newEntity);
+                assets = await AssetService.create(Path.join(file.path, '/blockware.yml'), this.state.newEntity);
                 this.resetNewEntity();
                 this.closeCreatePanel();
                 this.closeAssetImport();
-                this.loadBlocks();
+                await this.loadBlocks();
             }
+
+            this.props.onBlockAdded &&
+            assets.length > 0 &&
+            this.props.onBlockAdded(assets[0]);
+
         } catch (err:any) {
             console.error('Failed on file selection', err.stack);
         }
@@ -170,7 +177,7 @@ class BlockStore extends React.Component<{}, BlockStoreState> {
 
     @action
     private renderBlocks =  () => {
-      
+
             return (
                 <div className={'items'}>
                     {
@@ -216,7 +223,7 @@ class BlockStore extends React.Component<{}, BlockStoreState> {
     private onNewEntityUpdate = (metadata: any, spec: any) => {
         this.setState({
             newEntity: {
-                kind: this.createNewBlock().kind,
+                kind: BlockTypeProvider.getDefaultKind(),
                 metadata,
                 spec
             }
@@ -270,12 +277,12 @@ class BlockStore extends React.Component<{}, BlockStoreState> {
     }
 
     render() {
-   
+
         return (
 
             <div className={'block-store-container'}>
                 {
-                    this.state.blocks && 
+                    this.state.blocks &&
                     this.renderBlockStore()
                 }
                 <FileBrowserDialog
@@ -302,7 +309,7 @@ class BlockStore extends React.Component<{}, BlockStoreState> {
                 />
                 <SidePanel
                     ref={this.createPanel}
-                    size={PanelSize.medium}
+                    size={PanelSize.large}
                     side={PanelAlignment.right}
                     onClose={this.cancelNewEntity}
                     title={'Create new Block'} >

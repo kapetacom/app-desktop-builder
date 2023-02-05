@@ -21,11 +21,13 @@ import PlanOverviewItem from "./components/PlanOverviewItem"
 import {PlanOverviewTopBar} from "./components/PlanOverviewTopBar";
 
 import "./PlanOverview.less";
+import {Asset} from "@blockware/ui-web-types";
 
 interface PlanOverviewWrapperProps {
     plans: PlannerModelRef[]
     size: number
     onPlanChanged?: () => void
+    onAssetAdded?: (asset:Asset) => void
     itemDeleted?: (plan: PlannerModelRef) => void
     onPlanSelected?: (plan: PlannerModelRef) => void
     onPlanAdded?: (plan: PlannerModelRef) => void
@@ -41,8 +43,6 @@ export default class PlanOverview extends Component<PlanOverviewWrapperProps, Pl
 
     private readonly containerSize: { width: number, height: number };
 
-    @observable
-    private open:boolean = true;
     @observable
     private runningBlocks: { [id: string]: { status: InstanceStatus } } = {};
 
@@ -146,9 +146,12 @@ export default class PlanOverview extends Component<PlanOverviewWrapperProps, Pl
     };
 
 
-    private onImportDone() {
+    private onImportDone(asset?:Asset) {
         this.importPlanPanel && this.importPlanPanel.close();
         this.props.onPlanChanged && this.props.onPlanChanged();
+        if (asset && this.props.onAssetAdded) {
+          this.props.onAssetAdded(asset);
+        }
     }
     private onInstanceStatusChanged = (message: any) => {
         this.runningBlocks[message.instanceId] = { status: message.status }
@@ -172,10 +175,8 @@ export default class PlanOverview extends Component<PlanOverviewWrapperProps, Pl
             return (
                 <div style={{ position: "relative" }}>
                     <PlanOverviewTopBar
-                        open={this.open}
-                        onClose={() => { this.importPlanPanel && this.importPlanPanel.close(); }}
-                        onDone={() => {
-                            this.onImportDone()
+                        onDone={(asset) => {
+                            this.onImportDone(asset)
                         }}
                         skipFiles={this.props.plans.map(plan => {
                             return plan.ref;
@@ -193,10 +194,8 @@ export default class PlanOverview extends Component<PlanOverviewWrapperProps, Pl
 
                 <div style={{ position: "relative" }}>
                     <PlanOverviewTopBar
-                        open={this.open}
-                        onClose={() => { this.importPlanPanel && this.importPlanPanel.close(); }}
-                        onDone={() => {
-                            this.onImportDone()
+                        onDone={(asset) => {
+                            this.onImportDone(asset);
                         }}
                         skipFiles={this.props.plans.map(plan => {
                             return plan.ref;

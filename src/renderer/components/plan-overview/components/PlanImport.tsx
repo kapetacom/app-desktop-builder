@@ -1,5 +1,5 @@
 import React from "react";
-import {EntityConfigProps, FileInfo, PLAN_KIND} from "@blockware/ui-web-types";
+import {Asset, EntityConfigProps, FileInfo, PLAN_KIND} from "@blockware/ui-web-types";
 import {AssetStore} from "@blockware/ui-web-context";
 import {FormInput} from "@blockware/ui-web-components";
 
@@ -7,7 +7,7 @@ import { AssetImport } from "../../plan-import/AssetImport";
 
 interface PlanImportProps {
     assetService: AssetStore
-    onDone: () => void
+    onDone: (asset?:Asset) => void
     skipFiles: string[]
 }
 

@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React from "react";
 import {Tab, TabList, TabPanel, Tabs} from "react-tabs";
 import 'react-tabs/style/react-tabs.css';
 import './Main.less';
@@ -40,6 +40,14 @@ export default observer(function Main() {
 
   const reader: PlannerModelReader = new PlannerModelReader(BlockService);
 
+  const loadAsset = async (planAsset: Asset<PlanKind>):Promise<PlannerModelRef> => {
+    return {
+      ref: planAsset.ref,
+      version: planAsset.version,
+      model: await reader.load(planAsset.data, planAsset.ref)
+    }
+  };
+
   const loadPlans = async () => {
     let planAssets: Asset<PlanKind>[] = [];
     try {
@@ -50,13 +58,7 @@ export default observer(function Main() {
       return;
     }
 
-    const planPromises: Promise<PlannerModelRef>[] = planAssets.map(async (planAsset: Asset<PlanKind>): Promise<PlannerModelRef> => {
-      return {
-        ref: planAsset.ref,
-        version: planAsset.version,
-        model: await reader.load(planAsset.data, planAsset.ref)
-      }
-    });
+    const planPromises: Promise<PlannerModelRef>[] = planAssets.map(loadAsset);
 
     try {
       const planListResults: PromiseSettledResult<PlannerModelRef>[] = await Promise.allSettled(planPromises);
@@ -80,6 +82,13 @@ export default observer(function Main() {
     }
   };
 
+  const onAssetAdded = async (asset: Asset<PlanKind>) => {
+    console.log('Loading asset', asset);
+    const plannerModelRef = await loadAsset(asset);
+    console.log('Loaded asset', plannerModelRef);
+    pushPlanModels(plannerModelRef);
+    onPlanSelected(plannerModelRef);
+  }
 
   const onPlanSelected = (plan: PlannerModelRef) => {
     const items = openPlans.filter((openPlan: PlannerModelRef) => {
@@ -87,7 +96,6 @@ export default observer(function Main() {
     })
     const exists = items.length > 0;
     if (exists) {
-
       setActiveTab(openPlans.findIndex((openPlan) => (openPlan.ref === plan.ref)));//set the tab equal to the index of the clicked plan in the openPlans
     } else {
       openPlans.push(plan);
@@ -143,6 +151,7 @@ export default observer(function Main() {
             <TabPanel>
               <PlanOverview
                 onPlanSelected={onPlanSelected}
+                onAssetAdded={onAssetAdded}
                 size={400}
                 onPlanChanged={loadPlans}
                 itemDeleted={(plan) => {

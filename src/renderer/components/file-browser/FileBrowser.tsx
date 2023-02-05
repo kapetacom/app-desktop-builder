@@ -71,21 +71,23 @@ export class FileBrowser extends React.Component<FileBrowserProps> {
             return;
         }
 
-        const currentPath = this.currentPath;
+        let currentPath = this.currentPath;
         const root = this.root;
+
         //Use the users home dir as root
         if (!currentPath ||
-             currentPath === '/') {
-            const homeFolder = await this.props.service.getHomeFolder();
-            runInAction(() => this.setCurrentPath(homeFolder));
+            currentPath === '/') {
+            currentPath = await this.props.service.getHomeFolder();
         }
 
-        this.setRootFile({
-          path: currentPath,
-          folder: true
+        await runInAction(async () => {
+            this.setCurrentPath(currentPath);
+            this.setRootFile({
+              path: currentPath,
+              folder: true
+            });
+            await this.loadFolder(root);
         })
-
-        await this.loadFolder(root);
     }
 
     @action
@@ -485,10 +487,11 @@ export class FileBrowser extends React.Component<FileBrowserProps> {
             this.currentPath = this.currentPath.trim();
             await this.openFolder(this.currentPath);
         } catch (err) {
-            this.currentPathError = 'Path not found: ' + this.currentPath;
-            this.currentPath = previousPath;
-
-            await this.openFolder(this.currentPath);
+            await runInAction(async () => {
+              this.currentPathError = 'Path not found: ' + this.currentPath;
+              this.currentPath = previousPath;
+              await this.openFolder(this.currentPath);
+            });
         }
     }
 
@@ -512,7 +515,7 @@ export class FileBrowser extends React.Component<FileBrowserProps> {
                 <input type={'text'}
                     value={this.currentPath}
                     onChange={(evt) => this.onPathChange(evt)}
-                    onKeyPress={(evt) => this.onPathEnter(evt)}
+                    onKeyUp={(evt) => this.onPathEnter(evt)}
                 />
             </div>
         )

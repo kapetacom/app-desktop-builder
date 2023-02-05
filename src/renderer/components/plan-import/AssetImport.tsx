@@ -2,7 +2,7 @@ import Path from "path";
 import React from "react";
 import {action} from "mobx";
 
-import {EntityConfigProps, FileInfo, SchemaKind} from "@blockware/ui-web-types";
+import {Asset, EntityConfigProps, FileInfo, SchemaKind} from "@blockware/ui-web-types";
 
 import {AssetStore, FileSystemService} from "@blockware/ui-web-context";
 
@@ -23,7 +23,7 @@ import {
 
 interface AssetImportProps {
     assetService: AssetStore
-    onDone: () => void
+    onDone: (asset?:Asset) => void
     skipFiles: string[]//A collection of files to prevent importing as they are already loaded
     title: string
     introduction: string
@@ -92,10 +92,7 @@ export class AssetImport extends React.Component<AssetImportProps, AssetImportSt
     };
 
     private openFilePanel = () => {
-        console.log("Opening the FilePanel");
-        
         this.filePanel && this.filePanel.open();
-
     };
 
     private closeFilePanel = () => {
@@ -104,26 +101,29 @@ export class AssetImport extends React.Component<AssetImportProps, AssetImportSt
 
     private onFileSelection = async (file: FileInfo) => {
         try {
+            let assets:Asset[];
             if (this.state.importing) {
-                await this.props.assetService.import('file://' + file.path);
+                // @ts-ignore
+                assets = await this.props.assetService.import('file://' + file.path);
                 this.closeImportPanel();
             } else {
-                await this.props.assetService.create(Path.join(file.path, this.props.fileName), this.state.newEntity);
+                // @ts-ignore
+                assets = await this.props.assetService.create(Path.join(file.path, this.props.fileName), this.state.newEntity);
                 this.closeCreatePanel();
             }
 
-            this.markAsDone();
+            this.markAsDone(assets.length > 0 ? assets[0] : undefined);
         } catch (err:any) {
             console.error('Failed on file selection', err.stack);
         }
     };
 
-    private markAsDone() {
+    private markAsDone(asset?:Asset) {
         if (!this.props.onDone) {
             return;
         }
 
-        this.props.onDone();
+        this.props.onDone(asset);
     }
 
     private createNewEntity() {

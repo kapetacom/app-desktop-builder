@@ -32,6 +32,12 @@ function emptyBlock(): BlockKind<any> {
     }
 }
 
+function validateBlockName(field:string, value:string) {
+  if (!/^[a-z][a-z0-9_-]*\/[a-z][a-z0-9_-]*$/i.test(value)) {
+    throw new Error('Invalid block name. Expected format is <handle>/<name>');
+  }
+}
+
 @observer
 class BlockForm extends React.Component<BlockFormProps> {
 
@@ -74,7 +80,13 @@ class BlockForm extends React.Component<BlockFormProps> {
     @action
     createDropdownOptions() {
         let options: { [key: string]: string } = {};
-        BlockTypeProvider.list().forEach((blockTypeConfig) => options[blockTypeConfig.kind.toLowerCase()] = blockTypeConfig.title ? blockTypeConfig.title : blockTypeConfig.kind);
+        BlockTypeProvider.listAll().forEach(
+          (blockTypeConfig) => {
+            const id = `${blockTypeConfig.kind}:${blockTypeConfig.version}`;
+            const name = blockTypeConfig.title ? blockTypeConfig.title : blockTypeConfig.kind;
+            options[id] = `${name} [${id}]`;
+          }
+        );
         return options;
     }
 
@@ -124,7 +136,6 @@ class BlockForm extends React.Component<BlockFormProps> {
                 metadata={toJS(this.block.metadata)}
                 spec={toJS(this.block.spec)}
                 onDataChanged={(metadata: BlockMetadata, spec: any) => {
-                    this.block.metadata = metadata;
                     this.block.spec = spec
                 }}/>
         );
@@ -150,7 +161,7 @@ class BlockForm extends React.Component<BlockFormProps> {
                     />
 
                     <FormInput name={'name'}
-                               validation={['required']}
+                               validation={['required', validateBlockName]}
                                value={this.block.metadata.name}
                                onChange={this.handleMetaDataChanged}
                                label={'Name'}
