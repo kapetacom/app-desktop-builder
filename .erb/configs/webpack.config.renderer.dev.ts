@@ -229,7 +229,7 @@ const configuration: webpack.Configuration = {
       let args = ['run', 'start:main'];
       if (process.env.MAIN_ARGS) {
         args = args.concat(
-          ['--', ...process.env.MAIN_ARGS.matchAll(/"[^"]+"|[^\s"]+/g)].flat()
+          ['--', ...Array.from(process.env.MAIN_ARGS.matchAll(/"[^"]+"|[^\s"]+/g))].flat()
         );
       }
       spawn('npm', args, {
