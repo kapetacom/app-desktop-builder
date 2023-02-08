@@ -11,8 +11,10 @@ const Application: React.FC = (props: any) => {
 
   useEffect(() => {
     return AssetService.subscribe((evt) => {
-      //We just brute-force reload since this might remove or introduce new providers or assets.
-      //TODO: Make this smarter and only do full reloads when absolutely needed
+      if (['added','removed'].indexOf(evt.payload.type) === -1) {
+        return; //We don't care about updated here
+      }
+      //TODO: Make smarter - add or remove specific providers instead of just reloading everything
       window.location.reload();
     });
   });
