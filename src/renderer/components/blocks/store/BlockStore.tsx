@@ -1,7 +1,5 @@
 import React, { createRef } from "react";
-import { observer } from "mobx-react";
 import * as Path from 'path';
-import { action, makeObservable } from "mobx";
 import {Guid} from "guid-typescript";
 
 import {
@@ -35,12 +33,21 @@ import BlockForm from "../BlockForm";
 import './BlockStore.less';
 import './BlockStoreSection.less';
 
+enum FileBrowserState {
+    IMPORTING,
+    CREATING,
+    PROJECT_FOLDER
+}
+
+
 interface State {
-    importing: boolean
+    fileBrowserState: FileBrowserState
     blocks: Asset<SchemaKind<BlockServiceSpec, BlockMetadata>>[]
     newEntity: SchemaKind
     entityKey: string
     filePath: string
+    useProjectHome: boolean
+    projectHome:string
     loading: boolean
     searchTerm: string
 }
@@ -49,7 +56,7 @@ interface Props {
   onBlockAdded?:(asset:Asset) => void
 }
 
-@observer
+
 class BlockStore extends React.Component<Props, State> {
 
     private createPanel = createRef<SidePanel>();
@@ -60,15 +67,15 @@ class BlockStore extends React.Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
-        makeObservable(this);
-
 
         this.state = {
-            importing: false,
+            fileBrowserState: FileBrowserState.CREATING,
             searchTerm: '',
             loading: true,
             filePath: '',
             blocks: [],
+            useProjectHome: false,
+            projectHome:'',
             newEntity: this.createNewBlock(),
             entityKey: Guid.create().toString()
         };
@@ -90,7 +97,6 @@ class BlockStore extends React.Component<Props, State> {
         }
     }
 
-    @action
     private resetNewEntity() {
         this.setState({
             newEntity: this.createNewBlock(),
@@ -98,7 +104,6 @@ class BlockStore extends React.Component<Props, State> {
         });
     }
 
-    @action
     private loadBlocks = async () => {
         if (!this.mounted) {
             return;
@@ -123,10 +128,18 @@ class BlockStore extends React.Component<Props, State> {
         this.setState(state);
     };
 
-    @action
-    private importFinished() {
-        AssetService.import('file://' + this.state.filePath);
-        this.closeAssetImport();
+    private onFileBrowserClose() {
+        if (this.state.fileBrowserState === FileBrowserState.IMPORTING) {
+            AssetService.import('file://' + this.state.filePath);
+            this.closeFileDialog();
+        }
+
+        if (this.state.fileBrowserState === FileBrowserState.PROJECT_FOLDER) {
+            //When we're done with project folder - switch back to creating
+            this.setState({
+                fileBrowserState: FileBrowserState.CREATING
+            });
+        }
     }
 
     private cancelNewEntity = () => {
@@ -143,31 +156,49 @@ class BlockStore extends React.Component<Props, State> {
         this.mounted = false;
     }
 
+    private async createAsset(filePath:string) {
+        const assets:Asset[] = await AssetService.create(Path.join(filePath, '/blockware.yml'), this.state.newEntity);
+        this.resetNewEntity();
+        this.closeCreatePanel();
+        this.closeFileDialog();
+        await this.loadBlocks();
+
+        this.props.onBlockAdded &&
+        assets.length > 0 &&
+        this.props.onBlockAdded(assets[0]);
+    }
+
+    private async importAsset(filePath:string) {
+        const assets:Asset[] = await AssetService.import('file://' + filePath);
+        this.closeFileDialog();
+        await this.loadBlocks();
+        this.props.onBlockAdded &&
+        assets.length > 0 &&
+        this.props.onBlockAdded(assets[0]);
+    }
+
+    private async updateProjectFolder(filePath:string) {
+        await FileSystemService.setProjectFolder(filePath);
+        this.setState({projectHome: filePath});
+        this.closeFileDialog()
+    }
+
     private onFileSelection = async (file: FileInfo) => {
         this.setState({ filePath: file.path })
         try {
-            let assets:Asset[];
-            if (this.state.importing) {
-                assets = await AssetService.import('file://' + file.path);
-                this.closeAssetImport();
-            } else {
-                assets = await AssetService.create(Path.join(file.path, '/blockware.yml'), this.state.newEntity);
-                this.resetNewEntity();
-                this.closeCreatePanel();
-                this.closeAssetImport();
-                await this.loadBlocks();
+            if (this.state.fileBrowserState === FileBrowserState.IMPORTING) {
+                await this.importAsset(file.path);
+            } else if (this.state.fileBrowserState === FileBrowserState.CREATING) {
+                await this.createAsset(file.path);
+            } else if (this.state.fileBrowserState === FileBrowserState.PROJECT_FOLDER) {
+                await this.updateProjectFolder(file.path);
             }
-
-            this.props.onBlockAdded &&
-            assets.length > 0 &&
-            this.props.onBlockAdded(assets[0]);
-
         } catch (err:any) {
             console.error('Failed on file selection', err.stack);
         }
     };
 
-    private closeAssetImport() {
+    private closeFileDialog() {
         this.fileDialog.current && this.fileDialog.current.close();
     }
 
@@ -175,7 +206,6 @@ class BlockStore extends React.Component<Props, State> {
         this.createPanel.current && this.createPanel.current.close();
     }
 
-    @action
     private renderBlocks =  () => {
 
             return (
@@ -198,28 +228,40 @@ class BlockStore extends React.Component<Props, State> {
             )
     }
 
-    @action
     private saveNewEntity = async (data:BlockKind) => {
         this.setState({newEntity: data}, () => {
-            this.fileDialog.current && this.fileDialog.current.open();
+            if (this.state.useProjectHome && this.state.projectHome) {
+                this.createAsset(Path.join(this.state.projectHome, this.state.newEntity.metadata.name));
+            } else {
+                this.fileDialog.current && this.fileDialog.current.open();
+            }
         });
     };
 
     private openAssetImport() {
-        this.fileDialog.current && this.fileDialog.current.open();
+        this.fileDialog.current?.open();
         this.setState({
-            importing: true
+            fileBrowserState: FileBrowserState.IMPORTING
         });
     }
 
-    private openAssetCreate() {
-        this.createPanel.current && this.createPanel.current.open();
+    private async openAssetCreate() {
+        this.createPanel.current?.open();
+        const projectHome = await FileSystemService.getProjectFolder()
         this.setState({
-            importing: false
+            fileBrowserState: FileBrowserState.CREATING,
+            projectHome,
+            useProjectHome: !!projectHome
         });
     }
 
-    @action
+    private openProjectFolder = () => {
+        this.fileDialog.current?.open();
+        this.setState({
+            fileBrowserState: FileBrowserState.PROJECT_FOLDER
+        });
+    }
+
     private onNewEntityUpdate = (metadata: any, spec: any) => {
         this.setState({
             newEntity: {
@@ -292,18 +334,13 @@ class BlockStore extends React.Component<Props, State> {
                     ref={this.fileDialog}
                     service={FileSystemService}
                     onSelect={this.onFileSelection}
-                    onClose={this.importFinished}
+                    onClose={this.onFileBrowserClose}
                     selectable={(file) => {
-                        if (this.state.importing) {
-                            if (file.path.indexOf('blockware.yml') > -1) {
-                                return true;
-                            }
-                            return false;
+                        if (this.state.fileBrowserState === FileBrowserState.IMPORTING) {
+                            //Importing needs a blockware.yml file
+                            return file.path.endsWith('/blockware.yml');
                         } else {
-                            if (file.folder) {
-                                return true;
-                            }
-                            return false;
+                            return !!file.folder;
                         }
                     } }
                 />
@@ -313,13 +350,23 @@ class BlockStore extends React.Component<Props, State> {
                     side={PanelAlignment.right}
                     onClose={this.cancelNewEntity}
                     title={'Create new Block'} >
-
-                    <div className={'entity-form'}>
-                        <BlockForm creating={true}
-                                   key={this.state.entityKey}
-                                   onSubmit={this.saveNewEntity}
-                                   onCancel={this.cancelNewEntity} />
-                    </div>
+'
+                    {this.createPanel.current?.isOpen() &&
+                        <div className={'entity-form'}>
+                            <BlockForm creating={true}
+                                       key={this.state.entityKey}
+                                       projectHome={this.state.projectHome}
+                                       useProjectHome={this.state.useProjectHome}
+                                       onProjectHomeClick={this.openProjectFolder}
+                                       onUseProjectHomeChange={(useProjectHome) => {
+                                           this.setState({
+                                               useProjectHome
+                                           })
+                                       }}
+                                       onSubmit={this.saveNewEntity}
+                                       onCancel={this.cancelNewEntity} />
+                        </div>
+                    }
                 </SidePanel>
             </div>
 

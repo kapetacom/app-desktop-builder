@@ -4,12 +4,14 @@ import {observer} from "mobx-react";
 
 import {
     Button,
+    ButtonStyle,
     ButtonType,
     FormButtons,
     FormContainer,
-    ButtonStyle,
+    FormInput,
+    FormRow,
     FormSelect,
-    FormInput
+    Type as FieldType
 } from "@blockware/ui-web-components";
 
 import {BlockTypeProvider} from "@blockware/ui-web-context";
@@ -20,6 +22,10 @@ import './BlockForm.less';
 interface BlockFormProps {
     block?: BlockKind
     creating?: boolean
+    useProjectHome?: boolean
+    projectHome?: string
+    onProjectHomeClick?: () => void
+    onUseProjectHomeChange?: (useProjectHome: boolean) => void
     onSubmit?: (data: BlockKind) => void
     onCancel?: () => void
 }
@@ -32,10 +38,10 @@ function emptyBlock(): BlockKind<any> {
     }
 }
 
-function validateBlockName(field:string, value:string) {
-  if (!/^[a-z][a-z0-9_-]*\/[a-z][a-z0-9_-]*$/i.test(value)) {
-    throw new Error('Invalid block name. Expected format is <handle>/<name>');
-  }
+function validateBlockName(field: string, value: string) {
+    if (!/^[a-z][a-z0-9_-]*\/[a-z][a-z0-9_-]*$/i.test(value)) {
+        throw new Error('Invalid block name. Expected format is <handle>/<name>');
+    }
 }
 
 @observer
@@ -74,18 +80,17 @@ class BlockForm extends React.Component<BlockFormProps> {
 
     handleFormSubmit() {
         this.props.onSubmit && this.props.onSubmit(toJS(this.block));
-        this.reset();
     }
 
     @action
     createDropdownOptions() {
         let options: { [key: string]: string } = {};
         BlockTypeProvider.listAll().forEach(
-          (blockTypeConfig) => {
-            const id = `${blockTypeConfig.kind}:${blockTypeConfig.version}`;
-            const name = blockTypeConfig.title ? blockTypeConfig.title : blockTypeConfig.kind;
-            options[id] = `${name} [${id}]`;
-          }
+            (blockTypeConfig) => {
+                const id = `${blockTypeConfig.kind}:${blockTypeConfig.version}`;
+                const name = blockTypeConfig.title ? blockTypeConfig.title : blockTypeConfig.kind;
+                options[id] = `${name} [${id}]`;
+            }
         );
         return options;
     }
@@ -94,11 +99,6 @@ class BlockForm extends React.Component<BlockFormProps> {
     handleBlockKindChanged = (name: string, value: string) => {
         this.kind = value;
         this.block.kind = this.kind;
-        this.block.metadata = {
-            name: this.block.metadata.name,
-            title: this.block.metadata.title
-        };
-        this.block.spec = {};
     }
 
 
@@ -177,13 +177,54 @@ class BlockForm extends React.Component<BlockFormProps> {
 
                     />
 
+
+                    {this.props.creating &&
+                        <div>
+                            <FormRow label={'Project folder'}
+                                     help={this.props.useProjectHome ?
+                                         'Choose project home to create this block in' :
+                                         'Check this to save block in project home'}
+                                     focused={true}
+                                     validation={this.props.useProjectHome ? ['required'] : []}
+                                     type={'folder'}>
+                                <div
+                                    data-name={'project_home'}
+                                    data-value={this.props.projectHome}
+                                    className={'project-home-folder'}>
+                                    <input type={'checkbox'}
+                                           data-name={'use_project_home'}
+                                           data-value={this.props.useProjectHome}
+                                           checked={this.props.useProjectHome}
+                                           onChange={(evt) => {
+                                               this.props.onUseProjectHomeChange &&
+                                               this.props.onUseProjectHomeChange(evt.target.checked);
+                                           }}/>
+                                    <input type={'text'}
+                                           readOnly={true}
+                                           disabled={!this.props.useProjectHome}
+                                           value={this.props.projectHome}
+                                           onClick={() => {
+                                               if (!this.props.useProjectHome ||
+                                                   !this.props.onProjectHomeClick) {
+                                                   return;
+                                               }
+
+                                               this.props.onProjectHomeClick();
+                                           }}/>
+                                </div>
+                            </FormRow>
+                        </div>
+                    }
+
                     {this.renderBlockType()}
+
 
                     <FormButtons>
                         <Button width={70} type={ButtonType.BUTTON} style={ButtonStyle.DANGER}
                                 onClick={() => this.cancel()} text="Cancel"/>
                         <Button width={70} type={ButtonType.SUBMIT} style={ButtonStyle.PRIMARY}
                                 text={this.props.creating ? 'Create' : 'Update'}/>
+
                     </FormButtons>
 
                 </FormContainer>
