@@ -1,4 +1,6 @@
-import React, { ComponentType } from 'react';
+import React, {Component} from "react";
+import {action, makeObservable, observable, toJS} from "mobx";
+import {observer} from "mobx-react";
 
 import {
     Button,
@@ -6,64 +8,77 @@ import {
     ButtonType,
     FormButtons,
     FormContainer,
-    FormField,
-    FormFieldType,
+    FormInput,
     FormRow,
-} from '@blockware/ui-web-components';
+    FormSelect,
+    AssetNameInput,
 
-import { BlockTypeProvider } from '@blockware/ui-web-context';
-import type {
-    BlockKind,
-    BlockServiceSpec,
-    SchemaKind,
-} from '@blockware/ui-web-types';
+    Type as FieldType
+} from "@blockware/ui-web-components";
+
+import {BlockTypeProvider, IdentityService} from "@blockware/ui-web-context";
+import type {BlockKind, BlockMetadata, EntityConfigProps, Type} from "@blockware/ui-web-types";
 
 import './BlockForm.less';
-import { BlockConfigComponentProps } from '@blockware/ui-web-types';
-import { ErrorBoundary } from 'react-error-boundary';
+import {useAsync} from "react-use";
 
-interface Props {
-    block?: BlockKind;
-    creating?: boolean;
-    useProjectHome?: boolean;
-    projectHome?: string;
-    onProjectHomeClick?: () => void;
-    onUseProjectHomeChange?: (useProjectHome: boolean) => void;
-    onSubmit?: (data: BlockKind) => void;
-    onCancel?: () => void;
+interface BlockFormProps {
+    block?: BlockKind
+    creating?: boolean
+    useProjectHome?: boolean
+    projectHome?: string
+    onProjectHomeClick?: () => void
+    onUseProjectHomeChange?: (useProjectHome: boolean) => void
+    onSubmit?: (data: BlockKind) => void
+    onCancel?: () => void
 }
 
-interface State {
-    block: BlockKind;
-}
-
-function emptyBlock(): BlockKind<BlockServiceSpec> {
+function emptyBlock(): BlockKind<any> {
     return {
         kind: BlockTypeProvider.getDefaultKind(),
-        metadata: { name: '', title: '' },
-        spec: {
-            target: {
-                kind: 'empty',
-            },
-        },
-    };
-}
-
-function validateBlockName(field: string, value: string) {
-    if (!/^[a-z][a-z0-9_-]*\/[a-z][a-z0-9_-]*$/i.test(value)) {
-        throw new Error(
-            'Invalid block name. Expected format is <handle>/<name>'
-        );
+        metadata: {name: '', title: ''},
+        spec: {}
     }
 }
 
-class BlockForm extends React.Component<Props, State> {
+// Higher-order-component to allow us to use hooks for data loading (not possible in class components)
+const withNamespaces = (Component) => {
+    return (props) => {
+        const {value: namespaces} = useAsync(async () => {
+            const identity = await IdentityService.getCurrent();
+            const memberships = await IdentityService.getMemberships(identity.id);
+            return [identity.handle, ...memberships.map(membership => membership.identity.handle)];
+        });
+        return <AssetNameInput
+            {...props}
+            namespaces={namespaces || []}
+        />;
+    }
+}
+const AutoLoadAssetNameInput = withNamespaces(AssetNameInput);
+
+@observer
+class BlockForm extends React.Component<BlockFormProps> {
+
+    @observable
+    private block: BlockKind<any> = emptyBlock();
+
+    @observable
+    private kind: string = this.block.kind.toLowerCase();
+
     constructor(props: any) {
         super(props);
 
-        this.state = {
-            block: this.props.block ?? emptyBlock(),
-        };
+        if (this.props.block) {
+            this.block = this.props.block;
+        }
+
+        if (!this.block.kind) {
+            this.block.kind = BlockTypeProvider.getDefaultKind();
+        }
+
+        this.kind = this.block.kind.toLowerCase();
+        makeObservable(this);
     }
 
     cancel() {
@@ -71,40 +86,53 @@ class BlockForm extends React.Component<Props, State> {
         this.reset();
     }
 
+    @action
     reset() {
-        this.setState({ block: emptyBlock() });
+        this.block = emptyBlock();
     }
 
-    private async handleFormSubmit(data) {
-        this.props.onSubmit && (await this.props.onSubmit(data));
+    handleFormSubmit() {
+        this.props.onSubmit && this.props.onSubmit(toJS(this.block));
     }
 
+    @action
     createDropdownOptions() {
-        const options: { [key: string]: string } = {};
-        try {
-            BlockTypeProvider.listAll().forEach((blockTypeConfig) => {
+        let options: { [key: string]: string } = {};
+        BlockTypeProvider.listAll().forEach(
+            (blockTypeConfig) => {
                 const id = `${blockTypeConfig.kind}:${blockTypeConfig.version}`;
-                const name = blockTypeConfig.title
-                    ? blockTypeConfig.title
-                    : blockTypeConfig.kind;
+                const name = blockTypeConfig.title ? blockTypeConfig.title : blockTypeConfig.kind;
                 options[id] = `${name} [${id}]`;
-            });
-        } catch (e) {
-            console.error('Failed to create drop down', e);
-        }
-
+            }
+        );
         return options;
     }
 
-    renderBlockType() {
-        let BlockTypeComponent: ComponentType<BlockConfigComponentProps> | null =
-            null;
+    @action
+    handleBlockKindChanged = (name: string, value: string) => {
+        this.kind = value;
+        this.block.kind = this.kind;
+    }
 
-        if (!this.state.block.kind) {
+
+    @action
+    handleMetaDataChanged = (name: string, value: string) => {
+        switch (name) {
+            case 'name':
+            case 'title':
+                this.block.metadata[name] = value
+
+        }
+    }
+
+    renderBlockType() {
+        let BlockTypeComponent: Type<Component<EntityConfigProps, any>> | null = null;
+
+        if (!this.block.kind) {
             return <div>Select block type</div>;
         }
 
-        const currentTarget = BlockTypeProvider.get(this.state.block.kind);
+        const currentTarget = BlockTypeProvider.get(this.block.kind);
 
         if (currentTarget && currentTarget.componentType) {
             BlockTypeComponent = currentTarget.componentType;
@@ -115,129 +143,102 @@ class BlockForm extends React.Component<Props, State> {
         }
 
         return (
-            <ErrorBoundary
-                fallback={
-                    <div>
-                        Failed to render block type: {this.state.block.kind}
-                    </div>
-                }
-            >
-                <BlockTypeComponent creating={this.props.creating} />
-            </ErrorBoundary>
+            <BlockTypeComponent
+                kind={this.block.kind}
+                creating={this.props.creating}
+                metadata={toJS(this.block.metadata)}
+                spec={toJS(this.block.spec)}
+                onDataChanged={(metadata: BlockMetadata, spec: any) => {
+                    this.block.spec = spec
+                }}/>
         );
     }
 
     render() {
         return (
-            <div className="block-form">
-                <FormContainer
-                    initialValue={this.state.block}
-                    onChange={(data) => {
-                        this.setState({ block: data as SchemaKind });
-                    }}
-                    onSubmitData={async (data) => {
-                        await this.handleFormSubmit(data);
-                    }}
-                >
-                    <FormField
-                        name="kind"
-                        label="Type"
+            <div className={"block-form"}>
+                <FormContainer onSubmit={() => {
+                    this.handleFormSubmit()
+                }}>
+
+                    <FormSelect
+                        name={"kind"}
+                        value={this.kind}
+                        label={"Type"}
                         validation={['required']}
-                        type={FormFieldType.ENUM}
-                        help="The type of block you want to create."
+                        help={"The type of block you want to create."}
                         options={this.createDropdownOptions()}
+                        onChange={this.handleBlockKindChanged}
                         disabled={!this.props.creating}
                     />
 
-                    <FormField
-                        name="metadata.name"
-                        validation={['required', validateBlockName]}
-                        type={FormFieldType.STRING}
-                        label="Name"
-                        help={
-                            'Give your block a system name prefixed with your handle - e.g. "myhandle/my-block"'
-                        }
+                    <div className={"form-element-container"}>
+                        <AutoLoadAssetNameInput
+                            name={'name'}
+                            value={this.block.metadata.name}
+                            onChange={this.handleMetaDataChanged}
+                            label={'Name'}
+                            help={<>Give your block a system name prefixed with your handle <br /> e.g. "myhandle/my-block"</>}
+                        />
+                    </div>
+
+                    <FormInput name={'title'}
+                               label={'Title'}
+                               value={this.block.metadata.title}
+                               onChange={this.handleMetaDataChanged}
+                               help={'Give your block a human-friendly title'}
                     />
 
-                    <FormField
-                        name="metadata.title"
-                        type={FormFieldType.STRING}
-                        label="Title"
-                        help="Give your block a human-friendly title"
-                    />
 
-                    {this.props.creating && (
+                    {this.props.creating &&
                         <div>
-                            <FormRow
-                                label="Project folder"
-                                help={
-                                    this.props.useProjectHome
-                                        ? 'Choose project home to create this block in'
-                                        : 'Check this to save block in project home'
-                                }
-                                focused
-                                validation={
-                                    this.props.useProjectHome
-                                        ? ['required']
-                                        : []
-                                }
-                                type="folder"
-                            >
+                            <FormRow label={'Project folder'}
+                                     help={this.props.useProjectHome ?
+                                         'Choose project home to create this block in' :
+                                         'Check this to save block in project home'}
+                                     focused={true}
+                                     validation={this.props.useProjectHome ? ['required'] : []}
+                                     type={'folder'}>
                                 <div
-                                    data-name="project_home"
+                                    data-name={'project_home'}
                                     data-value={this.props.projectHome}
-                                    className="project-home-folder"
-                                >
-                                    <input
-                                        type="checkbox"
-                                        data-name="use_project_home"
-                                        data-value={this.props.useProjectHome}
-                                        checked={this.props.useProjectHome}
-                                        onChange={(evt) => {
-                                            this.props.onUseProjectHomeChange &&
-                                                this.props.onUseProjectHomeChange(
-                                                    evt.target.checked
-                                                );
-                                        }}
-                                    />
-                                    <input
-                                        type="text"
-                                        readOnly
-                                        disabled={!this.props.useProjectHome}
-                                        value={this.props.projectHome}
-                                        onClick={() => {
-                                            if (
-                                                !this.props.useProjectHome ||
-                                                !this.props.onProjectHomeClick
-                                            ) {
-                                                return;
-                                            }
+                                    className={'project-home-folder'}>
+                                    <input type={'checkbox'}
+                                           data-name={'use_project_home'}
+                                           data-value={this.props.useProjectHome}
+                                           checked={this.props.useProjectHome}
+                                           onChange={(evt) => {
+                                               this.props.onUseProjectHomeChange &&
+                                               this.props.onUseProjectHomeChange(evt.target.checked);
+                                           }}/>
+                                    <input type={'text'}
+                                           readOnly={true}
+                                           disabled={!this.props.useProjectHome}
+                                           value={this.props.projectHome}
+                                           onClick={() => {
+                                               if (!this.props.useProjectHome ||
+                                                   !this.props.onProjectHomeClick) {
+                                                   return;
+                                               }
 
-                                            this.props.onProjectHomeClick();
-                                        }}
-                                    />
+                                               this.props.onProjectHomeClick();
+                                           }}/>
                                 </div>
                             </FormRow>
                         </div>
-                    )}
+                    }
 
                     {this.renderBlockType()}
 
+
                     <FormButtons>
-                        <Button
-                            width={70}
-                            type={ButtonType.BUTTON}
-                            style={ButtonStyle.DANGER}
-                            onClick={() => this.cancel()}
-                            text="Cancel"
-                        />
-                        <Button
-                            width={70}
-                            type={ButtonType.SUBMIT}
-                            style={ButtonStyle.PRIMARY}
-                            text={this.props.creating ? 'Create' : 'Update'}
-                        />
+                        <Button width={70} type={ButtonType.BUTTON} style={ButtonStyle.DANGER}
+                                onClick={() => this.cancel()} text="Cancel"/>
+                        <Button width={70} type={ButtonType.SUBMIT} style={ButtonStyle.PRIMARY}
+                                text={this.props.creating ? 'Create' : 'Update'}/>
+
                     </FormButtons>
+
                 </FormContainer>
             </div>
         );
