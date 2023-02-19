@@ -1,33 +1,17 @@
-import React, { createRef } from "react";
+import React, {createRef} from "react";
 import * as Path from 'path';
 import {Guid} from "guid-typescript";
 
-import {
-    BlockKind,
-    SchemaKind,
-    BlockServiceSpec,
-    BlockMetadata,
-    Asset,
-    FileInfo
-} from "@blockware/ui-web-types";
+import {Asset, BlockKind, BlockMetadata, BlockServiceSpec, FileInfo, SchemaKind} from "@blockware/ui-web-types";
 
-import {
-    FileSystemService,
-    AssetService,
-    BlockService,
-    BlockTypeProvider
-} from "@blockware/ui-web-context";
+import {AssetService, BlockService, BlockTypeProvider, FileSystemService} from "@blockware/ui-web-context";
 
 
-import {
-    SidePanel,
-    PanelSize,
-    PanelAlignment
-} from "@blockware/ui-web-components";
+import {PanelAlignment, PanelSize, showToasty, SidePanel, ToastType} from "@blockware/ui-web-components";
 
 import BlockStoreItem from "./BlockStoreItem";
 
-import { FileBrowserDialog } from "../../file-browser/FileBrowserDialog";
+import {FileBrowserDialog} from "../../file-browser/FileBrowserDialog";
 import BlockForm from "../BlockForm";
 
 import './BlockStore.less';
@@ -156,16 +140,24 @@ class BlockStore extends React.Component<Props, State> {
         this.mounted = false;
     }
 
-    private async createAsset(filePath:string) {
-        const assets:Asset[] = await AssetService.create(Path.join(filePath, '/blockware.yml'), this.state.newEntity);
-        this.resetNewEntity();
-        this.closeCreatePanel();
-        this.closeFileDialog();
-        await this.loadBlocks();
+    private async createAsset(filePath:string, content:SchemaKind) {
+        try {
+            const assets:Asset[] = await AssetService.create(Path.join(filePath, '/blockware.yml'), content);
+            this.resetNewEntity();
+            this.closeCreatePanel();
+            this.closeFileDialog();
+            await this.loadBlocks();
 
-        this.props.onBlockAdded &&
-        assets.length > 0 &&
-        this.props.onBlockAdded(assets[0]);
+            this.props.onBlockAdded &&
+            assets.length > 0 &&
+            this.props.onBlockAdded(assets[0]);
+        } catch (e) {
+            showToasty({
+                type: ToastType.ALERT,
+                title: 'Failed to create asset',
+                message: e.message
+            });
+        }
     }
 
     private async importAsset(filePath:string) {
@@ -189,7 +181,7 @@ class BlockStore extends React.Component<Props, State> {
             if (this.state.fileBrowserState === FileBrowserState.IMPORTING) {
                 await this.importAsset(file.path);
             } else if (this.state.fileBrowserState === FileBrowserState.CREATING) {
-                await this.createAsset(file.path);
+                await this.createAsset(file.path, this.state.newEntity);
             } else if (this.state.fileBrowserState === FileBrowserState.PROJECT_FOLDER) {
                 await this.updateProjectFolder(file.path);
             }
@@ -229,12 +221,14 @@ class BlockStore extends React.Component<Props, State> {
     }
 
     private saveNewEntity = async (data:BlockKind) => {
+        if (this.state.useProjectHome &&
+            this.state.projectHome) {
+            const path = Path.join(this.state.projectHome, data.metadata.name);
+            return await this.createAsset(path, data);
+        }
+
         this.setState({newEntity: data}, () => {
-            if (this.state.useProjectHome && this.state.projectHome) {
-                this.createAsset(Path.join(this.state.projectHome, this.state.newEntity.metadata.name));
-            } else {
-                this.fileDialog.current && this.fileDialog.current.open();
-            }
+            this.fileDialog.current && this.fileDialog.current.open();
         });
     };
 
@@ -261,16 +255,6 @@ class BlockStore extends React.Component<Props, State> {
             fileBrowserState: FileBrowserState.PROJECT_FOLDER
         });
     }
-
-    private onNewEntityUpdate = (metadata: any, spec: any) => {
-        this.setState({
-            newEntity: {
-                kind: BlockTypeProvider.getDefaultKind(),
-                metadata,
-                spec
-            }
-        });
-    };
 
     private renderBlockStore = () => {
         return (
