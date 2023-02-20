@@ -1,21 +1,21 @@
 {
-  "compilerOptions": {
-    "incremental": true,
-    "target": "es5",
-    "module": "commonjs",
-    "jsx": "react-jsx",
-    "strict": false,
-    "sourceMap": true,
-    "baseUrl": "./src",
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "strictNullChecks": true,
-    "useDefineForClassFields": true,
-    "allowSyntheticDefaultImports": true,
-    "experimentalDecorators": true,
-    "resolveJsonModule": true,
-    "allowJs": true,
-    "outDir": ".erb/dll"
-  },
-  "exclude": ["test", "release/build", "release/app/dist", ".erb/dll"]
+    "compilerOptions": {
+        "incremental": true,
+        "target": "es5",
+        "module": "commonjs",
+        "jsx": "react-jsx",
+        "strict": false,
+        "sourceMap": true,
+        "baseUrl": "./src",
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "strictNullChecks": true,
+        "useDefineForClassFields": true,
+        "allowSyntheticDefaultImports": true,
+        "experimentalDecorators": true,
+        "resolveJsonModule": true,
+        "allowJs": true,
+        "outDir": ".erb/dll"
+    },
+    "exclude": ["test", "release/build", "release/app/dist", ".erb/dll"]
 }

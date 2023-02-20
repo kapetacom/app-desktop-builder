@@ -2,53 +2,50 @@
 @import '~@blockware/ui-web-components/styles/functions.less';
 
 .file-browser-dialog {
-
-
-  .modal-container {
-    bottom: 0;
-  }
-
-  .panel-content {
-    overflow: visible;
-  }
-
-  .file-browser-dialog-body {
-    display: flex;
-    height: 100%;
-    width: 100%;
-    flex-direction: column;
-  }
-
-  .file-browser-container {
-    flex: 1;
-  }
-
-  .file-browser-actions {
-    .container();
-    height: 60px;
-    flex-direction: row-reverse;
-    flex: 0;
-    padding-top: 8px;
-
-    & > button {
-      float: right;
-
-      &:first-child {
-        margin-right: 0;
-      }
-    }
-  }
-
-  .file-list-container {
-    position: relative;
-
-    .file-list {
-      top:0;
-      left:0;
-      right:0;
-      bottom: 0;
-      position: absolute;
+    .modal-container {
+        bottom: 0;
     }
 
-  }
+    .panel-content {
+        overflow: visible;
+    }
+
+    .file-browser-dialog-body {
+        display: flex;
+        height: 100%;
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .file-browser-container {
+        flex: 1;
+    }
+
+    .file-browser-actions {
+        .container();
+        height: 60px;
+        flex-direction: row-reverse;
+        flex: 0;
+        padding-top: 8px;
+
+        & > button {
+            float: right;
+
+            &:first-child {
+                margin-right: 0;
+            }
+        }
+    }
+
+    .file-list-container {
+        position: relative;
+
+        .file-list {
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            position: absolute;
+        }
+    }
 }

@@ -1,35 +1,35 @@
 export interface MenuWrapper {
-    color: string
-    size: number
-    position: { left: number, right: number }
-    menuCategories: MenuCategoryModel[]
+    color: string;
+    size: number;
+    position: { left: number; right: number };
+    menuCategories: MenuCategoryModel[];
 }
 
 export enum CategoryState {
-    OPEN = "open",
-    CLOSED = "closed"
+    OPEN = 'open',
+    CLOSED = 'closed',
 }
 
 export interface MenuCategoryModel {
-    icon: string
-    index: number
-    color: string
-    animationState: CategoryState
-    menuItem: MenuItem[]
-    children: SVGSVGElement[]
+    icon: string;
+    index: number;
+    color: string;
+    animationState: CategoryState;
+    menuItem: MenuItem[];
+    children: SVGSVGElement[];
 }
 
 export interface MenuItem {
-    text: string
-    open?: boolean
-    callback: () => boolean
+    text: string;
+    open?: boolean;
+    callback: () => boolean;
 }
 
 export interface MenuCategoryItem {
-    text: string
-    open: boolean
-    icon: string
-    index: number
-    menuItems: MenuItem[]
-    onClick?: () => void
+    text: string;
+    open: boolean;
+    icon: string;
+    index: number;
+    menuItems: MenuItem[];
+    onClick?: () => void;
 }

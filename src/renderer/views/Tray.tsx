@@ -1,11 +1,10 @@
 import React from 'react';
-import {electronRemote} from "@blockware/ui-web-utils";
+import { electronRemote } from '@blockware/ui-web-utils';
 
-let mainWindow:any;
+let mainWindow: any;
 
-async function ensureWindow () {
-    if (mainWindow &&
-        !mainWindow.isDestroyed()) {
+async function ensureWindow() {
+    if (mainWindow && !mainWindow.isDestroyed()) {
         if (mainWindow.isVisible()) {
             mainWindow.show();
         } else {
@@ -19,12 +18,12 @@ async function ensureWindow () {
     // Create the main window.
     mainWindow = new BrowserWindow({
         webPreferences: {
-            nodeIntegration: true
+            nodeIntegration: true,
         },
         title: 'Blockware Desktop',
         titleBarStyle: 'hiddenInset',
         width: 1200,
-        height: 600
+        height: 600,
     });
 
     if (remote.app.dock) {
@@ -45,26 +44,18 @@ async function ensureWindow () {
     }
 }
 
-
 function closeApp() {
     const remote = electronRemote();
     remote.app.exit(0);
 }
 
 export default function Tray(props: any) {
-
     return (
         <>
-            <div>
-                Tray Test!
-            </div>
-            <button onClick={ensureWindow}>
-                Open main window
-            </button>
+            <div>Tray Test!</div>
+            <button onClick={ensureWindow}>Open main window</button>
 
-            <button onClick={closeApp}>
-                Quit
-            </button>
+            <button onClick={closeApp}>Quit</button>
         </>
     );
-};
+}

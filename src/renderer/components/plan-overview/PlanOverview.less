@@ -2,176 +2,173 @@
 @import '~@blockware/ui-web-components/styles/functions.less';
 
 // Plan overview values
-@bw-plan-overview-background: #D9D6CD;
-@bw-plan-overview-plan-background: #FFFFFF;
-@bw-plan-overview-plus: #EE766A;
+@bw-plan-overview-background: #d9d6cd;
+@bw-plan-overview-plan-background: #ffffff;
+@bw-plan-overview-plus: #ee766a;
 @bw-plan-overview-menu-items: @bw-menu-dark;
 @bw-plan-overview-menu-items-hover: lighten(@bw-menu-dark, 20%);
-@bw-plan-overview-title-color: #544B49;
-@bw-plan-overview-stroke: #885A55;
+@bw-plan-overview-title-color: #544b49;
+@bw-plan-overview-stroke: #885a55;
 
 .plan-overview-wrapper {
-  background-color: @bw-planner-background;
-  width: 100%;
-  min-height: 100vh;
-  display: flex;
-  flex-wrap: wrap;
-  padding-top: 60px;
-  filter: "url(#dropshadow)";
-  flex-direction: row;
-  overflow: visible;
-  overflow-y: scroll;
-  justify-content: flex-start;
-  text-anchor: middle;
-
-  text {
-    pointer-events: none;
-  }
-
-  .plan-title {
-    .no-select();
-    fill: @bw-plan-overview-title-color;
-    font-weight: 500;
-    font-size: 18px;
-  }
-
-  .plan-version {
-    .no-select();
-    fill: @bw-plan-overview-title-color;
-    font-weight: 300;
-    font-size: 12px;
-  }
-
-  .mini-plan {
-    .pointer-event-none();
-
-    .planner-block-node {
-      text {
-        display: inline;
-        font-weight: 900;
-      }
-
-      .block-node {
-        .block-body-text {
-
-          &.block-version,
-          &.block-name {
-            opacity: 0;
-          }
-
-          &.instance-name {
-            .transform(translateY(8px));
-          }
-        }
-      }
-
-    }
-
-    .planner-connection {
-      > path {
-        stroke-width: 12px;
-      }
-    }
-
-  }
-
-  .plan-overview-item-background {
-
-    &  > path {
-      fill: @bw-plan-overview-plan-background;
-      .drop-shadow();
-    }
-  }
-
-  .plan-overview-item-wrapper {
+    background-color: @bw-planner-background;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-wrap: wrap;
+    padding-top: 60px;
+    filter: 'url(#dropshadow)';
+    flex-direction: row;
     overflow: visible;
-    width: 340px;
-    margin: 20px;
-    margin-top: 10px;
-    border-radius: 10px;
-    height: 400px;
-    justify-content: space-around;
-    align-content: center;
-    text-align: center;
-    fill: @bw-plan-overview-background;
+    overflow-y: scroll;
+    justify-content: flex-start;
+    text-anchor: middle;
 
-    foreignObject > i {
-      visibility: hidden;
-    }
-
-    .sub-plan-overview-menu { //Makes the menu disappear on mouse out
-      visibility: hidden;
-    }
-
-    &:hover {
-      foreignObject > i {
-        visibility: visible;
-        color: @gray-xdark;
-      }
-
-      .sub-plan-overview-menu { //Makes menu visible on mouse hover
-        visibility: visible;
-      }
-    }
-
-    &:hover {
-      box-shadow: inset 0px 0px 6px 2px;
-      background-color: #E7E4E1;
-    }
-
-    .overview-item {
-      flex-wrap: wrap;
-      position: relative;
-      overflow: visible;
-      height: 220px;
-
-      .menu-item, .overview-item-menu {
-        cursor: pointer;
-      }
-
-      .sub-plan-overview-menu {
-        position: relative;
-        overflow: visible;
-        fill: @bw-plan-overview-menu-items;
-        opacity: 0;
-        display: block;
-        transform: translate(-10px, 140px);
+    text {
         pointer-events: none;
-        .transition();
+    }
+
+    .plan-title {
+        .no-select();
+        fill: @bw-plan-overview-title-color;
+        font-weight: 500;
+        font-size: 18px;
+    }
+
+    .plan-version {
+        .no-select();
+        fill: @bw-plan-overview-title-color;
+        font-weight: 300;
+        font-size: 12px;
+    }
+
+    .mini-plan {
+        .pointer-event-none();
+
+        .planner-block-node {
+            text {
+                display: inline;
+                font-weight: 900;
+            }
+
+            .block-node {
+                .block-body-text {
+                    &.block-version,
+                    &.block-name {
+                        opacity: 0;
+                    }
+
+                    &.instance-name {
+                        .transform(translateY(8px));
+                    }
+                }
+            }
+        }
+
+        .planner-connection {
+            > path {
+                stroke-width: 12px;
+            }
+        }
+    }
+
+    .plan-overview-item-background {
+        & > path {
+            fill: @bw-plan-overview-plan-background;
+            .drop-shadow();
+        }
+    }
+
+    .plan-overview-item-wrapper {
+        overflow: visible;
+        width: 340px;
+        margin: 20px;
+        margin-top: 10px;
+        border-radius: 10px;
+        height: 400px;
+        justify-content: space-around;
+        align-content: center;
+        text-align: center;
+        fill: @bw-plan-overview-background;
+
+        foreignObject > i {
+            visibility: hidden;
+        }
+
+        .sub-plan-overview-menu {
+            //Makes the menu disappear on mouse out
+            visibility: hidden;
+        }
 
         &:hover {
-          fill: @bw-plan-overview-menu-items-hover;
+            foreignObject > i {
+                visibility: visible;
+                color: @gray-xdark;
+            }
+
+            .sub-plan-overview-menu {
+                //Makes menu visible on mouse hover
+                visibility: visible;
+            }
         }
 
-        &.active-menu {
-          transform: translate(-10px, 240px);
-          opacity: 1;
-          pointer-events: auto;
+        &:hover {
+            box-shadow: inset 0px 0px 6px 2px;
+            background-color: #e7e4e1;
         }
-      }
-    }
 
-    svg {
+        .overview-item {
+            flex-wrap: wrap;
+            position: relative;
+            overflow: visible;
+            height: 220px;
 
-      overflow: visible;
-    }
+            .menu-item,
+            .overview-item-menu {
+                cursor: pointer;
+            }
 
-    .menu-item-text {
-      opacity: 1;
-      stroke: @bw-plan-overview-plan-background;
-      fill: @bw-plan-overview-plan-background;
+            .sub-plan-overview-menu {
+                position: relative;
+                overflow: visible;
+                fill: @bw-plan-overview-menu-items;
+                opacity: 0;
+                display: block;
+                transform: translate(-10px, 140px);
+                pointer-events: none;
+                .transition();
+
+                &:hover {
+                    fill: @bw-plan-overview-menu-items-hover;
+                }
+
+                &.active-menu {
+                    transform: translate(-10px, 240px);
+                    opacity: 1;
+                    pointer-events: auto;
+                }
+            }
+        }
+
+        svg {
+            overflow: visible;
+        }
+
+        .menu-item-text {
+            opacity: 1;
+            stroke: @bw-plan-overview-plan-background;
+            fill: @bw-plan-overview-plan-background;
+        }
     }
-  }
 }
 
 .plan-overview-placeholder {
-  position: relative;
-  width: 100%;
-  min-height: 100vh;
-  display: flex;
-  flex-wrap: wrap;
-  padding-top: 60px;
-  align-items: center;
-  justify-content: center;
-
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-wrap: wrap;
+    padding-top: 60px;
+    align-items: center;
+    justify-content: center;
 }

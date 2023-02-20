@@ -2,11 +2,11 @@
 @import '~@blockware/ui-web-components/styles/functions.less';
 
 .file-browser-container {
-
-    ul,li {
+    ul,
+    li {
         list-style: none;
-        padding:0;
-        margin:0;
+        padding: 0;
+        margin: 0;
     }
 
     display: flex;
@@ -25,16 +25,15 @@
     & > .actions-container {
         height: 24px;
         flex: 0;
-        padding:2px 0;
+        padding: 2px 0;
 
         .error-message {
             .flash();
             margin-top: 12px;
-            float:left;
-            color:@red-dark;
-            font-size:12px;
+            float: left;
+            color: @red-dark;
+            font-size: 12px;
             font-weight: bold;
-
         }
 
         .actions {
@@ -46,7 +45,7 @@
                 line-height: 22px;
                 width: 28px;
                 text-align: center;
-                border:1px solid @gray-light;
+                border: 1px solid @gray-light;
 
                 &:hover {
                     background-color: @blue-light;
@@ -59,40 +58,36 @@
     & > .path-container {
         height: 24px;
         flex: 0;
-        margin:3px 0;
-
+        margin: 3px 0;
 
         .current-path {
             border: 1px solid @gray-light;
 
             input {
-                padding:0 8px;
+                padding: 0 8px;
                 font-size: 12px;
-                border:0;
+                border: 0;
                 line-height: 24px;
             }
         }
-
     }
 
     & > .file-list-container {
         flex: 1;
-        padding:5px;
+        padding: 5px;
         border: 1px solid @gray-light;
         position: relative;
         overflow: auto;
 
         .root-loader {
             text-align: center;
-            padding:20px;
+            padding: 20px;
             i {
                 margin-right: 10px;
             }
         }
 
         .file-list {
-
-
             & > li.file {
                 .no-select();
                 display: flex;
@@ -122,11 +117,9 @@
                     box-sizing: border-box;
                 }
 
-
-
                 &.selectable {
                     cursor: pointer;
-                    color:inherit;
+                    color: inherit;
                 }
 
                 &.folder,
@@ -138,7 +131,7 @@
                     display: none;
                 }
 
-                &.unselectable:not(.folder,.exists) {
+                &.unselectable:not(.folder, .exists) {
                     color: #ccc;
                 }
 
