@@ -108,44 +108,44 @@ export default class MenuCategory extends Component<
         // console.log('rendering', this.props.categoryIndex, this.props.activeIndex, isCurrent, isActive);
 
         return (
-            <>
-                <g
-                    className={`menu-category ${classnames}`}
-                    onTransitionEndCapture={() => {
-                        this.handleTransitionEnd(this.props.activeIndex);
-                    }}
-                    style={{
-                        opacity: isActive ? 1 : 0,
-                        transform: `translateY(${this.currentPosition()}px)`,
-                    }}
-                >
-                    <g className="menu-category-inner">
-                        <MenuHexagon
-                            onClick={
-                                this.props.menuOpen
-                                    ? this.toggleMenuItems
-                                    : () => {}
-                            }
-                        >
-                            <i className={`fal ${this.props.icon}`} />
-                        </MenuHexagon>
-                        <g
-                            className="sub-category-menu-item-holder active"
-                            style={{
-                                pointerEvents: this.props.open ? 'all' : 'none',
+            <g
+                className={`menu-category ${classnames}`}
+                onTransitionEndCapture={() => {
+                    this.handleTransitionEnd(this.props.activeIndex);
+                }}
+                style={{
+                    opacity: isActive ? 1 : 0,
+                    transform: `translateY(${this.currentPosition()}px)`,
+                }}
+            >
+                <g className="menu-category-inner">
+                    <MenuHexagon
+                        onClick={
+                            this.props.menuOpen
+                                ? this.toggleMenuItems
+                                : () => {
+                                      // Do nothing
+                                  }
+                        }
+                    >
+                        <i className={`fal ${this.props.icon}`} />
+                    </MenuHexagon>
+                    <g
+                        className="sub-category-menu-item-holder active"
+                        style={{
+                            pointerEvents: this.props.open ? 'all' : 'none',
+                        }}
+                    >
+                        <MenuItems
+                            closeMenu={() => {
+                                this.toggleMenuItems();
                             }}
-                        >
-                            <MenuItems
-                                closeMenu={() => {
-                                    this.toggleMenuItems();
-                                }}
-                                visible={this.props.open}
-                                menuItems={this.props.categoryItem.menuItems}
-                            />
-                        </g>
+                            visible={this.props.open}
+                            menuItems={this.props.categoryItem.menuItems}
+                        />
                     </g>
                 </g>
-            </>
+            </g>
         );
     }
 }

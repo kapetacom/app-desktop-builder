@@ -158,6 +158,7 @@ export class FileBrowser extends React.Component<FileBrowserProps> {
     }
 
     @action
+    // eslint-disable-next-line react/no-unused-class-component-methods
     private async reloadFolder() {
         this.root.loaded = false;
         return this.loadFolder(this.root);

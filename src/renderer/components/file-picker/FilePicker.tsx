@@ -152,7 +152,8 @@ export class FilePicker extends React.Component<
 
     private async addFiles(domFiles: FileList) {
         const files = this.props.multiple
-            ? _.clone(this.state.currentFiles)
+            ? // eslint-disable-next-line react/no-access-state-in-setstate
+              _.clone(this.state.currentFiles)
             : [];
         let anyValid = false;
 
@@ -269,7 +270,10 @@ export class FilePicker extends React.Component<
             <ul className="files">
                 {this.state.currentFiles.map((file, ix) => {
                     return (
-                        <li className="file" key={ix}>
+                        <li
+                            className="file"
+                            key={`${file.name}.${file.extension}`}
+                        >
                             <div className="info">{this.renderFile(file)}</div>
                             <div className="actions">
                                 <button
@@ -292,10 +296,12 @@ export class FilePicker extends React.Component<
     }
 
     private removeFile(file: FileWrapper): void {
-        const files = _.clone(this.state.currentFiles);
-        _.pull(files, file);
-        this.setState({
-            currentFiles: files,
+        this.setState((state) => {
+            const files = _.clone(state.currentFiles);
+            _.pull(files, file);
+            return {
+                currentFiles: files,
+            };
         });
     }
 

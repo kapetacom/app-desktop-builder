@@ -160,12 +160,15 @@ export default observer(function Main() {
                                             >
                                                 {plan.model.name} [
                                                 {plan.version}]{' '}
-                                                <i
+                                                <button
+                                                    style={{ all: 'unset' }}
+                                                    type="button"
                                                     onClick={() => {
                                                         onTabClosed(plan);
                                                     }}
-                                                    className="fal fa-times close-plan"
-                                                />
+                                                >
+                                                    <i className="fal fa-times close-plan" />
+                                                </button>
                                             </div>
                                         </Tab>
                                     );

@@ -84,14 +84,14 @@ export default class Menu extends Component<
     };
 
     private resetCategoryMenus = () => {
-        let tempMenuCategories = this.state.menuCategoryItems;
-        tempMenuCategories = this.state.menuCategoryItems.map(
-            (categoryMenu) => {
+        this.setState((state) => {
+            let tempMenuCategories = state.menuCategoryItems;
+            tempMenuCategories = state.menuCategoryItems.map((categoryMenu) => {
                 categoryMenu.open = false;
                 return categoryMenu;
-            }
-        );
-        this.setState({ menuCategoryItems: tempMenuCategories });
+            });
+            return { menuCategoryItems: tempMenuCategories };
+        });
     };
 
     private renderMenuCategories() {
@@ -136,14 +136,19 @@ export default class Menu extends Component<
     }
 
     private toggleCategories = () => {
-        let temCategoryItems = _.cloneDeep(this.state.menuCategoryItems);
-        temCategoryItems = temCategoryItems.map((category) => {
-            category.open = false;
-            return category;
-        });
-
-        this.setState({ menuCategoryItems: temCategoryItems });
-        this.resetCategoryMenus();
+        this.setState(
+            (state) => {
+                let temCategoryItems = _.cloneDeep(state.menuCategoryItems);
+                temCategoryItems = temCategoryItems.map((category) => {
+                    category.open = false;
+                    return category;
+                });
+                return { menuCategoryItems: temCategoryItems };
+            },
+            () => {
+                this.resetCategoryMenus();
+            }
+        );
     };
 
     render() {

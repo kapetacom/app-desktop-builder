@@ -3,7 +3,7 @@ export class FileWrapper<T = any> {
 
     public readonly extension: string;
 
-    public progress: number = 0;
+    public progress = 0;
 
     public content?: string;
 

@@ -282,11 +282,11 @@ const createWindow = async () => {
     await refreshTray();
 
     mainWindow.maximize();
-    const clusterService = encodeURIComponent(
+    const clusterServiceURL = encodeURIComponent(
         `http://${localClusterInfo?.host}:${localClusterInfo?.port}`
     );
     await mainWindow.loadURL(
-        `${resolveHtmlPath(`index.html`)}#cluster_service=${clusterService}`
+        `${resolveHtmlPath(`index.html`)}#cluster_service=${clusterServiceURL}`
     );
 
     mainWindow.on('show', showDock);

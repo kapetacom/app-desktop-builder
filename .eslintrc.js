@@ -20,7 +20,21 @@ module.exports = {
         'react/jsx-filename-extension': [1, { extensions: ['.tsx', '.jsx'] }],
         'react/jsx-props-no-spreading': 'off',
         'react/no-unused-prop-types': 'warn',
+        // Override airbnb rule
+        // Labels for inputs can either be with `<label htmlFor={...}>` and ids,
+        // or via nesting <label><input/></label>
+        'jsx-a11y/label-has-associated-control': [
+            'error',
+            {
+                labelComponents: ['label'],
+                labelAttributes: [],
+                controlComponents: ['input', 'select', 'textarea'],
+                assert: 'either',
+                depth: 25,
+            },
+        ],
         'class-methods-use-this': 'off',
+        'no-await-in-loop': 'off',
         'no-console': 'off',
         'no-plusplus': 'off',
         'no-multi-assign': 'off',

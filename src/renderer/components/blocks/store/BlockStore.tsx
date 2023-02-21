@@ -61,7 +61,7 @@ class BlockStore extends React.Component<Props, State> {
 
     private fileDialog = createRef<FileBrowserDialog>();
 
-    private mounted: boolean = false;
+    private mounted = false;
 
     constructor(props: Props) {
         super(props);
@@ -234,7 +234,7 @@ class BlockStore extends React.Component<Props, State> {
                         return false;
                     })
                     .map((item, ix) => {
-                        return <BlockStoreItem key={ix} item={item} />;
+                        return <BlockStoreItem key={item.ref} item={item} />;
                     })}
             </div>
         );
@@ -243,7 +243,8 @@ class BlockStore extends React.Component<Props, State> {
     private saveNewEntity = async (data: BlockKind) => {
         if (this.state.useProjectHome && this.state.projectHome) {
             const path = Path.join(this.state.projectHome, data.metadata.name);
-            return this.createAsset(path, data);
+            await this.createAsset(path, data);
+            return;
         }
 
         this.setState({ newEntity: data }, () => {
@@ -280,7 +281,8 @@ class BlockStore extends React.Component<Props, State> {
             <div className="block-store-section">
                 <div className="section">
                     <div className="block-store-import-create">
-                        <div
+                        <button
+                            type="button"
                             className="create-block-button"
                             onClick={() => this.openAssetCreate()}
                         >
@@ -308,8 +310,9 @@ class BlockStore extends React.Component<Props, State> {
                                 />
                             </svg>
                             <p>Create</p>
-                        </div>
-                        <div
+                        </button>
+                        <button
+                            type="button"
                             className="import-block-button"
                             onClick={() => this.openAssetImport()}
                         >
@@ -339,7 +342,7 @@ class BlockStore extends React.Component<Props, State> {
                                 />
                             </svg>
                             <p>Import</p>
-                        </div>
+                        </button>
                     </div>
                     <div className="block-store-search">
                         <i className="search-icon fa fa-search " />
