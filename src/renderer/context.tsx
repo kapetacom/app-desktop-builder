@@ -1,12 +1,11 @@
 /* Initialise contexts */
-import Blockware from './blockware';
 import {
     ResourceTypeProvider,
     BlockTypeProvider,
     BlockTargetProvider,
 } from '@blockware/ui-web-context';
-import {} from '@blockware/ui-web-context';
 import _ from 'lodash';
+import Blockware from './blockware';
 
 export async function initialise() {
     const start = Date.now();
@@ -19,6 +18,7 @@ export async function initialise() {
             scriptElm.addEventListener('error', resolve);
         });
         document.body.appendChild(scriptElm);
+        // eslint-disable-next-line no-await-in-loop
         await loaderPromise;
     }
 

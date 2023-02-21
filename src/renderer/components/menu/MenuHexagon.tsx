@@ -21,9 +21,8 @@ const MenuHexagon = (props: MenuWrapperProps) => {
     const getSize = () => {
         if (props.size) {
             return props.size;
-        } else {
-            return 30;
         }
+        return 30;
     };
 
     const isDark = () => {
@@ -38,7 +37,7 @@ const MenuHexagon = (props: MenuWrapperProps) => {
                 }
             }}
             onClick={props.onClick}
-            className={'menu-hexagon ' + toClass({ dark: isDark() })}
+            className={`menu-hexagon ${toClass({ dark: isDark() })}`}
         >
             <path
                 d={createSimpleHexagon(1.3 * getSize(), Orientation.HORIZONTAL)}
@@ -50,7 +49,7 @@ const MenuHexagon = (props: MenuWrapperProps) => {
                     x="16"
                     y="10"
                     width="30"
-                    alignmentBaseline={'central'}
+                    alignmentBaseline="central"
                 >
                     {props.children}
                 </foreignObject>

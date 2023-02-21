@@ -1,5 +1,4 @@
 import React, { ComponentType } from 'react';
-import { action } from 'mobx';
 
 import {
     Button,
@@ -13,13 +12,7 @@ import {
 } from '@blockware/ui-web-components';
 
 import { BlockTypeProvider } from '@blockware/ui-web-context';
-import type {
-    BlockKind,
-    BlockMetadata,
-    EntityConfigProps,
-    SchemaKind,
-    Type,
-} from '@blockware/ui-web-types';
+import type { BlockKind, SchemaKind } from '@blockware/ui-web-types';
 
 import './BlockForm.less';
 import { BlockConfigComponentProps } from '@blockware/ui-web-types';
@@ -40,7 +33,7 @@ interface State {
     block: BlockKind;
 }
 
-function emptyBlock(): BlockKind<any> {
+function emptyBlock(): BlockKind<void> {
     return {
         kind: BlockTypeProvider.getDefaultKind(),
         metadata: { name: '', title: '' },
@@ -79,7 +72,7 @@ class BlockForm extends React.Component<Props, State> {
     }
 
     createDropdownOptions() {
-        let options: { [key: string]: string } = {};
+        const options: { [key: string]: string } = {};
         try {
             BlockTypeProvider.listAll().forEach((blockTypeConfig) => {
                 const id = `${blockTypeConfig.kind}:${blockTypeConfig.version}`;
@@ -128,7 +121,7 @@ class BlockForm extends React.Component<Props, State> {
 
     render() {
         return (
-            <div className={'block-form'}>
+            <div className="block-form">
                 <FormContainer
                     initialValue={this.state.block}
                     onChange={(data) => {
@@ -139,57 +132,57 @@ class BlockForm extends React.Component<Props, State> {
                     }}
                 >
                     <FormField
-                        name={'kind'}
-                        label={'Type'}
+                        name="kind"
+                        label="Type"
                         validation={['required']}
                         type={FormFieldType.ENUM}
-                        help={'The type of block you want to create.'}
+                        help="The type of block you want to create."
                         options={this.createDropdownOptions()}
                         disabled={!this.props.creating}
                     />
 
                     <FormField
-                        name={'metadata.name'}
+                        name="metadata.name"
                         validation={['required', validateBlockName]}
                         type={FormFieldType.STRING}
-                        label={'Name'}
+                        label="Name"
                         help={
                             'Give your block a system name prefixed with your handle - e.g. "myhandle/my-block"'
                         }
                     />
 
                     <FormField
-                        name={'metadata.title'}
+                        name="metadata.title"
                         type={FormFieldType.STRING}
-                        label={'Title'}
-                        help={'Give your block a human-friendly title'}
+                        label="Title"
+                        help="Give your block a human-friendly title"
                     />
 
                     {this.props.creating && (
                         <div>
                             <FormRow
-                                label={'Project folder'}
+                                label="Project folder"
                                 help={
                                     this.props.useProjectHome
                                         ? 'Choose project home to create this block in'
                                         : 'Check this to save block in project home'
                                 }
-                                focused={true}
+                                focused
                                 validation={
                                     this.props.useProjectHome
                                         ? ['required']
                                         : []
                                 }
-                                type={'folder'}
+                                type="folder"
                             >
                                 <div
-                                    data-name={'project_home'}
+                                    data-name="project_home"
                                     data-value={this.props.projectHome}
-                                    className={'project-home-folder'}
+                                    className="project-home-folder"
                                 >
                                     <input
-                                        type={'checkbox'}
-                                        data-name={'use_project_home'}
+                                        type="checkbox"
+                                        data-name="use_project_home"
                                         data-value={this.props.useProjectHome}
                                         checked={this.props.useProjectHome}
                                         onChange={(evt) => {
@@ -200,8 +193,8 @@ class BlockForm extends React.Component<Props, State> {
                                         }}
                                     />
                                     <input
-                                        type={'text'}
-                                        readOnly={true}
+                                        type="text"
+                                        readOnly
                                         disabled={!this.props.useProjectHome}
                                         value={this.props.projectHome}
                                         onClick={() => {

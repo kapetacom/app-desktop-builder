@@ -152,7 +152,8 @@ export class FilePicker extends React.Component<
 
     private async addFiles(domFiles: FileList) {
         const files = this.props.multiple
-            ? _.clone(this.state.currentFiles)
+            ? // eslint-disable-next-line react/no-access-state-in-setstate
+              _.clone(this.state.currentFiles)
             : [];
         let anyValid = false;
 
@@ -184,7 +185,7 @@ export class FilePicker extends React.Component<
             files.push(wrapper);
 
             if (!this.props.multiple && files.length > 0) {
-                break; //Stop
+                break; // Stop
             }
         }
 
@@ -204,7 +205,7 @@ export class FilePicker extends React.Component<
 
         // @ts-ignore
         if (window.boundFilePicker) {
-            //We make sure we only do this once
+            // We make sure we only do this once
             return;
         }
 
@@ -240,20 +241,20 @@ export class FilePicker extends React.Component<
 
     renderFile(file: FileWrapper) {
         if (this.props.renderFile) {
-            //Allows overwriting the file rendering
+            // Allows overwriting the file rendering
             return this.props.renderFile(file);
         }
 
         return (
             <>
-                <div className={'name'}>{file.name}</div>
-                <div className={'type'}>
-                    <span className={'label'}>Type:</span>
-                    <span className={'value'}>{file.type}</span>
+                <div className="name">{file.name}</div>
+                <div className="type">
+                    <span className="label">Type:</span>
+                    <span className="value">{file.type}</span>
                 </div>
-                <div className={'size'}>
-                    <span className={'label'}>Size:</span>
-                    <span className={'value'}>{formatBytes(file.size)}</span>
+                <div className="size">
+                    <span className="label">Size:</span>
+                    <span className="value">{formatBytes(file.size)}</span>
                 </div>
             </>
         );
@@ -261,29 +262,30 @@ export class FilePicker extends React.Component<
 
     renderFiles() {
         if (this.props.renderFiles) {
-            //Allows overwriting the file rendering
+            // Allows overwriting the file rendering
             return this.props.renderFiles(this.state.currentFiles);
         }
 
         return (
-            <ul className={'files'}>
+            <ul className="files">
                 {this.state.currentFiles.map((file, ix) => {
                     return (
-                        <li className={'file'} key={ix}>
-                            <div className={'info'}>
-                                {this.renderFile(file)}
-                            </div>
-                            <div className={'actions'}>
+                        <li
+                            className="file"
+                            key={`${file.name}.${file.extension}`}
+                        >
+                            <div className="info">{this.renderFile(file)}</div>
+                            <div className="actions">
                                 <button
-                                    type={'button'}
-                                    className={'danger'}
-                                    title={'Remove file'}
+                                    type="button"
+                                    className="danger"
+                                    title="Remove file"
                                     onClick={(evt) => {
                                         evt.preventDefault();
                                         this.removeFile(file);
                                     }}
                                 >
-                                    <i className={'fa fa-times'} />
+                                    <i className="fa fa-times" />
                                 </button>
                             </div>
                         </li>
@@ -294,10 +296,12 @@ export class FilePicker extends React.Component<
     }
 
     private removeFile(file: FileWrapper): void {
-        const files = _.clone(this.state.currentFiles);
-        _.pull(files, file);
-        this.setState({
-            currentFiles: files,
+        this.setState((state) => {
+            const files = _.clone(state.currentFiles);
+            _.pull(files, file);
+            return {
+                currentFiles: files,
+            };
         });
     }
 
@@ -316,9 +320,9 @@ export class FilePicker extends React.Component<
 
         return (
             <div className={containerClass}>
-                <label className={'instructions'}>
+                <label className="instructions">
                     <div
-                        className={'mouse-catcher'}
+                        className="mouse-catcher"
                         onDragEnterCapture={this.onDragEnter}
                         onDragLeaveCapture={this.onDragLeave}
                         onDragOverCapture={this.onDragOver}
@@ -327,14 +331,14 @@ export class FilePicker extends React.Component<
 
                     <i className="main-icon fa fa-cloud-upload" />
 
-                    <span className={'description'}>
+                    <span className="description">
                         Click or drag files here to upload them now.
                     </span>
 
                     <input
                         type="file"
                         onChange={this.onFileInputChange}
-                        value={''} //Ensures the file input field always changes
+                        value="" // Ensures the file input field always changes
                         multiple={this.props.multiple}
                         accept={accept}
                     />

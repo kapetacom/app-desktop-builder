@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
     Asset,
     EntityConfigProps,
@@ -17,33 +17,32 @@ interface PlanImportProps {
 }
 
 const PlanForm = (props: EntityConfigProps) => {
-    function updateValue(fieldName: string, value: string) {
-        const newMetadata = { ...props.metadata };
-        newMetadata[fieldName] = value;
-        props.onDataChanged(newMetadata, props.spec);
-    }
+    const updateValue = useCallback(
+        (fieldName: string, value: string) => {
+            const newMetadata = { ...props.metadata };
+            newMetadata[fieldName] = value;
+            props.onDataChanged(newMetadata, props.spec);
+        },
+        [props]
+    );
 
     return (
         <>
             <FormInput
-                name={'name'}
+                name="name"
                 value={props.metadata.name}
-                label={'Name'}
+                label="Name"
                 validation={['required']}
-                help={
-                    'Give your plan an identifier with your handle. E.g. myhandle/my-plan'
-                }
+                help="Give your plan an identifier with your handle. E.g. myhandle/my-plan"
                 onChange={updateValue}
             />
 
             <FormInput
-                name={'title'}
+                name="title"
                 value={props.metadata.title}
-                label={'Title'}
+                label="Title"
                 validation={['required']}
-                help={
-                    'Give your plan a user friendly title - e.g. My Awesome Plan'
-                }
+                help="Give your plan a user friendly title - e.g. My Awesome Plan"
                 onChange={updateValue}
             />
         </>
@@ -68,11 +67,11 @@ class PlanImport extends React.Component<PlanImportProps> {
     render() {
         return (
             <AssetImport
-                title={'Create new plan...'}
+                title="Create new plan..."
                 skipFiles={this.props.skipFiles}
-                introduction={''}
+                introduction=""
                 createNewKind={this.createNewPlan}
-                fileName={'blockware.yml'}
+                fileName="blockware.yml"
                 onDone={this.props.onDone}
                 fileSelectableHandler={this.selectableHandler}
                 assetService={this.props.assetService}

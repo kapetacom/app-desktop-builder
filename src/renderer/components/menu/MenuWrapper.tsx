@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
+import { toClass } from '@blockware/ui-web-utils';
+import * as _ from 'lodash';
+
 import { MenuCategoryItem, CategoryState } from './MenuDataModel';
 import './Menu.less';
-import MenuHexagon from './MenuHexagon';
-import { observer } from 'mobx-react';
 import MenuCategory from './MenuCategory';
-import { action, makeObservable } from 'mobx';
-import * as _ from 'lodash';
-import { toClass } from '@blockware/ui-web-utils';
+import MenuHexagon from './MenuHexagon';
 
 interface MenuWrapperProps {
     menuCategoryItems: MenuCategoryItem[];
@@ -38,15 +37,15 @@ export default class Menu extends Component<
             expanding &&
             this.state.activeIndex < this.state.menuCategoryItems.length
         ) {
-            this.setState({
-                activeIndex: this.state.activeIndex + 1,
+            this.setState((state) => ({
+                activeIndex: state.activeIndex + 1,
                 categoryItemState: CategoryState.OPEN,
-            });
+            }));
         } else if (this.state.activeIndex > -1 && !expanding) {
-            this.setState({
-                activeIndex: this.state.activeIndex - 1,
+            this.setState((state) => ({
+                activeIndex: state.activeIndex - 1,
                 categoryItemState: CategoryState.CLOSED,
-            });
+            }));
         }
 
         return true;
@@ -54,13 +53,16 @@ export default class Menu extends Component<
 
     private toggleMenuCategories = (open: boolean, index: number) => {
         this.resetCategoryMenus();
-        let temCategoryItems = _.cloneDeep(this.state.menuCategoryItems);
-        if (!open) {
-            temCategoryItems[index].open = true;
-        } else {
-            temCategoryItems[index].open = false;
-        }
-        this.setState({ menuCategoryItems: temCategoryItems });
+        this.setState((state) => {
+            const temCategoryItems = _.cloneDeep(state.menuCategoryItems);
+            if (!open) {
+                temCategoryItems[index].open = true;
+            } else {
+                temCategoryItems[index].open = false;
+            }
+
+            return { menuCategoryItems: temCategoryItems };
+        });
     };
 
     private toggleMenu = () => {
@@ -71,25 +73,25 @@ export default class Menu extends Component<
                 menuOpen: true,
             });
         } else {
-            this.setState({
-                activeIndex: this.state.menuCategoryItems.length - 1,
+            this.setState((state) => ({
+                activeIndex: state.menuCategoryItems.length - 1,
                 categoryItemState: CategoryState.CLOSED,
                 menuOpen: false,
-            });
+            }));
         }
 
         return true;
     };
 
     private resetCategoryMenus = () => {
-        let tempMenuCategories = this.state.menuCategoryItems;
-        tempMenuCategories = this.state.menuCategoryItems.map(
-            (categoryMenu) => {
+        this.setState((state) => {
+            let tempMenuCategories = state.menuCategoryItems;
+            tempMenuCategories = state.menuCategoryItems.map((categoryMenu) => {
                 categoryMenu.open = false;
                 return categoryMenu;
-            }
-        );
-        this.setState({ menuCategoryItems: tempMenuCategories });
+            });
+            return { menuCategoryItems: tempMenuCategories };
+        });
     };
 
     private renderMenuCategories() {
@@ -108,7 +110,7 @@ export default class Menu extends Component<
                         return (
                             <MenuCategory
                                 menuOpen={this.state.menuOpen}
-                                key={index + 'menuItem'}
+                                key={`${index}menuItem`}
                                 activeIndex={this.state.activeIndex}
                                 animationState={this.state.categoryItemState}
                                 open={categoryItem.open}
@@ -134,28 +136,33 @@ export default class Menu extends Component<
     }
 
     private toggleCategories = () => {
-        let temCategoryItems = _.cloneDeep(this.state.menuCategoryItems);
-        temCategoryItems = temCategoryItems.map((category) => {
-            category.open = false;
-            return category;
-        });
-
-        this.setState({ menuCategoryItems: temCategoryItems });
-        this.resetCategoryMenus();
+        this.setState(
+            (state) => {
+                let temCategoryItems = _.cloneDeep(state.menuCategoryItems);
+                temCategoryItems = temCategoryItems.map((category) => {
+                    category.open = false;
+                    return category;
+                });
+                return { menuCategoryItems: temCategoryItems };
+            },
+            () => {
+                this.resetCategoryMenus();
+            }
+        );
     };
 
     render() {
-        let classNames = toClass({
+        const classNames = toClass({
             'menu-wrapper': true,
             'menu-open': this.state.menuOpen,
         });
         return (
             <svg className={classNames}>
-                <g className={'menu'}>
+                <g className="menu">
                     {this.renderMenuCategories()}
                     <MenuHexagon
-                        isDark={true}
-                        custom={true}
+                        isDark
+                        custom
                         onClick={() => {
                             this.toggleCategories();
                             this.toggleMenu();
@@ -169,7 +176,7 @@ export default class Menu extends Component<
                             xmlns="http://www.w3.org/2000/svg"
                         >
                             <g
-                                className={'menu-logo'}
+                                className="menu-logo"
                                 style={{
                                     transform: `rotate(${this.calcRotationDeg()}deg)`,
                                     transformOrigin: '26.5% 24.5%',

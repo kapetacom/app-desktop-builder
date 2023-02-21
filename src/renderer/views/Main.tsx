@@ -6,20 +6,20 @@ import {
     PlannerModelRef,
     PlannerModelReader,
 } from '@blockware/ui-web-plan-editor';
-import { PlanView } from './PlanView';
 import PlanOverview from 'renderer/components/plan-overview/PlanOverview';
 
 import { BlockService, PlannerService } from '@blockware/ui-web-context';
 import { Asset, PlanKind } from '@blockware/ui-web-types';
 import { useList } from 'react-use';
 import { toClass } from '@blockware/ui-web-utils';
-import { useLocalStorage } from '../utils/localStorage';
 import {
     showToasty,
     SimpleLoader,
     ToastType,
 } from '@blockware/ui-web-components';
 import { observer } from 'mobx-react-lite';
+import { useLocalStorage } from '../utils/localStorage';
+import { PlanView } from './PlanView';
 
 export default observer(function Main() {
     const [activeTab, setActiveTab] = useLocalStorage<number>(
@@ -65,8 +65,8 @@ export default observer(function Main() {
         try {
             setError('');
             planAssets = await PlannerService.list();
-        } catch (e: any) {
-            setError('Failed to load plans: ' + e.message);
+        } catch (e: unknown) {
+            setError(`Failed to load plans: ${(e as Error).message}`);
             return;
         }
 
@@ -85,23 +85,14 @@ export default observer(function Main() {
                     showToasty({
                         title: 'Failed to load plan',
                         type: ToastType.DANGER,
-                        message: '' + plan.reason,
+                        message: `${plan.reason}`,
                     });
                 }
             });
             setPlanModels(planList);
-        } catch (e: any) {
-            setError('Failed to load plans models: ' + e.message);
-            return;
+        } catch (e: unknown) {
+            setError(`Failed to load plans models: ${(e as Error).message}`);
         }
-    };
-
-    const onAssetAdded = async (asset: Asset<PlanKind>) => {
-        console.log('Loading asset', asset);
-        const plannerModelRef = await loadAsset(asset);
-        console.log('Loaded asset', plannerModelRef);
-        pushPlanModels(plannerModelRef);
-        onPlanSelected(plannerModelRef);
     };
 
     const onPlanSelected = (plan: PlannerModelRef) => {
@@ -112,12 +103,20 @@ export default observer(function Main() {
         if (exists) {
             setActiveTab(
                 openPlans.findIndex((openPlan) => openPlan.ref === plan.ref)
-            ); //set the tab equal to the index of the clicked plan in the openPlans
+            ); // set the tab equal to the index of the clicked plan in the openPlans
         } else {
             openPlans.push(plan);
             setOpenPlanRefs(openPlans.map((p) => p.ref));
             setActiveTab(openPlans.indexOf(plan));
         }
+    };
+
+    const onAssetAdded = async (asset: Asset<PlanKind>) => {
+        console.log('Loading asset', asset);
+        const plannerModelRef = await loadAsset(asset);
+        console.log('Loaded asset', plannerModelRef);
+        pushPlanModels(plannerModelRef);
+        onPlanSelected(plannerModelRef);
     };
 
     const onTabClosed = (plan: PlannerModelRef) => {
@@ -136,7 +135,7 @@ export default observer(function Main() {
     });
 
     return (
-        <SimpleLoader loader={loadPlans} text={'Loading plans...'}>
+        <SimpleLoader loader={loadPlans} text="Loading plans...">
             <div className="main-container">
                 {!error && (
                     <Tabs
@@ -150,7 +149,7 @@ export default observer(function Main() {
                             {openPlans.map(
                                 (plan: PlannerModelRef, index: number) => {
                                     return (
-                                        <Tab key={index}>
+                                        <Tab key={plan.ref}>
                                             <div
                                                 className={
                                                     index !== activeTab - 1 &&
@@ -161,12 +160,15 @@ export default observer(function Main() {
                                             >
                                                 {plan.model.name} [
                                                 {plan.version}]{' '}
-                                                <i
+                                                <button
+                                                    style={{ all: 'unset' }}
+                                                    type="button"
                                                     onClick={() => {
                                                         onTabClosed(plan);
                                                     }}
-                                                    className="fal fa-times close-plan"
-                                                ></i>
+                                                >
+                                                    <i className="fal fa-times close-plan" />
+                                                </button>
                                             </div>
                                         </Tab>
                                     );
@@ -175,13 +177,13 @@ export default observer(function Main() {
 
                             <Tab>
                                 {' '}
-                                <i className="fa fa-plus add-plan"></i>
+                                <i className="fa fa-plus add-plan" />
                             </Tab>
                         </TabList>
                         {openPlans.map(
                             (plan: PlannerModelRef, index: number) => {
                                 return (
-                                    <TabPanel key={index}>
+                                    <TabPanel key={plan.ref}>
                                         <PlanView
                                             planRef={
                                                 openPlans[activeTab]
@@ -219,7 +221,7 @@ export default observer(function Main() {
                         </TabPanel>
                     </Tabs>
                 )}
-                {error && <div className={'error-details'}>{error}</div>}
+                {error && <div className="error-details">{error}</div>}
             </div>
         </SimpleLoader>
     );

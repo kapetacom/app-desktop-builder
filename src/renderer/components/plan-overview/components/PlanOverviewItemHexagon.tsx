@@ -10,7 +10,7 @@ export default function PlanOverviewItemHexagon(
 ) {
     const dimension = 300;
     return (
-        <svg className={'plan-overview-item-background'} x="-50" y="20">
+        <svg className="plan-overview-item-background" x="-50" y="20">
             <defs>
                 <filter id="dropshadow" height="140%">
                     <feGaussianBlur in="SourceAlpha" stdDeviation="5" />
@@ -35,7 +35,7 @@ export default function PlanOverviewItemHexagon(
                     dimension * 0.2
                 )}
                 onClick={props.onClick}
-            ></path>
+            />
         </svg>
     );
 }

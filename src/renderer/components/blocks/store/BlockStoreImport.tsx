@@ -15,7 +15,7 @@ interface BlockStoreImportProps {
 class BlockStoreImport extends React.Component<BlockStoreImportProps> {
     private defaultKind: string;
 
-    constructor(props: any) {
+    constructor(props: BlockStoreImportProps) {
         super(props);
 
         this.defaultKind = BlockTypeProvider.getDefaultKind();
@@ -46,12 +46,10 @@ class BlockStoreImport extends React.Component<BlockStoreImportProps> {
         return (
             <AssetImport
                 skipFiles={this.props.files}
-                title={'Create new block...'}
-                introduction={
-                    'Choose whether to import an existing block or create a new one.'
-                }
+                title="Create new block..."
+                introduction="Choose whether to import an existing block or create a new one."
                 createNewKind={this.createNewBlock}
-                fileName={'blockware.yml'}
+                fileName="blockware.yml"
                 onDone={this.props.onDone}
                 fileSelectableHandler={this.selectableHandler}
                 assetService={this.props.assetService}

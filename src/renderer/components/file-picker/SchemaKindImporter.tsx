@@ -1,7 +1,5 @@
 import YAML from 'yaml';
 import React from 'react';
-import { action, makeObservable } from 'mobx';
-import { observer } from 'mobx-react';
 
 import { PLAN_KIND, SchemaKind } from '@blockware/ui-web-types';
 import { BlockTypeProvider } from '@blockware/ui-web-context';
@@ -20,10 +18,6 @@ interface SchemaKindImporterProps {
 }
 
 export class SchemaKindImporter extends React.Component<SchemaKindImporterProps> {
-    constructor(props: SchemaKindImporterProps) {
-        super(props);
-    }
-
     onChange = (files: FileWrapper[]) => {
         if (!this.props.onChange) {
             return;
@@ -74,12 +68,12 @@ export class SchemaKindImporter extends React.Component<SchemaKindImporterProps>
     render() {
         return (
             <FilePicker
-                multiple={true}
+                multiple
                 maxByteSize={100 * 1024}
-                extensions={'.json,.yml,.yaml'}
+                extensions=".json,.yml,.yaml"
                 fileParser={this.fileParser}
                 fileValidator={this.fileValidator}
-                autoLoad={true}
+                autoLoad
                 onChange={this.onChange}
                 renderFile={(file) => this.renderFile(file)}
             />
@@ -89,10 +83,10 @@ export class SchemaKindImporter extends React.Component<SchemaKindImporterProps>
     renderFile(file: FileWrapper) {
         return (
             <>
-                <div className={'name'}>{file.data.metadata.name}</div>
-                <div className={'type'}>
-                    <span className={'label'}>Kind:</span>
-                    <span className={'value'}>{file.data.kind}</span>
+                <div className="name">{file.data.metadata.name}</div>
+                <div className="type">
+                    <span className="label">Kind:</span>
+                    <span className="value">{file.data.kind}</span>
                 </div>
             </>
         );

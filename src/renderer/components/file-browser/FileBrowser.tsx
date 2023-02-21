@@ -50,10 +50,10 @@ export class FileBrowser extends React.Component<FileBrowserProps> {
     private newFolder?: FileInfo;
 
     @observable
-    private currentPath: string = '/';
+    private currentPath = '/';
 
     @observable
-    private currentPathError: string = '';
+    private currentPathError = '';
 
     constructor(props: FileBrowserProps) {
         super(props);
@@ -71,10 +71,10 @@ export class FileBrowser extends React.Component<FileBrowserProps> {
             return;
         }
 
-        let currentPath = this.currentPath;
-        const root = this.root;
+        let { currentPath } = this;
+        const { root } = this;
 
-        //Use the users home dir as root
+        // Use the users home dir as root
         if (!currentPath || currentPath === '/') {
             currentPath = await this.props.service.getHomeFolder();
         }
@@ -133,7 +133,7 @@ export class FileBrowser extends React.Component<FileBrowserProps> {
                 const files = await this.props.service.listFilesInFolder(
                     folder.file.path
                 );
-                //TODO: prevent the UI from double triggering the .. (parent directory)
+                // TODO: prevent the UI from double triggering the .. (parent directory)
                 runInAction(() => {
                     if (Array.isArray(files)) {
                         folder.children = files
@@ -158,6 +158,7 @@ export class FileBrowser extends React.Component<FileBrowserProps> {
     }
 
     @action
+    // eslint-disable-next-line react/no-unused-class-component-methods
     private async reloadFolder() {
         this.root.loaded = false;
         return this.loadFolder(this.root);
@@ -171,9 +172,8 @@ export class FileBrowser extends React.Component<FileBrowserProps> {
 
             if (file.open) {
                 return 'fal fa-folder-open';
-            } else {
-                return 'fal fa-folder';
             }
+            return 'fal fa-folder';
         }
 
         return 'fal fa-file';
@@ -181,21 +181,12 @@ export class FileBrowser extends React.Component<FileBrowserProps> {
 
     private isHidden(file: FileStructureElement) {
         const name = this.getNameForFile(file);
-        //TODO: Determine hidden on windows
+        // TODO: Determine hidden on windows
         return name.startsWith('.');
     }
 
     private getNameForFile(file: FileStructureElement) {
         return Path.basename(file.file.path);
-    }
-
-    private getBreadcrumb() {
-        const currentPath = this.root.file.path;
-        const parts = currentPath.split(Path.sep);
-        while (parts.length > 0 && !parts[0]) {
-            parts.shift(); //Remove empty parts
-        }
-        return parts;
     }
 
     private isSelected(file: FileStructureElement) {
@@ -207,6 +198,7 @@ export class FileBrowser extends React.Component<FileBrowserProps> {
     private isFileSystemRoot() {
         return !this.root.file.path || this.root.file.path === '/';
     }
+
     @action
     private async openParent() {
         if (this.isFileSystemRoot()) {
@@ -246,7 +238,7 @@ export class FileBrowser extends React.Component<FileBrowserProps> {
 
     private async toggleFolder(file: FileStructureElement) {
         if (!file.file.folder) {
-            //If it's not a folder - select file
+            // If it's not a folder - select file
 
             this.toggleSelection(file);
             return;
@@ -286,7 +278,7 @@ export class FileBrowser extends React.Component<FileBrowserProps> {
     }
 
     @action
-    private deselectFile(file: FileStructureElement) {
+    private deselectFile(_file: FileStructureElement) {
         this.props.onSelect(undefined);
     }
 
@@ -309,7 +301,7 @@ export class FileBrowser extends React.Component<FileBrowserProps> {
     }
 
     @action
-    private async saveNewFolder(evt: KeyboardEvent<any>) {
+    private async saveNewFolder(evt: KeyboardEvent<unknown>) {
         if (evt.key === 'Enter' && this.newFolder) {
             if (!this.newFolder.path) {
                 return;
@@ -317,10 +309,10 @@ export class FileBrowser extends React.Component<FileBrowserProps> {
 
             const newFolderName = this.newFolder.path.trim();
             if (this.root.children) {
-                let rootPath = this.root.file.path;
+                const rootPath = this.root.file.path;
                 let newFolderPath;
                 if (rootPath === '/') {
-                    newFolderPath = '/' + newFolderName;
+                    newFolderPath = `/${newFolderName}`;
                 } else {
                     newFolderPath = Path.join(
                         this.root.file.path,
@@ -358,7 +350,7 @@ export class FileBrowser extends React.Component<FileBrowserProps> {
         }
         return (
             this.props.skipFiles.filter((ref: string) => {
-                return ref === 'file://' + file.file.path;
+                return ref === `file://${file.file.path}`;
             }).length > 0
         );
     }

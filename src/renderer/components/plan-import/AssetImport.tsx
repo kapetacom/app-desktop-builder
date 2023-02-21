@@ -10,10 +10,6 @@ import {
 } from '@blockware/ui-web-types';
 
 import { AssetStore, FileSystemService } from '@blockware/ui-web-context';
-
-import { FileBrowserDialog } from '../file-browser/FileBrowserDialog';
-
-import './AssetImport.less';
 import {
     Button,
     ButtonStyle,
@@ -25,10 +21,14 @@ import {
     SidePanel,
 } from '@blockware/ui-web-components';
 
+import { FileBrowserDialog } from '../file-browser/FileBrowserDialog';
+
+import './AssetImport.less';
+
 interface AssetImportProps {
     assetService: AssetStore;
     onDone: (asset?: Asset) => void;
-    skipFiles: string[]; //A collection of files to prevent importing as they are already loaded
+    skipFiles: string[]; // A collection of files to prevent importing as they are already loaded
     title: string;
     introduction: string;
     fileName: string;
@@ -78,13 +78,13 @@ export class AssetImport extends React.Component<
                 importing: false,
             },
             () => {
-                this.createPanel && this.createPanel.open();
+                this.createPanel?.open();
             }
         );
     };
 
     private closeCreatePanel = () => {
-        this.createPanel && this.createPanel.close();
+        this.createPanel?.close();
         this.resetNewEntity();
     };
 
@@ -106,11 +106,11 @@ export class AssetImport extends React.Component<
     };
 
     private openFilePanel = () => {
-        this.filePanel && this.filePanel.open();
+        this.filePanel?.open();
     };
 
     private closeFilePanel = () => {
-        this.filePanel && this.filePanel.close();
+        this.filePanel?.close();
     };
 
     private onFileSelection = async (file: FileInfo) => {
@@ -119,7 +119,7 @@ export class AssetImport extends React.Component<
             if (this.state.importing) {
                 // @ts-ignore
                 assets = await this.props.assetService.import(
-                    'file://' + file.path
+                    `file://${file.path}`
                 );
                 this.closeImportPanel();
             } else {
@@ -169,17 +169,17 @@ export class AssetImport extends React.Component<
 
     private selectableHandler = (file: FileInfo) => {
         if (this.state.importing) {
-            //Filter the selectable files / folders in the import
+            // Filter the selectable files / folders in the import
             return this.props.fileSelectableHandler(file);
         }
-        //When creating we want only folders
+        // When creating we want only folders
         return !!file.folder;
     };
 
     render() {
         return (
-            <div className={'entity-import'}>
-                <div className={'actions'}>
+            <div className="entity-import">
+                <div className="actions">
                     <Button
                         text="Create"
                         onClick={this.openCreatePanel}
@@ -193,17 +193,19 @@ export class AssetImport extends React.Component<
                 </div>
 
                 <SidePanel
-                    ref={(ref: SidePanel) => (this.createPanel = ref)}
+                    ref={(ref: SidePanel) => {
+                        this.createPanel = ref;
+                    }}
                     size={PanelSize.medium}
                     side={PanelAlignment.right}
                     onClose={this.closeCreatePanel}
                     title={this.props.title}
                 >
-                    <div className={'entity-form'}>
+                    <div className="entity-form">
                         <FormContainer onSubmit={this.saveNewEntity}>
                             <this.props.formRenderer
                                 {...this.state.newEntity}
-                                creating={true}
+                                creating
                                 onDataChanged={(metadata, spec) =>
                                     this.onNewEntityUpdate(metadata, spec)
                                 }
@@ -215,13 +217,13 @@ export class AssetImport extends React.Component<
                                     style={ButtonStyle.DANGER}
                                     onClick={this.closeCreatePanel}
                                     width={100}
-                                    text={'Cancel'}
+                                    text="Cancel"
                                 />
                                 <Button
                                     type={ButtonType.SUBMIT}
                                     style={ButtonStyle.PRIMARY}
                                     width={100}
-                                    text={'Create'}
+                                    text="Create"
                                 />
                             </FormButtons>
                         </FormContainer>

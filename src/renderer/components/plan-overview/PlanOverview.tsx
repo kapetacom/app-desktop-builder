@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import { action, makeObservable, observable } from 'mobx';
 
-import { AssetService } from '@blockware/ui-web-context';
 import {
+    AssetService,
     InstanceService,
     InstanceStatus,
     InstanceEventType,
@@ -25,13 +25,13 @@ import {
     PlannerBlockNode,
 } from '@blockware/ui-web-plan-editor';
 
+import { Asset } from '@blockware/ui-web-types';
 import PlanOverviewPlaceHolder from './PlanOverviewPlaceHolder';
 import { MenuItem } from '../menu/MenuDataModel';
-import PlanOverviewItem from './components/PlanOverviewItem';
+import { PlanOverviewItem } from './components/PlanOverviewItem';
 import { PlanOverviewTopBar } from './components/PlanOverviewTopBar';
 
 import './PlanOverview.less';
-import { Asset } from '@blockware/ui-web-types';
 
 interface PlanOverviewWrapperProps {
     plans: PlannerModelRef[];
@@ -75,13 +75,17 @@ export default class PlanOverview extends Component<
                 };
             });
         });
-        InstanceService.getInstanceCurrentStatus().then((res) =>
-            this.updateRunningBlockStatus(res)
-        );
+        InstanceService.getInstanceCurrentStatus()
+            .then((res) => this.updateRunningBlockStatus(res))
+            .catch(() => {
+                // Ignore
+            });
 
         this.unsubscribers = [];
         this.containerSize = { width: 200, height: 200 };
         this.state = {
+            // TODO: unused state
+            // eslint-disable-next-line react/no-unused-state
             activePlan: -1,
             activePlanMenu: -1,
         };
@@ -112,7 +116,7 @@ export default class PlanOverview extends Component<
 
     private onPlanRemove = (item: PlannerModelRef) => {
         try {
-            //TODO: animate the item out of the dom and then call itemDeleted
+            // TODO: animate the item out of the dom and then call itemDeleted
             DialogControl.show(
                 'Delete this plan?',
                 item.model.name,
@@ -120,13 +124,10 @@ export default class PlanOverview extends Component<
                     this.props.itemDeleted && this.props.itemDeleted(item);
                     showToasty({
                         title: 'Plan Deleted!',
-                        message:
-                            'Deleted ' +
-                            item.model.name +
-                            ' from your plan list',
+                        message: `Deleted ${item.model.name} from your plan list`,
                         type: ToastType.ALERT,
                     });
-                    AssetService.remove(item.ref); //res can be saved in a variable as promise
+                    AssetService.remove(item.ref); // res can be saved in a variable as promise
                 },
                 DialogTypes.DELETE
             );
@@ -135,6 +136,7 @@ export default class PlanOverview extends Component<
         }
         return true;
     };
+
     private renderMiniPlan = (item: PlannerModelWrapper) => {
         const planSize = item.calculateCanvasSize(
             this.props.size,
@@ -155,12 +157,20 @@ export default class PlanOverview extends Component<
                         <PlannerConnection
                             key={connection.id}
                             size={PlannerNodeSize.SMALL}
-                            setItemToEdit={(item, type) => {}}
+                            setItemToEdit={(edit, type) => {
+                                // TODO
+                            }}
                             handleInspectClick={(
-                                connection: PlannerConnectionModelWrapper
-                            ) => {}}
-                            onFocus={() => {}}
-                            onDelete={() => {}}
+                                clickedConnection: PlannerConnectionModelWrapper
+                            ) => {
+                                // TODO
+                            }}
+                            onFocus={() => {
+                                // TODO
+                            }}
+                            onDelete={() => {
+                                // TODO
+                            }}
                             connection={connection}
                         />
                     );
@@ -177,11 +187,15 @@ export default class PlanOverview extends Component<
                             }
                             key={block.id + block.name}
                             block={block}
-                            onDoubleTap={() => {}}
+                            onDoubleTap={() => {
+                                //     TODO
+                            }}
                             zoom={1}
-                            readOnly={true}
+                            readOnly
                             size={PlannerNodeSize.SMALL}
-                            setItemToEdit={(item, type) => {}}
+                            setItemToEdit={(edit, type) => {
+                                //     TODO
+                            }}
                             planner={item}
                         />
                     );
@@ -197,6 +211,7 @@ export default class PlanOverview extends Component<
             this.props.onAssetAdded(asset);
         }
     }
+
     private onInstanceStatusChanged = (message: any) => {
         this.runningBlocks[message.instanceId] = { status: message.status };
     };
@@ -243,55 +258,52 @@ export default class PlanOverview extends Component<
                     </PlanOverviewPlaceHolder>
                 </div>
             );
-        } else {
-            return (
-                <div style={{ position: 'relative' }}>
-                    <PlanOverviewTopBar
-                        onDone={(asset) => {
-                            this.onImportDone(asset);
-                        }}
-                        skipFiles={this.props.plans.map((plan) => {
-                            return plan.ref;
-                        })}
-                    />
-
-                    <div className={'plan-overview-wrapper'}>
-                        {this.props.plans.map(
-                            (item: PlannerModelRef, index) => {
-                                //overwrite the callback now that we have hold of the plannerModelRef that we want to delete
-                                let menuItem: MenuItem[] = [];
-                                menuItem.push({
-                                    text: 'Delete',
-                                    callback: () => {
-                                        return this.onPlanRemove(item);
-                                    },
-                                });
-
-                                return (
-                                    <PlanOverviewItem
-                                        name={item.model.name}
-                                        key={`plan_${index}`}
-                                        version={item.version}
-                                        index={index}
-                                        activeMenu={this.state.activePlanMenu}
-                                        menuItems={menuItem}
-                                        onClick={() => {
-                                            this.props.onPlanSelected &&
-                                                this.props.onPlanSelected(item);
-                                        }}
-                                        toggleMenu={(indexIn: number) => {
-                                            this.setOpenMenu(indexIn);
-                                        }}
-                                        size={200}
-                                    >
-                                        {this.renderMiniPlan(item.model)}
-                                    </PlanOverviewItem>
-                                );
-                            }
-                        )}
-                    </div>
-                </div>
-            );
         }
+        return (
+            <div style={{ position: 'relative' }}>
+                <PlanOverviewTopBar
+                    onDone={(asset) => {
+                        this.onImportDone(asset);
+                    }}
+                    skipFiles={this.props.plans.map((plan) => {
+                        return plan.ref;
+                    })}
+                />
+
+                <div className="plan-overview-wrapper">
+                    {this.props.plans.map((item: PlannerModelRef, index) => {
+                        // overwrite the callback now that we have hold of the plannerModelRef that we want to delete
+                        const menuItem: MenuItem[] = [];
+                        menuItem.push({
+                            text: 'Delete',
+                            callback: () => {
+                                return this.onPlanRemove(item);
+                            },
+                        });
+
+                        return (
+                            <PlanOverviewItem
+                                name={item.model.name}
+                                key={item.model.getRef()}
+                                version={item.version}
+                                index={index}
+                                activeMenu={this.state.activePlanMenu}
+                                menuItems={menuItem}
+                                onClick={() => {
+                                    this.props.onPlanSelected &&
+                                        this.props.onPlanSelected(item);
+                                }}
+                                toggleMenu={(indexIn: number) => {
+                                    this.setOpenMenu(indexIn);
+                                }}
+                                size={200}
+                            >
+                                {this.renderMiniPlan(item.model)}
+                            </PlanOverviewItem>
+                        );
+                    })}
+                </div>
+            </div>
+        );
     }
 }

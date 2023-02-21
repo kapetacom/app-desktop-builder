@@ -61,7 +61,7 @@ class BlockStore extends React.Component<Props, State> {
 
     private fileDialog = createRef<FileBrowserDialog>();
 
-    private mounted: boolean = false;
+    private mounted = false;
 
     constructor(props: Props) {
         super(props);
@@ -107,15 +107,15 @@ class BlockStore extends React.Component<Props, State> {
         }
 
         this.setState({ loading: true });
-        let state: any = {
+        const state = {
             loading: false,
-            blocks: [],
+            blocks: [] as State['blocks'],
         };
 
         try {
             state.blocks = await BlockService.list();
-        } catch (e: any) {
-            console.error(e.stack);
+        } catch (e: unknown) {
+            console.error((e as Error).stack);
         }
 
         if (!this.mounted) {
@@ -127,12 +127,12 @@ class BlockStore extends React.Component<Props, State> {
 
     private onFileBrowserClose() {
         if (this.state.fileBrowserState === FileBrowserState.IMPORTING) {
-            AssetService.import('file://' + this.state.filePath);
+            AssetService.import(`file://${this.state.filePath}`);
             this.closeFileDialog();
         }
 
         if (this.state.fileBrowserState === FileBrowserState.PROJECT_FOLDER) {
-            //When we're done with project folder - switch back to creating
+            // When we're done with project folder - switch back to creating
             this.setState({
                 fileBrowserState: FileBrowserState.CREATING,
             });
@@ -140,7 +140,7 @@ class BlockStore extends React.Component<Props, State> {
     }
 
     private cancelNewEntity = () => {
-        this.createPanel.current && this.createPanel.current.close();
+        this.createPanel.current?.close();
         this.resetNewEntity();
     };
 
@@ -164,9 +164,9 @@ class BlockStore extends React.Component<Props, State> {
             this.closeFileDialog();
             await this.loadBlocks();
 
-            this.props.onBlockAdded &&
-                assets.length > 0 &&
+            if (this.props.onBlockAdded && assets.length > 0) {
                 this.props.onBlockAdded(assets[0]);
+            }
         } catch (e) {
             showToasty({
                 type: ToastType.ALERT,
@@ -177,12 +177,12 @@ class BlockStore extends React.Component<Props, State> {
     }
 
     private async importAsset(filePath: string) {
-        const assets: Asset[] = await AssetService.import('file://' + filePath);
+        const assets: Asset[] = await AssetService.import(`file://${filePath}`);
         this.closeFileDialog();
         await this.loadBlocks();
-        this.props.onBlockAdded &&
-            assets.length > 0 &&
+        if (this.props.onBlockAdded && assets.length > 0) {
             this.props.onBlockAdded(assets[0]);
+        }
     }
 
     private async updateProjectFolder(filePath: string) {
@@ -211,16 +211,16 @@ class BlockStore extends React.Component<Props, State> {
     };
 
     private closeFileDialog() {
-        this.fileDialog.current && this.fileDialog.current.close();
+        this.fileDialog.current?.close();
     }
 
     private closeCreatePanel() {
-        this.createPanel.current && this.createPanel.current.close();
+        this.createPanel.current?.close();
     }
 
     private renderBlocks = () => {
         return (
-            <div className={'items'}>
+            <div className="items">
                 {this.state.blocks
                     .filter((item) => {
                         if (
@@ -234,7 +234,7 @@ class BlockStore extends React.Component<Props, State> {
                         return false;
                     })
                     .map((item, ix) => {
-                        return <BlockStoreItem key={ix} item={item} />;
+                        return <BlockStoreItem key={item.ref} item={item} />;
                     })}
             </div>
         );
@@ -243,7 +243,8 @@ class BlockStore extends React.Component<Props, State> {
     private saveNewEntity = async (data: BlockKind) => {
         if (this.state.useProjectHome && this.state.projectHome) {
             const path = Path.join(this.state.projectHome, data.metadata.name);
-            return await this.createAsset(path, data);
+            await this.createAsset(path, data);
+            return;
         }
 
         this.setState({ newEntity: data }, () => {
@@ -277,10 +278,11 @@ class BlockStore extends React.Component<Props, State> {
 
     private renderBlockStore = () => {
         return (
-            <div className={'block-store-section'}>
-                <div className={'section'}>
+            <div className="block-store-section">
+                <div className="section">
                     <div className="block-store-import-create">
-                        <div
+                        <button
+                            type="button"
                             className="create-block-button"
                             onClick={() => this.openAssetCreate()}
                         >
@@ -308,8 +310,9 @@ class BlockStore extends React.Component<Props, State> {
                                 />
                             </svg>
                             <p>Create</p>
-                        </div>
-                        <div
+                        </button>
+                        <button
+                            type="button"
                             className="import-block-button"
                             onClick={() => this.openAssetImport()}
                         >
@@ -339,10 +342,10 @@ class BlockStore extends React.Component<Props, State> {
                                 />
                             </svg>
                             <p>Import</p>
-                        </div>
+                        </button>
                     </div>
-                    <div className={'block-store-search'}>
-                        <i className={'search-icon fa fa-search '} />
+                    <div className="block-store-search">
+                        <i className="search-icon fa fa-search " />
                         <input
                             value={this.state.searchTerm}
                             onChange={(text) => {
@@ -355,21 +358,19 @@ class BlockStore extends React.Component<Props, State> {
                     </div>
                 </div>
 
-                {
-                    <div className={'section'}>
-                        {this.state.loading && (
-                            <div className="section">Loading...</div>
-                        )}
-                        {!this.state.loading && this.renderBlocks()}
-                    </div>
-                }
+                <div className="section">
+                    {this.state.loading && (
+                        <div className="section">Loading...</div>
+                    )}
+                    {!this.state.loading && this.renderBlocks()}
+                </div>
             </div>
         );
     };
 
     render() {
         return (
-            <div className={'block-store-container'}>
+            <div className="block-store-container">
                 {this.state.blocks && this.renderBlockStore()}
                 <FileBrowserDialog
                     skipFiles={this.state.blocks.map((item) => {
@@ -384,11 +385,10 @@ class BlockStore extends React.Component<Props, State> {
                             this.state.fileBrowserState ===
                             FileBrowserState.IMPORTING
                         ) {
-                            //Importing needs a blockware.yml file
+                            // Importing needs a blockware.yml file
                             return file.path.endsWith('/blockware.yml');
-                        } else {
-                            return !!file.folder;
                         }
+                        return !!file.folder;
                     }}
                 />
                 <SidePanel
@@ -396,13 +396,12 @@ class BlockStore extends React.Component<Props, State> {
                     size={PanelSize.large}
                     side={PanelAlignment.right}
                     onClose={this.cancelNewEntity}
-                    title={'Create new Block'}
+                    title="Create new Block"
                 >
-                    '
                     {this.createPanel.current?.isOpen() && (
-                        <div className={'entity-form'}>
+                        <div className="entity-form">
                             <BlockForm
-                                creating={true}
+                                creating
                                 key={this.state.entityKey}
                                 projectHome={this.state.projectHome}
                                 useProjectHome={this.state.useProjectHome}

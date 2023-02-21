@@ -1,3 +1,4 @@
+/* eslint-disable import/no-relative-packages */
 import { execSync } from 'child_process';
 import fs from 'fs';
 import { dependencies } from '../../release/app/package.json';

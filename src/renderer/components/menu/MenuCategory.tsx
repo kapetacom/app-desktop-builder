@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import './Menu.less';
+import { Orientation, toClass } from '@blockware/ui-web-utils';
 import MenuHexagon from './MenuHexagon';
 import { CategoryState, MenuCategoryItem } from './MenuDataModel';
-import { Orientation, toClass } from '@blockware/ui-web-utils';
 
 import MenuItems from './MenuItems';
 
@@ -32,9 +32,12 @@ export default class MenuCategory extends Component<
     constructor(props: MenuCategoryProps) {
         super(props);
         this.state = {
+            // TODO: Unused state
+            // eslint-disable-next-line react/no-unused-state
             yPosition: this.subMenuPosition(),
         };
     }
+
     private subMenuPosition = () => {
         if (this.props.animationState === CategoryState.OPEN) {
             if (this.props.categoryIndex >= this.props.activeIndex)
@@ -50,6 +53,7 @@ export default class MenuCategory extends Component<
         }
         return 0;
     };
+
     private currentPosition = () => {
         if (this.props.animationState === CategoryState.OPEN) {
             if (this.props.categoryIndex >= this.props.activeIndex)
@@ -104,44 +108,44 @@ export default class MenuCategory extends Component<
         // console.log('rendering', this.props.categoryIndex, this.props.activeIndex, isCurrent, isActive);
 
         return (
-            <>
-                <g
-                    className={'menu-category ' + classnames}
-                    onTransitionEndCapture={() => {
-                        this.handleTransitionEnd(this.props.activeIndex);
-                    }}
-                    style={{
-                        opacity: isActive ? 1 : 0,
-                        transform: `translateY(${this.currentPosition()}px)`,
-                    }}
-                >
-                    <g className={'menu-category-inner'}>
-                        <MenuHexagon
-                            onClick={
-                                this.props.menuOpen
-                                    ? this.toggleMenuItems
-                                    : () => {}
-                            }
-                        >
-                            <i className={`fal ${this.props.icon}`}></i>
-                        </MenuHexagon>
-                        <g
-                            className={'sub-category-menu-item-holder active'}
-                            style={{
-                                pointerEvents: this.props.open ? 'all' : 'none',
+            <g
+                className={`menu-category ${classnames}`}
+                onTransitionEndCapture={() => {
+                    this.handleTransitionEnd(this.props.activeIndex);
+                }}
+                style={{
+                    opacity: isActive ? 1 : 0,
+                    transform: `translateY(${this.currentPosition()}px)`,
+                }}
+            >
+                <g className="menu-category-inner">
+                    <MenuHexagon
+                        onClick={
+                            this.props.menuOpen
+                                ? this.toggleMenuItems
+                                : () => {
+                                      // Do nothing
+                                  }
+                        }
+                    >
+                        <i className={`fal ${this.props.icon}`} />
+                    </MenuHexagon>
+                    <g
+                        className="sub-category-menu-item-holder active"
+                        style={{
+                            pointerEvents: this.props.open ? 'all' : 'none',
+                        }}
+                    >
+                        <MenuItems
+                            closeMenu={() => {
+                                this.toggleMenuItems();
                             }}
-                        >
-                            <MenuItems
-                                closeMenu={() => {
-                                    this.toggleMenuItems();
-                                }}
-                                visible={this.props.open}
-                                menuItems={this.props.categoryItem.menuItems}
-                            />
-                        </g>
+                            visible={this.props.open}
+                            menuItems={this.props.categoryItem.menuItems}
+                        />
                     </g>
                 </g>
-            </>
+            </g>
         );
     }
 }

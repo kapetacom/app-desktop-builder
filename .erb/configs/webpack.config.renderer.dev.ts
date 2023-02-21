@@ -25,9 +25,9 @@ const skipDLLs =
 
 const packageJson = require('../../package.json');
 
-//We do this to ensure any linked dependencies uses the node modules from here
+// We do this to ensure any linked dependencies uses the node modules from here
 const alias: { [key: string]: string } = {};
-Object.entries(packageJson.devDependencies).forEach(([key, value]) => {
+Object.entries(packageJson.devDependencies).forEach(([key]) => {
     alias[key] = path.resolve(__dirname, `../../node_modules/${key}`);
 });
 
@@ -74,7 +74,7 @@ const configuration: webpack.Configuration = {
         rules: [
             {
                 test: /\.tsx?$/,
-                //exclude: /node_modules/,
+                // exclude: /node_modules/,
                 use: {
                     loader: 'ts-loader',
                     options: {
