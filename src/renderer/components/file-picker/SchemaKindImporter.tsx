@@ -39,7 +39,7 @@ export class SchemaKindImporter extends React.Component<SchemaKindImporterProps>
     };
 
     private convertToSchemaKind(file: FileWrapper): SchemaKind | null {
-        let data = null;
+        let data: SchemaKind | null = null;
         if (file.content && file.content) {
             if (file.extension === '.json') {
                 data = JSON.parse(file.content);

@@ -41,7 +41,7 @@ class BlockStoreImport extends React.Component<BlockStoreImportProps> {
     };
 
     render() {
-        const BlockTypeConfig = BlockTypeProvider.get(this.defaultKind);
+        const blockTypeConfig = BlockTypeProvider.get(this.defaultKind);
 
         return (
             <AssetImport
@@ -53,7 +53,9 @@ class BlockStoreImport extends React.Component<BlockStoreImportProps> {
                 onDone={this.props.onDone}
                 fileSelectableHandler={this.selectableHandler}
                 assetService={this.props.assetService}
-                formRenderer={BlockTypeConfig.componentType}
+                // TODO: What the hell?
+                // @ts-ignore
+                formRenderer={blockTypeConfig.componentType}
             />
         );
     }
