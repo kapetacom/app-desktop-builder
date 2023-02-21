@@ -16,13 +16,15 @@ jobs:
 
             - name: Install Node.js and NPM
               uses: actions/setup-node@v3
+              id: node
               with:
                   node-version: 18
                   cache: npm
-                  registry-url: ${{ secrets.GCP_ARTIFACT_NPM_URL }}
-                  scope: blockware
+            - name: Configure blockware registry
+              run: echo '@blockware:registry=${{ secrets.GCP_ARTIFACT_NPM_URL }}' >> .npmrc
 
             - name: npm install
+              if: ${{ steps.node.outputs.cache-hit != true }}
               run: |
                   npm ci
 
