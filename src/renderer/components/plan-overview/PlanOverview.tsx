@@ -75,13 +75,17 @@ export default class PlanOverview extends Component<
                 };
             });
         });
-        InstanceService.getInstanceCurrentStatus().then((res) =>
-            this.updateRunningBlockStatus(res)
-        );
+        InstanceService.getInstanceCurrentStatus()
+            .then((res) => this.updateRunningBlockStatus(res))
+            .catch(() => {
+                // Ignore
+            });
 
         this.unsubscribers = [];
         this.containerSize = { width: 200, height: 200 };
         this.state = {
+            // TODO: unused state
+            // eslint-disable-next-line react/no-unused-state
             activePlan: -1,
             activePlanMenu: -1,
         };
@@ -153,12 +157,20 @@ export default class PlanOverview extends Component<
                         <PlannerConnection
                             key={connection.id}
                             size={PlannerNodeSize.SMALL}
-                            setItemToEdit={(item, type) => {}}
+                            setItemToEdit={(edit, type) => {
+                                // TODO
+                            }}
                             handleInspectClick={(
-                                connection: PlannerConnectionModelWrapper
-                            ) => {}}
-                            onFocus={() => {}}
-                            onDelete={() => {}}
+                                clickedConnection: PlannerConnectionModelWrapper
+                            ) => {
+                                // TODO
+                            }}
+                            onFocus={() => {
+                                // TODO
+                            }}
+                            onDelete={() => {
+                                // TODO
+                            }}
                             connection={connection}
                         />
                     );
@@ -175,11 +187,15 @@ export default class PlanOverview extends Component<
                             }
                             key={block.id + block.name}
                             block={block}
-                            onDoubleTap={() => {}}
+                            onDoubleTap={() => {
+                                //     TODO
+                            }}
                             zoom={1}
                             readOnly
                             size={PlannerNodeSize.SMALL}
-                            setItemToEdit={(item, type) => {}}
+                            setItemToEdit={(edit, type) => {
+                                //     TODO
+                            }}
                             planner={item}
                         />
                     );
@@ -268,7 +284,7 @@ export default class PlanOverview extends Component<
                         return (
                             <PlanOverviewItem
                                 name={item.model.name}
-                                key={`plan_${index}`}
+                                key={item.model.getRef()}
                                 version={item.version}
                                 index={index}
                                 activeMenu={this.state.activePlanMenu}

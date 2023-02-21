@@ -37,15 +37,15 @@ export default class Menu extends Component<
             expanding &&
             this.state.activeIndex < this.state.menuCategoryItems.length
         ) {
-            this.setState({
-                activeIndex: this.state.activeIndex + 1,
+            this.setState((state) => ({
+                activeIndex: state.activeIndex + 1,
                 categoryItemState: CategoryState.OPEN,
-            });
+            }));
         } else if (this.state.activeIndex > -1 && !expanding) {
-            this.setState({
-                activeIndex: this.state.activeIndex - 1,
+            this.setState((state) => ({
+                activeIndex: state.activeIndex - 1,
                 categoryItemState: CategoryState.CLOSED,
-            });
+            }));
         }
 
         return true;
@@ -53,13 +53,16 @@ export default class Menu extends Component<
 
     private toggleMenuCategories = (open: boolean, index: number) => {
         this.resetCategoryMenus();
-        const temCategoryItems = _.cloneDeep(this.state.menuCategoryItems);
-        if (!open) {
-            temCategoryItems[index].open = true;
-        } else {
-            temCategoryItems[index].open = false;
-        }
-        this.setState({ menuCategoryItems: temCategoryItems });
+        this.setState((state) => {
+            const temCategoryItems = _.cloneDeep(state.menuCategoryItems);
+            if (!open) {
+                temCategoryItems[index].open = true;
+            } else {
+                temCategoryItems[index].open = false;
+            }
+
+            return { menuCategoryItems: temCategoryItems };
+        });
     };
 
     private toggleMenu = () => {
@@ -70,11 +73,11 @@ export default class Menu extends Component<
                 menuOpen: true,
             });
         } else {
-            this.setState({
-                activeIndex: this.state.menuCategoryItems.length - 1,
+            this.setState((state) => ({
+                activeIndex: state.menuCategoryItems.length - 1,
                 categoryItemState: CategoryState.CLOSED,
                 menuOpen: false,
-            });
+            }));
         }
 
         return true;

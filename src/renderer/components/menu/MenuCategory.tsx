@@ -32,6 +32,8 @@ export default class MenuCategory extends Component<
     constructor(props: MenuCategoryProps) {
         super(props);
         this.state = {
+            // TODO: Unused state
+            // eslint-disable-next-line react/no-unused-state
             yPosition: this.subMenuPosition(),
         };
     }

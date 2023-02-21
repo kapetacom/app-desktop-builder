@@ -18,11 +18,12 @@ import { TopMenu } from '../components/TopMenu';
 import BlockStore from '../components/blocks/store/BlockStore';
 
 function getVersionFromRef(ref: string) {
-    if (ref.indexOf('://') > -1) {
-        ref = ref.split('://')[1];
+    let refWithoutProtocol = ref;
+    if (refWithoutProtocol.indexOf('://') > -1) {
+        refWithoutProtocol = refWithoutProtocol.split('://')[1];
     }
 
-    const [, version] = ref.split(':');
+    const [, version] = refWithoutProtocol.split(':');
     return version;
 }
 

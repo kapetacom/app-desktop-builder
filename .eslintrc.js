@@ -2,6 +2,9 @@ module.exports = {
     extends: ['erb', 'plugin:@typescript-eslint/recommended'],
     rules: {
         '@typescript-eslint/ban-ts-comment': 'off',
+        '@typescript-eslint/no-explicit-any': 'warn',
+        '@typescript-eslint/no-shadow': 'error',
+        'no-shadow': 'off',
         // A temporary hack related to IDE not resolving correct package.json
         'import/no-extraneous-dependencies': 'off',
         'import/no-unresolved': 'error',
@@ -22,18 +25,28 @@ module.exports = {
         'no-plusplus': 'off',
         'no-multi-assign': 'off',
         'no-underscore-dangle': 'off',
+        'no-continue': 'off',
         'no-unused-expressions': 'warn',
-        'prefer-const': 'off',
         'no-unused-vars': 'off',
         'no-use-before-define': 'off',
+        'prefer-const': 'off',
+        'prefer-destructuring': 'off',
     },
+    overrides: [
+        {
+            files: '.erb/**',
+            rules: {
+                '@typescript-eslint/no-var-requires': 'off',
+                'import/no-import-module-exports': 'off',
+            },
+        },
+    ],
     parserOptions: {
         ecmaVersion: 2020,
         sourceType: 'module',
         project: './tsconfig.json',
         tsconfigRootDir: __dirname,
         createDefaultProgram: true,
-
     },
     settings: {
         'import/resolver': {
