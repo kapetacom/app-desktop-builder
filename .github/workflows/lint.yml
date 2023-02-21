@@ -1,14 +1,10 @@
-name: Test
+name: Lint
 
 on: [push]
 
 jobs:
-    test:
-        runs-on: ${{ matrix.os }}
-
-        strategy:
-            matrix:
-                os: [macos-latest, windows-latest, ubuntu-latest]
+    lint:
+        runs-on: ubuntu-latest
 
         steps:
             - name: Check out Git repository
@@ -26,12 +22,6 @@ jobs:
               run: |
                   npm ci
 
-            - name: Build
-              env:
-                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            - name: Lint
               run: |
-                  npm run package
-                  npm exec tsc
-            - name: Test
-              run: |
-                  npm test
+                  npm run lint
