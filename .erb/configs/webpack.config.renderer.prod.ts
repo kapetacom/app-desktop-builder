@@ -19,153 +19,154 @@ checkNodeEnv('production');
 deleteSourceMaps();
 
 const configuration: webpack.Configuration = {
-  devtool: 'source-map',
+    devtool: 'source-map',
 
-  mode: 'production',
+    mode: 'production',
 
-  target: ['web', 'electron-renderer'],
+    target: ['web', 'electron-renderer'],
 
-  entry: {
-    index: [path.join(webpackPaths.srcRendererPath, 'index.tsx')]
-  },
-
-  output: {
-    path: webpackPaths.distRendererPath,
-    publicPath: './',
-    filename: '[name].js',
-    library: {
-      type: 'umd',
+    entry: {
+        index: [path.join(webpackPaths.srcRendererPath, 'index.tsx')],
     },
-  },
 
-  module: {
-    rules: [
-      {
-        test: /\.tsx?$/,
-        //exclude: /node_modules/,
-        use: {
-          loader: 'ts-loader',
-          options: {
-            // Remove this line to enable type checking in webpack builds
-            transpileOnly: true,
-            compilerOptions: {
-              module: 'esnext',
-            },
-          },
+    output: {
+        path: webpackPaths.distRendererPath,
+        publicPath: './',
+        filename: '[name].js',
+        library: {
+            type: 'umd',
         },
-      },
-      {
-        test: /\.s?(a|c)ss$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          {
-            loader: 'css-loader',
-            options: {
-              modules: true,
-              sourceMap: true,
-              importLoaders: 1,
+    },
+
+    module: {
+        rules: [
+            {
+                test: /\.tsx?$/,
+                //exclude: /node_modules/,
+                use: {
+                    loader: 'ts-loader',
+                    options: {
+                        // Remove this line to enable type checking in webpack builds
+                        transpileOnly: true,
+                        compilerOptions: {
+                            module: 'esnext',
+                        },
+                    },
+                },
             },
-          },
-          'sass-loader',
-        ],
-        include: /\.module\.s?(c|a)ss$/,
-      },
-      {
-        test: /\.s?(a|c)ss$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
-        exclude: /\.module\.s?(c|a)ss$/,
-      },
-      {
-        test: /\.less$/,
-        use: [MiniCssExtractPlugin.loader,  "css-loader", "less-loader"]
-      },
-      {
-        test: /\.ya?ml$/,
-        use: ['yaml-loader']
-      },
-      // Fonts
-      {
-        test: /\.(woff|woff2|eot|ttf|otf)$/i,
-        type: 'asset/resource',
-      },
-      // Images
-      {
-        test: /\.(png|jpg|jpeg|gif)$/i,
-        type: 'asset/resource',
-      },
-      // SVG
-      {
-        test: /\.svg$/,
-        use: [
-          {
-            loader: '@svgr/webpack',
-            options: {
-              prettier: false,
-              svgo: false,
-              svgoConfig: {
-                plugins: [{ removeViewBox: false }],
-              },
-              titleProp: true,
-              ref: true,
+            {
+                test: /\.s?(a|c)ss$/,
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            modules: true,
+                            sourceMap: true,
+                            importLoaders: 1,
+                        },
+                    },
+                    'sass-loader',
+                ],
+                include: /\.module\.s?(c|a)ss$/,
             },
-          },
-          'file-loader',
+            {
+                test: /\.s?(a|c)ss$/,
+                use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
+                exclude: /\.module\.s?(c|a)ss$/,
+            },
+            {
+                test: /\.less$/,
+                use: [MiniCssExtractPlugin.loader, 'css-loader', 'less-loader'],
+            },
+            {
+                test: /\.ya?ml$/,
+                use: ['yaml-loader'],
+            },
+            // Fonts
+            {
+                test: /\.(woff|woff2|eot|ttf|otf)$/i,
+                type: 'asset/resource',
+            },
+            // Images
+            {
+                test: /\.(png|jpg|jpeg|gif)$/i,
+                type: 'asset/resource',
+            },
+            // SVG
+            {
+                test: /\.svg$/,
+                use: [
+                    {
+                        loader: '@svgr/webpack',
+                        options: {
+                            prettier: false,
+                            svgo: false,
+                            svgoConfig: {
+                                plugins: [{ removeViewBox: false }],
+                            },
+                            titleProp: true,
+                            ref: true,
+                        },
+                    },
+                    'file-loader',
+                ],
+            },
         ],
-      },
+    },
+
+    optimization: {
+        minimize: true,
+        minimizer: [
+            new TerserPlugin({
+                parallel: true,
+            }),
+            new CssMinimizerPlugin(),
+        ],
+    },
+
+    plugins: [
+        /**
+         * Create global constants which can be configured at compile time.
+         *
+         * Useful for allowing different behaviour between development builds and
+         * release builds
+         *
+         * NODE_ENV should be production so that modules do not perform certain
+         * development checks
+         */
+        new webpack.EnvironmentPlugin({
+            NODE_ENV: 'production',
+            DEBUG_PROD: false,
+        }),
+
+        new MiniCssExtractPlugin({
+            filename: 'style.css',
+        }),
+
+        new BundleAnalyzerPlugin({
+            analyzerMode:
+                process.env.ANALYZE === 'true' ? 'server' : 'disabled',
+            analyzerPort: 8889,
+        }),
+
+        new HtmlWebpackPlugin({
+            filename: 'index.html',
+            chunks: ['index'],
+            template: path.join(webpackPaths.srcRendererPath, 'index.ejs'),
+            minify: {
+                collapseWhitespace: true,
+                removeAttributeQuotes: true,
+                removeComments: true,
+            },
+            isBrowser: false,
+            isDevelopment: process.env.NODE_ENV !== 'production',
+        }),
+
+        new webpack.DefinePlugin({
+            'process.type': '"renderer"',
+        }),
     ],
-  },
-
-  optimization: {
-    minimize: true,
-    minimizer: [
-      new TerserPlugin({
-        parallel: true,
-      }),
-      new CssMinimizerPlugin(),
-    ],
-  },
-
-  plugins: [
-    /**
-     * Create global constants which can be configured at compile time.
-     *
-     * Useful for allowing different behaviour between development builds and
-     * release builds
-     *
-     * NODE_ENV should be production so that modules do not perform certain
-     * development checks
-     */
-    new webpack.EnvironmentPlugin({
-      NODE_ENV: 'production',
-      DEBUG_PROD: false,
-    }),
-
-    new MiniCssExtractPlugin({
-      filename: 'style.css',
-    }),
-
-    new BundleAnalyzerPlugin({
-      analyzerMode: process.env.ANALYZE === 'true' ? 'server' : 'disabled',
-      analyzerPort: 8889,
-    }),
-
-    new HtmlWebpackPlugin({
-      filename: 'index.html',
-      chunks:['index'],
-      template: path.join(webpackPaths.srcRendererPath, 'index.ejs'),
-      minify: {
-        collapseWhitespace: true,
-        removeAttributeQuotes: true,
-        removeComments: true,
-      },
-      isBrowser: false,
-      isDevelopment: process.env.NODE_ENV !== 'production',
-    }),
-
-    new webpack.DefinePlugin({
-      'process.type': '"renderer"',
-    }),
-  ],
 };
 
 export default merge(baseConfig, configuration);

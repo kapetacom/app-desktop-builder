@@ -1,27 +1,34 @@
-import React, {createRef} from "react";
-import {FileInfo} from "@blockware/ui-web-types";
-import {FileBrowser} from "./FileBrowser";
-import {FileSystemStore} from "@blockware/ui-web-context";
+import React, { createRef } from 'react';
+import { FileInfo } from '@blockware/ui-web-types';
+import { FileBrowser } from './FileBrowser';
+import { FileSystemStore } from '@blockware/ui-web-context';
 
 import './FileBrowserDialog.less';
-import {Button, ButtonStyle, ButtonType, Modal, ModalSize} from "@blockware/ui-web-components";
-
+import {
+    Button,
+    ButtonStyle,
+    ButtonType,
+    Modal,
+    ModalSize,
+} from '@blockware/ui-web-components';
 
 interface FileBrowserDialogProps {
-    service: FileSystemStore
-    onSelect: (file:FileInfo) => void
-    onClose: () => void
-    selectable?: (file:FileInfo) => boolean
-    open?: boolean
-    skipFiles:string[] //files that already are imported
+    service: FileSystemStore;
+    onSelect: (file: FileInfo) => void;
+    onClose: () => void;
+    selectable?: (file: FileInfo) => boolean;
+    open?: boolean;
+    skipFiles: string[]; //files that already are imported
 }
 
 interface FileBrowserDialogState {
-    selection?:FileInfo
+    selection?: FileInfo;
 }
 
-export class FileBrowserDialog extends React.Component<FileBrowserDialogProps, FileBrowserDialogState> {
-
+export class FileBrowserDialog extends React.Component<
+    FileBrowserDialogProps,
+    FileBrowserDialogState
+> {
     private modal = createRef<Modal>();
 
     constructor(props: FileBrowserDialogProps) {
@@ -29,9 +36,9 @@ export class FileBrowserDialog extends React.Component<FileBrowserDialogProps, F
         this.state = {};
     }
 
-    private onSelect(selection?:FileInfo) {
+    private onSelect(selection?: FileInfo) {
         this.setState({
-            selection
+            selection,
         });
     }
 
@@ -43,7 +50,7 @@ export class FileBrowserDialog extends React.Component<FileBrowserDialogProps, F
         this.props.onSelect(this.state.selection);
 
         this.setState({
-            selection: undefined
+            selection: undefined,
         });
     }
 
@@ -56,10 +63,9 @@ export class FileBrowserDialog extends React.Component<FileBrowserDialogProps, F
     }
 
     render() {
-
         return (
-
-            <Modal ref={this.modal}
+            <Modal
+                ref={this.modal}
                 size={ModalSize.medium}
                 title={'Choose file'}
                 className={'file-browser-dialog'}
@@ -70,7 +76,8 @@ export class FileBrowserDialog extends React.Component<FileBrowserDialogProps, F
                         service={this.props.service}
                         selectable={this.props.selectable}
                         selection={this.state.selection}
-                        onSelect={(file) => this.onSelect(file)} />
+                        onSelect={(file) => this.onSelect(file)}
+                    />
 
                     <div className={'file-browser-actions'}>
                         <Button
@@ -80,7 +87,7 @@ export class FileBrowserDialog extends React.Component<FileBrowserDialogProps, F
                             text={'Select'}
                             disabled={!this.state.selection}
                             onClick={() => this.selectFile()}
-                            />
+                        />
                         <Button
                             type={ButtonType.BUTTON}
                             style={ButtonStyle.DANGER}
@@ -91,7 +98,6 @@ export class FileBrowserDialog extends React.Component<FileBrowserDialogProps, F
                     </div>
                 </div>
             </Modal>
-
         );
     }
 }

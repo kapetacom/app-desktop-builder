@@ -1,33 +1,37 @@
-import React, {DragEvent as ReactDragEvent, FormEvent} from "react";
+import React, { DragEvent as ReactDragEvent, FormEvent } from 'react';
 import _ from 'lodash';
-import {formatBytes, getFileExtension, toClass} from "@blockware/ui-web-utils";
+import {
+    formatBytes,
+    getFileExtension,
+    toClass,
+} from '@blockware/ui-web-utils';
 
-import {FileWrapper} from "./FileWrapper";
+import { FileWrapper } from './FileWrapper';
 import './FilePicker.less';
 
 interface FilePickerProps {
     extensions?: string;
     multiple: boolean;
     autoLoad?: boolean;
-    maxByteSize?:number;
-    fileValidator?: (file:FileWrapper) => boolean;
-    fileParser?: (file:FileWrapper) => any;
-    onChange?: (files:FileWrapper[]) => void;
-    renderFile?:( file:FileWrapper) => JSX.Element;
-    renderFiles?:( files:FileWrapper[]) => JSX.Element;
+    maxByteSize?: number;
+    fileValidator?: (file: FileWrapper) => boolean;
+    fileParser?: (file: FileWrapper) => any;
+    onChange?: (files: FileWrapper[]) => void;
+    renderFile?: (file: FileWrapper) => JSX.Element;
+    renderFiles?: (files: FileWrapper[]) => JSX.Element;
 }
 
-
 interface FilePickerState {
-    fileOver:boolean;
-    invalid:boolean;
-    fileOverPage:boolean;
+    fileOver: boolean;
+    invalid: boolean;
+    fileOverPage: boolean;
     currentFiles: FileWrapper[];
 }
 
-
-export class FilePicker extends React.Component<FilePickerProps,FilePickerState> {
-
+export class FilePicker extends React.Component<
+    FilePickerProps,
+    FilePickerState
+> {
     constructor(props: FilePickerProps) {
         super(props);
 
@@ -35,49 +39,48 @@ export class FilePicker extends React.Component<FilePickerProps,FilePickerState>
             fileOver: false,
             fileOverPage: false,
             invalid: false,
-            currentFiles: []
+            currentFiles: [],
         };
     }
 
     onDragEnterWindow = () => {
         this.setState({
-            fileOverPage: true
+            fileOverPage: true,
         });
     };
 
-    onDragLeaveWindow = (evt:DragEvent) => {
-        if (evt.x === 0 &&
-            evt.y === 0) {
+    onDragLeaveWindow = (evt: DragEvent) => {
+        if (evt.x === 0 && evt.y === 0) {
             this.setState({
-                fileOverPage: false
+                fileOverPage: false,
             });
         }
     };
 
-    onDropWindow = (evt:DragEvent) => {
+    onDropWindow = (evt: DragEvent) => {
         this.setState({
-            fileOverPage: false
+            fileOverPage: false,
         });
     };
 
-    onDragEnter = (evt:ReactDragEvent) => {
+    onDragEnter = (evt: ReactDragEvent) => {
         if (!evt.dataTransfer) {
             return;
         }
 
         this.setState({
-            fileOver: true
+            fileOver: true,
         });
     };
 
     onDragLeave = () => {
         this.setState({
             fileOver: false,
-            invalid: false
+            invalid: false,
         });
     };
 
-    onDragOver = (evt:ReactDragEvent) => {
+    onDragOver = (evt: ReactDragEvent) => {
         evt.stopPropagation();
         evt.preventDefault();
 
@@ -86,15 +89,16 @@ export class FilePicker extends React.Component<FilePickerProps,FilePickerState>
         }
     };
 
-    onDrop = async (evt:ReactDragEvent) => {
+    onDrop = async (evt: ReactDragEvent) => {
         evt.preventDefault();
 
         this.onDragLeave();
 
-        if (evt.dataTransfer &&
+        if (
+            evt.dataTransfer &&
             evt.dataTransfer.files &&
-            evt.dataTransfer.files.length > 0) {
-
+            evt.dataTransfer.files.length > 0
+        ) {
             const anyValid = await this.addFiles(evt.dataTransfer.files);
             if (!anyValid) {
                 this.flashInvalid();
@@ -102,7 +106,7 @@ export class FilePicker extends React.Component<FilePickerProps,FilePickerState>
         }
     };
 
-    onFileInputChange = async (evt:FormEvent<HTMLInputElement>) => {
+    onFileInputChange = async (evt: FormEvent<HTMLInputElement>) => {
         if (!evt.currentTarget.files) {
             return;
         }
@@ -114,42 +118,45 @@ export class FilePicker extends React.Component<FilePickerProps,FilePickerState>
     };
 
     private flashInvalid() {
-        this.setState({invalid: true}, () => {
+        this.setState({ invalid: true }, () => {
             setTimeout(() => {
                 this.setState({
                     invalid: false,
-                    fileOver: false
+                    fileOver: false,
                 });
             }, 150);
         });
     }
 
+    private isValid(file: File) {
+        const extensions = this.props.extensions
+            ? this.props.extensions.toLowerCase().split(/,/g)
+            : null;
 
-    private isValid(file:File) {
-
-        const extensions = this.props.extensions ? this.props.extensions.toLowerCase().split(/,/g) : null;
-
-        if (this.props.maxByteSize &&
-            this.props.maxByteSize < file.size) {
+        if (this.props.maxByteSize && this.props.maxByteSize < file.size) {
             return false;
         }
 
         const extension = getFileExtension(file.name);
 
-        if (extensions &&
+        if (
+            extensions &&
             extensions.length > 0 &&
-            extensions.indexOf(extension) === -1) {
+            extensions.indexOf(extension) === -1
+        ) {
             return false;
         }
 
         return true;
     }
 
-    private async addFiles(domFiles:FileList) {
-        const files = this.props.multiple ? _.clone(this.state.currentFiles) : [];
+    private async addFiles(domFiles: FileList) {
+        const files = this.props.multiple
+            ? _.clone(this.state.currentFiles)
+            : [];
         let anyValid = false;
 
-        for(let i = 0; i < domFiles.length; i++) {
+        for (let i = 0; i < domFiles.length; i++) {
             const file = domFiles.item(i);
             if (!file) {
                 continue;
@@ -166,23 +173,23 @@ export class FilePicker extends React.Component<FilePickerProps,FilePickerState>
                 await wrapper.loadAsText(this.props.fileParser);
             }
 
-            if (this.props.fileValidator &&
-                !this.props.fileValidator(wrapper)) {
+            if (
+                this.props.fileValidator &&
+                !this.props.fileValidator(wrapper)
+            ) {
                 continue;
             }
 
             anyValid = true;
             files.push(wrapper);
 
-            if (!this.props.multiple &&
-                files.length > 0) {
+            if (!this.props.multiple && files.length > 0) {
                 break; //Stop
             }
         }
 
-        this.setState({currentFiles: files}, () => {
-            if (this.props.onChange &&
-                this.state.currentFiles.length > 0) {
+        this.setState({ currentFiles: files }, () => {
+            if (this.props.onChange && this.state.currentFiles.length > 0) {
                 this.props.onChange(this.state.currentFiles);
             }
         });
@@ -190,34 +197,39 @@ export class FilePicker extends React.Component<FilePickerProps,FilePickerState>
         return anyValid;
     }
 
-
     componentDidMount() {
-
         window.addEventListener('dragenter', this.onDragEnterWindow, false);
         window.addEventListener('drop', this.onDropWindow, false);
         window.addEventListener('dragleave', this.onDragLeaveWindow, false);
 
         // @ts-ignore
-        if (window.boundFilePicker) { //We make sure we only do this once
+        if (window.boundFilePicker) {
+            //We make sure we only do this once
             return;
         }
 
         // @ts-ignore
         window.boundFilePicker = true;
 
-        window.addEventListener('dragover', function(evt) {
-            evt.preventDefault();
-            if (evt.dataTransfer) {
-                evt.dataTransfer.dropEffect = 'none';
-            }
+        window.addEventListener(
+            'dragover',
+            function (evt) {
+                evt.preventDefault();
+                if (evt.dataTransfer) {
+                    evt.dataTransfer.dropEffect = 'none';
+                }
+            },
+            false
+        );
 
-        }, false);
-
-        window.addEventListener('drop', function(evt) {
-            evt.preventDefault();
-            evt.stopPropagation();
-        }, false);
-
+        window.addEventListener(
+            'drop',
+            function (evt) {
+                evt.preventDefault();
+                evt.stopPropagation();
+            },
+            false
+        );
     }
 
     componentWillUnmount() {
@@ -226,8 +238,7 @@ export class FilePicker extends React.Component<FilePickerProps,FilePickerState>
         window.removeEventListener('dragleave', this.onDragLeaveWindow, false);
     }
 
-    renderFile(file:FileWrapper) {
-
+    renderFile(file: FileWrapper) {
         if (this.props.renderFile) {
             //Allows overwriting the file rendering
             return this.props.renderFile(file);
@@ -245,11 +256,10 @@ export class FilePicker extends React.Component<FilePickerProps,FilePickerState>
                     <span className={'value'}>{formatBytes(file.size)}</span>
                 </div>
             </>
-        )
+        );
     }
 
     renderFiles() {
-
         if (this.props.renderFiles) {
             //Allows overwriting the file rendering
             return this.props.renderFiles(this.state.currentFiles);
@@ -257,60 +267,63 @@ export class FilePicker extends React.Component<FilePickerProps,FilePickerState>
 
         return (
             <ul className={'files'}>
-                {
-                    this.state.currentFiles.map((file, ix) => {
-                        return (
-                            <li className={'file'} key={ix}>
-                                <div className={'info'}>
-                                    {this.renderFile(file)}
-                                </div>
-                                <div className={'actions'}>
-                                    <button type={'button'}
-                                            className={'danger'}
-                                            title={'Remove file'}
-                                            onClick={(evt) => { evt.preventDefault(); this.removeFile(file); }}>
-                                        <i className={'fa fa-times'} />
-                                    </button>
-                                </div>
-                            </li>
-                        )
-                    })
-                }
+                {this.state.currentFiles.map((file, ix) => {
+                    return (
+                        <li className={'file'} key={ix}>
+                            <div className={'info'}>
+                                {this.renderFile(file)}
+                            </div>
+                            <div className={'actions'}>
+                                <button
+                                    type={'button'}
+                                    className={'danger'}
+                                    title={'Remove file'}
+                                    onClick={(evt) => {
+                                        evt.preventDefault();
+                                        this.removeFile(file);
+                                    }}
+                                >
+                                    <i className={'fa fa-times'} />
+                                </button>
+                            </div>
+                        </li>
+                    );
+                })}
             </ul>
-        )
+        );
     }
 
     private removeFile(file: FileWrapper): void {
         const files = _.clone(this.state.currentFiles);
         _.pull(files, file);
         this.setState({
-            currentFiles: files
+            currentFiles: files,
         });
     }
 
     render() {
-
         const accept = this.props.extensions;
 
         const hasFileSelection = this.state.currentFiles.length > 0;
 
         const containerClass = toClass({
-            'file-picker-container':true,
+            'file-picker-container': true,
             'file-over': this.state.fileOver,
             'file-over-page': this.state.fileOverPage,
-            'invalid': this.state.invalid,
-            'selection': hasFileSelection
+            invalid: this.state.invalid,
+            selection: hasFileSelection,
         });
 
         return (
             <div className={containerClass}>
-
                 <label className={'instructions'}>
-                    <div className={'mouse-catcher'}
-                         onDragEnterCapture={this.onDragEnter}
-                         onDragLeaveCapture={this.onDragLeave}
-                         onDragOverCapture={this.onDragOver}
-                         onDropCapture={this.onDrop} />
+                    <div
+                        className={'mouse-catcher'}
+                        onDragEnterCapture={this.onDragEnter}
+                        onDragLeaveCapture={this.onDragLeave}
+                        onDragOverCapture={this.onDragOver}
+                        onDropCapture={this.onDrop}
+                    />
 
                     <i className="main-icon fa fa-cloud-upload" />
 
@@ -318,17 +331,16 @@ export class FilePicker extends React.Component<FilePickerProps,FilePickerState>
                         Click or drag files here to upload them now.
                     </span>
 
-                    <input type="file"
-                           onChange={this.onFileInputChange}
-                           value={''} //Ensures the file input field always changes
-                           multiple={this.props.multiple}
-                           accept={accept}/>
+                    <input
+                        type="file"
+                        onChange={this.onFileInputChange}
+                        value={''} //Ensures the file input field always changes
+                        multiple={this.props.multiple}
+                        accept={accept}
+                    />
                 </label>
 
-                {hasFileSelection &&
-                    this.renderFiles()
-                }
-
+                {hasFileSelection && this.renderFiles()}
             </div>
         );
     }
