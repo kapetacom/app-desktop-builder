@@ -1,9 +1,8 @@
-import { ChildProcess } from 'child_process';
-import { EventEmitter } from 'events';
+import { ChildProcess, fork } from 'node:child_process';
+import { EventEmitter } from 'node:events';
 
-const { fork } = require('child_process');
-const Path = require('path');
-const FS = require('fs');
+import Path from 'node:path';
+import FS from 'node:fs';
 
 export interface ClusterInfo {
     host: string;
@@ -20,7 +19,7 @@ export class ClusterService extends EventEmitter {
         }
     }
 
-    private running: boolean = false;
+    private running = false;
 
     private child?: ChildProcess = undefined;
 

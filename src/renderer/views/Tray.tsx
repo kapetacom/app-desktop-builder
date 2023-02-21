@@ -14,7 +14,7 @@ async function ensureWindow() {
     }
 
     const remote = electronRemote();
-    const BrowserWindow = remote.BrowserWindow;
+    const { BrowserWindow } = remote;
     // Create the main window.
     mainWindow = new BrowserWindow({
         webPreferences: {
@@ -49,13 +49,17 @@ function closeApp() {
     remote.app.exit(0);
 }
 
-export default function Tray(props: any) {
+export default function Tray() {
     return (
         <>
             <div>Tray Test!</div>
-            <button onClick={ensureWindow}>Open main window</button>
+            <button type="button" onClick={ensureWindow}>
+                Open main window
+            </button>
 
-            <button onClick={closeApp}>Quit</button>
+            <button type="button" onClick={closeApp}>
+                Quit
+            </button>
         </>
     );
 }

@@ -2,8 +2,8 @@ import React from 'react';
 import './PlanOverviewTopBar.less';
 import { SidePanel } from '@blockware/ui-web-components';
 import { AssetService } from '@blockware/ui-web-context';
-import PlanImport from './PlanImport';
 import { Asset } from '@blockware/ui-web-types';
+import PlanImport from './PlanImport';
 
 interface Props {
     skipFiles: string[];
@@ -20,7 +20,7 @@ export function PlanOverviewTopBar(props: Props) {
                 assetService={AssetService}
                 onDone={(asset?: Asset) => {
                     props.onDone(asset);
-                    createPanel.current && createPanel.current.close();
+                    createPanel.current?.close();
                 }}
             />
         </div>

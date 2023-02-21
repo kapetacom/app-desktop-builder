@@ -41,26 +41,28 @@ export const TopMenu = observer((props: Props) => {
         playing,
     });
 
-    const updateState = async () => {
-        const status = await InstanceService.getInstanceStatusForPlan(
-            props.systemId
-        );
-        setPlaying(status.filter((s) => s.status !== 'stopped').length > 0);
-    };
-
     useEffect(() => {
-        updateState().catch(() => {});
+        const updateState = async () => {
+            const status = await InstanceService.getInstanceStatusForPlan(
+                props.systemId
+            );
+            setPlaying(status.filter((s) => s.status !== 'stopped').length > 0);
+        };
+        updateState().catch(() => {
+            // ignore initial error
+        });
         return InstanceService.subscribe(
             props.systemId,
             InstanceEventType.EVENT_INSTANCE_CHANGED,
             updateState
         );
-    }, []);
+    }, [props.systemId]);
 
     return (
         <div className={containerClass}>
-            <div className={'buttons'}>
+            <div className="buttons">
                 <button
+                    type="button"
                     disabled={playing || processing}
                     onClick={async () => {
                         await doProcess(async () => {
@@ -71,10 +73,11 @@ export const TopMenu = observer((props: Props) => {
                         }, 'Failed to start plan');
                     }}
                 >
-                    <i className={'fa fa-play'} />
+                    <i className="fa fa-play" />
                     <span>Start</span>
                 </button>
                 <button
+                    type="button"
                     disabled={!playing || processing}
                     onClick={async () => {
                         await doProcess(async () => {
@@ -83,7 +86,7 @@ export const TopMenu = observer((props: Props) => {
                         }, 'Failed to stop plan');
                     }}
                 >
-                    <i className={'fa fa-stop'} />
+                    <i className="fa fa-stop" />
                     <span>Stop</span>
                 </button>
             </div>

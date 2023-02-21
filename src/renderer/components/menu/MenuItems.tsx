@@ -1,13 +1,13 @@
 import React from 'react';
-import { MenuItem } from './MenuDataModel';
-import './Menu.less';
 import {
     toClass,
     createHexagonPath,
     Orientation,
 } from '@blockware/ui-web-utils';
-
 import { SVGText } from '@blockware/ui-web-components';
+
+import { MenuItem } from './MenuDataModel';
+import './Menu.less';
 
 interface MenuWrapperProps {
     menuItems: MenuItem[];
@@ -33,8 +33,8 @@ const MenuItems = (props: MenuWrapperProps) => {
                             menuItem.callback();
                             props.closeMenu();
                         }}
-                        className={'menu-item'}
-                        key={'menuItem' + index}
+                        className="menu-item"
+                        key={menuItem.text}
                         style={{ transform: `translateY(${-42 * index}px)` }}
                     >
                         <path
@@ -45,9 +45,9 @@ const MenuItems = (props: MenuWrapperProps) => {
                                 Orientation.HORIZONTAL,
                                 12
                             )}
-                        ></path>
+                        />
                         <SVGText
-                            className={'menu-item-text'}
+                            className="menu-item-text"
                             maxWidth={140}
                             x={75}
                             y={24}

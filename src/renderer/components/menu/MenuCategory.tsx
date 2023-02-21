@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import './Menu.less';
+import { Orientation, toClass } from '@blockware/ui-web-utils';
 import MenuHexagon from './MenuHexagon';
 import { CategoryState, MenuCategoryItem } from './MenuDataModel';
-import { Orientation, toClass } from '@blockware/ui-web-utils';
 
 import MenuItems from './MenuItems';
 
@@ -35,6 +35,7 @@ export default class MenuCategory extends Component<
             yPosition: this.subMenuPosition(),
         };
     }
+
     private subMenuPosition = () => {
         if (this.props.animationState === CategoryState.OPEN) {
             if (this.props.categoryIndex >= this.props.activeIndex)
@@ -50,6 +51,7 @@ export default class MenuCategory extends Component<
         }
         return 0;
     };
+
     private currentPosition = () => {
         if (this.props.animationState === CategoryState.OPEN) {
             if (this.props.categoryIndex >= this.props.activeIndex)
@@ -106,7 +108,7 @@ export default class MenuCategory extends Component<
         return (
             <>
                 <g
-                    className={'menu-category ' + classnames}
+                    className={`menu-category ${classnames}`}
                     onTransitionEndCapture={() => {
                         this.handleTransitionEnd(this.props.activeIndex);
                     }}
@@ -115,7 +117,7 @@ export default class MenuCategory extends Component<
                         transform: `translateY(${this.currentPosition()}px)`,
                     }}
                 >
-                    <g className={'menu-category-inner'}>
+                    <g className="menu-category-inner">
                         <MenuHexagon
                             onClick={
                                 this.props.menuOpen
@@ -123,10 +125,10 @@ export default class MenuCategory extends Component<
                                     : () => {}
                             }
                         >
-                            <i className={`fal ${this.props.icon}`}></i>
+                            <i className={`fal ${this.props.icon}`} />
                         </MenuHexagon>
                         <g
-                            className={'sub-category-menu-item-holder active'}
+                            className="sub-category-menu-item-holder active"
                             style={{
                                 pointerEvents: this.props.open ? 'all' : 'none',
                             }}

@@ -8,7 +8,7 @@ export function useLocalStorage<T>(
         window.localStorage.setItem(name, JSON.stringify(value));
     }
 
-    let raw = window.localStorage.getItem(name);
+    const raw = window.localStorage.getItem(name);
     let item: T;
     if (raw) {
         item = JSON.parse(raw);

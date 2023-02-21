@@ -1,13 +1,14 @@
-import './shared-libraries.js';
+import './shared-libraries';
 
 import React, { useState } from 'react';
-import Application from './views/Application';
 import { Provider } from 'mobx-react';
+import { SimpleLoader } from '@blockware/ui-web-components';
+
+import Application from './views/Application';
 
 import './index.less';
 
 import { initialise } from './context';
-import { SimpleLoader } from '@blockware/ui-web-components';
 
 export const Root = () => {
     const [loading, setLoading] = useState(true);
@@ -15,7 +16,7 @@ export const Root = () => {
     return (
         <Provider>
             <SimpleLoader
-                text={'Initialising application...'}
+                text="Initialising application..."
                 loader={async () => {
                     await initialise();
                     setLoading(false);

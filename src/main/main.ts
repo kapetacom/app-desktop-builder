@@ -20,10 +20,10 @@ import {
 } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
+import { BlockwareAPI } from '@blockware/nodejs-api-client';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import MenuItem = Electron.MenuItem;
-import { BlockwareAPI } from '@blockware/nodejs-api-client';
 import { ClusterInfo, ClusterService } from './ClusterService';
 
 type TrayMenuItem = MenuItemConstructorOptions | MenuItem;
@@ -99,9 +99,9 @@ const refreshTray = async () => {
     let userMenu: TrayMenuItem[];
 
     try {
-        const identity: any = await api.getCurrentIdentity();
-        const context: any = await api.getCurrentContext();
-        const memberships: any[] = await api.getCurrentMemberships();
+        const identity = await api.getCurrentIdentity();
+        const context = await api.getCurrentContext();
+        const memberships = await api.getCurrentMemberships();
         userMenu = [
             {
                 type: 'submenu',
@@ -144,7 +144,7 @@ const refreshTray = async () => {
                     return;
                 }
 
-                let label = membership.identity.name;
+                const label = membership.identity.name;
                 contextMenus.push({
                     label,
                     click: async () => {
@@ -186,8 +186,8 @@ const refreshTray = async () => {
                             }!`,
                             title: 'Signed in!',
                         });
-                    } catch (e: any) {
-                        //Failed to complete
+                    } catch (err: any) {
+                        // Failed to complete
                         dialog.showErrorBox(
                             'Failed to authenticate',
                             e.message || e.error || 'Unknown error'
@@ -285,7 +285,7 @@ const createWindow = async () => {
         `http://${localClusterInfo?.host}:${localClusterInfo?.port}`
     );
     await mainWindow.loadURL(
-        resolveHtmlPath(`index.html`) + `#cluster_service=${clusterService}`
+        `${resolveHtmlPath(`index.html`)}#cluster_service=${clusterService}`
     );
 
     mainWindow.on('show', showDock);
@@ -322,7 +322,7 @@ const createWindow = async () => {
  */
 
 app.on('window-all-closed', () => {
-    //Do not close app when windows close. We still have the tray
+    // Do not close app when windows close. We still have the tray
 });
 
 app.on('quit', async () => {

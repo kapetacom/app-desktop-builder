@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
+import { toClass } from '@blockware/ui-web-utils';
+import * as _ from 'lodash';
+
 import { MenuCategoryItem, CategoryState } from './MenuDataModel';
 import './Menu.less';
-import MenuHexagon from './MenuHexagon';
-import { observer } from 'mobx-react';
 import MenuCategory from './MenuCategory';
-import { action, makeObservable } from 'mobx';
-import * as _ from 'lodash';
-import { toClass } from '@blockware/ui-web-utils';
+import MenuHexagon from './MenuHexagon';
 
 interface MenuWrapperProps {
     menuCategoryItems: MenuCategoryItem[];
@@ -54,7 +53,7 @@ export default class Menu extends Component<
 
     private toggleMenuCategories = (open: boolean, index: number) => {
         this.resetCategoryMenus();
-        let temCategoryItems = _.cloneDeep(this.state.menuCategoryItems);
+        const temCategoryItems = _.cloneDeep(this.state.menuCategoryItems);
         if (!open) {
             temCategoryItems[index].open = true;
         } else {
@@ -108,7 +107,7 @@ export default class Menu extends Component<
                         return (
                             <MenuCategory
                                 menuOpen={this.state.menuOpen}
-                                key={index + 'menuItem'}
+                                key={`${index}menuItem`}
                                 activeIndex={this.state.activeIndex}
                                 animationState={this.state.categoryItemState}
                                 open={categoryItem.open}
@@ -145,17 +144,17 @@ export default class Menu extends Component<
     };
 
     render() {
-        let classNames = toClass({
+        const classNames = toClass({
             'menu-wrapper': true,
             'menu-open': this.state.menuOpen,
         });
         return (
             <svg className={classNames}>
-                <g className={'menu'}>
+                <g className="menu">
                     {this.renderMenuCategories()}
                     <MenuHexagon
-                        isDark={true}
-                        custom={true}
+                        isDark
+                        custom
                         onClick={() => {
                             this.toggleCategories();
                             this.toggleMenu();
@@ -169,7 +168,7 @@ export default class Menu extends Component<
                             xmlns="http://www.w3.org/2000/svg"
                         >
                             <g
-                                className={'menu-logo'}
+                                className="menu-logo"
                                 style={{
                                     transform: `rotate(${this.calcRotationDeg()}deg)`,
                                     transformOrigin: '26.5% 24.5%',
