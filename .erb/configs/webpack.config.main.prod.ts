@@ -40,7 +40,7 @@ const configuration: webpack.Configuration = {
             {
                 test: /\.tsx?$/,
                 exclude: /node_modules/,
-                include: /src\/main\//,
+                include: /src[\\/]main[\\/]/,
                 use: {
                     loader: 'ts-loader',
                     options: {
