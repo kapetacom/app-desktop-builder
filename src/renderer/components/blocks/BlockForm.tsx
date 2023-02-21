@@ -12,7 +12,11 @@ import {
 } from '@blockware/ui-web-components';
 
 import { BlockTypeProvider } from '@blockware/ui-web-context';
-import type { BlockKind, SchemaKind } from '@blockware/ui-web-types';
+import type {
+    BlockKind,
+    BlockServiceSpec,
+    SchemaKind,
+} from '@blockware/ui-web-types';
 
 import './BlockForm.less';
 import { BlockConfigComponentProps } from '@blockware/ui-web-types';
@@ -33,11 +37,15 @@ interface State {
     block: BlockKind;
 }
 
-function emptyBlock(): BlockKind<void> {
+function emptyBlock(): BlockKind<BlockServiceSpec> {
     return {
         kind: BlockTypeProvider.getDefaultKind(),
         metadata: { name: '', title: '' },
-        spec: {},
+        spec: {
+            target: {
+                kind: 'empty',
+            },
+        },
     };
 }
 

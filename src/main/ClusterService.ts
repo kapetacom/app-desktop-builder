@@ -27,7 +27,7 @@ export class ClusterService extends EventEmitter {
         console.log('Starting cluster service from %s', SERVICE_FILE);
         return new Promise((resolve, reject) => {
             const child = (this.child = fork(SERVICE_FILE));
-            child.on('message', (msg) => {
+            child.on('message', (msg: ClusterInfo) => {
                 this.running = true;
                 this.emit('started', msg);
                 console.log(
