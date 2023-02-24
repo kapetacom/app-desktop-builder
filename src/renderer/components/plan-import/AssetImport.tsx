@@ -101,8 +101,8 @@ export class AssetImport extends React.Component<
         this.resetNewEntity();
     };
 
-    private saveNewEntity = () => {
-        this.openFilePanel();
+    private saveNewEntity = (entity) => {
+        this.setState({ newEntity: entity }, () => this.openFilePanel());
     };
 
     private openFilePanel = () => {
@@ -202,7 +202,10 @@ export class AssetImport extends React.Component<
                     title={this.props.title}
                 >
                     <div className="entity-form">
-                        <FormContainer onSubmit={this.saveNewEntity}>
+                        <FormContainer
+                            onSubmitData={this.saveNewEntity}
+                            initialValue={this.state.newEntity}
+                        >
                             <this.props.formRenderer
                                 {...this.state.newEntity}
                                 creating
