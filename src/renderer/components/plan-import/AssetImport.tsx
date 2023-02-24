@@ -202,7 +202,10 @@ export class AssetImport extends React.Component<
                     title={this.props.title}
                 >
                     <div className="entity-form">
-                        <FormContainer onSubmit={this.saveNewEntity}>
+                        <FormContainer
+                            onSubmit={this.saveNewEntity}
+                            initialValue={this.state.newEntity}
+                        >
                             <this.props.formRenderer
                                 {...this.state.newEntity}
                                 creating

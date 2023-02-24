@@ -6,7 +6,12 @@ import {
     PLAN_KIND,
 } from '@blockware/ui-web-types';
 import { AssetStore, IdentityService } from '@blockware/ui-web-context';
-import { FormInput, AssetNameInput } from '@blockware/ui-web-components';
+import {
+    FormInput,
+    AssetNameInput,
+    SimpleLoader,
+    useFormContextField,
+} from '@blockware/ui-web-components';
 import { useAsync } from 'react-use';
 
 import { AssetImport } from '../../plan-import/AssetImport';
@@ -18,16 +23,15 @@ interface PlanImportProps {
 }
 
 const PlanForm = (props: EntityConfigProps) => {
+    const titleField = useFormContextField('metadata.title');
     const updateValue = useCallback(
         (fieldName: string, value: string) => {
-            const newMetadata = { ...props.metadata };
-            newMetadata[fieldName] = value;
-            props.onDataChanged(newMetadata, props.spec);
+            titleField.set(value);
         },
-        [props]
+        [titleField]
     );
 
-    const { value: namespaces } = useAsync(async () => {
+    const { value: namespaces, loading } = useAsync(async () => {
         const identity = await IdentityService.getCurrent();
         const memberships = await IdentityService.getMemberships(identity.id);
         return [
@@ -38,18 +42,18 @@ const PlanForm = (props: EntityConfigProps) => {
 
     return (
         <>
-            <AssetNameInput
-                name="name"
-                value={props.metadata.name}
-                label="Name"
-                help="Give your plan an identifier with your handle. E.g. myhandle/my-plan"
-                onChange={updateValue}
-                namespaces={namespaces || []}
-            />
+            <SimpleLoader loading={loading}>
+                <AssetNameInput
+                    name="metadata.name"
+                    label="Name"
+                    help="Give your plan an identifier with your handle. E.g. myhandle/my-plan"
+                    namespaces={namespaces || []}
+                />
+            </SimpleLoader>
 
             <FormInput
-                name="title"
-                value={props.metadata.title}
+                name="metadata.title"
+                value={titleField.get('')}
                 label="Title"
                 validation={['required']}
                 help="Give your plan a user friendly title - e.g. My Awesome Plan"

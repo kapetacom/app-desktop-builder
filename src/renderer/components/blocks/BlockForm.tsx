@@ -10,6 +10,7 @@ import {
     FormField,
     FormFieldType,
     FormRow,
+    SimpleLoader,
 } from '@blockware/ui-web-components';
 
 import { BlockTypeProvider, IdentityService } from '@blockware/ui-web-context';
@@ -54,7 +55,7 @@ function emptyBlock(): BlockKind<BlockServiceSpec> {
 // Higher-order-component to allow us to use hooks for data loading (not possible in class components)
 const withNamespaces = (Component) => {
     return (props) => {
-        const { value: namespaces } = useAsync(async () => {
+        const { value: namespaces, loading } = useAsync(async () => {
             const identity = await IdentityService.getCurrent();
             const memberships = await IdentityService.getMemberships(
                 identity.id
@@ -64,13 +65,17 @@ const withNamespaces = (Component) => {
                 ...memberships.map((membership) => membership.identity.handle),
             ];
         });
-        return <AssetNameInput {...props} namespaces={namespaces || []} />;
+        return (
+            <SimpleLoader loading={loading}>
+                <Component {...props} namespaces={namespaces || []} />
+            </SimpleLoader>
+        );
     };
 };
 const AutoLoadAssetNameInput = withNamespaces(AssetNameInput);
 
 class BlockForm extends React.Component<Props, State> {
-    constructor(props: any) {
+    constructor(props: Props) {
         super(props);
 
         this.state = {
