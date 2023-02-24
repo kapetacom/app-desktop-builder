@@ -1,6 +1,7 @@
 import React, { ComponentType } from 'react';
 
 import {
+    AssetNameInput,
     Button,
     ButtonStyle,
     ButtonType,
@@ -11,7 +12,7 @@ import {
     FormRow,
 } from '@blockware/ui-web-components';
 
-import { BlockTypeProvider } from '@blockware/ui-web-context';
+import { BlockTypeProvider, IdentityService } from '@blockware/ui-web-context';
 import type {
     BlockKind,
     BlockServiceSpec,
@@ -21,6 +22,7 @@ import type {
 import './BlockForm.less';
 import { BlockConfigComponentProps } from '@blockware/ui-web-types';
 import { ErrorBoundary } from 'react-error-boundary';
+import { useAsync } from 'react-use';
 
 interface Props {
     block?: BlockKind;
@@ -49,13 +51,23 @@ function emptyBlock(): BlockKind<BlockServiceSpec> {
     };
 }
 
-function validateBlockName(field: string, value: string) {
-    if (!/^[a-z][a-z0-9_-]*\/[a-z][a-z0-9_-]*$/i.test(value)) {
-        throw new Error(
-            'Invalid block name. Expected format is <handle>/<name>'
-        );
-    }
-}
+// Higher-order-component to allow us to use hooks for data loading (not possible in class components)
+const withNamespaces = (Component) => {
+    return (props) => {
+        const { value: namespaces } = useAsync(async () => {
+            const identity = await IdentityService.getCurrent();
+            const memberships = await IdentityService.getMemberships(
+                identity.id
+            );
+            return [
+                identity.handle,
+                ...memberships.map((membership) => membership.identity.handle),
+            ];
+        });
+        return <AssetNameInput {...props} namespaces={namespaces || []} />;
+    };
+};
+const AutoLoadAssetNameInput = withNamespaces(AssetNameInput);
 
 class BlockForm extends React.Component<Props, State> {
     constructor(props: any) {
@@ -149,10 +161,8 @@ class BlockForm extends React.Component<Props, State> {
                         disabled={!this.props.creating}
                     />
 
-                    <FormField
+                    <AutoLoadAssetNameInput
                         name="metadata.name"
-                        validation={['required', validateBlockName]}
-                        type={FormFieldType.STRING}
                         label="Name"
                         help={
                             'Give your block a system name prefixed with your handle - e.g. "myhandle/my-block"'
