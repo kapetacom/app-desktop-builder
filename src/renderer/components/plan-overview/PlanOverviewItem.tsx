@@ -2,8 +2,8 @@ import React from 'react';
 import { toClass } from '@blockware/ui-web-utils';
 import { SVGText } from '@blockware/ui-web-components';
 
-import { MenuItem } from '../../menu/MenuDataModel';
-import MenuItems from '../../menu/MenuItems';
+import { MenuItem } from '../menu/MenuDataModel';
+import MenuItems from '../menu/MenuItems';
 
 import PlanOverviewItemHexagon from './PlanOverviewItemHexagon';
 

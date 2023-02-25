@@ -14,8 +14,6 @@ interface BlockStoreItemProps {
 
 @observer
 class BlockStoreItem extends React.Component<BlockStoreItemProps> {
-    // eslint-disable-next-line react/no-unused-class-component-methods
-    private placeholderElement: SVGSVGElement | null = null;
 
     private renderPlaceholder = (): JSX.Element => {
         return (
@@ -23,10 +21,6 @@ class BlockStoreItem extends React.Component<BlockStoreItemProps> {
                 className="block-store-item-placeholder"
                 width={150}
                 height={150}
-                ref={(ref) => {
-                    // eslint-disable-next-line react/no-unused-class-component-methods
-                    this.placeholderElement = ref;
-                }}
             >
                 <BlockNode
                     height={150}

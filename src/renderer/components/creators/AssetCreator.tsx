@@ -21,16 +21,22 @@ import {
 
 import {FileBrowserDialog} from '../file-browser/FileBrowserDialog';
 
-import './AssetImport.less';
-import {ProjectHomeFolderInput} from "../utils/ProjectHomeFolderInput";
+import './AssetCreator.less';
+import {ProjectHomeFolderInput} from "../fields/ProjectHomeFolderInput";
 
 export interface CreatingFormProps {
     creating?: boolean;
 }
 
-interface AssetImportProps {
+export enum AssetCreatorState {
+    CLOSED,
+    IMPORTING,
+    CREATING
+}
+
+interface Props {
     assetService: AssetStore;
-    onDone: (asset?: Asset) => void;
+    onDone?: (asset?: Asset) => void;
     skipFiles: string[]; // A collection of files to prevent importing as they are already loaded
     title: string;
     introduction: string;
@@ -39,67 +45,46 @@ interface AssetImportProps {
     formRenderer: React.ComponentType<CreatingFormProps>;
     fileSelectableHandler: (file: FileInfo) => boolean;
     onAssetAdded?:(asset:Asset) => void
+    state: AssetCreatorState
+    onStateChanged: (state:AssetCreatorState) => void
+
 }
 
-interface AssetImportState {
-    importing: boolean;
+interface State {
     newEntity: SchemaKind;
     useProjectHome?: boolean;
     projectHome?: string;
     filePanelOpen: boolean;
-    createPanelOpen: boolean;
 }
 
-export class AssetImport extends React.Component<AssetImportProps, AssetImportState> {
+export class AssetCreator extends React.Component<Props, State> {
 
     constructor(props: any) {
         super(props);
 
         this.state = {
             newEntity: this.createNewEntity(),
-            importing: false,
             filePanelOpen: false,
-            createPanelOpen: false
         };
     }
 
-    private openImportPanel = () => {
-        this.setState(
-            {
-                importing: true,
-                createPanelOpen: false,
-                filePanelOpen: true
-            }
-        );
-    };
-
-    private openCreatePanel = () => {
-
-        this.setState(
-            {
-                importing: false,
-                createPanelOpen: true,
-                filePanelOpen: false,
-                newEntity: this.createNewEntity(),
-            }
-        );
-    };
 
     private closeCreatePanel = () => {
         this.setState({
-            createPanelOpen: false,
             newEntity: this.createNewEntity(),
+            filePanelOpen: false
         });
+        this.props.onStateChanged(AssetCreatorState.CLOSED);
     };
 
     private closeImportPanel = () => {
         this.setState(
             {
-                importing: false,
-                filePanelOpen: false,
                 newEntity: this.createNewEntity(),
+                filePanelOpen: false
             }
         );
+        this.props.onStateChanged(AssetCreatorState.CLOSED);
     };
 
     private saveNewEntity = async (data: SchemaKind) => {
@@ -112,7 +97,7 @@ export class AssetImport extends React.Component<AssetImportProps, AssetImportSt
         this.setState({
             newEntity: data,
             filePanelOpen: true
-        })
+        });
     };
 
     private async createAsset(filePath: string, content: SchemaKind) {
@@ -123,7 +108,6 @@ export class AssetImport extends React.Component<AssetImportProps, AssetImportSt
             );
 
             this.setState({
-                createPanelOpen: false,
                 filePanelOpen: false,
                 newEntity: this.createNewEntity(),
             });
@@ -131,6 +115,7 @@ export class AssetImport extends React.Component<AssetImportProps, AssetImportSt
             if (this.props.onAssetAdded && assets.length > 0) {
                 this.props.onAssetAdded(assets[0]);
             }
+            this.callDone(assets.length > 0 ? assets[0] : undefined);
         } catch (e) {
             showToasty({
                 type: ToastType.ALERT,
@@ -143,17 +128,19 @@ export class AssetImport extends React.Component<AssetImportProps, AssetImportSt
     private onFileSelection = async (file: FileInfo) => {
         try {
             let assets: Asset[];
-            if (this.state.importing) {
+            if (this.props.state === AssetCreatorState.IMPORTING) {
                 assets = await this.props.assetService.import(
                     `file://${file.path}`
                 );
                 this.closeImportPanel();
-            } else {
+            } else if (this.props.state === AssetCreatorState.CREATING) {
                 assets = await this.props.assetService.create(
                     Path.join(file.path, this.props.fileName),
                     this.state.newEntity
                 );
                 this.closeCreatePanel();
+            } else {
+                return;
             }
 
             this.callDone(assets.length > 0 ? assets[0] : undefined);
@@ -176,7 +163,7 @@ export class AssetImport extends React.Component<AssetImportProps, AssetImportSt
 
 
     private selectableHandler = (file: FileInfo) => {
-        if (this.state.importing) {
+        if (this.props.state === AssetCreatorState.IMPORTING) {
             // Filter the selectable files / folders in the import
             return this.props.fileSelectableHandler(file);
         }
@@ -184,38 +171,47 @@ export class AssetImport extends React.Component<AssetImportProps, AssetImportSt
         return !!file.folder;
     };
 
+    private isFilePanelOpen() {
+        if (this.props.state === AssetCreatorState.CLOSED) {
+            return false;
+        }
+        return this.state.filePanelOpen || this.props.state === AssetCreatorState.IMPORTING;
+    }
+
+    private isCreatePanelOpen() {
+        if (this.props.state === AssetCreatorState.CLOSED) {
+            return false;
+        }
+        return this.props.state === AssetCreatorState.CREATING;
+    }
+
+    private onClosedFilePanel() {
+        this.setState({filePanelOpen: false});
+        if (this.props.state === AssetCreatorState.IMPORTING) {
+            //Closing file panel closes all for import
+            this.closeImportPanel();
+        }
+    }
+
     render() {
         return (
-            <div className="entity-import">
-                <div className="actions">
-                    <Button
-                        text="Create"
-                        onClick={this.openCreatePanel}
-                        width={90}
-                    />
-                    <Button
-                        text="Import"
-                        onClick={this.openImportPanel}
-                        width={90}
-                    />
-                </div>
-
+            <>
                 <SidePanel
-                    open={this.state.createPanelOpen}
+                    open={this.isCreatePanelOpen()}
                     size={PanelSize.medium}
                     side={PanelAlignment.right}
                     onClose={this.closeCreatePanel}
                     title={this.props.title}
                 >
-                    <div className="entity-form">
+                    <div className="asset-creator-form">
                         <FormContainer
                             initialValue={this.state.newEntity}
                             onSubmitData={(data: any) => this.saveNewEntity(data)}>
+
                             <this.props.formRenderer creating/>
 
                             <ProjectHomeFolderInput
-                                useProjectHome={this.state.useProjectHome}
-                                onChange={async (useProjectHome, projectHome) => {
+                                onChange={(useProjectHome, projectHome) => {
                                     this.setState({
                                         useProjectHome,
                                         projectHome
@@ -243,14 +239,14 @@ export class AssetImport extends React.Component<AssetImportProps, AssetImportSt
                 </SidePanel>
 
                 <FileBrowserDialog
-                    open={this.state.filePanelOpen}
+                    open={this.isFilePanelOpen()}
                     skipFiles={this.props.skipFiles}
                     service={FileSystemService}
                     onSelect={this.onFileSelection}
-                    onClose={() => this.setState({filePanelOpen: false})}
+                    onClose={() => this.onClosedFilePanel()}
                     selectable={this.selectableHandler}
                 />
-            </div>
+            </>
         );
     }
 }

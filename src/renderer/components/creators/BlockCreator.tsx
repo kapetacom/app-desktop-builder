@@ -1,15 +1,18 @@
 import React from 'react';
 
-import { FileInfo } from '@blockware/ui-web-types';
+import {Asset, FileInfo} from '@blockware/ui-web-types';
 import { BlockTypeProvider, AssetStore } from '@blockware/ui-web-context';
 
-import { AssetImport } from '../../plan-import/AssetImport';
+import {AssetCreator, AssetCreatorState} from './AssetCreator';
+import {BlockForm} from "../forms/BlockForm";
 
-interface BlockStoreImportProps {
+interface Props {
+    state: AssetCreatorState;
+    onStateChanged: (state:AssetCreatorState) => void
     assetService: AssetStore;
-    onDone: () => void;
-    open: boolean;
     files: string[];
+    onDone?: (asset?: Asset) => void;
+    onAssetAdded?:(asset:Asset) => void
 }
 
 const createNewBlock = () => {
@@ -31,12 +34,15 @@ const selectableHandler = (file: FileInfo) => {
     return file.path.endsWith('/blockware.yml');
 };
 
-export const BlockStoreImport = (props:BlockStoreImportProps) => {
-    const defaultKind = BlockTypeProvider.getDefaultKind();
-    const blockTypeConfig = BlockTypeProvider.get(defaultKind);
+export const BlockCreator = (props:Props) => {
+
 
     return (
-        <AssetImport
+        <AssetCreator
+            state={props.state}
+            onStateChanged={props.onStateChanged}
+
+            onAssetAdded={props.onAssetAdded}
             skipFiles={props.files}
             title="Create new block..."
             introduction="Choose whether to import an existing block or create a new one."
@@ -45,7 +51,7 @@ export const BlockStoreImport = (props:BlockStoreImportProps) => {
             onDone={props.onDone}
             fileSelectableHandler={selectableHandler}
             assetService={props.assetService}
-            formRenderer={blockTypeConfig.componentType}
+            formRenderer={BlockForm}
         />
     );
 }
