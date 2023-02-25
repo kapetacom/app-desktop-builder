@@ -33,19 +33,16 @@ import BlockForm from '../BlockForm';
 
 import './BlockStore.less';
 import './BlockStoreSection.less';
+import {BlockStoreImport} from "./BlockStoreImport";
 
 enum FileBrowserState {
     IMPORTING,
-    CREATING,
-    PROJECT_FOLDER,
+    CREATING
 }
 
 interface State {
     fileBrowserState: FileBrowserState;
     blocks: Asset<SchemaKind<BlockServiceSpec, BlockMetadata>>[];
-    newEntity: SchemaKind;
-    entityKey: string;
-    filePath: string;
     useProjectHome: boolean;
     projectHome: string;
     loading: boolean;
@@ -57,10 +54,6 @@ interface Props {
 }
 
 class BlockStore extends React.Component<Props, State> {
-    private createPanel = createRef<SidePanel>();
-
-    private fileDialog = createRef<FileBrowserDialog>();
-
     private mounted = false;
 
     constructor(props: Props) {
@@ -70,35 +63,10 @@ class BlockStore extends React.Component<Props, State> {
             fileBrowserState: FileBrowserState.CREATING,
             searchTerm: '',
             loading: true,
-            filePath: '',
             blocks: [],
             useProjectHome: false,
-            projectHome: '',
-            newEntity: this.createNewBlock(),
-            entityKey: Guid.create().toString(),
+            projectHome: ''
         };
-    }
-
-    private createNewBlock = () => {
-        return {
-            kind: BlockTypeProvider.getDefaultKind(),
-            metadata: {
-                name: '',
-                title: '',
-            },
-            spec: {
-                target: {
-                    kind: '',
-                },
-            },
-        };
-    };
-
-    private resetNewEntity() {
-        this.setState({
-            newEntity: this.createNewBlock(),
-            entityKey: Guid.create().toString(),
-        });
     }
 
     private loadBlocks = async () => {
@@ -125,24 +93,6 @@ class BlockStore extends React.Component<Props, State> {
         this.setState(state);
     };
 
-    private onFileBrowserClose() {
-        if (this.state.fileBrowserState === FileBrowserState.IMPORTING) {
-            AssetService.import(`file://${this.state.filePath}`);
-            this.closeFileDialog();
-        }
-
-        if (this.state.fileBrowserState === FileBrowserState.PROJECT_FOLDER) {
-            // When we're done with project folder - switch back to creating
-            this.setState({
-                fileBrowserState: FileBrowserState.CREATING,
-            });
-        }
-    }
-
-    private cancelNewEntity = () => {
-        this.createPanel.current?.close();
-        this.resetNewEntity();
-    };
 
     componentDidMount() {
         this.mounted = true;
@@ -151,38 +101,6 @@ class BlockStore extends React.Component<Props, State> {
 
     componentWillUnmount() {
         this.mounted = false;
-    }
-
-    private async createAsset(filePath: string, content: SchemaKind) {
-        try {
-            const assets: Asset[] = await AssetService.create(
-                Path.join(filePath, '/blockware.yml'),
-                content
-            );
-            this.resetNewEntity();
-            this.closeCreatePanel();
-            this.closeFileDialog();
-            await this.loadBlocks();
-
-            if (this.props.onBlockAdded && assets.length > 0) {
-                this.props.onBlockAdded(assets[0]);
-            }
-        } catch (e) {
-            showToasty({
-                type: ToastType.ALERT,
-                title: 'Failed to create asset',
-                message: e.message,
-            });
-        }
-    }
-
-    private async importAsset(filePath: string) {
-        const assets: Asset[] = await AssetService.import(`file://${filePath}`);
-        this.closeFileDialog();
-        await this.loadBlocks();
-        if (this.props.onBlockAdded && assets.length > 0) {
-            this.props.onBlockAdded(assets[0]);
-        }
     }
 
     private async updateProjectFolder(filePath: string) {
@@ -253,14 +171,12 @@ class BlockStore extends React.Component<Props, State> {
     };
 
     private openAssetImport() {
-        this.fileDialog.current?.open();
         this.setState({
             fileBrowserState: FileBrowserState.IMPORTING,
         });
     }
 
     private async openAssetCreate() {
-        this.createPanel.current?.open();
         const projectHome = await FileSystemService.getProjectFolder();
         this.setState({
             fileBrowserState: FileBrowserState.CREATING,
@@ -269,12 +185,6 @@ class BlockStore extends React.Component<Props, State> {
         });
     }
 
-    private openProjectFolder = () => {
-        this.fileDialog.current?.open();
-        this.setState({
-            fileBrowserState: FileBrowserState.PROJECT_FOLDER,
-        });
-    };
 
     private renderBlockStore = () => {
         return (
@@ -372,51 +282,15 @@ class BlockStore extends React.Component<Props, State> {
         return (
             <div className="block-store-container">
                 {this.state.blocks && this.renderBlockStore()}
-                <FileBrowserDialog
-                    skipFiles={this.state.blocks.map((item) => {
-                        return item.ref;
-                    })}
-                    ref={this.fileDialog}
-                    service={FileSystemService}
-                    onSelect={this.onFileSelection}
-                    onClose={this.onFileBrowserClose}
-                    selectable={(file) => {
-                        if (
-                            this.state.fileBrowserState ===
-                            FileBrowserState.IMPORTING
-                        ) {
-                            // Importing needs a blockware.yml file
-                            return file.path.endsWith('/blockware.yml');
-                        }
-                        return !!file.folder;
-                    }}
-                />
-                <SidePanel
-                    ref={this.createPanel}
-                    size={PanelSize.large}
-                    side={PanelAlignment.right}
-                    onClose={this.cancelNewEntity}
-                    title="Create new Block"
-                >
-                    {this.createPanel.current?.isOpen() && (
-                        <div className="entity-form">
-                            <BlockForm
-                                creating
-                                key={this.state.entityKey}
-                                projectHome={this.state.projectHome}
-                                useProjectHome={this.state.useProjectHome}
-                                onProjectHomeClick={this.openProjectFolder}
-                                onUseProjectHomeChange={(useProjectHome) => {
-                                    this.setState({
-                                        useProjectHome,
-                                    });
-                                }}
-                                onSubmit={this.saveNewEntity}
-                                onCancel={this.cancelNewEntity}
-                            />
-                        </div>
-                    )}
-                </SidePanel>
+                <BlockStoreImport assetService={AssetService}
+                                  onDone={async () => {
+                                      await this.loadBlocks();
+                                  }}
+                                  open={}
+                                  files={this.state.blocks.map((item) => {
+                                      return item.ref;
+                                  })} />
+
             </div>
         );
     }

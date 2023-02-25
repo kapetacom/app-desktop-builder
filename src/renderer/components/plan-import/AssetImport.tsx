@@ -1,15 +1,13 @@
 import Path from 'path';
 import React from 'react';
-import { action } from 'mobx';
 
 import {
     Asset,
-    EntityConfigProps,
     FileInfo,
     SchemaKind,
 } from '@blockware/ui-web-types';
 
-import { AssetStore, FileSystemService } from '@blockware/ui-web-context';
+import {AssetService, AssetStore, FileSystemService} from '@blockware/ui-web-context';
 import {
     Button,
     ButtonStyle,
@@ -17,13 +15,18 @@ import {
     FormButtons,
     FormContainer,
     PanelAlignment,
-    PanelSize,
-    SidePanel,
+    PanelSize, showToasty,
+    SidePanel, ToastType,
 } from '@blockware/ui-web-components';
 
-import { FileBrowserDialog } from '../file-browser/FileBrowserDialog';
+import {FileBrowserDialog} from '../file-browser/FileBrowserDialog';
 
 import './AssetImport.less';
+import {ProjectHomeFolderInput} from "../utils/ProjectHomeFolderInput";
+
+export interface CreatingFormProps {
+    creating?: boolean;
+}
 
 interface AssetImportProps {
     assetService: AssetStore;
@@ -33,22 +36,21 @@ interface AssetImportProps {
     introduction: string;
     fileName: string;
     createNewKind: () => SchemaKind;
-    formRenderer: React.ComponentType<EntityConfigProps>;
+    formRenderer: React.ComponentType<CreatingFormProps>;
     fileSelectableHandler: (file: FileInfo) => boolean;
+    onAssetAdded?:(asset:Asset) => void
 }
 
 interface AssetImportState {
     importing: boolean;
     newEntity: SchemaKind;
+    useProjectHome?: boolean;
+    projectHome?: string;
+    filePanelOpen: boolean;
+    createPanelOpen: boolean;
 }
 
-export class AssetImport extends React.Component<
-    AssetImportProps,
-    AssetImportState
-> {
-    private createPanel: SidePanel | null = null;
-
-    private filePanel: FileBrowserDialog | null = null;
+export class AssetImport extends React.Component<AssetImportProps, AssetImportState> {
 
     constructor(props: any) {
         super(props);
@@ -56,6 +58,8 @@ export class AssetImport extends React.Component<
         this.state = {
             newEntity: this.createNewEntity(),
             importing: false,
+            filePanelOpen: false,
+            createPanelOpen: false
         };
     }
 
@@ -63,67 +67,88 @@ export class AssetImport extends React.Component<
         this.setState(
             {
                 importing: true,
-            },
-            () => {
-                this.openFilePanel();
+                createPanelOpen: false,
+                filePanelOpen: true
             }
         );
     };
 
     private openCreatePanel = () => {
-        this.resetNewEntity();
 
         this.setState(
             {
                 importing: false,
-            },
-            () => {
-                this.createPanel?.open();
+                createPanelOpen: true,
+                filePanelOpen: false,
+                newEntity: this.createNewEntity(),
             }
         );
     };
 
     private closeCreatePanel = () => {
-        this.createPanel?.close();
-        this.resetNewEntity();
+        this.setState({
+            createPanelOpen: false,
+            newEntity: this.createNewEntity(),
+        });
     };
 
     private closeImportPanel = () => {
         this.setState(
             {
                 importing: false,
-            },
-            () => {
-                this.closeFilePanel();
+                filePanelOpen: false,
+                newEntity: this.createNewEntity(),
             }
         );
-
-        this.resetNewEntity();
     };
 
-    private saveNewEntity = (entity) => {
-        this.setState({ newEntity: entity }, () => this.openFilePanel());
+    private saveNewEntity = async (data: SchemaKind) => {
+        if (this.state.useProjectHome && this.state.projectHome) {
+            const path = Path.join(this.state.projectHome, data.metadata.name);
+            await this.createAsset(path, data);
+            return;
+        }
+
+        this.setState({
+            newEntity: data,
+            filePanelOpen: true
+        })
     };
 
-    private openFilePanel = () => {
-        this.filePanel?.open();
-    };
+    private async createAsset(filePath: string, content: SchemaKind) {
+        try {
+            const assets: Asset[] = await AssetService.create(
+                Path.join(filePath, '/blockware.yml'),
+                content
+            );
 
-    private closeFilePanel = () => {
-        this.filePanel?.close();
-    };
+            this.setState({
+                createPanelOpen: false,
+                filePanelOpen: false,
+                newEntity: this.createNewEntity(),
+            });
+
+            if (this.props.onAssetAdded && assets.length > 0) {
+                this.props.onAssetAdded(assets[0]);
+            }
+        } catch (e) {
+            showToasty({
+                type: ToastType.ALERT,
+                title: 'Failed to create asset',
+                message: e.message,
+            });
+        }
+    }
 
     private onFileSelection = async (file: FileInfo) => {
         try {
             let assets: Asset[];
             if (this.state.importing) {
-                // @ts-ignore
                 assets = await this.props.assetService.import(
                     `file://${file.path}`
                 );
                 this.closeImportPanel();
             } else {
-                // @ts-ignore
                 assets = await this.props.assetService.create(
                     Path.join(file.path, this.props.fileName),
                     this.state.newEntity
@@ -131,13 +156,13 @@ export class AssetImport extends React.Component<
                 this.closeCreatePanel();
             }
 
-            this.markAsDone(assets.length > 0 ? assets[0] : undefined);
+            this.callDone(assets.length > 0 ? assets[0] : undefined);
         } catch (err: any) {
             console.error('Failed on file selection', err.stack);
         }
     };
 
-    private markAsDone(asset?: Asset) {
+    private callDone(asset?: Asset) {
         if (!this.props.onDone) {
             return;
         }
@@ -149,23 +174,6 @@ export class AssetImport extends React.Component<
         return this.props.createNewKind();
     }
 
-    @action
-    private resetNewEntity() {
-        this.setState({
-            newEntity: this.createNewEntity(),
-        });
-    }
-
-    @action
-    private onNewEntityUpdate = (metadata: any, spec: any) => {
-        this.setState({
-            newEntity: {
-                kind: this.props.createNewKind().kind,
-                metadata,
-                spec,
-            },
-        });
-    };
 
     private selectableHandler = (file: FileInfo) => {
         if (this.state.importing) {
@@ -193,9 +201,7 @@ export class AssetImport extends React.Component<
                 </div>
 
                 <SidePanel
-                    ref={(ref: SidePanel) => {
-                        this.createPanel = ref;
-                    }}
+                    open={this.state.createPanelOpen}
                     size={PanelSize.medium}
                     side={PanelAlignment.right}
                     onClose={this.closeCreatePanel}
@@ -203,15 +209,18 @@ export class AssetImport extends React.Component<
                 >
                     <div className="entity-form">
                         <FormContainer
-                            onSubmitData={this.saveNewEntity}
                             initialValue={this.state.newEntity}
-                        >
-                            <this.props.formRenderer
-                                {...this.state.newEntity}
-                                creating
-                                onDataChanged={(metadata, spec) =>
-                                    this.onNewEntityUpdate(metadata, spec)
-                                }
+                            onSubmitData={(data: any) => this.saveNewEntity(data)}>
+                            <this.props.formRenderer creating/>
+
+                            <ProjectHomeFolderInput
+                                useProjectHome={this.state.useProjectHome}
+                                onChange={async (useProjectHome, projectHome) => {
+                                    this.setState({
+                                        useProjectHome,
+                                        projectHome
+                                    });
+                                }}
                             />
 
                             <FormButtons>
@@ -234,13 +243,11 @@ export class AssetImport extends React.Component<
                 </SidePanel>
 
                 <FileBrowserDialog
-                    ref={(ref) => {
-                        this.filePanel = ref;
-                    }}
+                    open={this.state.filePanelOpen}
                     skipFiles={this.props.skipFiles}
                     service={FileSystemService}
                     onSelect={this.onFileSelection}
-                    onClose={this.closeFilePanel}
+                    onClose={() => this.setState({filePanelOpen: false})}
                     selectable={this.selectableHandler}
                 />
             </div>

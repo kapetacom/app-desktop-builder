@@ -24,14 +24,11 @@ import './BlockForm.less';
 import { BlockConfigComponentProps } from '@blockware/ui-web-types';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useAsync } from 'react-use';
+import {ProjectHomeFolderInput, ProjectHomeFolderInputProps} from "../utils/ProjectHomeFolderInput";
 
-interface Props {
+interface Props extends ProjectHomeFolderInputProps {
     block?: BlockKind;
     creating?: boolean;
-    useProjectHome?: boolean;
-    projectHome?: string;
-    onProjectHomeClick?: () => void;
-    onUseProjectHomeChange?: (useProjectHome: boolean) => void;
     onSubmit?: (data: BlockKind) => void;
     onCancel?: () => void;
 }
@@ -183,56 +180,7 @@ class BlockForm extends React.Component<Props, State> {
 
                     {this.props.creating && (
                         <div>
-                            <FormRow
-                                label="Project folder"
-                                help={
-                                    this.props.useProjectHome
-                                        ? 'Choose project home to create this block in'
-                                        : 'Check this to save block in project home'
-                                }
-                                focused
-                                validation={
-                                    this.props.useProjectHome
-                                        ? ['required']
-                                        : []
-                                }
-                                type="folder"
-                            >
-                                <div
-                                    data-name="project_home"
-                                    data-value={this.props.projectHome}
-                                    className="project-home-folder"
-                                >
-                                    <input
-                                        type="checkbox"
-                                        data-name="use_project_home"
-                                        data-value={this.props.useProjectHome}
-                                        checked={this.props.useProjectHome}
-                                        onChange={(evt) => {
-                                            this.props.onUseProjectHomeChange &&
-                                                this.props.onUseProjectHomeChange(
-                                                    evt.target.checked
-                                                );
-                                        }}
-                                    />
-                                    <input
-                                        type="text"
-                                        readOnly
-                                        disabled={!this.props.useProjectHome}
-                                        value={this.props.projectHome}
-                                        onClick={() => {
-                                            if (
-                                                !this.props.useProjectHome ||
-                                                !this.props.onProjectHomeClick
-                                            ) {
-                                                return;
-                                            }
-
-                                            this.props.onProjectHomeClick();
-                                        }}
-                                    />
-                                </div>
-                            </FormRow>
+                            <ProjectHomeFolderInput {...this.props} />
                         </div>
                     )}
 

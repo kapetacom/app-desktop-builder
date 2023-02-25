@@ -1,20 +1,21 @@
 import React, { useCallback } from 'react';
 import {
     Asset,
-    EntityConfigProps,
     FileInfo,
     PLAN_KIND,
 } from '@blockware/ui-web-types';
 import { AssetStore, IdentityService } from '@blockware/ui-web-context';
 import {
-    FormInput,
+    FormField,
     AssetNameInput,
     SimpleLoader,
     useFormContextField,
 } from '@blockware/ui-web-components';
 import { useAsync } from 'react-use';
 
-import { AssetImport } from '../../plan-import/AssetImport';
+
+
+import {AssetImport} from '../../plan-import/AssetImport';
 
 interface PlanImportProps {
     assetService: AssetStore;
@@ -22,14 +23,8 @@ interface PlanImportProps {
     skipFiles: string[];
 }
 
-const PlanForm = (props: EntityConfigProps) => {
-    const titleField = useFormContextField('metadata.title');
-    const updateValue = useCallback(
-        (fieldName: string, value: string) => {
-            titleField.set(value);
-        },
-        [titleField]
-    );
+
+const PlanForm = () => {
 
     const { value: namespaces, loading } = useAsync(async () => {
         const identity = await IdentityService.getCurrent();
@@ -42,6 +37,7 @@ const PlanForm = (props: EntityConfigProps) => {
 
     return (
         <>
+
             <SimpleLoader loading={loading}>
                 <AssetNameInput
                     name="metadata.name"
@@ -51,48 +47,51 @@ const PlanForm = (props: EntityConfigProps) => {
                 />
             </SimpleLoader>
 
-            <FormInput
+            <FormField
+                name="metadata.name"
+                label="Name"
+                validation={['required']}
+                help="Give your plan an identifier with your handle. E.g. myhandle/my-plan"
+            />
+
+            <FormField
                 name="metadata.title"
-                value={titleField.get('')}
                 label="Title"
                 validation={['required']}
                 help="Give your plan a user friendly title - e.g. My Awesome Plan"
-                onChange={updateValue}
             />
+
         </>
     );
 };
 
-class PlanImport extends React.Component<PlanImportProps> {
-    private createNewPlan() {
-        return {
-            kind: PLAN_KIND,
-            metadata: {
-                name: '',
-            },
-            spec: {},
-        };
-    }
-
-    private selectableHandler = (file: FileInfo) => {
-        return file.path.endsWith('/blockware.yml');
+const createNewPlan = () => {
+    return {
+        kind: PLAN_KIND,
+        metadata: {
+            name: '',
+        },
+        spec: {},
     };
-
-    render() {
-        return (
-            <AssetImport
-                title="Create new plan..."
-                skipFiles={this.props.skipFiles}
-                introduction=""
-                createNewKind={this.createNewPlan}
-                fileName="blockware.yml"
-                onDone={this.props.onDone}
-                fileSelectableHandler={this.selectableHandler}
-                assetService={this.props.assetService}
-                formRenderer={PlanForm}
-            />
-        );
-    }
 }
 
-export default PlanImport;
+const selectableHandler = (file: FileInfo) => {
+    return file.path.endsWith('/blockware.yml');
+};
+
+export const PlanImport = (props:PlanImportProps) => {
+
+    return (
+        <AssetImport
+            title="Create new plan..."
+            skipFiles={props.skipFiles}
+            introduction=""
+            createNewKind={createNewPlan}
+            fileName="blockware.yml"
+            onDone={props.onDone}
+            fileSelectableHandler={selectableHandler}
+            assetService={props.assetService}
+            formRenderer={PlanForm}
+        />
+    );
+}

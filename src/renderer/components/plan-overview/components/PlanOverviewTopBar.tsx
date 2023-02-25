@@ -3,7 +3,7 @@ import './PlanOverviewTopBar.less';
 import { SidePanel } from '@blockware/ui-web-components';
 import { AssetService } from '@blockware/ui-web-context';
 import { Asset } from '@blockware/ui-web-types';
-import PlanImport from './PlanImport';
+import {PlanImport} from './PlanImport';
 
 interface Props {
     skipFiles: string[];
