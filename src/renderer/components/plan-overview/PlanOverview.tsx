@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { observer } from 'mobx-react';
-import { action, makeObservable, observable } from 'mobx';
 
 import {
     AssetService,
@@ -10,14 +8,12 @@ import {
 } from '@blockware/ui-web-context';
 import {
     DialogControl,
-    SidePanel,
     showToasty,
     ToastType,
     DialogTypes,
 } from '@blockware/ui-web-components';
 
 import {
-    PlannerConnectionModelWrapper,
     PlannerModelWrapper,
     PlannerModelRef,
     PlannerConnection,
@@ -28,8 +24,8 @@ import {
 import { Asset } from '@blockware/ui-web-types';
 import PlanOverviewPlaceHolder from './PlanOverviewPlaceHolder';
 import { MenuItem } from '../menu/MenuDataModel';
-import { PlanOverviewItem } from './components/PlanOverviewItem';
-import { PlanOverviewTopBar } from './components/PlanOverviewTopBar';
+import { PlanOverviewItem } from './PlanOverviewItem';
+import { PlanOverviewTopBar } from './PlanOverviewTopBar';
 
 import './PlanOverview.less';
 
@@ -40,37 +36,35 @@ interface PlanOverviewWrapperProps {
     onAssetAdded?: (asset: Asset) => void;
     itemDeleted?: (plan: PlannerModelRef) => void;
     onPlanSelected?: (plan: PlannerModelRef) => void;
-    onPlanAdded?: (plan: PlannerModelRef) => void;
 }
+
+type InstanceStatusMap = { [id: string]: { status: InstanceStatus } };
 
 interface PlanOverviewWrapperState {
-    activePlan: number;
     activePlanMenu: number;
+    runningBlocks: InstanceStatusMap;
 }
 
-@observer
 export default class PlanOverview extends Component<
     PlanOverviewWrapperProps,
     PlanOverviewWrapperState
 > {
     private readonly containerSize: { width: number; height: number };
 
-    @observable
-    private runningBlocks: { [id: string]: { status: InstanceStatus } } = {};
-
-    private unsubscribers: any[];
-
-    private importPlanPanel: SidePanel | null = null;
+    private unsubscribers: any[] = [];
 
     constructor(props: PlanOverviewWrapperProps) {
         super(props);
-        makeObservable(this);
+
+        this.containerSize = { width: 200, height: 200 };
+
+        const runningBlocks: InstanceStatusMap = {};
         props.plans.forEach((plan: PlannerModelRef) => {
             if (!plan.model || !plan.model.blocks) {
                 return;
             }
             plan.model.blocks.forEach((block) => {
-                this.runningBlocks[block.id] = {
+                runningBlocks[block.id] = {
                     status: InstanceStatus.STOPPED,
                 };
             });
@@ -81,27 +75,28 @@ export default class PlanOverview extends Component<
                 // Ignore
             });
 
-        this.unsubscribers = [];
-        this.containerSize = { width: 200, height: 200 };
         this.state = {
-            // TODO: unused state
-            // eslint-disable-next-line react/no-unused-state
-            activePlan: -1,
             activePlanMenu: -1,
+            runningBlocks,
         };
     }
 
-    @action
     private updateRunningBlockStatus(res: any) {
         if (Array.isArray(res)) {
-            res.forEach((status: any) => {
-                if (
-                    this.runningBlocks[status.instanceId] &&
-                    this.runningBlocks[status.instanceId].status
-                ) {
-                    this.runningBlocks[status.instanceId].status =
-                        status.status;
-                }
+            this.setState((prevState) => {
+                const runningBlocks = { ...prevState.runningBlocks };
+                res.forEach((status: any) => {
+                    if (
+                        runningBlocks[status.instanceId] &&
+                        runningBlocks[status.instanceId].status
+                    ) {
+                        runningBlocks[status.instanceId].status = status.status;
+                    }
+                });
+
+                return {
+                    runningBlocks,
+                };
             });
         }
     }
@@ -157,27 +152,13 @@ export default class PlanOverview extends Component<
                         <PlannerConnection
                             key={connection.id}
                             size={PlannerNodeSize.SMALL}
-                            setItemToEdit={(edit, type) => {
-                                // TODO
-                            }}
-                            handleInspectClick={(
-                                clickedConnection: PlannerConnectionModelWrapper
-                            ) => {
-                                // TODO
-                            }}
-                            onFocus={() => {
-                                // TODO
-                            }}
-                            onDelete={() => {
-                                // TODO
-                            }}
                             connection={connection}
                         />
                     );
                 })}
 
                 {item.blocks.map((block, index) => {
-                    const runningBlock = this.runningBlocks[block.id];
+                    const runningBlock = this.state.runningBlocks[block.id];
                     return (
                         <PlannerBlockNode
                             status={
@@ -187,15 +168,9 @@ export default class PlanOverview extends Component<
                             }
                             key={block.id + block.name}
                             block={block}
-                            onDoubleTap={() => {
-                                //     TODO
-                            }}
                             zoom={1}
                             readOnly
                             size={PlannerNodeSize.SMALL}
-                            setItemToEdit={(edit, type) => {
-                                //     TODO
-                            }}
                             planner={item}
                         />
                     );
@@ -204,8 +179,7 @@ export default class PlanOverview extends Component<
         );
     };
 
-    private onImportDone(asset?: Asset) {
-        this.importPlanPanel && this.importPlanPanel.close();
+    private onPlanCreated(asset?: Asset) {
         this.props.onPlanChanged && this.props.onPlanChanged();
         if (asset && this.props.onAssetAdded) {
             this.props.onAssetAdded(asset);
@@ -213,8 +187,19 @@ export default class PlanOverview extends Component<
     }
 
     private onInstanceStatusChanged = (message: any) => {
-        this.runningBlocks[message.instanceId] = { status: message.status };
+        this.setInstanceStatus(message.instanceId, message.status);
     };
+
+    private setInstanceStatus(id: string, status: InstanceStatus) {
+        this.setState((prevState) => {
+            return {
+                runningBlocks: {
+                    ...prevState.runningBlocks,
+                    [id]: { status },
+                },
+            };
+        });
+    }
 
     componentDidMount() {
         console.log('Subscribing to instance state ');
@@ -228,13 +213,9 @@ export default class PlanOverview extends Component<
     }
 
     componentWillUnmount() {
-        this.props.plans.forEach((plan, index) => {
-            InstanceService.unsubscribe(
-                plan.ref,
-                InstanceEventType.EVENT_INSTANCE_CHANGED,
-                this.unsubscribers[index]
-            );
-        });
+        while (this.unsubscribers.length > 0) {
+            this.unsubscribers.pop()();
+        }
     }
 
     render() {
@@ -243,7 +224,7 @@ export default class PlanOverview extends Component<
                 <div style={{ position: 'relative' }}>
                     <PlanOverviewTopBar
                         onDone={(asset) => {
-                            this.onImportDone(asset);
+                            this.onPlanCreated(asset);
                         }}
                         skipFiles={this.props.plans.map((plan) => {
                             return plan.ref;
@@ -263,7 +244,7 @@ export default class PlanOverview extends Component<
             <div style={{ position: 'relative' }}>
                 <PlanOverviewTopBar
                     onDone={(asset) => {
-                        this.onImportDone(asset);
+                        this.onPlanCreated(asset);
                     }}
                     skipFiles={this.props.plans.map((plan) => {
                         return plan.ref;
@@ -296,7 +277,6 @@ export default class PlanOverview extends Component<
                                 toggleMenu={(indexIn: number) => {
                                     this.setOpenMenu(indexIn);
                                 }}
-                                size={200}
                             >
                                 {this.renderMiniPlan(item.model)}
                             </PlanOverviewItem>

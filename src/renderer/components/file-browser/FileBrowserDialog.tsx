@@ -1,4 +1,4 @@
-import React, { createRef } from 'react';
+import React from 'react';
 import { FileInfo } from '@blockware/ui-web-types';
 import { FileSystemStore } from '@blockware/ui-web-context';
 import {
@@ -12,7 +12,7 @@ import {
 import { FileBrowser } from './FileBrowser';
 import './FileBrowserDialog.less';
 
-interface FileBrowserDialogProps {
+interface Props {
     service: FileSystemStore;
     onSelect: (file: FileInfo) => void;
     onClose: () => void;
@@ -21,17 +21,12 @@ interface FileBrowserDialogProps {
     skipFiles: string[]; // files that already are imported
 }
 
-interface FileBrowserDialogState {
+interface State {
     selection?: FileInfo;
 }
 
-export class FileBrowserDialog extends React.Component<
-    FileBrowserDialogProps,
-    FileBrowserDialogState
-> {
-    private modal = createRef<Modal>();
-
-    constructor(props: FileBrowserDialogProps) {
+export class FileBrowserDialog extends React.Component<Props, State> {
+    constructor(props: Props) {
         super(props);
         this.state = {};
     }
@@ -54,19 +49,11 @@ export class FileBrowserDialog extends React.Component<
         });
     }
 
-    // eslint-disable-next-line react/no-unused-class-component-methods
-    public open() {
-        this.modal.current?.open();
-    }
-
-    public close() {
-        this.modal.current?.close();
-    }
-
     render() {
         return (
             <Modal
-                ref={this.modal}
+                open={this.props.open}
+                onClose={this.props.onClose}
                 size={ModalSize.medium}
                 title="Choose file"
                 className="file-browser-dialog"
@@ -94,7 +81,7 @@ export class FileBrowserDialog extends React.Component<
                             style={ButtonStyle.DANGER}
                             width={100}
                             text="Cancel"
-                            onClick={() => this.close()}
+                            onClick={() => this.props.onClose()}
                         />
                     </div>
                 </div>

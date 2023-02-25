@@ -227,7 +227,7 @@ export class FileBrowser extends React.Component<FileBrowserProps> {
         if (file.children) {
             file.children.forEach((child) => {
                 if (this.isSelected(child)) {
-                    this.deselectFile(child);
+                    this.deselectFile();
                     return;
                 }
 
@@ -278,7 +278,7 @@ export class FileBrowser extends React.Component<FileBrowserProps> {
     }
 
     @action
-    private deselectFile(_file: FileStructureElement) {
+    private deselectFile() {
         this.props.onSelect(undefined);
     }
 
@@ -289,7 +289,7 @@ export class FileBrowser extends React.Component<FileBrowserProps> {
             return;
         }
         if (this.isSelected(file)) {
-            this.deselectFile(file);
+            this.deselectFile();
         } else {
             this.selectFile(file);
         }

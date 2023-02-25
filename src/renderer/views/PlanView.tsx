@@ -14,8 +14,8 @@ import './PlanView.less';
 import { Asset } from '@blockware/ui-web-types';
 import { SimpleLoader } from '@blockware/ui-web-components';
 import { toClass } from '@blockware/ui-web-utils';
-import { TopMenu } from '../components/TopMenu';
-import BlockStore from '../components/blocks/store/BlockStore';
+import { TopMenu } from '../components/menu/TopMenu';
+import { BlockStore } from '../components/blockstore/BlockStore';
 
 function getVersionFromRef(ref: string) {
     let refWithoutProtocol = ref;

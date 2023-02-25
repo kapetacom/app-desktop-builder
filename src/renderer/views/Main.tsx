@@ -213,9 +213,6 @@ export default observer(function Main() {
                                         )
                                     );
                                 }}
-                                onPlanAdded={(plan) => {
-                                    pushPlanModels(plan);
-                                }}
                                 plans={planModelRefs || []}
                             />
                         </TabPanel>
