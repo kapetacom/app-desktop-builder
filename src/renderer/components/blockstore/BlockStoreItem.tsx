@@ -14,7 +14,6 @@ interface BlockStoreItemProps {
 
 @observer
 class BlockStoreItem extends React.Component<BlockStoreItemProps> {
-
     private renderPlaceholder = (): JSX.Element => {
         return (
             <svg

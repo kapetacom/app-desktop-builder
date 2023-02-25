@@ -15,7 +15,7 @@ import { Asset } from '@blockware/ui-web-types';
 import { SimpleLoader } from '@blockware/ui-web-components';
 import { toClass } from '@blockware/ui-web-utils';
 import { TopMenu } from '../components/menu/TopMenu';
-import BlockStore from '../components/blockstore/BlockStore';
+import { BlockStore } from '../components/blockstore/BlockStore';
 
 function getVersionFromRef(ref: string) {
     let refWithoutProtocol = ref;

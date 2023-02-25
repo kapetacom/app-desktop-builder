@@ -1,9 +1,8 @@
-import {FormField} from "@blockware/ui-web-components";
-import React from "react";
-import {AutoLoadAssetNameInput} from "../fields/AutoLoadAssetNameInput";
+import { FormField } from '@blockware/ui-web-components';
+import React from 'react';
+import { AutoLoadAssetNameInput } from '../fields/AutoLoadAssetNameInput';
 
 export const PlanForm = () => {
-
     return (
         <>
             <AutoLoadAssetNameInput

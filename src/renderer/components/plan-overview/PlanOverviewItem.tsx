@@ -9,7 +9,6 @@ import PlanOverviewItemHexagon from './PlanOverviewItemHexagon';
 
 interface PlanOverviewPlannerWrapperProps {
     children: JSX.Element;
-    size: number;
     name: string;
     version: string;
     onClick: () => void;

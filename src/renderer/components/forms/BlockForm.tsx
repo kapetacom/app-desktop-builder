@@ -1,8 +1,9 @@
-import React, {ComponentType, useMemo} from 'react';
+import React, { ComponentType, useMemo } from 'react';
 
 import {
     FormField,
-    FormFieldType, useFormContextField,
+    FormFieldType,
+    useFormContextField,
 } from '@blockware/ui-web-components';
 
 import { BlockTypeProvider } from '@blockware/ui-web-context';
@@ -10,21 +11,21 @@ import { BlockTypeProvider } from '@blockware/ui-web-context';
 import './BlockForm.less';
 import { BlockConfigComponentProps } from '@blockware/ui-web-types';
 import { ErrorBoundary } from 'react-error-boundary';
-import {ProjectHomeFolderInputProps} from "../fields/ProjectHomeFolderInput";
-import {AutoLoadAssetNameInput} from "../fields/AutoLoadAssetNameInput";
-
+import { ProjectHomeFolderInputProps } from '../fields/ProjectHomeFolderInput';
+import { AutoLoadAssetNameInput } from '../fields/AutoLoadAssetNameInput';
 
 interface Props extends ProjectHomeFolderInputProps {
     creating?: boolean;
 }
 
 interface InnerBlockTypeProps {
-    kind?:string
+    kind?: string;
     creating?: boolean;
 }
 
-const InnerBlockType = (props:InnerBlockTypeProps) => {
-    let BlockTypeComponent: ComponentType<BlockConfigComponentProps> | null = null;
+const InnerBlockType = (props: InnerBlockTypeProps) => {
+    let BlockTypeComponent: ComponentType<BlockConfigComponentProps> | null =
+        null;
 
     if (!props.kind) {
         return <div>Select block type</div>;
@@ -43,22 +44,17 @@ const InnerBlockType = (props:InnerBlockTypeProps) => {
     return (
         <ErrorBoundary
             resetKeys={[props.kind]}
-            fallback={
-                <div>
-                    Failed to render block type: {props.kind}
-                </div>
-            }
+            fallback={<div>Failed to render block type: {props.kind}</div>}
         >
             <BlockTypeComponent creating={props.creating} />
         </ErrorBoundary>
     );
 };
 
-export const BlockForm  = (props:Props) => {
+export const BlockForm = (props: Props) => {
     const kindField = useFormContextField<string>('kind');
 
     const blockTypeOptions = useMemo(() => {
-
         const options: { [key: string]: string } = {};
         try {
             BlockTypeProvider.listAll().forEach((blockTypeConfig) => {
@@ -75,10 +71,8 @@ export const BlockForm  = (props:Props) => {
         return options;
     }, []);
 
-
     return (
         <div className="block-form">
-
             <FormField
                 name="kind"
                 label="Type"
@@ -105,7 +99,6 @@ export const BlockForm  = (props:Props) => {
             />
 
             <InnerBlockType kind={kindField.get()} creating={props.creating} />
-
         </div>
     );
-}
+};

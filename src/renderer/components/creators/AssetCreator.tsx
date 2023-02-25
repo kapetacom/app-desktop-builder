@@ -1,13 +1,13 @@
 import Path from 'path';
 import React from 'react';
 
-import {
-    Asset,
-    FileInfo,
-    SchemaKind,
-} from '@blockware/ui-web-types';
+import { Asset, FileInfo, SchemaKind } from '@blockware/ui-web-types';
 
-import {AssetService, AssetStore, FileSystemService} from '@blockware/ui-web-context';
+import {
+    AssetService,
+    AssetStore,
+    FileSystemService,
+} from '@blockware/ui-web-context';
 import {
     Button,
     ButtonStyle,
@@ -15,14 +15,16 @@ import {
     FormButtons,
     FormContainer,
     PanelAlignment,
-    PanelSize, showToasty,
-    SidePanel, ToastType,
+    PanelSize,
+    showToasty,
+    SidePanel,
+    ToastType,
 } from '@blockware/ui-web-components';
 
-import {FileBrowserDialog} from '../file-browser/FileBrowserDialog';
+import { FileBrowserDialog } from '../file-browser/FileBrowserDialog';
 
 import './AssetCreator.less';
-import {ProjectHomeFolderInput} from "../fields/ProjectHomeFolderInput";
+import { ProjectHomeFolderInput } from '../fields/ProjectHomeFolderInput';
 
 export interface CreatingFormProps {
     creating?: boolean;
@@ -31,7 +33,7 @@ export interface CreatingFormProps {
 export enum AssetCreatorState {
     CLOSED,
     IMPORTING,
-    CREATING
+    CREATING,
 }
 
 interface Props {
@@ -39,15 +41,13 @@ interface Props {
     onDone?: (asset?: Asset) => void;
     skipFiles: string[]; // A collection of files to prevent importing as they are already loaded
     title: string;
-    introduction: string;
     fileName: string;
     createNewKind: () => SchemaKind;
     formRenderer: React.ComponentType<CreatingFormProps>;
     fileSelectableHandler: (file: FileInfo) => boolean;
-    onAssetAdded?:(asset:Asset) => void
-    state: AssetCreatorState
-    onStateChanged: (state:AssetCreatorState) => void
-
+    onAssetAdded?: (asset: Asset) => void;
+    state: AssetCreatorState;
+    onStateChanged: (state: AssetCreatorState) => void;
 }
 
 interface State {
@@ -58,7 +58,6 @@ interface State {
 }
 
 export class AssetCreator extends React.Component<Props, State> {
-
     constructor(props: any) {
         super(props);
 
@@ -68,22 +67,19 @@ export class AssetCreator extends React.Component<Props, State> {
         };
     }
 
-
     private closeCreatePanel = () => {
         this.setState({
             newEntity: this.createNewEntity(),
-            filePanelOpen: false
+            filePanelOpen: false,
         });
         this.props.onStateChanged(AssetCreatorState.CLOSED);
     };
 
     private closeImportPanel = () => {
-        this.setState(
-            {
-                newEntity: this.createNewEntity(),
-                filePanelOpen: false
-            }
-        );
+        this.setState({
+            newEntity: this.createNewEntity(),
+            filePanelOpen: false,
+        });
         this.props.onStateChanged(AssetCreatorState.CLOSED);
     };
 
@@ -96,7 +92,7 @@ export class AssetCreator extends React.Component<Props, State> {
 
         this.setState({
             newEntity: data,
-            filePanelOpen: true
+            filePanelOpen: true,
         });
     };
 
@@ -161,7 +157,6 @@ export class AssetCreator extends React.Component<Props, State> {
         return this.props.createNewKind();
     }
 
-
     private selectableHandler = (file: FileInfo) => {
         if (this.props.state === AssetCreatorState.IMPORTING) {
             // Filter the selectable files / folders in the import
@@ -175,7 +170,10 @@ export class AssetCreator extends React.Component<Props, State> {
         if (this.props.state === AssetCreatorState.CLOSED) {
             return false;
         }
-        return this.state.filePanelOpen || this.props.state === AssetCreatorState.IMPORTING;
+        return (
+            this.state.filePanelOpen ||
+            this.props.state === AssetCreatorState.IMPORTING
+        );
     }
 
     private isCreatePanelOpen() {
@@ -186,14 +184,15 @@ export class AssetCreator extends React.Component<Props, State> {
     }
 
     private onClosedFilePanel() {
-        this.setState({filePanelOpen: false});
+        this.setState({ filePanelOpen: false });
         if (this.props.state === AssetCreatorState.IMPORTING) {
-            //Closing file panel closes all for import
+            // Closing file panel closes all for import
             this.closeImportPanel();
         }
     }
 
     render() {
+        const InnerFormRenderer = this.props.formRenderer;
         return (
             <>
                 <SidePanel
@@ -206,15 +205,17 @@ export class AssetCreator extends React.Component<Props, State> {
                     <div className="asset-creator-form">
                         <FormContainer
                             initialValue={this.state.newEntity}
-                            onSubmitData={(data: any) => this.saveNewEntity(data)}>
-
-                            <this.props.formRenderer creating/>
+                            onSubmitData={(data: any) =>
+                                this.saveNewEntity(data)
+                            }
+                        >
+                            <InnerFormRenderer creating />
 
                             <ProjectHomeFolderInput
                                 onChange={(useProjectHome, projectHome) => {
                                     this.setState({
                                         useProjectHome,
-                                        projectHome
+                                        projectHome,
                                     });
                                 }}
                             />

@@ -1,4 +1,4 @@
-import React, { createRef } from 'react';
+import React from 'react';
 import { FileInfo } from '@blockware/ui-web-types';
 import { FileSystemStore } from '@blockware/ui-web-context';
 import {
@@ -25,8 +25,7 @@ interface State {
     selection?: FileInfo;
 }
 
-export class FileBrowserDialog extends React.Component<Props,State> {
-
+export class FileBrowserDialog extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {};

@@ -1,52 +1,53 @@
-import React, {useEffect, useState} from 'react';
-
-import {Asset} from '@blockware/ui-web-types';
-
-import {AssetService, BlockService,} from '@blockware/ui-web-context';
+import React, { useEffect, useState } from 'react';
+import { useAsyncFn } from 'react-use';
+import { Asset } from '@blockware/ui-web-types';
+import { AssetService, BlockService } from '@blockware/ui-web-context';
 
 import BlockStoreItem from './BlockStoreItem';
+import { BlockCreator } from '../creators/BlockCreator';
+import { AssetCreatorState } from '../creators/AssetCreator';
 
 import './BlockStore.less';
 import './BlockStoreSection.less';
-import {BlockCreator} from "../creators/BlockCreator";
-import {AssetCreatorState} from "../creators/AssetCreator";
-import {useAsyncFn} from "react-use";
 
 interface Props {
     onBlockAdded?: (asset: Asset) => void;
 }
 
-export const BlockStore  = (props:Props) => {
-
+export const BlockStore = (props: Props) => {
     const [creatorState, setCreatorState] = useState(AssetCreatorState.CLOSED);
     const [searchTerm, setSearchTerm] = useState('');
 
-    const [{value:blocks, loading}, loadBlocks] = useAsyncFn(async () => {
-        return await BlockService.list();
+    const [{ value: blocks, loading }, loadBlocks] = useAsyncFn(async () => {
+        return BlockService.list();
     });
 
     useEffect(() => {
-        loadBlocks().catch(() => {});
-    }, [])
+        loadBlocks().catch(() => {
+            // Do nothing...
+        });
+    }, [loadBlocks]);
 
     const renderBlocks = () => {
         return (
             <div className="items">
-                {blocks && blocks
-                    .filter((item) => {
-                        if (
-                            item.data.metadata.name
-                                .toLowerCase()
-                                .indexOf(searchTerm.toLowerCase()) >
-                            -1
-                        ) {
-                            return true;
-                        }
-                        return false;
-                    })
-                    .map((item, ix) => {
-                        return <BlockStoreItem key={item.ref} item={item}/>;
-                    })}
+                {blocks &&
+                    blocks
+                        .filter((item) => {
+                            if (
+                                item.data.metadata.name
+                                    .toLowerCase()
+                                    .indexOf(searchTerm.toLowerCase()) > -1
+                            ) {
+                                return true;
+                            }
+                            return false;
+                        })
+                        .map((item, ix) => {
+                            return (
+                                <BlockStoreItem key={item.ref} item={item} />
+                            );
+                        })}
             </div>
         );
     };
@@ -123,7 +124,7 @@ export const BlockStore  = (props:Props) => {
                         </button>
                     </div>
                     <div className="block-store-search">
-                        <i className="search-icon fa fa-search "/>
+                        <i className="search-icon fa fa-search " />
                         <input
                             value={searchTerm}
                             onChange={(text) => {
@@ -135,9 +136,7 @@ export const BlockStore  = (props:Props) => {
                 </div>
 
                 <div className="section">
-                    {loading && (
-                        <div className="section">Loading...</div>
-                    )}
+                    {loading && <div className="section">Loading...</div>}
                     {!loading && renderBlocks()}
                 </div>
             </div>
@@ -147,20 +146,25 @@ export const BlockStore  = (props:Props) => {
     return (
         <div className="block-store-container">
             {blocks && renderBlockStore()}
-            <BlockCreator assetService={AssetService}
-                          state={creatorState}
-                          onStateChanged={setCreatorState}
-                          onAssetAdded={props.onBlockAdded}
-                          onDone={async (asset) => {
-                              setCreatorState(AssetCreatorState.CLOSED);
-                              await loadBlocks();
-                          }}
-                          files={blocks && blocks.map((item) => {
-                              return item.ref;
-                          }) || []}/>
-
+            <BlockCreator
+                assetService={AssetService}
+                state={creatorState}
+                onStateChanged={setCreatorState}
+                onAssetAdded={props.onBlockAdded}
+                onDone={async () => {
+                    setCreatorState(AssetCreatorState.CLOSED);
+                    await loadBlocks();
+                }}
+                files={
+                    (blocks &&
+                        blocks.map((item) => {
+                            return item.ref;
+                        })) ||
+                    []
+                }
+            />
         </div>
     );
-}
+};
 
 export default BlockStore;

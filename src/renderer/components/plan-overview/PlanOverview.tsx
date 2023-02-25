@@ -36,18 +36,21 @@ interface PlanOverviewWrapperProps {
     onAssetAdded?: (asset: Asset) => void;
     itemDeleted?: (plan: PlannerModelRef) => void;
     onPlanSelected?: (plan: PlannerModelRef) => void;
-    onPlanAdded?: (plan: PlannerModelRef) => void;
 }
 
 type InstanceStatusMap = { [id: string]: { status: InstanceStatus } };
 
 interface PlanOverviewWrapperState {
     activePlanMenu: number;
-    runningBlocks: InstanceStatusMap
+    runningBlocks: InstanceStatusMap;
 }
 
-export default class PlanOverview extends Component<PlanOverviewWrapperProps,PlanOverviewWrapperState> {
+export default class PlanOverview extends Component<
+    PlanOverviewWrapperProps,
+    PlanOverviewWrapperState
+> {
     private readonly containerSize: { width: number; height: number };
+
     private unsubscribers: any[] = [];
 
     constructor(props: PlanOverviewWrapperProps) {
@@ -55,7 +58,7 @@ export default class PlanOverview extends Component<PlanOverviewWrapperProps,Pla
 
         this.containerSize = { width: 200, height: 200 };
 
-        const runningBlocks:InstanceStatusMap = {};
+        const runningBlocks: InstanceStatusMap = {};
         props.plans.forEach((plan: PlannerModelRef) => {
             if (!plan.model || !plan.model.blocks) {
                 return;
@@ -74,26 +77,27 @@ export default class PlanOverview extends Component<PlanOverviewWrapperProps,Pla
 
         this.state = {
             activePlanMenu: -1,
-            runningBlocks
+            runningBlocks,
         };
-
     }
-
 
     private updateRunningBlockStatus(res: any) {
         if (Array.isArray(res)) {
-            const runningBlocks = {...this.state.runningBlocks}
-            res.forEach((status: any) => {
-                if (
-                    runningBlocks[status.instanceId] &&
-                    runningBlocks[status.instanceId].status
-                ) {
-                    runningBlocks[status.instanceId].status =
-                        status.status;
-                }
-            });
+            this.setState((prevState) => {
+                const runningBlocks = { ...prevState.runningBlocks };
+                res.forEach((status: any) => {
+                    if (
+                        runningBlocks[status.instanceId] &&
+                        runningBlocks[status.instanceId].status
+                    ) {
+                        runningBlocks[status.instanceId].status = status.status;
+                    }
+                });
 
-            this.setState({runningBlocks});
+                return {
+                    runningBlocks,
+                };
+            });
         }
     }
 
@@ -186,12 +190,14 @@ export default class PlanOverview extends Component<PlanOverviewWrapperProps,Pla
         this.setInstanceStatus(message.instanceId, message.status);
     };
 
-    private setInstanceStatus(id:string, status:InstanceStatus) {
-        this.setState({
-            runningBlocks: {
-                ...this.state.runningBlocks,
-                [id]: { status }
-            }
+    private setInstanceStatus(id: string, status: InstanceStatus) {
+        this.setState((prevState) => {
+            return {
+                runningBlocks: {
+                    ...prevState.runningBlocks,
+                    [id]: { status },
+                },
+            };
         });
     }
 
@@ -207,7 +213,7 @@ export default class PlanOverview extends Component<PlanOverviewWrapperProps,Pla
     }
 
     componentWillUnmount() {
-        while(this.unsubscribers.length > 0) {
+        while (this.unsubscribers.length > 0) {
             this.unsubscribers.pop()();
         }
     }
@@ -271,7 +277,6 @@ export default class PlanOverview extends Component<PlanOverviewWrapperProps,Pla
                                 toggleMenu={(indexIn: number) => {
                                     this.setOpenMenu(indexIn);
                                 }}
-                                size={200}
                             >
                                 {this.renderMiniPlan(item.model)}
                             </PlanOverviewItem>

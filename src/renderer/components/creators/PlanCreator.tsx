@@ -1,10 +1,10 @@
-import React, {useState} from 'react';
-import {Asset, FileInfo, PLAN_KIND,} from '@blockware/ui-web-types';
-import {AssetStore} from '@blockware/ui-web-context';
+import React, { useState } from 'react';
+import { Asset, FileInfo, PLAN_KIND } from '@blockware/ui-web-types';
+import { AssetStore } from '@blockware/ui-web-context';
+import { Button } from '@blockware/ui-web-components';
 
-import {AssetCreator, AssetCreatorState} from './AssetCreator';
-import {PlanForm} from "../forms/PlanForm";
-import {Button} from "@blockware/ui-web-components";
+import { AssetCreator, AssetCreatorState } from './AssetCreator';
+import { PlanForm } from '../forms/PlanForm';
 import './PlanCreator.less';
 
 interface PlanImportProps {
@@ -12,7 +12,6 @@ interface PlanImportProps {
     onDone: (asset?: Asset) => void;
     skipFiles: string[];
 }
-
 
 const createNewPlan = () => {
     return {
@@ -22,14 +21,13 @@ const createNewPlan = () => {
         },
         spec: {},
     };
-}
+};
 
 const selectableHandler = (file: FileInfo) => {
     return file.path.endsWith('/blockware.yml');
 };
 
 export const PlanCreator = (props: PlanImportProps) => {
-
     const [creatorState, setCreatorState] = useState(AssetCreatorState.CLOSED);
 
     const openImportPanel = () => {
@@ -41,26 +39,16 @@ export const PlanCreator = (props: PlanImportProps) => {
     };
 
     return (
-        <div className={'plan-creator'}>
+        <div className="plan-creator">
             <div className="actions">
-                <Button
-                    text="Create"
-                    onClick={openCreatePanel}
-                    width={90}
-                />
-                <Button
-                    text="Import"
-                    onClick={openImportPanel}
-                    width={90}
-                />
+                <Button text="Create" onClick={openCreatePanel} width={90} />
+                <Button text="Import" onClick={openImportPanel} width={90} />
             </div>
             <AssetCreator
                 state={creatorState}
                 onStateChanged={setCreatorState}
-
                 title="Create new plan..."
                 skipFiles={props.skipFiles}
-                introduction=""
                 createNewKind={createNewPlan}
                 fileName="blockware.yml"
                 onDone={props.onDone}
@@ -70,4 +58,4 @@ export const PlanCreator = (props: PlanImportProps) => {
             />
         </div>
     );
-}
+};

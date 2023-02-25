@@ -1,46 +1,25 @@
-import {FormRow, SimpleLoader, useFormContextField} from "@blockware/ui-web-components";
-import React, {useEffect, useState} from "react";
-import {FileSystemService} from "@blockware/ui-web-context";
-import {FileBrowserDialog} from "../file-browser/FileBrowserDialog";
-import {useAsync} from "react-use";
-
+import { FormRow, SimpleLoader } from '@blockware/ui-web-components';
+import React, { useEffect, useState } from 'react';
+import { useAsync } from 'react-use';
+import { FileSystemService } from '@blockware/ui-web-context';
+import { FileBrowserDialog } from '../file-browser/FileBrowserDialog';
 
 import './ProjectHomeFolderInput.less';
 
 export interface ProjectHomeFolderInputProps {
-    enabledName?:string;
-    folderName?:string;
-    onChange?: (enable: boolean, home:string) => void;
+    onChange?: (enable: boolean, home: string) => void;
 }
 
-
-
 export const ProjectHomeFolderInput = (props: ProjectHomeFolderInputProps) => {
-
     const [showFileBrowser, setShowFileBrowser] = useState(false);
 
-    let isEnabled:boolean,
-        projectHome:string;
-    let setEnabled:(val:boolean) => void;
-    let setProjectHome:(val:string) => void;
-    if (props.folderName && props.enabledName) {
-        const folderNameField = useFormContextField<string>(props.folderName);
-        const enabledNameField = useFormContextField<boolean>(props.enabledName);
-        isEnabled = enabledNameField.get();
-        projectHome = folderNameField.get();
-        setEnabled = enabledNameField.set.bind(enabledNameField);
-        setProjectHome = folderNameField.set.bind(folderNameField);
-    } else {
-        const [projectHomeFromState, setProjectHomeForState] = useState<string>('');
-        const [isEnabledFromState, setEnabledForState] = useState<boolean>(false);
-        isEnabled = isEnabledFromState;
-        projectHome = projectHomeFromState;
-        setEnabled = setEnabledForState;
-        setProjectHome = setProjectHomeForState;
-    }
+    const [projectHome, setProjectHome] = useState<string>('');
+    const [isEnabled, setEnabled] = useState<boolean>(false);
 
-    let {value:storedProjectHome, loading:loadingStored} = useAsync(() => FileSystemService.getProjectFolder(), []);
-
+    const { value: storedProjectHome, loading: loadingStored } = useAsync(
+        () => FileSystemService.getProjectFolder(),
+        []
+    );
 
     useEffect(() => {
         if (loadingStored) {
@@ -51,9 +30,10 @@ export const ProjectHomeFolderInput = (props: ProjectHomeFolderInputProps) => {
         const enabled = !!folder;
         setProjectHome(folder);
         setEnabled(enabled);
-        props.onChange && props.onChange(enabled, folder);
-    }, [storedProjectHome, loadingStored]);
 
+        props.onChange && props.onChange(enabled, folder);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [storedProjectHome, loadingStored]);
 
     return (
         <SimpleLoader loading={loadingStored}>
@@ -61,15 +41,11 @@ export const ProjectHomeFolderInput = (props: ProjectHomeFolderInputProps) => {
                 label="Project folder"
                 help={
                     isEnabled
-                        ? 'Choose project home to create this block in'
-                        : 'Check this to save block in project home'
+                        ? 'Choose project home to create this asset in'
+                        : 'Check this to save asset in project home'
                 }
                 focused
-                validation={
-                    isEnabled
-                        ? ['required']
-                        : []
-                }
+                validation={isEnabled ? ['required'] : []}
                 type="folder"
             >
                 <div
@@ -84,10 +60,10 @@ export const ProjectHomeFolderInput = (props: ProjectHomeFolderInputProps) => {
                         checked={isEnabled}
                         onChange={(evt) => {
                             props.onChange &&
-                            props.onChange(
-                                evt.target.checked,
-                                projectHome ?? ''
-                            );
+                                props.onChange(
+                                    evt.target.checked,
+                                    projectHome ?? ''
+                                );
 
                             setEnabled(evt.target.checked);
                         }}
@@ -113,10 +89,7 @@ export const ProjectHomeFolderInput = (props: ProjectHomeFolderInputProps) => {
                 skipFiles={[]}
                 onSelect={async (file) => {
                     props.onChange &&
-                    props.onChange(
-                        isEnabled ?? false,
-                        file.path
-                    );
+                        props.onChange(isEnabled ?? false, file.path);
 
                     if (file.path) {
                         await FileSystemService.setProjectFolder(file.path);
@@ -132,5 +105,5 @@ export const ProjectHomeFolderInput = (props: ProjectHomeFolderInputProps) => {
                 }}
             />
         </SimpleLoader>
-    )
+    );
 };
