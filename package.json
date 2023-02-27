@@ -1,7 +1,7 @@
 {
     "name": "@blockware/app-desktop-builder",
     "description": "Blockware Desktop Application",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "homepage": "https://blockware.com",
     "license": "MIT",
     "author": {
