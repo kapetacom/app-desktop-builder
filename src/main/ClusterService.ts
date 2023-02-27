@@ -41,7 +41,12 @@ export class ClusterService extends EventEmitter {
                 this.stop();
                 reject(err);
             });
-            child.on('exit', () => {
+            child.on('exit', (exitCode: number) => {
+                if (exitCode !== 0) {
+                    reject(
+                        new Error(`Process exited with exitCode: ${exitCode}.`)
+                    );
+                }
                 this.stop();
             });
         });

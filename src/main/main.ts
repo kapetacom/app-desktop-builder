@@ -224,7 +224,12 @@ const refreshTray = async () => {
                     }
                     await clusterService.stop();
                 } else {
-                    await ensureLocalCluster();
+                    try {
+                        await ensureLocalCluster();
+                    } catch (err) {
+                        //     TODO: Show a popup
+                        console.error(err);
+                    }
                 }
 
                 await refreshTray();
@@ -265,7 +270,6 @@ const createWindow = async () => {
         await installExtensions();
     }
 
-    await ensureLocalCluster();
     await showDock();
     mainWindow = new BrowserWindow({
         show: false,
@@ -279,12 +283,20 @@ const createWindow = async () => {
         },
     });
 
+    try {
+        await ensureLocalCluster();
+    } catch (err) {
+        console.error('Something bad happened');
+        console.error(err);
+    }
     await refreshTray();
 
     mainWindow.maximize();
-    const clusterServiceURL = encodeURIComponent(
-        `http://${localClusterInfo?.host}:${localClusterInfo?.port}`
-    );
+    const clusterServiceURL = localClusterInfo
+        ? encodeURIComponent(
+              `http://${localClusterInfo.host}:${localClusterInfo.port}`
+          )
+        : '';
     await mainWindow.loadURL(
         `${resolveHtmlPath(`index.html`)}#cluster_service=${clusterServiceURL}`
     );
