@@ -8,6 +8,11 @@ import _ from 'lodash';
 import Blockware from './blockware';
 
 export async function initialise() {
+    if (!window.Blockware.config.cluster_service) {
+        throw new Error(
+            'Local cluster not configured. Make sure docker is running and try again.'
+        );
+    }
     const start = Date.now();
     console.log('Loading %s plugins...', Blockware.paths.length);
     for (let i = 0; i < Blockware.paths.length; i++) {
