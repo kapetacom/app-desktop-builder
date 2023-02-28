@@ -59,6 +59,11 @@ const configuration: webpack.Configuration = {
             'webpack/hot/only-dev-server',
             path.join(webpackPaths.srcRendererPath, 'index.tsx'),
         ],
+        splash: [
+            `webpack-dev-server/client?http://localhost:${port}/dist`,
+            'webpack/hot/only-dev-server',
+            path.join(webpackPaths.srcRendererPath, 'splash.tsx'),
+        ],
     },
 
     output: {
@@ -194,6 +199,19 @@ const configuration: webpack.Configuration = {
             env: process.env.NODE_ENV,
             isDevelopment: process.env.NODE_ENV !== 'production',
             nodeModules: webpackPaths.appNodeModulesPath,
+        }),
+
+        new HtmlWebpackPlugin({
+            filename: 'splash.html',
+            chunks: ['splash'],
+            template: path.join(webpackPaths.srcRendererPath, 'splash.ejs'),
+            minify: {
+                collapseWhitespace: true,
+                removeAttributeQuotes: true,
+                removeComments: true,
+            },
+            isBrowser: false,
+            isDevelopment: process.env.NODE_ENV !== 'production',
         }),
     ],
     resolve: {
