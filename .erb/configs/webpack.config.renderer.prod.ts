@@ -27,6 +27,7 @@ const configuration: webpack.Configuration = {
 
     entry: {
         index: [path.join(webpackPaths.srcRendererPath, 'index.tsx')],
+        splash: [path.join(webpackPaths.srcRendererPath, 'splash.tsx')],
     },
 
     output: {
@@ -154,6 +155,18 @@ const configuration: webpack.Configuration = {
             filename: 'index.html',
             chunks: ['index'],
             template: path.join(webpackPaths.srcRendererPath, 'index.ejs'),
+            minify: {
+                collapseWhitespace: true,
+                removeAttributeQuotes: true,
+                removeComments: true,
+            },
+            isBrowser: false,
+            isDevelopment: process.env.NODE_ENV !== 'production',
+        }),
+        new HtmlWebpackPlugin({
+            filename: 'splash.html',
+            chunks: ['splash'],
+            template: path.join(webpackPaths.srcRendererPath, 'splash.ejs'),
             minify: {
                 collapseWhitespace: true,
                 removeAttributeQuotes: true,

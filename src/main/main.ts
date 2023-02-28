@@ -13,19 +13,24 @@ import path from 'path';
 import {
     app,
     BrowserWindow,
-    shell,
-    Tray,
+    dialog,
     Menu,
     MenuItemConstructorOptions,
-    dialog,
+    shell,
+    Tray,
 } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import { BlockwareAPI } from '@blockware/nodejs-api-client';
+import { execSync, spawnSync } from 'child_process';
+import which from 'which';
+
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-import MenuItem = Electron.MenuItem;
 import { ClusterInfo, ClusterService } from './ClusterService';
+import { SplashScreen } from './SplashScreen';
+import { StatusCheck } from './SplashScreenStatus';
+import MenuItem = Electron.MenuItem;
 
 type TrayMenuItem = MenuItemConstructorOptions | MenuItem;
 
@@ -227,8 +232,11 @@ const refreshTray = async () => {
                     try {
                         await ensureLocalCluster();
                     } catch (err) {
-                        //     TODO: Show a popup
                         console.error(err);
+                        dialog.showErrorBox(
+                            'Failed to start local cluster',
+                            err.message
+                        );
                     }
                 }
 
@@ -283,12 +291,6 @@ const createWindow = async () => {
         },
     });
 
-    try {
-        await ensureLocalCluster();
-    } catch (err) {
-        console.error('Something bad happened');
-        console.error(err);
-    }
     await refreshTray();
 
     mainWindow.maximize();
@@ -330,6 +332,23 @@ const createWindow = async () => {
     new AppUpdater();
 };
 
+async function checkDockerBinary() {
+    try {
+        await which('docker');
+    } catch (e) {
+        throw new Error('docker binary not found');
+    }
+}
+
+function checkDockerStatus() {
+    const child = spawnSync('docker', ['ps']);
+    if (child.status !== 0) {
+        console.error(child.stdout?.toString('utf-8'));
+        console.error(child.stderr?.toString('utf-8'));
+        throw new Error('Docker does not seem to be running.');
+    }
+}
+
 /**
  * Add event listeners...
  */
@@ -341,8 +360,54 @@ app.on('window-all-closed', () => {
 app.on('quit', async () => {
     await clusterService.stop();
 });
+
+const splash = new SplashScreen();
 app.whenReady()
-    .then(() => createWindow())
-    .then(() => refreshTray())
-    .then(() => app.on('activate', ensureWindow))
-    .catch(console.log);
+    .then(async () => {
+        splash.open({
+            text: 'Running startup checks...',
+            docker: StatusCheck.LOADING,
+            cluster: StatusCheck.LOADING,
+        });
+        try {
+            await checkDockerBinary();
+            await checkDockerStatus();
+            splash.setStatus({
+                docker: StatusCheck.OK,
+            });
+        } catch (e) {
+            splash.setStatus({
+                docker: StatusCheck.ERROR,
+            });
+            throw e;
+        }
+
+        try {
+            await ensureLocalCluster();
+            splash.setStatus({
+                cluster: StatusCheck.OK,
+            });
+        } catch (e) {
+            splash.setStatus({
+                cluster: StatusCheck.ERROR,
+            });
+            throw e;
+        }
+    })
+    .then(() => {
+        splash.setStatus({ text: 'Launching UI...' });
+        return createWindow();
+    })
+    .then(async () => {
+        await refreshTray();
+        app.on('activate', ensureWindow);
+        splash.close();
+        app.show();
+    })
+    .catch((err) => {
+        console.error(err);
+        // Show a blocking error popup before exiting
+        app.focus();
+        dialog.showErrorBox('An error occurred during startup', err.stack);
+        app.exit(1);
+    });
