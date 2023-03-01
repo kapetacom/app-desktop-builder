@@ -1,9 +1,8 @@
-name: Publish
-
+name: Publish artifacts
 on:
-    push:
-        branches:
-            - master
+    release:
+        types:
+            - created
 
 jobs:
     publish:
