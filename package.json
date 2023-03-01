@@ -1,7 +1,7 @@
 {
     "name": "@blockware/app-desktop-builder",
     "description": "Blockware Desktop Application",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "private": true,
     "homepage": "https://blockware.com",
     "license": "MIT",
@@ -261,9 +261,12 @@
                 }
             ],
             "@semantic-release/npm",
-            ["@semantic-release/npm", {
-                "pkgRoot": "./release/app/"
-            }],
+            [
+                "@semantic-release/npm",
+                {
+                    "pkgRoot": "./release/app/"
+                }
+            ],
             "@semantic-release/github",
             [
                 "@semantic-release/git",

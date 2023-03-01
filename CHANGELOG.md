@@ -1,3 +1,10 @@
+## [0.0.6](https://github.com/blockwarecom/app-desktop-builder/compare/v0.0.5...v0.0.6) (2023-03-01)
+
+
+### Bug Fixes
+
+* test 2nd npm release step ([22b6549](https://github.com/blockwarecom/app-desktop-builder/commit/22b654949d29c1415af0567cf4f83f4de64c5bcf))
+
 ## [0.0.5](https://github.com/blockwarecom/app-desktop-builder/compare/v0.0.4...v0.0.5) (2023-03-01)
 
 
