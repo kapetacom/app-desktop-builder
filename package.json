@@ -245,7 +245,8 @@
         "publish": {
             "provider": "github",
             "owner": "blockwarecom",
-            "repo": "app-desktop-builder"
+            "repo": "app-desktop-builder",
+            "releaseType": "release"
         }
     },
     "devEngines": {
