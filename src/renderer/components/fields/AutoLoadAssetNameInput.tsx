@@ -1,7 +1,7 @@
 // Higher-order-component to allow us to use hooks for data loading (not possible in class components)
 import { useAsync } from 'react-use';
-import { IdentityService } from '@blockware/ui-web-context';
-import { AssetNameInput, SimpleLoader } from '@blockware/ui-web-components';
+import { IdentityService } from '@kapeta/ui-web-context';
+import { AssetNameInput, SimpleLoader } from '@kapeta/ui-web-components';
 import React from 'react';
 
 interface Props {

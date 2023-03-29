@@ -1,6 +1,6 @@
 import React from 'react';
-import { toClass } from '@blockware/ui-web-utils';
-import { SVGText } from '@blockware/ui-web-components';
+import { toClass } from '@kapeta/ui-web-utils';
+import { SVGText } from '@kapeta/ui-web-components';
 
 import { MenuItem } from '../menu/MenuDataModel';
 import MenuItems from '../menu/MenuItems';

@@ -1,6 +1,6 @@
 type TypeModules = { [key: string]: any };
 
-export interface BlockwareAPI {
+export interface KapetaAPI {
     paths: string[];
     resourceTypes: TypeModules;
     blockTypes: TypeModules;
@@ -9,6 +9,6 @@ export interface BlockwareAPI {
     setPluginPaths: (paths: string[]) => void;
 }
 // @ts-ignore
-const bw: BlockwareAPI = window.Blockware;
+const bw: KapetaAPI = window.Kapeta;
 
 export default bw;

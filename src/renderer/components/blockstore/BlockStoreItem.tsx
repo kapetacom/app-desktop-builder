@@ -1,9 +1,9 @@
 import React from 'react';
-import { Asset, BlockKind } from '@blockware/ui-web-types';
-import { DnDDrag } from '@blockware/ui-web-components';
-import { toClass } from '@blockware/ui-web-utils';
+import { Asset, BlockKind } from '@kapeta/ui-web-types';
+import { DnDDrag } from '@kapeta/ui-web-components';
+import { toClass } from '@kapeta/ui-web-utils';
 
-import { BlockNode } from '@blockware/ui-web-plan-editor';
+import { BlockNode } from '@kapeta/ui-web-plan-editor';
 
 import './BlockStoreItem.less';
 import { observer } from 'mobx-react';

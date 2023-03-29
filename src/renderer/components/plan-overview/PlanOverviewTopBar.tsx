@@ -1,7 +1,7 @@
 import React from 'react';
 import './PlanOverviewTopBar.less';
-import { AssetService } from '@blockware/ui-web-context';
-import { Asset } from '@blockware/ui-web-types';
+import { AssetService } from '@kapeta/ui-web-context';
+import { Asset } from '@kapeta/ui-web-types';
 import { PlanCreator } from '../creators/PlanCreator';
 
 interface Props {

@@ -2,7 +2,7 @@ import './shared-libraries';
 
 import React from 'react';
 import { Provider } from 'mobx-react';
-import { SimpleLoader } from '@blockware/ui-web-components';
+import { SimpleLoader } from '@kapeta/ui-web-components';
 import { useAsync } from 'react-use';
 
 import Application from './views/Application';

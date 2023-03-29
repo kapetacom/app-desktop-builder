@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { PlannerModelWrapper } from '@blockware/ui-web-plan-editor/src/wrappers/PlannerModelWrapper';
+import { PlannerModelWrapper } from '@kapeta/ui-web-plan-editor/src/wrappers/PlannerModelWrapper';
 import { observer } from 'mobx-react';
 
 import './TopMenu.less';
-import { toClass } from '@blockware/ui-web-utils';
-import { InstanceEventType, InstanceService } from '@blockware/ui-web-context';
-import { showToasty, ToastType } from '@blockware/ui-web-components';
+import { toClass } from '@kapeta/ui-web-utils';
+import { InstanceEventType, InstanceService } from '@kapeta/ui-web-context';
+import { showToasty, ToastType } from '@kapeta/ui-web-components';
 
 interface Props {
     plan: PlannerModelWrapper;

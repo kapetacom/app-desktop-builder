@@ -1,6 +1,6 @@
-## Blockware Desktop
+## Kapeta Desktop
 
-This is the blockware desktop app.
+This is the kapeta desktop app.
 
 ### Test Locally
 

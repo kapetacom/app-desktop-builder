@@ -4,12 +4,12 @@ import {
     FormField,
     FormFieldType,
     useFormContextField,
-} from '@blockware/ui-web-components';
+} from '@kapeta/ui-web-components';
 
-import { BlockTypeProvider } from '@blockware/ui-web-context';
+import { BlockTypeProvider } from '@kapeta/ui-web-context';
 
 import './BlockForm.less';
-import { BlockConfigComponentProps } from '@blockware/ui-web-types';
+import { BlockConfigComponentProps } from '@kapeta/ui-web-types';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ProjectHomeFolderInputProps } from '../fields/ProjectHomeFolderInput';
 import { AutoLoadAssetNameInput } from '../fields/AutoLoadAssetNameInput';

@@ -3,7 +3,7 @@ import {
     Checkbox,
     LoaderType,
     SimpleLoader,
-} from '@blockware/ui-web-components';
+} from '@kapeta/ui-web-components';
 import { StatusCheck } from '../main/SplashScreenStatus';
 
 const root = createRoot(document.getElementById('root')!);
@@ -20,7 +20,7 @@ function render() {
     const keyValuePairs = new URLSearchParams(
         window.location.hash.substring(1)
     );
-    // TODO: Make this a blockware logo loader
+    // TODO: Make this a kapeta logo loader
     const element = (
         <div>
             <SimpleLoader

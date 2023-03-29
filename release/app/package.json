@@ -1,13 +1,13 @@
 {
-    "name": "@blockware/ui-web-desktop",
+    "name": "@kapeta/ui-web-desktop",
     "version": "0.0.6",
     "private": true,
-    "description": "Blockware Desktop Application",
-    "homepage": "https://blockware.com",
+    "description": "Kapeta Desktop Application",
+    "homepage": "https://kapeta.com",
     "author": {
-        "url": "https://blockware.com",
-        "email": "info@blockware.com",
-        "name": "Blockware Inc."
+        "url": "https://kapeta.com",
+        "email": "info@kapeta.com",
+        "name": "Kapeta Inc."
     },
     "main": "./dist/main/main.js",
     "license": "MIT",
@@ -17,7 +17,7 @@
         "link-modules": "node -r ts-node/register ../../.erb/scripts/link-modules.ts"
     },
     "dependencies": {
-        "@blockware/local-cluster-config": "<2",
-        "@blockware/local-cluster-service": "<2"
+        "@kapeta/local-cluster-config": "<2",
+        "@kapeta/local-cluster-service": "<2"
     }
 }

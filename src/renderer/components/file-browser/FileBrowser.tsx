@@ -4,9 +4,9 @@ import type { ChangeEvent, KeyboardEvent } from 'react';
 import { action, makeObservable, observable, runInAction, toJS } from 'mobx';
 import { observer } from 'mobx-react';
 
-import { toClass } from '@blockware/ui-web-utils';
-import type { FileInfo } from '@blockware/ui-web-types';
-import { FileSystemStore } from '@blockware/ui-web-context';
+import { toClass } from '@kapeta/ui-web-utils';
+import type { FileInfo } from '@kapeta/ui-web-types';
+import { FileSystemStore } from '@kapeta/ui-web-context';
 
 import './FileBrowser.less';
 

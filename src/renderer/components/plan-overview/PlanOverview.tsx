@@ -5,13 +5,13 @@ import {
     InstanceService,
     InstanceStatus,
     InstanceEventType,
-} from '@blockware/ui-web-context';
+} from '@kapeta/ui-web-context';
 import {
     DialogControl,
     showToasty,
     ToastType,
     DialogTypes,
-} from '@blockware/ui-web-components';
+} from '@kapeta/ui-web-components';
 
 import {
     PlannerModelWrapper,
@@ -19,9 +19,9 @@ import {
     PlannerConnection,
     PlannerNodeSize,
     PlannerBlockNode,
-} from '@blockware/ui-web-plan-editor';
+} from '@kapeta/ui-web-plan-editor';
 
-import { Asset } from '@blockware/ui-web-types';
+import { Asset } from '@kapeta/ui-web-types';
 import PlanOverviewPlaceHolder from './PlanOverviewPlaceHolder';
 import { MenuItem } from '../menu/MenuDataModel';
 import { PlanOverviewItem } from './PlanOverviewItem';

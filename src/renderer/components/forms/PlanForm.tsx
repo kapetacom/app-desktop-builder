@@ -1,4 +1,4 @@
-import { FormField } from '@blockware/ui-web-components';
+import { FormField } from '@kapeta/ui-web-components';
 import React from 'react';
 import { AutoLoadAssetNameInput } from '../fields/AutoLoadAssetNameInput';
 

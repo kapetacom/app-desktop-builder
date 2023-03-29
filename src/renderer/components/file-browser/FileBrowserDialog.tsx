@@ -1,13 +1,13 @@
 import React from 'react';
-import { FileInfo } from '@blockware/ui-web-types';
-import { FileSystemStore } from '@blockware/ui-web-context';
+import { FileInfo } from '@kapeta/ui-web-types';
+import { FileSystemStore } from '@kapeta/ui-web-context';
 import {
     Button,
     ButtonStyle,
     ButtonType,
     Modal,
     ModalSize,
-} from '@blockware/ui-web-components';
+} from '@kapeta/ui-web-components';
 
 import { FileBrowser } from './FileBrowser';
 import './FileBrowserDialog.less';

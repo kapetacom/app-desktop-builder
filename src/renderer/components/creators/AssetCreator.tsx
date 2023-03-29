@@ -1,13 +1,13 @@
 import Path from 'path';
 import React from 'react';
 
-import { Asset, FileInfo, SchemaKind } from '@blockware/ui-web-types';
+import { Asset, FileInfo, SchemaKind } from '@kapeta/ui-web-types';
 
 import {
     AssetService,
     AssetStore,
     FileSystemService,
-} from '@blockware/ui-web-context';
+} from '@kapeta/ui-web-context';
 import {
     Button,
     ButtonStyle,
@@ -19,7 +19,7 @@ import {
     showToasty,
     SidePanel,
     ToastType,
-} from '@blockware/ui-web-components';
+} from '@kapeta/ui-web-components';
 
 import { FileBrowserDialog } from '../file-browser/FileBrowserDialog';
 
@@ -99,7 +99,7 @@ export class AssetCreator extends React.Component<Props, State> {
     private async createAsset(filePath: string, content: SchemaKind) {
         try {
             const assets: Asset[] = await AssetService.create(
-                Path.join(filePath, '/blockware.yml'),
+                Path.join(filePath, '/kapeta.yml'),
                 content
             );
 

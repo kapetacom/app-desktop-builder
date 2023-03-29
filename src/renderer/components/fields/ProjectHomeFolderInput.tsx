@@ -1,7 +1,7 @@
-import { FormRow, SimpleLoader } from '@blockware/ui-web-components';
+import { FormRow, SimpleLoader } from '@kapeta/ui-web-components';
 import React, { useEffect, useState } from 'react';
 import { useAsync } from 'react-use';
-import { FileSystemService } from '@blockware/ui-web-context';
+import { FileSystemService } from '@kapeta/ui-web-context';
 import { FileBrowserDialog } from '../file-browser/FileBrowserDialog';
 
 import './ProjectHomeFolderInput.less';

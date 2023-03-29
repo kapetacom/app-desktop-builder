@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { Asset, FileInfo } from '@blockware/ui-web-types';
-import { BlockTypeProvider, AssetStore } from '@blockware/ui-web-context';
+import { Asset, FileInfo } from '@kapeta/ui-web-types';
+import { BlockTypeProvider, AssetStore } from '@kapeta/ui-web-context';
 
 import { AssetCreator, AssetCreatorState } from './AssetCreator';
 import { BlockForm } from '../forms/BlockForm';
@@ -31,7 +31,7 @@ const createNewBlock = () => {
 };
 
 const selectableHandler = (file: FileInfo) => {
-    return file.path.endsWith('/blockware.yml');
+    return file.path.endsWith('/kapeta.yml');
 };
 
 export const BlockCreator = (props: Props) => {
@@ -43,7 +43,7 @@ export const BlockCreator = (props: Props) => {
             skipFiles={props.files}
             title="Create new block..."
             createNewKind={createNewBlock}
-            fileName="blockware.yml"
+            fileName="kapeta.yml"
             onDone={props.onDone}
             fileSelectableHandler={selectableHandler}
             assetService={props.assetService}

@@ -5,18 +5,18 @@ import './Main.less';
 import {
     PlannerModelRef,
     PlannerModelReader,
-} from '@blockware/ui-web-plan-editor';
+} from '@kapeta/ui-web-plan-editor';
 import PlanOverview from 'renderer/components/plan-overview/PlanOverview';
 
-import { BlockService, PlannerService } from '@blockware/ui-web-context';
-import { Asset, PlanKind } from '@blockware/ui-web-types';
+import { BlockService, PlannerService } from '@kapeta/ui-web-context';
+import { Asset, PlanKind } from '@kapeta/ui-web-types';
 import { useList } from 'react-use';
-import { toClass } from '@blockware/ui-web-utils';
+import { toClass } from '@kapeta/ui-web-utils';
 import {
     showToasty,
     SimpleLoader,
     ToastType,
-} from '@blockware/ui-web-components';
+} from '@kapeta/ui-web-components';
 import { observer } from 'mobx-react-lite';
 import { useLocalStorage } from '../utils/localStorage';
 import { PlanView } from './PlanView';

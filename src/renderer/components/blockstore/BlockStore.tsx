@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAsyncFn } from 'react-use';
-import { Asset } from '@blockware/ui-web-types';
-import { AssetService, BlockService } from '@blockware/ui-web-context';
+import { Asset } from '@kapeta/ui-web-types';
+import { AssetService, BlockService } from '@kapeta/ui-web-context';
 
 import BlockStoreItem from './BlockStoreItem';
 import { BlockCreator } from '../creators/BlockCreator';

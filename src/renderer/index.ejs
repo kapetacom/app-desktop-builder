@@ -2,7 +2,7 @@
 <html>
 <head>
     <script>
-      window.Blockware = {
+      window.Kapeta = {
         paths: [],
         config: {},
         resourceTypes: {},
@@ -24,7 +24,7 @@
       if (location.hash && location.hash.length > 1) {
         const keyValuePairs = new URLSearchParams(location.hash.substring(1));
         for (const [key, value] of keyValuePairs.entries()) {
-          window.Blockware.config[key] = value;
+          window.Kapeta.config[key] = value;
         }
         const clusterBase = keyValuePairs.get('cluster_service');
         if (clusterBase) {
@@ -40,7 +40,7 @@
     </script>
     <meta charset="utf-8"/>
 
-    <title>Blockware</title>
+    <title>Kapeta</title>
 </head>
 <body>
 <div id="root"></div>

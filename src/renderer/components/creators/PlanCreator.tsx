@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Asset, FileInfo, PLAN_KIND } from '@blockware/ui-web-types';
-import { AssetStore } from '@blockware/ui-web-context';
-import { Button } from '@blockware/ui-web-components';
+import { Asset, FileInfo, PLAN_KIND } from '@kapeta/ui-web-types';
+import { AssetStore } from '@kapeta/ui-web-context';
+import { Button } from '@kapeta/ui-web-components';
 
 import { AssetCreator, AssetCreatorState } from './AssetCreator';
 import { PlanForm } from '../forms/PlanForm';
@@ -24,7 +24,7 @@ const createNewPlan = () => {
 };
 
 const selectableHandler = (file: FileInfo) => {
-    return file.path.endsWith('/blockware.yml');
+    return file.path.endsWith('/kapeta.yml');
 };
 
 export const PlanCreator = (props: PlanImportProps) => {
@@ -50,7 +50,7 @@ export const PlanCreator = (props: PlanImportProps) => {
                 title="Create new plan..."
                 skipFiles={props.skipFiles}
                 createNewKind={createNewPlan}
-                fileName="blockware.yml"
+                fileName="kapeta.yml"
                 onDone={props.onDone}
                 fileSelectableHandler={selectableHandler}
                 assetService={props.assetService}

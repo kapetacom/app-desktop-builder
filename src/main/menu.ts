@@ -54,17 +54,17 @@ export default class MenuBuilder {
 
     buildDarwinTemplate(): MenuItemConstructorOptions[] {
         const subMenuAbout: DarwinMenuItemConstructorOptions = {
-            label: 'Blockware',
+            label: 'Kapeta',
             submenu: [
                 {
-                    label: 'About Blockware',
+                    label: 'About Kapeta',
                     selector: 'orderFrontStandardAboutPanel:',
                 },
                 { type: 'separator' },
                 { label: 'Services', submenu: [] },
                 { type: 'separator' },
                 {
-                    label: 'Hide Blockware',
+                    label: 'Hide Kapeta',
                     accelerator: 'Command+H',
                     selector: 'hide:',
                 },
@@ -173,13 +173,13 @@ export default class MenuBuilder {
                 {
                     label: 'Learn More',
                     click() {
-                        shell.openExternal('https://blockware.com');
+                        shell.openExternal('https://kapeta.com');
                     },
                 },
                 {
                     label: 'Documentation',
                     click() {
-                        shell.openExternal('https://docs.blockware.com');
+                        shell.openExternal('https://docs.kapeta.com');
                     },
                 },
             ],
@@ -266,13 +266,13 @@ export default class MenuBuilder {
                     {
                         label: 'Learn More',
                         click() {
-                            shell.openExternal('https://blockware.com');
+                            shell.openExternal('https://kapeta.com');
                         },
                     },
                     {
                         label: 'Documentation',
                         click() {
-                            shell.openExternal('https://docs.blockware.com');
+                            shell.openExternal('https://docs.kapeta.com');
                         },
                     },
                 ],

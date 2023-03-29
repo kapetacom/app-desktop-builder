@@ -10,10 +10,10 @@ externals: {
     'react-dom': 'ReactDOM',
     'mobx': 'MobX',
     'mobx-react': 'MobXReact',
-    '@blockware/ui-web-types': 'Blockware.Types',
-    '@blockware/ui-web-utils': 'Blockware.Utils',
-    '@blockware/ui-web-context': 'Blockware.Context',
-    '@blockware/ui-web-components': 'Blockware.Components',
+    '@kapeta/ui-web-types': 'Kapeta.Types',
+    '@kapeta/ui-web-utils': 'Kapeta.Utils',
+    '@kapeta/ui-web-context': 'Kapeta.Context',
+    '@kapeta/ui-web-components': 'Kapeta.Components',
 }
 
 */
@@ -25,7 +25,7 @@ window.ReactDOM = require('react-dom');
 window.MobX = require('mobx');
 window.MobXReact = require('mobx-react');
 
-window.Blockware.Types = require('@blockware/ui-web-types');
-window.Blockware.Utils = require('@blockware/ui-web-utils');
-window.Blockware.Context = require('@blockware/ui-web-context');
-window.Blockware.Components = require('@blockware/ui-web-components');
+window.Kapeta.Types = require('@kapeta/ui-web-types');
+window.Kapeta.Utils = require('@kapeta/ui-web-utils');
+window.Kapeta.Context = require('@kapeta/ui-web-context');
+window.Kapeta.Components = require('@kapeta/ui-web-components');

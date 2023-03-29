@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { DefaultContext } from '@blockware/ui-web-components';
-import { AssetService } from '@blockware/ui-web-context';
+import { DefaultContext } from '@kapeta/ui-web-components';
+import { AssetService } from '@kapeta/ui-web-context';
 
 import Main from './Main';
 import 'react-toastify/dist/ReactToastify.css';

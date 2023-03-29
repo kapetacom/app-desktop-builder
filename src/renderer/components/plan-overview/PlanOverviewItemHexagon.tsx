@@ -1,5 +1,5 @@
 import React from 'react';
-import { createHexagonPath, Orientation } from '@blockware/ui-web-utils';
+import { createHexagonPath, Orientation } from '@kapeta/ui-web-utils';
 
 interface PlanOverviewItemHexagonProps {
     onClick: () => void;

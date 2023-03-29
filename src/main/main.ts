@@ -21,7 +21,7 @@ import {
 } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
-import { BlockwareAPI } from '@blockware/nodejs-api-client';
+import { KapetaAPI } from '@kapeta/nodejs-api-client';
 import { execSync, spawnSync } from 'child_process';
 import which from 'which';
 
@@ -97,10 +97,10 @@ const ensureLocalCluster = async () => {
 const refreshTray = async () => {
     if (!tray) {
         tray = new Tray(getAssetPath('icons/16x16.png'));
-        tray.setToolTip('Blockware Desktop');
+        tray.setToolTip('Kapeta Desktop');
     }
 
-    const api = new BlockwareAPI();
+    const api = new KapetaAPI();
 
     let userMenu: TrayMenuItem[];
 
@@ -245,13 +245,13 @@ const refreshTray = async () => {
         },
         { type: 'separator' },
         {
-            label: 'Open Blockware Cloud',
+            label: 'Open Kapeta Cloud',
             click: () => {
-                shell.openExternal('https://app.blockware.com');
+                shell.openExternal('https://app.kapeta.com');
             },
         },
         { type: 'separator' },
-        { label: 'Quit Blockware', click: () => app.quit() },
+        { label: 'Quit Kapeta', click: () => app.quit() },
     ];
     const contextMenu = Menu.buildFromTemplate(menuItems);
     tray.setContextMenu(contextMenu);

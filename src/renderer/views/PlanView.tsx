@@ -4,16 +4,16 @@ import {
     PlannerMode,
     PlannerModelReader,
     PlannerModelWrapper,
-} from '@blockware/ui-web-plan-editor';
+} from '@kapeta/ui-web-plan-editor';
 import { Lambda, reaction } from 'mobx';
 import _ from 'lodash';
 
-import { AssetService, BlockService } from '@blockware/ui-web-context';
+import { AssetService, BlockService } from '@kapeta/ui-web-context';
 
 import './PlanView.less';
-import { Asset } from '@blockware/ui-web-types';
-import { SimpleLoader } from '@blockware/ui-web-components';
-import { toClass } from '@blockware/ui-web-utils';
+import { Asset } from '@kapeta/ui-web-types';
+import { SimpleLoader } from '@kapeta/ui-web-components';
+import { toClass } from '@kapeta/ui-web-utils';
 import { TopMenu } from '../components/menu/TopMenu';
 import { BlockStore } from '../components/blockstore/BlockStore';
 

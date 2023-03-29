@@ -3,21 +3,21 @@ import {
     ResourceTypeProvider,
     BlockTypeProvider,
     BlockTargetProvider,
-} from '@blockware/ui-web-context';
+} from '@kapeta/ui-web-context';
 import _ from 'lodash';
-import Blockware from './blockware';
+import Kapeta from './kapeta';
 
 export async function initialise() {
-    if (!window.Blockware.config.cluster_service) {
+    if (!window.Kapeta.config.cluster_service) {
         throw new Error(
             'Local cluster not configured. Make sure docker is running and try again.'
         );
     }
     const start = Date.now();
-    console.log('Loading %s plugins...', Blockware.paths.length);
-    for (let i = 0; i < Blockware.paths.length; i++) {
+    console.log('Loading %s plugins...', Kapeta.paths.length);
+    for (let i = 0; i < Kapeta.paths.length; i++) {
         const scriptElm = document.createElement('script');
-        scriptElm.setAttribute('src', Blockware.paths[i]);
+        scriptElm.setAttribute('src', Kapeta.paths[i]);
         const loaderPromise = new Promise((resolve) => {
             scriptElm.addEventListener('load', resolve);
             scriptElm.addEventListener('error', resolve);
@@ -33,7 +33,7 @@ export async function initialise() {
         return id.split(':')[1];
     }
 
-    _.forEach(Blockware.resourceTypes, (provider, id) => {
+    _.forEach(Kapeta.resourceTypes, (provider, id) => {
         if (!provider.version) {
             provider.version = getVersion(id);
         }
@@ -45,7 +45,7 @@ export async function initialise() {
         ResourceTypeProvider.register(provider);
     });
 
-    _.forEach(Blockware.blockTypes, (provider, id) => {
+    _.forEach(Kapeta.blockTypes, (provider, id) => {
         if (!provider.version) {
             provider.version = getVersion(id);
         }
@@ -57,7 +57,7 @@ export async function initialise() {
         BlockTypeProvider.register(provider);
     });
 
-    _.forEach(Blockware.languageTargets, (provider, id) => {
+    _.forEach(Kapeta.languageTargets, (provider, id) => {
         if (!provider.version) {
             provider.version = getVersion(id);
         }

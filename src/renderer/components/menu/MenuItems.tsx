@@ -3,8 +3,8 @@ import {
     toClass,
     createHexagonPath,
     Orientation,
-} from '@blockware/ui-web-utils';
-import { SVGText } from '@blockware/ui-web-components';
+} from '@kapeta/ui-web-utils';
+import { SVGText } from '@kapeta/ui-web-components';
 
 import { MenuItem } from './MenuDataModel';
 import './Menu.less';

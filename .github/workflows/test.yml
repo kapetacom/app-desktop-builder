@@ -22,8 +22,6 @@ jobs:
               with:
                   node-version: 18
                   cache: npm
-            - name: Configure blockware registry
-              run: echo '@blockware:registry=${{ secrets.GCP_ARTIFACT_NPM_URL }}' >> .npmrc
 
             - name: npm install
               if: ${{ steps.node.outputs.cache-hit != true }}
