@@ -1,21 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import {
-    Planner,
+    Planner2,
     PlannerMode,
     PlannerModelReader,
     PlannerModelWrapper,
 } from '@kapeta/ui-web-plan-editor';
-import { Lambda, reaction } from 'mobx';
-import _ from 'lodash';
 
 import { AssetService, BlockService } from '@kapeta/ui-web-context';
 
 import './PlanView.less';
-import { Asset } from '@kapeta/ui-web-types';
+import { Asset, PlanKind } from '@kapeta/ui-web-types';
 import { SimpleLoader } from '@kapeta/ui-web-components';
 import { toClass } from '@kapeta/ui-web-utils';
-import { TopMenu } from '../components/menu/TopMenu';
-import { BlockStore } from '../components/blockstore/BlockStore';
+import { useAsync } from 'react-use';
+import { PlanEditor } from './PlanEditor';
 
 function getVersionFromRef(ref: string) {
     let refWithoutProtocol = ref;
@@ -32,63 +30,50 @@ interface PlanViewProps {
 }
 
 export const PlanView = (props: PlanViewProps) => {
+    console.log('PlanView render');
     const reader: PlannerModelReader = new PlannerModelReader(BlockService);
-    let planModelObserver: Lambda | undefined;
-
-    function cleanupObserver() {
-        if (planModelObserver) {
-            planModelObserver();
-            planModelObserver = undefined;
-        }
-    }
-    const [asset, setAsset] = useState<Asset>();
-    const [model, setModal] = useState<PlannerModelWrapper>();
     const version = getVersionFromRef(props.planRef);
 
-    const loader = async () => {
-        const assetData = await AssetService.get(props.planRef);
-        const modelData = await reader.load(assetData.data, props.planRef);
-
-        if (!version || version.toLowerCase() !== 'local') {
-            // We can only edit local versions
-            modelData.setMode(PlannerMode.CONFIGURATION);
-        }
-
-        cleanupObserver();
-        planModelObserver = reaction(
-            () => modelData,
-            _.debounce(async () => {
-                await AssetService.update(props.planRef, modelData.getData());
-            }, 1000)
+    const planData = useAsync(async () => {
+        const planAsset: Asset<PlanKind> = await AssetService.get(
+            props.planRef
         );
 
-        setAsset(assetData);
-        setModal(modelData);
-    };
+        // avoid regeneratorruntime by using Promise.all instead of for await
+        await Promise.all(
+            (planAsset.data.spec.blocks || []).map((block) =>
+                BlockService.get(block.block.ref)
+            )
+        ).catch((e) => {
+            console.error(e);
+        });
 
-    useEffect(() => {
-        return cleanupObserver;
+        return {
+            planAsset,
+            blockAssets: (await BlockService.list()) || [],
+        };
     });
 
+    const isReadOnly = planData.value?.planAsset.ref.endsWith(':local');
     const containerClass = toClass({
         'plan-view': true,
-        'read-only': model?.isReadOnly() || false,
+        'read-only': isReadOnly || false,
     });
 
     return (
-        <SimpleLoader loader={loader} text="Loading plan...">
-            {model && asset && (
+        <SimpleLoader loading={planData.loading} text="Loading plan...">
+            {planData.value?.planAsset && planData.value.blockAssets && (
                 <div className={containerClass}>
-                    <TopMenu
-                        plan={model}
-                        version={version}
-                        systemId={props.planRef}
-                    />
+                    {/*<TopMenu*/}
+                    {/*    plan={model}*/}
+                    {/*    version={version}*/}
+                    {/*    systemId={props.planRef}*/}
+                    {/*/>*/}
                     <div className="planner">
-                        <Planner
-                            plan={model}
+                        <PlanEditor
+                            plan={planData.value.planAsset.data}
+                            blockAssets={planData.value.blockAssets}
                             systemId={props.planRef}
-                            blockStore={BlockStore}
                             enableInstanceListening
                         />
                     </div>
