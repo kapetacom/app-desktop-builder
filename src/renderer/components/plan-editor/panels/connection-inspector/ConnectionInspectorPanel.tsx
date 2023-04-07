@@ -55,7 +55,7 @@ interface Props {
 }
 
 
-export const InspectConnectionPanel = (props:Props) => {
+export const ConnectionInspectorPanel = (props:Props) => {
     const planner = useContext(PlannerContext);
 
     const [trafficLines, trafficLinesHandler] = useList<Traffic>([]);

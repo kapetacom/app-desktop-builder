@@ -53,6 +53,7 @@ export interface EditResourceInfo {
 export interface EditConnectionInfo {
     type: ItemType.CONNECTION;
     item: BlockConnectionSpec;
+    creating: boolean;
 }
 
 export type EditItemInfo = EditBlockInfo | EditResourceInfo | EditConnectionInfo;

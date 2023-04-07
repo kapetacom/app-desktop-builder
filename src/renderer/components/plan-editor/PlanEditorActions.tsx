@@ -178,7 +178,8 @@ export const withPlanEditorActions = (planner: PlannerContextData, handlers: Act
                         if (connection) {
                             handlers.edit({
                                 type: ItemType.CONNECTION,
-                                item: connection
+                                item: connection,
+                                creating: false,
                             });
                         }
                     },

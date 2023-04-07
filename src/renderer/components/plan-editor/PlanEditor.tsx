@@ -10,7 +10,8 @@ import {BlockInspectorPanel} from "./panels/block-inspector/BlockInspectorPanel"
 import {BlockConnectionSpec, ItemType} from "@kapeta/ui-web-types";
 import {BlockConfigurationPanel} from "./panels/block-configuration/BlockConfigurationPanel";
 import {BlockInfo, ConfigureItemInfo, EditItemInfo, InspectItemInfo} from "./types";
-import {InspectConnectionPanel} from "./panels/connection-inspector/InspectConnectionPanel";
+import {ConnectionInspectorPanel} from "./panels/connection-inspector/ConnectionInspectorPanel";
+import {ItemEditorPanel} from "./panels/editor/ItemEditorPanel";
 
 interface Props {
     systemId: string
@@ -70,13 +71,20 @@ export const PlanEditor = withPlannerContext(forwardRef((props:Props, ref:Mutabl
                 }}
             />
 
-            <InspectConnectionPanel
+            <ConnectionInspectorPanel
                 open={inspectInfo?.type === ItemType.CONNECTION}
                 onClosed={() => {
                     setInspectInfo(null);
                 }}
                 connection={inspectInfo?.type === ItemType.CONNECTION ? inspectInfo?.item as BlockConnectionSpec : null}
             />
+
+            <ItemEditorPanel info={editInfo}
+                             open={!!editInfo}
+                             onSubmit={(data) => {
+                                 console.log('Save', data);
+                             }}
+                             onClosed={() => setEditInfo(null)} />
 
             <Planner2
                 actions={actions}
