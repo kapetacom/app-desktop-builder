@@ -59,7 +59,7 @@ export const PlanEditor = withPlannerContext(forwardRef((props:Props, ref:Mutabl
                 onSave={(data) => {
                     console.log('save', data);
                 }}
-                onClose={() => setConfigInfo(null)}
+                onClosed={() => setConfigInfo(null)}
             />
 
             <BlockInspectorPanel

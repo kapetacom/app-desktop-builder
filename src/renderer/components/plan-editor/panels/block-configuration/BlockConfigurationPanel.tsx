@@ -24,7 +24,7 @@ type Options = { [key: string]: string };
 interface Props {
     instance?: BlockInstanceSpec|null;
     open: boolean;
-    onClose: () => void;
+    onClosed: () => void;
     onSave: (data: BlockConfigurationData) => void;
 }
 
@@ -83,7 +83,7 @@ export const BlockConfigurationPanel = (props: Props) => {
     const readOnly = planner.mode !== PlannerMode.EDIT;
 
     return (
-        <SidePanel title={panelHeader()} size={PanelSize.large} open={props.open} onClose={props.onClose}>
+        <SidePanel title={panelHeader()} size={PanelSize.large} open={props.open} onClose={props.onClosed}>
             <SimpleLoader
                 loading={loading}
                 key={props.instance?.block.ref ?? 'unknown-block'}
@@ -117,7 +117,7 @@ export const BlockConfigurationPanel = (props: Props) => {
                                 width={70}
                                 type={ButtonType.BUTTON}
                                 style={ButtonStyle.DANGER}
-                                onClick={props.onClose}
+                                onClick={props.onClosed}
                                 text="Cancel"
                             />
                             <Button width={70} disabled={readOnly} type={ButtonType.SUBMIT} style={ButtonStyle.PRIMARY} text="Save" />
