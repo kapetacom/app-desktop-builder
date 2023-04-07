@@ -237,7 +237,7 @@ interface Props {
     onClosed: () => void;
 }
 
-export const ItemEditorPanel: React.FC<Props> = (props) => {
+export const EditorPanels: React.FC<Props> = (props) => {
     const planner = useContext(PlannerContext);
     // callbacks
     const saveAndClose = (data: SchemaKind) => {
