@@ -47,7 +47,11 @@ export interface EditBlockInfo {
 
 export interface EditResourceInfo {
     type: ItemType.RESOURCE;
-    item: ResourceKind;
+    item: {
+        resource: ResourceKind;
+        block: BlockKind;
+        instance: BlockInstanceSpec;
+    };
     creating: boolean;
 }
 export interface EditConnectionInfo {

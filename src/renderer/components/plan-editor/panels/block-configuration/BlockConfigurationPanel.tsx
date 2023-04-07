@@ -25,7 +25,6 @@ interface Props {
     instance?: BlockInstanceSpec|null;
     open: boolean;
     onClosed: () => void;
-    onSave: (data: BlockConfigurationData) => void;
 }
 
 export const BlockConfigurationPanel = (props: Props) => {
@@ -80,6 +79,25 @@ export const BlockConfigurationPanel = (props: Props) => {
         }
     };
 
+    const onSave = (data: BlockConfigurationData) => {
+        if (!props.instance?.id) {
+            return;
+        }
+        planner.updateBlockInstance(props.instance.id, (instance) => {
+            const uri = parseKapetaUri(instance.block.ref);
+            uri.version = data.version;
+            return {
+                ...instance,
+                block: {
+                    ...instance.block,
+                    ref: uri.id
+                },
+                name: data.name
+            };
+        });
+        props.onClosed();
+    }
+
     const readOnly = planner.mode !== PlannerMode.EDIT;
 
     return (
@@ -93,7 +111,7 @@ export const BlockConfigurationPanel = (props: Props) => {
                 <div className="block-configuration-panel">
                     <FormContainer
                         initialValue={data}
-                        onSubmitData={(formData) => props.onSave(formData as BlockConfigurationData)}
+                        onSubmitData={onSave}
                     >
                         <FormField
                             name="name"

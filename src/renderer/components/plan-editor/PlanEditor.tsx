@@ -55,9 +55,6 @@ export const PlanEditor = withPlannerContext(forwardRef((props: Props, ref: Muta
             <BlockConfigurationPanel
                 instance={configInfo?.item.instance}
                 open={!!configInfo}
-                onSave={(data) => {
-                    console.log('save', data);
-                }}
                 onClosed={() => setConfigInfo(null)}
             />
 
@@ -71,9 +68,6 @@ export const PlanEditor = withPlannerContext(forwardRef((props: Props, ref: Muta
 
             <EditorPanels info={editInfo}
                           open={!!editInfo}
-                          onSubmit={(data) => {
-                                 console.log('Save', data);
-                             }}
                           onClosed={() => setEditInfo(null)} />
 
             <Planner2

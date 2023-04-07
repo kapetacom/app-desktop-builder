@@ -11,13 +11,14 @@ import {
     PanelSize,
     SidePanel,
     SimpleLoader,
+    useFormContextField,
 } from '@kapeta/ui-web-components';
 
 import {BlockTypeProvider, IdentityService, ResourceTypeProvider} from '@kapeta/ui-web-context';
 
 import {parseKapetaUri} from '@kapeta/nodejs-utils';
 
-import type {BlockConnectionSpec, SchemaKind} from '@kapeta/ui-web-types';
+import type {BlockConnectionSpec, BlockKind, ResourceConfig, SchemaKind} from '@kapeta/ui-web-types';
 import {ItemType, ResourceKind, ResourceRole} from '@kapeta/ui-web-types';
 
 import {ErrorBoundary} from 'react-error-boundary';
@@ -49,14 +50,14 @@ function getVersions(dataKindUri) {
 // Higher-order-component to allow us to use hooks for data loading (not possible in class components)
 const withNamespaces = (ChildComponent) => {
     return (props) => {
-        const { value: namespaces, loading } = useAsync(async () => {
+        const {value: namespaces, loading} = useAsync(async () => {
             const identity = await IdentityService.getCurrent();
             const memberships = await IdentityService.getMemberships(identity.id);
             return [identity.handle, ...memberships.map((membership) => membership.identity.handle)];
         });
         return (
             <SimpleLoader loading={loading}>
-                <ChildComponent {...props} namespaces={namespaces || []} />
+                <ChildComponent {...props} namespaces={namespaces || []}/>
             </SimpleLoader>
         );
     };
@@ -67,7 +68,7 @@ interface BlockFieldsProps {
     data: SchemaKind
 }
 
-const BlockFields = ({data}:BlockFieldsProps) => {
+const BlockFields = ({data}: BlockFieldsProps) => {
     const kindUri = parseKapetaUri(data.kind);
 
     const options = useMemo(() => {
@@ -100,7 +101,7 @@ const BlockFields = ({data}:BlockFieldsProps) => {
                 help={'The name of this block - e.g. "myhandle/my-block"'}
             />
 
-            <FormField name="metadata.title" label="Title" help="This blocks human-friendly title" />
+            <FormField name="metadata.title" label="Title" help="This blocks human-friendly title"/>
         </>
     );
 }
@@ -110,7 +111,7 @@ interface InnerFormProps {
     info: EditItemInfo
 }
 
-const InnerForm = ({planner,info}:InnerFormProps) => {
+const InnerForm = ({planner, info}: InnerFormProps) => {
     if (info.type === ItemType.CONNECTION) {
         const connection = info.item as BlockConnectionSpec;
 
@@ -160,41 +161,49 @@ const InnerForm = ({planner,info}:InnerFormProps) => {
 
     if (info.type === ItemType.BLOCK) {
         const data = info.item as BlockInfo;
-
-        const BlockTypeConfig = BlockTypeProvider.get(data.block.kind);
+        const kindField = useFormContextField('kind');
+        const kind = kindField.get(data.block.kind);
+        const BlockTypeConfig = BlockTypeProvider.get(kind);
 
         if (!BlockTypeConfig.componentType) {
             return <div key={data.instance.block.ref}>
-                <BlockFields data={data.block} />
+                <BlockFields data={data.block}/>
             </div>;
         }
 
         return (
-            <div key={data.instance.block.ref}>
-                <BlockFields data={data.block} />
+            <div key={kind}>
+                <BlockFields data={data.block}/>
                 <ErrorBoundary
                     fallbackRender={(props) => (
                         <div>
-                            Failed to render block type: {data.block.kind}. <br />
+                            Failed to render block type: {kind}. <br/>
                             Error: {props.error.message}
                         </div>
                     )}
                 >
-                    <BlockTypeConfig.componentType creating={info.creating} />
+                    <BlockTypeConfig.componentType creating={info.creating}/>
                 </ErrorBoundary>
             </div>
         );
     }
 
     if (info.type === ItemType.RESOURCE) {
-        const data = info.item as ResourceKind;
-        const resourceType = ResourceTypeProvider.get(data.kind);
+        const data = info.item.resource as ResourceKind;
+        const kindField = useFormContextField('kind');
+        const kind = kindField.get(data.kind) || data.kind;
+        let resourceType:ResourceConfig|null = null;
+        try {
+            resourceType = ResourceTypeProvider.get(kind);
 
-        if (!resourceType.componentType) {
-            return null;
+            if (!resourceType.componentType) {
+                return null;
+            }
+        } catch (e) {
+            console.warn('Failed to get resource type for kind: ', kind);
         }
 
-        const dataKindUri = parseKapetaUri(data.kind);
+        const dataKindUri = parseKapetaUri(kind);
         const versions = getVersions(dataKindUri);
 
         return (
@@ -207,22 +216,22 @@ const InnerForm = ({planner,info}:InnerFormProps) => {
                     label="Resource kind"
                     name="kind"
                 />
-                <ErrorBoundary
-                    fallbackRender={(props) => (
-                        <div>
-                            Failed to render resource type: {data.kind}. <br />
-                            Error: {props.error.message}
-                        </div>
-                    )}
-                >
-                    <resourceType.componentType
-                        key={data.kind}
-                        // TODO: make resource componentType accept ResourceKind/Schemakind
-                        // @ts-ignore
-                        block={data}
-                        creating={info.creating}
-                    />
-                </ErrorBoundary>
+                {resourceType?.componentType &&
+                    <ErrorBoundary
+                        resetKeys={[kind, info.item]}
+                        fallbackRender={(props) => (
+                            <div>
+                                Failed to render resource type: {kind}. <br/>
+                                Error: {props.error.message}
+                            </div>
+                        )} >
+                        <resourceType.componentType
+                            key={kind}
+                            block={info.item.block}
+                            creating={info.creating}
+                        />
+                    </ErrorBoundary>
+                }
             </>
         );
     }
@@ -231,33 +240,55 @@ const InnerForm = ({planner,info}:InnerFormProps) => {
 }
 
 interface Props {
-    info?: EditItemInfo|null;
+    info?: EditItemInfo | null;
     open: boolean;
-    onSubmit: (data: SchemaKind) => void;
     onClosed: () => void;
 }
 
 export const EditorPanels: React.FC<Props> = (props) => {
     const planner = useContext(PlannerContext);
     // callbacks
-    const saveAndClose = (data: SchemaKind) => {
-        props.onSubmit(data);
+    const saveAndClose = (data: any) => {
+        switch (props.info?.type) {
+            case ItemType.CONNECTION:
+
+                break;
+            case ItemType.BLOCK:
+                planner.updateBlockDefinition(props.info.item.instance.block.ref, data as BlockKind);
+                break;
+            case ItemType.RESOURCE:
+                const consumerIx = props.info.item.block.spec.consumers?.indexOf(props.info.item.resource) ?? -1;
+                const providerIx = props.info.item.block.spec.providers?.indexOf(props.info.item.resource) ?? -1;
+                console.log('resource update', {consumerIx, providerIx})
+                const block = cloneDeep(props.info.item.block) as BlockKind;
+                if (consumerIx > -1) {
+                    block.spec.consumers![consumerIx] = data as ResourceKind;
+                } else if (providerIx > -1) {
+                    block.spec.providers![providerIx] = data as ResourceKind;
+                } else {
+                    console.warn('Could not find resource in block');
+                    return;
+                }
+                planner.updateBlockDefinition(props.info.item.instance.block.ref, block);
+                break;
+        }
         props.onClosed();
     };
+
     const onPanelCancel = () => {
         props.onClosed();
     };
 
     const initialValue = useMemo(() => {
-        if (props.info?.type === ItemType.CONNECTION) {
-            return cloneDeep(props.info.item);
+        switch (props.info?.type) {
+            case ItemType.CONNECTION:
+                return cloneDeep(props.info.item);
+            case ItemType.BLOCK:
+                return cloneDeep(props.info.item.block);
+            case ItemType.RESOURCE:
+                return cloneDeep(props.info.item.resource);
         }
-        if (props.info?.type === ItemType.BLOCK) {
-            return cloneDeep(props.info.item.block);
-        }
-        if (props.info?.type === ItemType.RESOURCE) {
-            return cloneDeep(props.info.item);
-        }
+
         return {};
     }, [props.info]);
 
@@ -279,10 +310,10 @@ export const EditorPanels: React.FC<Props> = (props) => {
                     <FormContainer
                         // Do we need editableItem state?
                         initialValue={initialValue}
-                        onSubmitData={(data) => saveAndClose(data as SchemaKind)}
+                        onSubmitData={(data) => saveAndClose(data)}
                     >
                         <div className="item-form">
-                            <InnerForm planner={planner} info={props.info} />
+                            <InnerForm planner={planner} info={props.info}/>
                         </div>
                         <FormButtons>
                             <Button
@@ -292,7 +323,7 @@ export const EditorPanels: React.FC<Props> = (props) => {
                                 onClick={onPanelCancel}
                                 text="Cancel"
                             />
-                            <Button width={70} type={ButtonType.SUBMIT} style={ButtonStyle.PRIMARY} text="Save" />
+                            <Button width={70} type={ButtonType.SUBMIT} style={ButtonStyle.PRIMARY} text="Save"/>
                         </FormButtons>
                     </FormContainer>
                 </div>

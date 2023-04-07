@@ -103,10 +103,14 @@ export const withPlanEditorActions = (planner: PlannerContextData, handlers: Act
                             parseKapetaUri(blockInstance.block.ref).version === 'local'
                         );
                     },
-                    onClick(p, { resource }) {
+                    onClick(p, { resource, block, blockInstance }) {
                         handlers.edit({
                             type: ItemType.RESOURCE,
-                            item: resource!,
+                            item: {
+                                resource: resource!,
+                                block: block!,
+                                instance: blockInstance!,
+                            },
                             creating: false,
                         });
                     },

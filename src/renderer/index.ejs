@@ -32,7 +32,7 @@
 <script src="${clusterBase}/providers/all.js" type="application/javascript"></scri`+`pt>
     <meta
             http-equiv="Content-Security-Policy"
-            content="script-src 'self' https://cdn.jsdelivr.net ${clusterBase};worker-src blob: 'self' https://cdn.jsdelivr.net ${clusterBase}"
+            content="script-src 'unsafe-eval' 'self' https://cdn.jsdelivr.net ${clusterBase};worker-src blob: 'self' https://cdn.jsdelivr.net ${clusterBase}"
     />
     `)
         }
