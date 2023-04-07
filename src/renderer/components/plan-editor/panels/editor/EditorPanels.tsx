@@ -251,7 +251,7 @@ export const EditorPanels: React.FC<Props> = (props) => {
     const saveAndClose = (data: any) => {
         switch (props.info?.type) {
             case ItemType.CONNECTION:
-
+                planner.updateConnectionMapping(data as BlockConnectionSpec);
                 break;
             case ItemType.BLOCK:
                 planner.updateBlockDefinition(props.info.item.instance.block.ref, data as BlockKind);
@@ -269,13 +269,29 @@ export const EditorPanels: React.FC<Props> = (props) => {
                     console.warn('Could not find resource in block');
                     return;
                 }
-                planner.updateBlockDefinition(props.info.item.instance.block.ref, block);
+                planner.updateBlockDefinition(props.info.item.ref, block);
                 break;
         }
         props.onClosed();
     };
 
     const onPanelCancel = () => {
+        if (props.info?.creating) {
+            // We remove the item if it was created in this session and then cancelled
+            switch (props.info?.type) {
+                case ItemType.CONNECTION:
+                    planner.removeConnection(props.info.item);
+                    break;
+                case ItemType.BLOCK:
+                    planner.removeBlockInstance(props.info.item.instance.id);
+                    break;
+                case ItemType.RESOURCE:
+                    const resource = props.info.item.resource;
+                    const resourceType = ResourceTypeProvider.get(resource.kind);
+                    planner.removeResource(props.info.item.ref, resource.metadata.name, resourceType.role);
+                    break;
+            }
+        }
         props.onClosed();
     };
 

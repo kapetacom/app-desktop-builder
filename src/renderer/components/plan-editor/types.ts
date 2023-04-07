@@ -5,7 +5,8 @@ import {
     BlockKind,
     ItemType,
     ResourceConfig,
-    ResourceKind
+    ResourceKind,
+    ResourceRole
 } from "@kapeta/ui-web-types";
 import {PlannerContextData} from "@kapeta/ui-web-plan-editor";
 
@@ -48,9 +49,9 @@ export interface EditBlockInfo {
 export interface EditResourceInfo {
     type: ItemType.RESOURCE;
     item: {
+        ref: string;
         resource: ResourceKind;
         block: BlockKind;
-        instance: BlockInstanceSpec;
     };
     creating: boolean;
 }
