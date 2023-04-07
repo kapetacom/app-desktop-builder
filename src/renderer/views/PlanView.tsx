@@ -43,6 +43,22 @@ export const PlanView = (props: PlanViewProps) => {
                     plan={planData.value.data}
                     mode={plannerMode}
                     systemId={props.systemId}
+                    onChange={async (plan) => {
+                        console.log('Plan changed', plan);
+                        try {
+                            await AssetService.update(props.systemId, plan);
+                        } catch (e) {
+                            console.error('Failed to update plan', e);
+                        }
+                    }}
+                    onAssetChange={async (asset) => {
+                        console.log('Asset changed', asset);
+                        try {
+                            await AssetService.update(asset.ref, asset.data);
+                        } catch (e) {
+                            console.error('Failed to update asset', e);
+                        }
+                    }}
                     blockAssets={blocks.value ?? []}
                 />
             )}

@@ -35,7 +35,6 @@ export const PlanEditor = withPlannerContext(forwardRef((props: Props, ref: Muta
         }
     });
 
-
     const resourceTypes = useMemo(() => ResourceTypeProvider.list(), []);
     const readonly = planner.mode !== PlannerMode.EDIT;
 
