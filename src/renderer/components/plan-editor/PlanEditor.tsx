@@ -1,14 +1,9 @@
 import {parseKapetaUri} from '@kapeta/nodejs-utils';
 import {Planner2, PlannerContext, PlannerMode, withPlannerContext} from "@kapeta/ui-web-plan-editor";
 import {PlanEditorTopMenu} from "./PlanEditorTopMenu";
-import React, {forwardRef, MutableRefObject, useContext, useMemo, useState} from "react";
+import React, {forwardRef, MutableRefObject, useContext, useMemo} from "react";
 import {withPlanEditorActions} from "./PlanEditorActions";
 import './PlanEditor.less'
-import Point = Electron.Point;
-import {DraggableItem} from "./types";
-import {ItemType} from "@kapeta/ui-web-types";
-import {DraggableBlock} from "./DraggableBlock";
-import {DraggableResource} from "./DraggableResource";
 import {PlannerToolBoxSidePanel} from "./sidepanel/PlannerToolBoxSidePanel";
 import {ResourceTypeProvider} from "@kapeta/ui-web-context";
 
@@ -19,8 +14,6 @@ interface Props {
 export const PlanEditor = withPlannerContext(forwardRef((props:Props, ref:MutableRefObject<HTMLDivElement>) => {
     const uri = parseKapetaUri(props.systemId);
     const planner = useContext(PlannerContext);
-    const [draggableItem, setDraggableItem] = useState<DraggableItem | null>(null);
-    const [draggableItemPosition, setDraggableItemPosition] = useState<Point | null>(null);
     const actions = withPlanEditorActions(planner, {
         inspect: (block) => {
             console.log('inspect', block);
@@ -45,23 +38,9 @@ export const PlanEditor = withPlannerContext(forwardRef((props:Props, ref:Mutabl
                 systemId={props.systemId}
             />
 
-
-            {draggableItem && draggableItemPosition && draggableItem.type === ItemType.RESOURCE && (
-                <DraggableResource {...draggableItem.data} point={draggableItemPosition} />
-            )}
-
-            {draggableItem && draggableItemPosition && draggableItem.type === ItemType.BLOCK && (
-                <DraggableBlock {...draggableItem.data} point={draggableItemPosition} />
-            )}
-
             <PlannerToolBoxSidePanel
                 open={!readonly}
                 resourceAssets={resourceTypes}
-                onItemDragEnd={() => setDraggableItem(null)}
-                onItemDragStart={setDraggableItem}
-                onItemDrag={(item, point) => {
-                    setDraggableItemPosition(point);
-                }}
             />
 
             <Planner2
