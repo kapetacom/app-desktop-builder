@@ -4,11 +4,49 @@ import {
     BlockConnectionSpec,
     BlockInstanceSpec,
     ItemType,
+    ResourceConverter,
     ResourceRole
 } from "@kapeta/ui-web-types";
 import {parseKapetaUri} from '@kapeta/nodejs-utils';
 import {useEffect, useMemo} from "react";
 import {ActionHandlers} from "./types";
+import {ResourceTypeProvider} from "@kapeta/ui-web-context";
+
+function getConverter(planner: PlannerContextData, connection: BlockConnectionSpec):ResourceConverter|null {
+    try {
+        const providerResource = planner.getResourceByBlockIdAndName(
+            connection.from.blockId,
+            connection.from.resourceName,
+            ResourceRole.PROVIDES
+        );
+
+        const consumerResource = planner.getResourceByBlockIdAndName(
+            connection.to.blockId,
+            connection.to.resourceName,
+            ResourceRole.CONSUMES
+        );
+        if (!providerResource || !consumerResource) {
+            return null;
+        }
+        return ResourceTypeProvider.getConverterFor(
+            providerResource.kind,
+            consumerResource.kind
+        ) ?? null;
+    } catch (e) {
+        console.warn('Failed to get converter for connection', e);
+        return null;
+    }
+}
+
+function hasMapping(planner: PlannerContextData, connection: BlockConnectionSpec):boolean {
+    if (!connection) {
+        return false;
+    }
+
+    const converter = getConverter(planner, connection);
+
+    return !!(converter && converter.mappingComponentType);
+}
 
 
 export const withPlanEditorActions = (planner: PlannerContextData, handlers: ActionHandlers): PlannerActionConfig => {
@@ -38,6 +76,10 @@ export const withPlanEditorActions = (planner: PlannerContextData, handlers: Act
                 })
             }),
             planner.onConnectionAdded((connection: BlockConnectionSpec) => {
+                if (!hasMapping(planner, connection)) {
+                    return;
+                }
+
                 handlers.edit({
                     type: ItemType.CONNECTION,
                     creating: true,
@@ -47,7 +89,7 @@ export const withPlanEditorActions = (planner: PlannerContextData, handlers: Act
         ];
 
         return () => unsubscribers.forEach(unsubscribe => unsubscribe());
-    }, [])
+    }, []);
 
 
     return useMemo(() => {
@@ -213,8 +255,19 @@ export const withPlanEditorActions = (planner: PlannerContextData, handlers: Act
                     label: 'Delete',
                 },
                 {
-                    enabled(context): boolean {
-                        return planner.mode === PlannerMode.EDIT;
+                    enabled(context,actionContext): boolean {
+                        if (planner.mode !== PlannerMode.EDIT) {
+                            return false;
+                        }
+
+                        const connection = actionContext.connection;
+                        if (!connection) {
+                            return false;
+                        }
+
+                        const converter = getConverter(planner, connection);
+
+                        return !!(converter && converter.mappingComponentType);
                     },
                     onClick(context, {connection}) {
                         if (connection) {
@@ -230,8 +283,15 @@ export const withPlanEditorActions = (planner: PlannerContextData, handlers: Act
                     label: 'Edit mapping',
                 },
                 {
-                    enabled(context): boolean {
-                        return planner.mode === PlannerMode.EDIT;
+                    enabled(planner,   actionContext): boolean {
+                        const connection = actionContext.connection;
+                        if (!connection) {
+                            return false;
+                        }
+
+                        const converter = getConverter(planner, connection);
+
+                        return !!(converter && converter.inspectComponentType);
                     },
                     onClick(context, {connection}) {
                         if (connection) {
