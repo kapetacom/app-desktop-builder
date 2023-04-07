@@ -3,20 +3,21 @@ import { PanelSize, SidePanel, TabContainer, TabPage } from '@kapeta/ui-web-comp
 import { InstanceEventType, InstanceService } from '@kapeta/ui-web-context';
 
 import './BlockInspectorPanel.less';
-import {BlockInstanceSpec, BlockKind} from "@kapeta/ui-web-types";
 import {BlockValidator, LogPanel } from '@kapeta/ui-web-plan-editor';
 import {useAsync} from "react-use";
+import {BlockInfo} from "../../types";
 
 interface BlockInspectorPanelProps {
     systemId: string
-    instance?: BlockInstanceSpec|null
-    block?: BlockKind|null
+    info?: BlockInfo|null
     open: boolean
     onClosed: () => void;
 }
 
 export const BlockInspectorPanel = (props:BlockInspectorPanelProps) =>{
-    const blockRef = props.instance?.block.ref;
+    const {info} = props;
+    const {block, instance} = info ? info : {block: null, instance: null};
+    const blockRef = instance?.block.ref;
 
     const emitter = useMemo(() => {
         const listeners:((entry: any) => void)[] = [];
@@ -47,28 +48,28 @@ export const BlockInspectorPanel = (props:BlockInspectorPanelProps) =>{
     }, [blockRef, emitter]);
 
     async function loadLogs() {
-        if (!props.instance?.id) {
+        if (!instance?.id) {
             return;
         }
-        const result = await InstanceService.getInstanceLogs(props.systemId, props.instance?.id);
+        const result = await InstanceService.getInstanceLogs(props.systemId, instance?.id);
         return result.ok === false ? [] : result.logs;
     }
 
-    const logs = useAsync(loadLogs, [props.instance?.id]);
+    const logs = useAsync(loadLogs, [instance?.id]);
 
     const issues = useMemo(()  => {
-        if (!props.block || !props.instance) {
+        if (!block || !instance) {
             return [];
         }
-        const validator = new BlockValidator(props.block, props.instance);
+        const validator = new BlockValidator(block, instance);
         return validator.toIssues();
-    }, [props.block, props.instance]);
+    }, [block, instance]);
 
     const valid = issues.length === 0;
 
     const title = useMemo(() => {
-        return props.instance ? `Inspect ${props.instance?.name}` : 'Inspect';
-    }, [props.instance]);
+        return instance ? `Inspect ${instance?.name}` : 'Inspect';
+    }, [instance]);
 
     return (
         <SidePanel
@@ -77,18 +78,18 @@ export const BlockInspectorPanel = (props:BlockInspectorPanelProps) =>{
             open={props.open}
             onClose={props.onClosed}
         >
-            {props.instance && (
+            {instance && (
                 <div className="item-inspector-panel">
                     <TabContainer>
                         <TabPage id="logs" title="Logs">
                             <LogPanel
-                                key={`${props.instance.block.ref}_logs`}
+                                key={`${instance.block.ref}_logs`}
                                 logs={logs.value}
                                 emitter={emitter}
                             />
                         </TabPage>
                         <TabPage id="issues" title="Issues">
-                            <div className="issues-container" key={`${props.instance.block.ref}_issues`}>
+                            <div className="issues-container" key={`${instance.block.ref}_issues`}>
                                 {(!valid && (
                                     <>
                                         <span>Found the following issues in block</span>

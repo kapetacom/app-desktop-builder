@@ -7,8 +7,10 @@ import './PlanEditor.less'
 import {PlanEditorToolBoxPanel} from "./panels/toolbox/PlanEditorToolBoxPanel";
 import {ResourceTypeProvider} from "@kapeta/ui-web-context";
 import {BlockInspectorPanel} from "./panels/block-inspector/BlockInspectorPanel";
-import {BlockInstanceSpec, BlockKind} from "@kapeta/ui-web-types";
+import {BlockConnectionSpec, ItemType} from "@kapeta/ui-web-types";
 import {BlockConfigurationPanel} from "./panels/block-configuration/BlockConfigurationPanel";
+import {BlockInfo, ConfigureItemInfo, EditItemInfo, InspectItemInfo} from "./types";
+import {InspectConnectionPanel} from "./panels/connection-inspector/InspectConnectionPanel";
 
 interface Props {
     systemId: string
@@ -18,20 +20,19 @@ export const PlanEditor = withPlannerContext(forwardRef((props:Props, ref:Mutabl
     const uri = parseKapetaUri(props.systemId);
     const planner = useContext(PlannerContext);
 
-    const [configBlock, setConfigBlock] = useState<BlockInstanceSpec | null>(null);
-    const [inspectBlock, setInspectBlock] = useState<BlockKind | null>(null);
-    const [inspectInstance, setInspectInstance] = useState<BlockInstanceSpec | null>(null);
+    const [configInfo, setConfigInfo] = useState<ConfigureItemInfo | null>(null);
+    const [inspectInfo, setInspectInfo] = useState<InspectItemInfo|null>(null);
+    const [editInfo, setEditInfo] = useState<EditItemInfo|null>(null);
 
     const actions = withPlanEditorActions(planner, {
-        inspect: (instance, block) => {
-            setInspectInstance(instance);
-            setInspectBlock(block);
+        inspect: (info) => {
+            setInspectInfo(info);
         },
-        configure: (instance) => {
-            setConfigBlock(instance);
+        configure: (info) => {
+            setConfigInfo(info);
         },
         edit: (info) => {
-            console.log('edit', info);
+            setEditInfo(info);
         }
     });
 
@@ -52,23 +53,29 @@ export const PlanEditor = withPlannerContext(forwardRef((props:Props, ref:Mutabl
             />
 
             <BlockConfigurationPanel
-                instance={configBlock}
-                open={!!configBlock}
+                instance={configInfo?.item.instance}
+                open={!!configInfo}
                 onSave={(data) => {
                     console.log('save', data);
                 }}
-                onClose={() => setConfigBlock(null)}
+                onClose={() => setConfigInfo(null)}
             />
 
             <BlockInspectorPanel
                 systemId={props.systemId}
-                block={inspectBlock}
-                instance={inspectInstance}
-                open={!!(inspectBlock && inspectInstance)}
+                info={inspectInfo?.type === ItemType.BLOCK ? inspectInfo?.item as BlockInfo : null}
+                open={inspectInfo?.type === ItemType.BLOCK}
                 onClosed={() => {
-                    setInspectBlock(null);
-                    setInspectInstance(null);
+                    setInspectInfo(null);
                 }}
+            />
+
+            <InspectConnectionPanel
+                open={inspectInfo?.type === ItemType.CONNECTION}
+                onClosed={() => {
+                    setInspectInfo(null);
+                }}
+                connection={inspectInfo?.type === ItemType.CONNECTION ? inspectInfo?.item as BlockConnectionSpec : null}
             />
 
             <Planner2

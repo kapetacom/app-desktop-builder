@@ -1,24 +1,16 @@
 import {PlannerActionConfig, PlannerContextData, PlannerMode} from "@kapeta/ui-web-plan-editor";
-import {ButtonStyle, DialogControl} from "@kapeta/ui-web-components";
-import {BlockInstanceSpec, BlockKind, ItemType, ResourceKind, ResourceRole} from "@kapeta/ui-web-types";
+import {ButtonStyle, showDelete} from "@kapeta/ui-web-components";
+import {
+    ItemType,
+    ResourceRole
+} from "@kapeta/ui-web-types";
 import {parseKapetaUri} from '@kapeta/nodejs-utils';
 import {useMemo} from "react";
-
-interface BlockInstanceInfo {
-    type: ItemType;
-    item: BlockKind|ResourceKind;
-    ref?: string;
-    creating: boolean;
-}
-
-interface Handlers {
-    inspect:(instance: BlockInstanceSpec, block: BlockKind) => void;
-    configure: (instance: BlockInstanceSpec, block: BlockKind) => void;
-    edit: (info: BlockInstanceInfo) => void;
-}
+import {ActionHandlers} from "./types";
 
 
-export const withPlanEditorActions = (planner: PlannerContextData, handlers: Handlers):PlannerActionConfig => {
+
+export const withPlanEditorActions = (planner: PlannerContextData, handlers: ActionHandlers):PlannerActionConfig => {
 
     return useMemo(() => {
         return {
@@ -28,7 +20,13 @@ export const withPlanEditorActions = (planner: PlannerContextData, handlers: Han
                         return true; // planner.mode !== PlannerMode.VIEW;
                     },
                     onClick(context, { block , blockInstance}) {
-                        handlers.inspect(blockInstance!, block!);
+                        handlers.inspect({
+                            type: ItemType.BLOCK,
+                            item: {
+                                instance: blockInstance!,
+                                block: block!,
+                            }
+                        });
                     },
                     buttonStyle: ButtonStyle.PRIMARY,
                     icon: 'fa fa-search',
@@ -42,16 +40,14 @@ export const withPlanEditorActions = (planner: PlannerContextData, handlers: Han
                             parseKapetaUri(blockInstance.block.ref).version === 'local'
                         );
                     },
-                    onClick(context, { blockInstance }) {
-                        DialogControl.delete(
+                    async onClick(context, { blockInstance }) {
+                        const confirm = await showDelete(
                             `Delete Block Instance`,
-                            `Are you sure you want to delete ${blockInstance?.name || 'this block'}?`,
-                            (confirm) => {
-                                if (confirm) {
-                                    planner.removeBlockInstance(blockInstance!.id);
-                                }
-                            }
+                            `Are you sure you want to delete ${blockInstance?.name || 'this block'}?`
                         );
+                        if (confirm) {
+                            planner.removeBlockInstance(blockInstance!.id);
+                        }
                     },
                     buttonStyle: ButtonStyle.DANGER,
                     icon: 'fa fa-trash',
@@ -68,8 +64,10 @@ export const withPlanEditorActions = (planner: PlannerContextData, handlers: Han
                     onClick(context, { blockInstance, block }) {
                         handlers.edit({
                             type: ItemType.BLOCK,
-                            item: block!,
-                            ref: blockInstance!.block.ref,
+                            item: {
+                                block: block!,
+                                instance: blockInstance!,
+                            },
                             creating: false,
                         });
                     },
@@ -83,7 +81,13 @@ export const withPlanEditorActions = (planner: PlannerContextData, handlers: Han
                                 context.mode === PlannerMode.EDIT;
                     },
                     onClick(context, { blockInstance, block }) {
-                        handlers.configure(blockInstance!, block!);
+                        handlers.configure({
+                            type: ItemType.BLOCK,
+                            item: {
+                                block: block!,
+                                instance: blockInstance!,
+                            }
+                        });
                     },
                     buttonStyle: ButtonStyle.DEFAULT,
                     icon: 'fa fa-tools',
@@ -118,20 +122,18 @@ export const withPlanEditorActions = (planner: PlannerContextData, handlers: Han
                             parseKapetaUri(blockInstance.block.ref).version === 'local'
                         );
                     },
-                    onClick(context, { blockInstance, resource, resourceRole }) {
-                        DialogControl.delete(
+                    async onClick(context, { blockInstance, resource, resourceRole }) {
+                        const confirm = await showDelete(
                             `Delete Resource`,
-                            `Are you sure you want to delete ${resource?.metadata.name || 'this resource'}?`,
-                            (confirm) => {
-                                if (confirm) {
-                                    context.removeResource(
-                                        blockInstance!.block.ref,
-                                        resource!.metadata.name,
-                                        resourceRole!
-                                    );
-                                }
-                            }
+                            `Are you sure you want to delete ${resource?.metadata.name || 'this resource'}?`
                         );
+                        if (confirm) {
+                            context.removeResource(
+                                blockInstance!.block.ref,
+                                resource!.metadata.name,
+                                resourceRole!
+                            );
+                        }
                     },
                     buttonStyle: ButtonStyle.DANGER,
                     icon: 'fa fa-trash',
@@ -143,7 +145,7 @@ export const withPlanEditorActions = (planner: PlannerContextData, handlers: Han
                     enabled(context): boolean {
                         return planner.mode === PlannerMode.EDIT;
                     },
-                    onClick(context, { connection }) {
+                    async onClick(context, { connection }) {
                         const from = planner.getResourceByBlockIdAndName(
                             connection!.from.blockId,
                             connection!.from.resourceName,
@@ -155,19 +157,50 @@ export const withPlanEditorActions = (planner: PlannerContextData, handlers: Han
                             ResourceRole.CONSUMES
                         );
 
-                        DialogControl.delete(
+                        const confirm = await showDelete(
                             `Delete Connection?`,
-                            `from ${from?.metadata.name} to ${to?.metadata.name}?`,
-                            (confirm) => {
-                                if (confirm) {
-                                    planner.removeConnection(connection!);
-                                }
-                            }
+                            `${from?.metadata.name} to ${to?.metadata.name}?`
                         );
+
+                        if (confirm) {
+                            planner.removeConnection(connection!);
+                        }
                     },
                     buttonStyle: ButtonStyle.DANGER,
                     icon: 'fa fa-trash',
                     label: 'Delete',
+                },
+                {
+                    enabled(context): boolean {
+                        return planner.mode === PlannerMode.EDIT;
+                    },
+                    onClick(context, { connection }) {
+                        if (connection) {
+                            handlers.edit({
+                                type: ItemType.CONNECTION,
+                                item: connection
+                            });
+                        }
+                    },
+                    buttonStyle: ButtonStyle.SECONDARY,
+                    icon: 'fa fa-pencil',
+                    label: 'Edit mapping',
+                },
+                {
+                    enabled(context): boolean {
+                        return planner.mode === PlannerMode.EDIT;
+                    },
+                    onClick(context, { connection }) {
+                        if (connection) {
+                            handlers.inspect({
+                                type: ItemType.CONNECTION,
+                                item: connection,
+                            });
+                        }
+                    },
+                    buttonStyle: ButtonStyle.PRIMARY,
+                    icon: 'fa fa-search',
+                    label: 'Inspect',
                 },
             ],
         };
