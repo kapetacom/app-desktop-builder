@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {useAsyncFn} from 'react-use';
 import {Asset, Point} from '@kapeta/ui-web-types';
 import {AssetService, BlockService} from '@kapeta/ui-web-context';
@@ -8,6 +8,7 @@ import {BlockCreator} from '../../../../creators/BlockCreator';
 import {AssetCreatorState} from '../../../../creators/AssetCreator';
 
 import {DraggableItem} from "../../../types";
+import { PlannerContext } from '@kapeta/ui-web-plan-editor';
 
 import './BlockStore.less';
 import './BlockStoreSection.less';
@@ -20,6 +21,7 @@ interface Props {
 }
 
 export const BlockStore = (props: Props) => {
+    const planner = useContext(PlannerContext);
     const [creatorState, setCreatorState] = useState(AssetCreatorState.CLOSED);
     const [searchTerm, setSearchTerm] = useState('');
 
@@ -152,7 +154,8 @@ export const BlockStore = (props: Props) => {
                 onAssetAdded={props.onBlockAdded}
                 onDone={async () => {
                     setCreatorState(AssetCreatorState.CLOSED);
-                    await loadBlocks();
+                    const blocks = await loadBlocks();
+                    planner.setBlockAssets(blocks ?? []);
                 }}
                 files={
                     (blocks &&

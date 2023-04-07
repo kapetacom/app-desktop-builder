@@ -64,17 +64,6 @@ export const withPlanEditorActions = (planner: PlannerContextData, handlers: Act
                     }
                 })
             }),
-            planner.onBlockInstanceAdded((instance: BlockInstanceSpec) => {
-                const block = planner.getBlockByRef(instance.block.ref);
-                handlers.edit({
-                    type: ItemType.BLOCK,
-                    creating: true,
-                    item: {
-                        block: block!,
-                        instance: instance
-                    }
-                })
-            }),
             planner.onConnectionAdded((connection: BlockConnectionSpec) => {
                 if (!hasMapping(planner, connection)) {
                     return;
