@@ -1,6 +1,4 @@
 import React, {useContext, useEffect, useMemo} from 'react';
-
-
 import { Modal, ModalSize } from '@kapeta/ui-web-components';
 import { TrafficService, TrafficEventType, ResourceTypeProvider } from '@kapeta/ui-web-context';
 import {BlockConnectionSpec, ConnectionMethodsMapping, ResourceRole, Traffic} from '@kapeta/ui-web-types';
@@ -75,8 +73,6 @@ export const InspectConnectionPanel = (props:Props) => {
             trafficLinesHandler.updateAt(ix, newItem);
         }
     };
-
-
 
     useEffect(() => {
         if (!connectionId) {

@@ -5,7 +5,7 @@ import {toClass} from '@kapeta/ui-web-utils';
 import {DnDDraggable, PlannerContext} from '@kapeta/ui-web-plan-editor';
 
 import './BlockStoreItem.less';
-import {DraggableItem} from "../types";
+import {DraggableItem} from "../../../types";
 
 interface BlockStoreItemProps {
     item: Asset<BlockKind>;

@@ -4,10 +4,10 @@ import {Asset, Point} from '@kapeta/ui-web-types';
 import {AssetService, BlockService} from '@kapeta/ui-web-context';
 
 import {BlockStoreItem} from './BlockStoreItem';
-import {BlockCreator} from '../../creators/BlockCreator';
-import {AssetCreatorState} from '../../creators/AssetCreator';
+import {BlockCreator} from '../../../../creators/BlockCreator';
+import {AssetCreatorState} from '../../../../creators/AssetCreator';
 
-import {DraggableItem} from "../types";
+import {DraggableItem} from "../../../types";
 
 import './BlockStore.less';
 import './BlockStoreSection.less';

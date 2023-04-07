@@ -1,6 +1,6 @@
 import {Tab, TabList, TabPanel, Tabs} from "react-tabs";
 import {PanelAlignment, PanelSize, SidePanel} from "@kapeta/ui-web-components";
-import BlockStore from "../../blockstore/BlockStore";
+import BlockStore from "./blockstore/BlockStore";
 import {Asset, BlockKind, ItemType, Point, ResourceConfig, ResourceRole} from "@kapeta/ui-web-types";
 import React, {useContext, useMemo, useState} from "react";
 import {DnDDraggable, PlannerContext, PlannerPayload} from "@kapeta/ui-web-plan-editor";
