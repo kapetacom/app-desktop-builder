@@ -1,3 +1,5 @@
+import {Asset, SchemaKind} from "@kapeta/ui-web-types";
+
 export function ProviderHeaderIcon() {
     return <svg
         width="24"
@@ -69,4 +71,12 @@ export function ConsumerHeaderIcon() {
             fillOpacity="0.6"
         />
     </svg>;
+}
+
+export function getAssetTitle(asset: Asset): string {
+    return getSchemaTitle(asset.data);
+}
+
+export function getSchemaTitle(asset: SchemaKind): string {
+    return asset.metadata.title ?? asset.metadata.name;
 }

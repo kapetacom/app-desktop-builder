@@ -1,19 +1,19 @@
 import {PlannerActionConfig, PlannerContextData, PlannerMode} from "@kapeta/ui-web-plan-editor";
 import {ButtonStyle, DialogControl} from "@kapeta/ui-web-components";
-import {BlockKind, ItemType, ResourceRole} from "@kapeta/ui-web-types";
+import {BlockInstanceSpec, BlockKind, ItemType, ResourceKind, ResourceRole} from "@kapeta/ui-web-types";
 import {parseKapetaUri} from '@kapeta/nodejs-utils';
 import {useMemo} from "react";
 
 interface BlockInstanceInfo {
     type: ItemType;
-    item: BlockKind;
+    item: BlockKind|ResourceKind;
     ref?: string;
     creating: boolean;
 }
 
 interface Handlers {
-    inspect:(block: BlockKind) => void;
-    configure: (block: BlockKind) => void;
+    inspect:(instance: BlockInstanceSpec, block: BlockKind) => void;
+    configure: (instance: BlockInstanceSpec, block: BlockKind) => void;
     edit: (info: BlockInstanceInfo) => void;
 }
 
@@ -27,8 +27,8 @@ export const withPlanEditorActions = (planner: PlannerContextData, handlers: Han
                     enabled(): boolean {
                         return true; // planner.mode !== PlannerMode.VIEW;
                     },
-                    onClick(context, { block }) {
-                        handlers.inspect(block!);
+                    onClick(context, { block , blockInstance}) {
+                        handlers.inspect(blockInstance!, block!);
                     },
                     buttonStyle: ButtonStyle.PRIMARY,
                     icon: 'fa fa-search',
@@ -78,11 +78,11 @@ export const withPlanEditorActions = (planner: PlannerContextData, handlers: Han
                     label: 'Edit',
                 },
                 {
-                    enabled(context, { blockInstance }): boolean {
+                    enabled(context): boolean {
                         return context.mode === PlannerMode.CONFIGURATION;
                     },
-                    onClick(context, { block }) {
-                        handlers.configure(block!);
+                    onClick(context, { blockInstance, block }) {
+                        handlers.configure(blockInstance!, block!);
                     },
                     buttonStyle: ButtonStyle.DEFAULT,
                     icon: 'fa fa-tools',

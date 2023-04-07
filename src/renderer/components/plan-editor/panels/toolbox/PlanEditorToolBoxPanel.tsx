@@ -1,12 +1,12 @@
 import {Tab, TabList, TabPanel, Tabs} from "react-tabs";
 import {PanelAlignment, PanelSize, SidePanel} from "@kapeta/ui-web-components";
-import BlockStore from "../blockstore/BlockStore";
+import BlockStore from "../../blockstore/BlockStore";
 import {Asset, BlockKind, ItemType, Point, ResourceConfig, ResourceRole} from "@kapeta/ui-web-types";
 import React, {useContext, useMemo, useState} from "react";
 import {DnDDraggable, PlannerContext, PlannerPayload} from "@kapeta/ui-web-plan-editor";
 import {BlockResourceTool} from "./BlockResourceTool";
-import {ConsumerHeaderIcon, ProviderHeaderIcon} from "../helpers";
-import {DraggableItem} from "../types";
+import {ConsumerHeaderIcon, ProviderHeaderIcon} from "../../helpers";
+import {DraggableItem} from "../../types";
 import {DraggableResource} from "./DraggableResource";
 import {DraggableBlock} from "./DraggableBlock";
 
@@ -30,7 +30,7 @@ interface Props {
     onBlockAdded?: (asset: Asset<BlockKind>) => void;
 }
 
-export const PlannerToolBoxSidePanel = (props: Props) => {
+export const PlanEditorToolBoxPanel = (props: Props) => {
     const planner = useContext(PlannerContext);
     const [draggableItem, setDraggableItem] = useState<DraggableItem | null>(null);
     const [draggableItemPosition, setDraggableItemPosition] = useState<Point | null>(null);

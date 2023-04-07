@@ -1,4 +1,4 @@
-import {DraggableBlockProps} from "../types";
+import {DraggableBlockProps} from "../../types";
 import {Point} from "@kapeta/ui-web-types";
 import {BlockNode} from "@kapeta/ui-web-plan-editor";
 import {InstanceStatus} from "@kapeta/ui-web-context";

@@ -1,4 +1,4 @@
-import {DraggableResourceProps} from "../types";
+import {DraggableResourceProps} from "../../types";
 import {Point} from "@kapeta/ui-web-types";
 import {BlockResourceTool, RESOURCE_TAG_HEIGHT, RESOURCE_TAG_WIDTH} from "./BlockResourceTool";
 
