@@ -185,7 +185,7 @@ export default observer(function Main() {
                                 return (
                                     <TabPanel key={plan.ref}>
                                         <PlanView
-                                            planRef={
+                                            systemId={
                                                 openPlans[activeTab]
                                                     ? openPlans[activeTab].ref
                                                     : ''

@@ -1,0 +1,36 @@
+@import '~@kapeta/ui-web-components/styles/values.less';
+@import '~@kapeta/ui-web-components/styles/functions.less';
+@import "vars.less";
+
+.plan-editor {
+    height:100%;
+    width: 100%;
+    background-color: @gray-xdark;
+    position: relative;
+
+    .block-store-container {
+        position: absolute;
+        top:0;
+        bottom: 0;
+        right: 0;
+        width: @side-bar-size;
+    }
+
+    .plan-item-dragged {
+        .toolbox-resource-listing-item {
+            margin: 0;
+            display: block;
+            height: 100%;
+            padding: 2px 0 0;
+            box-sizing: border-box;
+        }
+    }
+}
+
+.plan-editor-toolbox-container {
+    .side-panel-container {
+        margin-top: 0;
+        top: @tab-bar-size;
+        position: absolute;
+    }
+}

@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { PlannerModelWrapper } from '@kapeta/ui-web-plan-editor/src/wrappers/PlannerModelWrapper';
-import { observer } from 'mobx-react';
 
-import './TopMenu.less';
 import { toClass } from '@kapeta/ui-web-utils';
 import { InstanceEventType, InstanceService } from '@kapeta/ui-web-context';
 import { showToasty, ToastType } from '@kapeta/ui-web-components';
+import './PlanEditorTopMenu.less';
 
 interface Props {
-    plan: PlannerModelWrapper;
+    readonly: boolean
     version: string;
     systemId: string;
 }
 
-export const TopMenu = observer((props: Props) => {
+export const PlanEditorTopMenu = (props: Props) => {
     const [playing, setPlaying] = useState(false);
     const [processing, setProcessing] = useState(false);
 
@@ -37,7 +35,7 @@ export const TopMenu = observer((props: Props) => {
 
     const containerClass = toClass({
         'top-menu': true,
-        'read-only': props.plan.isReadOnly(),
+        'read-only': props.readonly,
         playing,
     });
 
@@ -92,4 +90,4 @@ export const TopMenu = observer((props: Props) => {
             </div>
         </div>
     );
-});
+};
