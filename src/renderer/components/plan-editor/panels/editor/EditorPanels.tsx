@@ -145,6 +145,7 @@ const InnerForm = ({planner, info}: InnerFormProps) => {
 
         const fromBlock = planner.getBlockById(connection.from.blockId);
         const toBlock = planner.getBlockById(connection.to.blockId);
+        const mappingField = useFormContextField('mapping');
 
         return (
             <MappingComponent
@@ -153,8 +154,10 @@ const InnerForm = ({planner, info}: InnerFormProps) => {
                 target={target}
                 sourceEntities={fromBlock?.spec.entities?.types ?? []}
                 targetEntities={toBlock?.spec.entities?.types ?? []}
-                value={connection.mapping}
-                onDataChanged={(change) => onMappingChanged(change)}
+                value={mappingField.get(connection.mapping)}
+                onDataChanged={(change) => {
+                    mappingField.set(change.data);
+                }}
             />
         );
     }
@@ -259,7 +262,6 @@ export const EditorPanels: React.FC<Props> = (props) => {
             case ItemType.RESOURCE:
                 const consumerIx = props.info.item.block.spec.consumers?.indexOf(props.info.item.resource) ?? -1;
                 const providerIx = props.info.item.block.spec.providers?.indexOf(props.info.item.resource) ?? -1;
-                console.log('resource update', {consumerIx, providerIx})
                 const block = cloneDeep(props.info.item.block) as BlockKind;
                 if (consumerIx > -1) {
                     block.spec.consumers![consumerIx] = data as ResourceKind;
@@ -324,7 +326,6 @@ export const EditorPanels: React.FC<Props> = (props) => {
             {props.info && (
                 <div className="item-editor-panel">
                     <FormContainer
-                        // Do we need editableItem state?
                         initialValue={initialValue}
                         onSubmitData={(data) => saveAndClose(data)}
                     >
