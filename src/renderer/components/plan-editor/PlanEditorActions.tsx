@@ -79,7 +79,8 @@ export const withPlanEditorActions = (planner: PlannerContextData, handlers: Han
                 },
                 {
                     enabled(context): boolean {
-                        return context.mode === PlannerMode.CONFIGURATION;
+                        return context.mode === PlannerMode.CONFIGURATION ||
+                                context.mode === PlannerMode.EDIT;
                     },
                     onClick(context, { blockInstance, block }) {
                         handlers.configure(blockInstance!, block!);
