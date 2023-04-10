@@ -1,9 +1,10 @@
+import React, {useContext, useMemo, useState} from "react";
 import {Tab, TabList, TabPanel, Tabs} from "react-tabs";
 import {PanelAlignment, PanelSize, SidePanel} from "@kapeta/ui-web-components";
 import BlockStore from "./blockstore/BlockStore";
-import {Asset, BlockKind, ItemType, Point, ResourceConfig, ResourceRole} from "@kapeta/ui-web-types";
-import React, {useContext, useMemo, useState} from "react";
+import {Asset, ItemType, Point, IResourceTypeProvider, ResourceRole} from "@kapeta/ui-web-types";
 import {DnDDraggable, PlannerContext, PlannerPayload} from "@kapeta/ui-web-plan-editor";
+import {BlockDefinition} from "@kapeta/schemas";
 import {BlockResourceTool} from "./BlockResourceTool";
 import {ConsumerHeaderIcon, ProviderHeaderIcon} from "../../helpers";
 import {DraggableItem} from "../../types";
@@ -12,7 +13,7 @@ import {DraggableBlock} from "./DraggableBlock";
 
 import './PlannerToolboxSidePanel.less';
 
-const toPlannerPayload = (config: ResourceConfig): PlannerPayload => {
+const toPlannerPayload = (config: IResourceTypeProvider): PlannerPayload => {
     return {
         type: "resource-type",
         data: {
@@ -26,8 +27,8 @@ const toPlannerPayload = (config: ResourceConfig): PlannerPayload => {
 
 interface Props {
     open: boolean;
-    resourceAssets: ResourceConfig[];
-    onBlockAdded?: (asset: Asset<BlockKind>) => void;
+    resourceAssets: IResourceTypeProvider[];
+    onBlockAdded?: (asset: Asset<BlockDefinition>) => void;
 }
 
 export const PlanEditorToolBoxPanel = (props: Props) => {
@@ -47,7 +48,7 @@ export const PlanEditorToolBoxPanel = (props: Props) => {
         return [providerList, consumerList];
     }, [resourceAssets]);
 
-    const toDraggableItem = (resourceConfig: ResourceConfig): DraggableItem => {
+    const toDraggableItem = (resourceConfig: IResourceTypeProvider): DraggableItem => {
         return {
             type: ItemType.RESOURCE,
             data: {

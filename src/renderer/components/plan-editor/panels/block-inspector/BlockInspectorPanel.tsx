@@ -2,10 +2,10 @@ import React, {useEffect, useMemo} from 'react';
 import { PanelSize, SidePanel, TabContainer, TabPage } from '@kapeta/ui-web-components';
 import { InstanceEventType, InstanceService } from '@kapeta/ui-web-context';
 
-import './BlockInspectorPanel.less';
 import {BlockValidator, LogPanel } from '@kapeta/ui-web-plan-editor';
 import {useAsync} from "react-use";
 import {BlockInfo} from "../../types";
+import './BlockInspectorPanel.less';
 
 interface BlockInspectorPanelProps {
     systemId: string

@@ -18,8 +18,9 @@ import {BlockTypeProvider, IdentityService, ResourceTypeProvider} from '@kapeta/
 
 import {parseKapetaUri} from '@kapeta/nodejs-utils';
 
-import type {BlockConnectionSpec, BlockKind, ResourceConfig, SchemaKind} from '@kapeta/ui-web-types';
-import {ItemType, ResourceKind, ResourceRole} from '@kapeta/ui-web-types';
+import type {IResourceTypeProvider, SchemaKind} from '@kapeta/ui-web-types';
+import {ItemType, ResourceRole} from '@kapeta/ui-web-types';
+import {BlockDefinition, Resource, Connection} from "@kapeta/schemas";
 
 import {ErrorBoundary} from 'react-error-boundary';
 import {useAsync} from 'react-use';
@@ -113,17 +114,17 @@ interface InnerFormProps {
 
 const InnerForm = ({planner, info}: InnerFormProps) => {
     if (info.type === ItemType.CONNECTION) {
-        const connection = info.item as BlockConnectionSpec;
+        const connection = info.item as Connection;
 
         const source = planner.getResourceByBlockIdAndName(
-            connection.from.blockId,
-            connection.from.resourceName,
+            connection.provider.blockId,
+            connection.provider.resourceName,
             ResourceRole.PROVIDES
         );
 
         const target = planner.getResourceByBlockIdAndName(
-            connection.to.blockId,
-            connection.to.resourceName,
+            connection.consumer.blockId,
+            connection.consumer.resourceName,
             ResourceRole.CONSUMES
         );
 
@@ -143,8 +144,8 @@ const InnerForm = ({planner, info}: InnerFormProps) => {
             return null;
         }
 
-        const fromBlock = planner.getBlockById(connection.from.blockId);
-        const toBlock = planner.getBlockById(connection.to.blockId);
+        const fromBlock = planner.getBlockById(connection.provider.blockId);
+        const toBlock = planner.getBlockById(connection.consumer.blockId);
         const mappingField = useFormContextField('mapping');
 
         return (
@@ -192,10 +193,10 @@ const InnerForm = ({planner, info}: InnerFormProps) => {
     }
 
     if (info.type === ItemType.RESOURCE) {
-        const data = info.item.resource as ResourceKind;
+        const data = info.item.resource as Resource;
         const kindField = useFormContextField('kind');
         const kind = kindField.get(data.kind) || data.kind;
-        let resourceType:ResourceConfig|null = null;
+        let resourceType:IResourceTypeProvider|null = null;
         try {
             resourceType = ResourceTypeProvider.get(kind);
 
@@ -254,19 +255,19 @@ export const EditorPanels: React.FC<Props> = (props) => {
     const saveAndClose = (data: any) => {
         switch (props.info?.type) {
             case ItemType.CONNECTION:
-                planner.updateConnectionMapping(data as BlockConnectionSpec);
+                planner.updateConnectionMapping(data as Connection);
                 break;
             case ItemType.BLOCK:
-                planner.updateBlockDefinition(props.info.item.instance.block.ref, data as BlockKind);
+                planner.updateBlockDefinition(props.info.item.instance.block.ref, data as BlockDefinition);
                 break;
             case ItemType.RESOURCE:
                 const consumerIx = props.info.item.block.spec.consumers?.indexOf(props.info.item.resource) ?? -1;
                 const providerIx = props.info.item.block.spec.providers?.indexOf(props.info.item.resource) ?? -1;
-                const block = cloneDeep(props.info.item.block) as BlockKind;
+                const block = cloneDeep(props.info.item.block) as BlockDefinition;
                 if (consumerIx > -1) {
-                    block.spec.consumers![consumerIx] = data as ResourceKind;
+                    block.spec.consumers![consumerIx] = data as Resource;
                 } else if (providerIx > -1) {
-                    block.spec.providers![providerIx] = data as ResourceKind;
+                    block.spec.providers![providerIx] = data as Resource;
                 } else {
                     console.warn('Could not find resource in block');
                     return;

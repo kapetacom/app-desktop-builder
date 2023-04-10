@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Asset, FileInfo, PLAN_KIND } from '@kapeta/ui-web-types';
+import { Asset, FileInfo } from '@kapeta/ui-web-types';
 import { AssetStore } from '@kapeta/ui-web-context';
 import { Button } from '@kapeta/ui-web-components';
 
@@ -15,7 +15,7 @@ interface PlanImportProps {
 
 const createNewPlan = () => {
     return {
-        kind: PLAN_KIND,
+        kind: 'core/plan',
         metadata: {
             name: '',
         },

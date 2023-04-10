@@ -9,9 +9,10 @@ import {
 import PlanOverview from 'renderer/components/plan-overview/PlanOverview';
 
 import { BlockService, PlannerService } from '@kapeta/ui-web-context';
-import { Asset, PlanKind } from '@kapeta/ui-web-types';
+import { Asset } from '@kapeta/ui-web-types';
 import { useList } from 'react-use';
 import { toClass } from '@kapeta/ui-web-utils';
+import { Plan } from '@kapeta/schemas';
 import {
     showToasty,
     SimpleLoader,
@@ -51,7 +52,7 @@ export default observer(function Main() {
     const reader: PlannerModelReader = new PlannerModelReader(BlockService);
 
     const loadAsset = async (
-        planAsset: Asset<PlanKind>
+        planAsset: Asset<Plan>
     ): Promise<PlannerModelRef> => {
         return {
             ref: planAsset.ref,
@@ -61,7 +62,7 @@ export default observer(function Main() {
     };
 
     const loadPlans = async () => {
-        let planAssets: Asset<PlanKind>[] = [];
+        let planAssets: Asset<Plan>[] = [];
         try {
             setError('');
             planAssets = await PlannerService.list();
@@ -111,7 +112,7 @@ export default observer(function Main() {
         }
     };
 
-    const onAssetAdded = async (asset: Asset<PlanKind>) => {
+    const onAssetAdded = async (asset: Asset<Plan>) => {
         console.log('Loading asset', asset);
         const plannerModelRef = await loadAsset(asset);
         console.log('Loaded asset', plannerModelRef);

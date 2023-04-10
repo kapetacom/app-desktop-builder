@@ -1,12 +1,13 @@
 import React, {useContext, useEffect, useMemo} from 'react';
 import { Modal, ModalSize } from '@kapeta/ui-web-components';
 import { TrafficService, TrafficEventType, ResourceTypeProvider } from '@kapeta/ui-web-context';
-import {BlockConnectionSpec, ConnectionMethodsMapping, ResourceRole, Traffic} from '@kapeta/ui-web-types';
+import {ConnectionMethodsMapping, ResourceRole, Traffic} from '@kapeta/ui-web-types';
+import {Connection} from "@kapeta/schemas";
 import {useList} from "react-use";
 import { getConnectionId, PlannerContext, PlannerContextData } from '@kapeta/ui-web-plan-editor';
 
 interface ModalProps {
-    connection: BlockConnectionSpec;
+    connection: Connection;
     planner: PlannerContextData;
     trafficLines: Traffic[]
 }
@@ -17,14 +18,14 @@ const ModalContent = ({planner, connection, trafficLines}:ModalProps) => {
     }
 
     let providerResource = planner.getResourceByBlockIdAndName(
-        connection.from.blockId,
-        connection.from.resourceName,
+        connection.provider.blockId,
+        connection.provider.resourceName,
         ResourceRole.PROVIDES
     );
 
     let consumerResource = planner.getResourceByBlockIdAndName(
-        connection.to.blockId,
-        connection.to.resourceName,
+        connection.consumer.blockId,
+        connection.consumer.resourceName,
         ResourceRole.CONSUMES
     );
 
@@ -49,7 +50,7 @@ const ModalContent = ({planner, connection, trafficLines}:ModalProps) => {
 }
 
 interface Props {
-    connection?: BlockConnectionSpec|null;
+    connection?: Connection|null;
     open: boolean;
     onClosed: () => void;
 }

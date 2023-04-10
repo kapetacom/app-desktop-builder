@@ -1,5 +1,6 @@
 import {BlockInspectorPanel} from "./block-inspector/BlockInspectorPanel";
-import {BlockConnectionSpec, ItemType} from "@kapeta/ui-web-types";
+import {ItemType} from "@kapeta/ui-web-types";
+import {Connection} from "@kapeta/schemas";
 import {BlockInfo, InspectItemInfo} from "../types";
 import {ConnectionInspectorPanel} from "./connection-inspector/ConnectionInspectorPanel";
 import React from "react";
@@ -27,7 +28,7 @@ export const InspectorPanels = (props:Props) => {
             <ConnectionInspectorPanel
                 open={inspectInfo?.type === ItemType.CONNECTION}
                 onClosed={props.onClosed}
-                connection={inspectInfo?.type === ItemType.CONNECTION ? inspectInfo?.item as BlockConnectionSpec : null}
+                connection={inspectInfo?.type === ItemType.CONNECTION ? inspectInfo?.item as Connection : null}
             />
         </>
     )

@@ -1,5 +1,5 @@
 import {ResourceTagSide, SVGCornersHelper, toClass} from "@kapeta/ui-web-utils";
-import {ResourceConfig, ResourceRole} from "@kapeta/ui-web-types";
+import {IResourceTypeProvider, ResourceProviderType, ResourceRole} from "@kapeta/ui-web-types";
 import {MouseEventHandler} from "react";
 
 export const RESOURCE_TAG_WIDTH = 128;
@@ -11,12 +11,12 @@ const ucFirst = (str: string) => {
     return str.charAt(0) + str.toLowerCase().substring(1)
 }
 
-const getResourceTagClasses = (resource: ResourceConfig) => {
+const getResourceTagClasses = (resource: IResourceTypeProvider) => {
     return toClass({
         'toolbox-resource-listing-item': true,
-        database: resource.type.toLowerCase() === 'database',
-        service: resource.type.toLowerCase() === 'service',
-        extension: resource.type.toLowerCase() === 'extension',
+        operator: resource.type === ResourceProviderType.OPERATOR,
+        internal: resource.type === ResourceProviderType.INTERNAL,
+        extension: resource.type === ResourceProviderType.EXTENSION,
         'consumer-item': resource.role === ResourceRole.CONSUMES,
         'provide-item': resource.role === ResourceRole.PROVIDES,
     });
@@ -24,7 +24,7 @@ const getResourceTagClasses = (resource: ResourceConfig) => {
 
 
 interface Props {
-    resource: ResourceConfig
+    resource: IResourceTypeProvider
     onMouseDown?: MouseEventHandler<HTMLDivElement> | undefined;
 }
 
@@ -65,7 +65,7 @@ export const BlockResourceTool = (props: Props) => {
                 x={textX}
                 y="35"
             >
-                {ucFirst(props.resource.type)}
+                {ucFirst(props.resource.type ?? 'unknown')}
             </text>
         </svg>
     </div>

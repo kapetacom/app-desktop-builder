@@ -1,28 +1,27 @@
 import {PlannerActionConfig, PlannerContextData, PlannerMode} from "@kapeta/ui-web-plan-editor";
 import {ButtonStyle, showDelete} from "@kapeta/ui-web-components";
 import {
-    BlockConnectionSpec,
-    BlockInstanceSpec,
     ItemType,
-    ResourceConverter,
+    IResourceTypeConverter,
     ResourceRole
 } from "@kapeta/ui-web-types";
 import {parseKapetaUri} from '@kapeta/nodejs-utils';
 import {useEffect, useMemo} from "react";
 import {ActionHandlers} from "./types";
 import {ResourceTypeProvider} from "@kapeta/ui-web-context";
+import {Connection} from "@kapeta/schemas";
 
-function getConverter(planner: PlannerContextData, connection: BlockConnectionSpec):ResourceConverter|null {
+function getConverter(planner: PlannerContextData, connection: Connection):IResourceTypeConverter|null {
     try {
         const providerResource = planner.getResourceByBlockIdAndName(
-            connection.from.blockId,
-            connection.from.resourceName,
+            connection.provider.blockId,
+            connection.provider.resourceName,
             ResourceRole.PROVIDES
         );
 
         const consumerResource = planner.getResourceByBlockIdAndName(
-            connection.to.blockId,
-            connection.to.resourceName,
+            connection.consumer.blockId,
+            connection.consumer.resourceName,
             ResourceRole.CONSUMES
         );
         if (!providerResource || !consumerResource) {
@@ -38,7 +37,7 @@ function getConverter(planner: PlannerContextData, connection: BlockConnectionSp
     }
 }
 
-function hasMapping(planner: PlannerContextData, connection: BlockConnectionSpec):boolean {
+function hasMapping(planner: PlannerContextData, connection: Connection):boolean {
     if (!connection) {
         return false;
     }
@@ -64,7 +63,7 @@ export const withPlanEditorActions = (planner: PlannerContextData, handlers: Act
                     }
                 })
             }),
-            planner.onConnectionAdded((connection: BlockConnectionSpec) => {
+            planner.onConnectionAdded((connection: Connection) => {
                 if (!hasMapping(planner, connection)) {
                     return;
                 }
@@ -220,13 +219,13 @@ export const withPlanEditorActions = (planner: PlannerContextData, handlers: Act
                     },
                     async onClick(context, {connection}) {
                         const from = planner.getResourceByBlockIdAndName(
-                            connection!.from.blockId,
-                            connection!.from.resourceName,
+                            connection!.provider.blockId,
+                            connection!.provider.resourceName,
                             ResourceRole.PROVIDES
                         );
                         const to = planner.getResourceByBlockIdAndName(
-                            connection!.to.blockId,
-                            connection!.to.resourceName,
+                            connection!.consumer.blockId,
+                            connection!.consumer.resourceName,
                             ResourceRole.CONSUMES
                         );
 

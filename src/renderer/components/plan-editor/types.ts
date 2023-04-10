@@ -1,25 +1,28 @@
 import {
     Asset,
-    BlockConnectionSpec,
-    BlockInstanceSpec,
-    BlockKind,
     ItemType,
-    ResourceConfig,
-    ResourceKind,
-    ResourceRole
+    IResourceTypeProvider
 } from "@kapeta/ui-web-types";
+
+import {
+    BlockDefinition,
+    BlockInstance,
+    Connection,
+    Resource
+} from "@kapeta/schemas";
+
 import {PlannerContextData} from "@kapeta/ui-web-plan-editor";
 
 export interface DraggableResourceProps {
     name: string;
-    resourceConfig: ResourceConfig;
+    resourceConfig: IResourceTypeProvider;
     planner: PlannerContextData;
 }
 
 export interface DraggableBlockProps {
     name: string;
     title?: string;
-    block: Asset<BlockKind>;
+    block: Asset<BlockDefinition>;
     planner: PlannerContextData;
 }
 
@@ -36,8 +39,8 @@ export interface DraggableBlockItem {
 export type DraggableItem = DraggableResourceItem | DraggableBlockItem;
 
 export interface BlockInfo {
-    instance: BlockInstanceSpec;
-    block: BlockKind;
+    instance: BlockInstance;
+    block: BlockDefinition;
 }
 
 export interface EditBlockInfo {
@@ -50,14 +53,14 @@ export interface EditResourceInfo {
     type: ItemType.RESOURCE;
     item: {
         ref: string;
-        resource: ResourceKind;
-        block: BlockKind;
+        resource: Resource;
+        block: BlockDefinition;
     };
     creating: boolean;
 }
 export interface EditConnectionInfo {
     type: ItemType.CONNECTION;
-    item: BlockConnectionSpec;
+    item: Connection;
     creating: boolean;
 }
 
@@ -65,12 +68,12 @@ export type EditItemInfo = EditBlockInfo | EditResourceInfo | EditConnectionInfo
 
 export interface InspectBlockInfo {
     type: ItemType.BLOCK;
-    item: BlockInfo|BlockConnectionSpec;
+    item: BlockInfo|Connection;
 }
 
 export interface InspectConnectionInfo {
     type: ItemType.CONNECTION;
-    item: BlockConnectionSpec;
+    item: Connection;
 }
 
 export type InspectItemInfo = InspectBlockInfo | InspectConnectionInfo;

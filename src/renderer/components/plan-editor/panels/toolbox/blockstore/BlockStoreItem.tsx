@@ -1,6 +1,7 @@
 import React, {useContext, useMemo} from 'react';
-import {Asset, BlockKind, ItemType, Point} from '@kapeta/ui-web-types';
+import {Asset, ItemType, Point} from '@kapeta/ui-web-types';
 import {toClass} from '@kapeta/ui-web-utils';
+import {BlockDefinition} from "@kapeta/schemas";
 
 import {DnDDraggable, PlannerContext} from '@kapeta/ui-web-plan-editor';
 
@@ -8,7 +9,7 @@ import './BlockStoreItem.less';
 import {DraggableItem} from "../../../types";
 
 interface BlockStoreItemProps {
-    item: Asset<BlockKind>;
+    item: Asset<BlockDefinition>;
     onItemDragStart?: (item: DraggableItem) => void;
     onItemDragEnd?: (item: DraggableItem) => void;
     onItemDrag?: (item: DraggableItem, point: Point) => void;

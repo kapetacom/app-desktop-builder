@@ -6,7 +6,7 @@ import {
 import { AssetService, BlockService } from '@kapeta/ui-web-context';
 
 import './PlanView.less';
-import {Asset, PlanKind} from '@kapeta/ui-web-types';
+import {Asset, Plan} from '@kapeta/ui-web-types';
 import {parseKapetaUri} from '@kapeta/nodejs-utils';
 import { SimpleLoader } from '@kapeta/ui-web-components';
 import {PlanEditor} from "../components/plan-editor/PlanEditor";
@@ -19,7 +19,7 @@ interface PlanViewProps {
 export const PlanView = (props: PlanViewProps) => {
 
 
-    const planData = useAsync(async ():Promise<Asset<PlanKind>> => {
+    const planData = useAsync(async ():Promise<Asset<Plan>> => {
         return AssetService.get(props.systemId);
     },[props.systemId]);
 

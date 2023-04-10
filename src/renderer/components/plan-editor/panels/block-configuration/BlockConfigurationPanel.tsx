@@ -14,7 +14,7 @@ import {
 
 import { BlockService } from '@kapeta/ui-web-context';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
-import {BlockInstanceSpec} from "@kapeta/ui-web-types";
+import {BlockInstance} from "@kapeta/schemas";
 import { BlockConfigurationData, PlannerContext, PlannerMode } from '@kapeta/ui-web-plan-editor';
 
 import './BlockConfigurationPanel.less';
@@ -22,7 +22,7 @@ import './BlockConfigurationPanel.less';
 type Options = { [key: string]: string };
 
 interface Props {
-    instance?: BlockInstanceSpec|null;
+    instance?: BlockInstance|null;
     open: boolean;
     onClosed: () => void;
 }
