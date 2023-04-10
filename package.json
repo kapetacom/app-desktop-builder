@@ -98,14 +98,15 @@
         "which": "^3.0.0"
     },
     "devDependencies": {
+        "@electron/notarize": "^1.2.3",
+        "@electron/rebuild": "^3.2.10",
         "@kapeta/nodejs-api-client": "<2",
+        "@kapeta/schemas": "^0.0.29",
         "@kapeta/ui-web-components": "<2",
         "@kapeta/ui-web-context": "<2",
         "@kapeta/ui-web-plan-editor": "<2",
         "@kapeta/ui-web-types": "<2",
         "@kapeta/ui-web-utils": "<2",
-        "@electron/notarize": "^1.2.3",
-        "@electron/rebuild": "^3.2.10",
         "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",
         "@svgr/webpack": "^6.3.1",
         "@teamsupercell/typings-for-css-modules-loader": "^2.5.1",

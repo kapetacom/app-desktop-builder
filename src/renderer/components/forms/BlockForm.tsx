@@ -9,7 +9,7 @@ import {
 import { BlockTypeProvider } from '@kapeta/ui-web-context';
 
 import './BlockForm.less';
-import { BlockConfigComponentProps } from '@kapeta/ui-web-types';
+import { BlockTypeProviderProps } from '@kapeta/ui-web-types';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ProjectHomeFolderInputProps } from '../fields/ProjectHomeFolderInput';
 import { AutoLoadAssetNameInput } from '../fields/AutoLoadAssetNameInput';
@@ -24,7 +24,7 @@ interface InnerBlockTypeProps {
 }
 
 const InnerBlockType = (props: InnerBlockTypeProps) => {
-    let BlockTypeComponent: ComponentType<BlockConfigComponentProps> | null =
+    let BlockTypeComponent: ComponentType<BlockTypeProviderProps> | null =
         null;
 
     if (!props.kind) {

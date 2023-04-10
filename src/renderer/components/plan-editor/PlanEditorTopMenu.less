@@ -1,5 +1,6 @@
 @import '~@kapeta/ui-web-components/styles/values.less';
 @import '~@kapeta/ui-web-components/styles/functions.less';
+@import "vars.less";
 
 .top-menu {
     .container();
@@ -9,9 +10,9 @@
     position: absolute;
     top: 0;
     left: 0;
-    right: 300px;
-    height: 52px;
-    line-height: 52px;
+    right: @side-bar-size;
+    height: @top-bar-size;
+    line-height: @top-bar-size;
     z-index: 6;
     box-sizing: border-box;
 
