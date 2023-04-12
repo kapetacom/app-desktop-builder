@@ -5,7 +5,6 @@ import {
     PlannerMode,
     withPlannerContext,
 } from '@kapeta/ui-web-plan-editor';
-import { PlanEditorTopMenu } from './PlanEditorTopMenu';
 import React, {
     forwardRef,
     MutableRefObject,
@@ -13,9 +12,10 @@ import React, {
     useMemo,
     useState,
 } from 'react';
+import { ResourceTypeProvider } from '@kapeta/ui-web-context';
+import { PlanEditorTopMenu } from './PlanEditorTopMenu';
 import { withPlanEditorActions } from './PlanEditorActions';
 import { PlanEditorToolBoxPanel } from './panels/toolbox/PlanEditorToolBoxPanel';
-import { ResourceTypeProvider } from '@kapeta/ui-web-context';
 import { BlockConfigurationPanel } from './panels/block-configuration/BlockConfigurationPanel';
 import { ConfigureItemInfo, EditItemInfo, InspectItemInfo } from './types';
 import { EditorPanels } from './panels/editor/EditorPanels';
@@ -55,7 +55,7 @@ export const PlanEditor = withPlannerContext(
         const readonly = planner.mode !== PlannerMode.EDIT;
 
         return (
-            <div className={'plan-editor'} ref={ref}>
+            <div className="plan-editor" ref={ref}>
                 <PlanEditorTopMenu
                     readonly={readonly}
                     version={uri.version}

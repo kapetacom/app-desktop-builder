@@ -1,9 +1,9 @@
-import { BlockInspectorPanel } from './block-inspector/BlockInspectorPanel';
 import { ItemType } from '@kapeta/ui-web-types';
 import { Connection } from '@kapeta/schemas';
+import React from 'react';
+import { BlockInspectorPanel } from './block-inspector/BlockInspectorPanel';
 import { BlockInfo, InspectItemInfo } from '../types';
 import { ConnectionInspectorPanel } from './connection-inspector/ConnectionInspectorPanel';
-import React from 'react';
 
 interface Props {
     systemId: string;

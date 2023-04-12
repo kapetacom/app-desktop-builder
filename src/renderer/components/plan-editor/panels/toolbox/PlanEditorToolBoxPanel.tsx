@@ -5,7 +5,6 @@ import {
     PanelSize,
     SidePanel,
 } from '@kapeta/ui-web-components';
-import BlockStore from './blockstore/BlockStore';
 import {
     Asset,
     ItemType,
@@ -19,6 +18,7 @@ import {
     PlannerPayload,
 } from '@kapeta/ui-web-plan-editor';
 import { BlockDefinition } from '@kapeta/schemas';
+import BlockStore from './blockstore/BlockStore';
 import { BlockResourceTool } from './BlockResourceTool';
 import { ConsumerHeaderIcon, ProviderHeaderIcon } from '../../helpers';
 import { DraggableItem } from '../../types';
@@ -33,7 +33,7 @@ const toPlannerPayload = (config: IResourceTypeProvider): PlannerPayload => {
         data: {
             title: config.title || config.kind,
             kind: config.kind,
-            config: config,
+            config,
         },
     };
 };

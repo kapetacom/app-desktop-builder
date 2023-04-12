@@ -3,12 +3,12 @@ import { useAsyncFn } from 'react-use';
 import { Asset, Point } from '@kapeta/ui-web-types';
 import { AssetService, BlockService } from '@kapeta/ui-web-context';
 
+import { PlannerContext } from '@kapeta/ui-web-plan-editor';
 import { BlockStoreItem } from './BlockStoreItem';
 import { BlockCreator } from '../../../../creators/BlockCreator';
 import { AssetCreatorState } from '../../../../creators/AssetCreator';
 
 import { DraggableItem } from '../../../types';
-import { PlannerContext } from '@kapeta/ui-web-plan-editor';
 
 import './BlockStore.less';
 import './BlockStoreSection.less';

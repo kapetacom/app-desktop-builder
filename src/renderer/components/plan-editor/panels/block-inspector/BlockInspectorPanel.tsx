@@ -21,7 +21,7 @@ interface BlockInspectorPanelProps {
 
 export const BlockInspectorPanel = (props: BlockInspectorPanelProps) => {
     const { info } = props;
-    const { block, instance } = info ? info : { block: null, instance: null };
+    const { block, instance } = info || { block: null, instance: null };
     const blockRef = instance?.block.ref;
 
     const emitter = useMemo(() => {

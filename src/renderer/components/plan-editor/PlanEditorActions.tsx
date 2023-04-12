@@ -11,9 +11,9 @@ import {
 } from '@kapeta/ui-web-types';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import { useEffect, useMemo } from 'react';
-import { ActionHandlers } from './types';
 import { ResourceTypeProvider } from '@kapeta/ui-web-context';
 import { Connection } from '@kapeta/schemas';
+import { ActionHandlers } from './types';
 
 function getConverter(
     planner: PlannerContextData,
