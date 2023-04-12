@@ -1,12 +1,12 @@
-import React, {useContext, useMemo} from 'react';
-import {Asset, ItemType, Point} from '@kapeta/ui-web-types';
-import {toClass} from '@kapeta/ui-web-utils';
-import {BlockDefinition} from "@kapeta/schemas";
+import React, { useContext, useMemo } from 'react';
+import { Asset, ItemType, Point } from '@kapeta/ui-web-types';
+import { toClass } from '@kapeta/ui-web-utils';
+import { BlockDefinition } from '@kapeta/schemas';
 
-import {DnDDraggable, PlannerContext} from '@kapeta/ui-web-plan-editor';
+import { DnDDraggable, PlannerContext } from '@kapeta/ui-web-plan-editor';
 
 import './BlockStoreItem.less';
-import {DraggableItem} from "../../../types";
+import { DraggableItem } from '../../../types';
 
 interface BlockStoreItemProps {
     item: Asset<BlockDefinition>;
@@ -35,13 +35,12 @@ export const BlockStoreItem = (props: BlockStoreItemProps) => {
                 name: props.item.data.metadata.name,
                 planner,
                 title,
-            }
-        }
+            },
+        };
     }, [props.item, planner, title]);
 
     return (
         <DnDDraggable
-
             onDragStart={(evt) => {
                 props.onItemDragStart?.(draggable);
             }}
@@ -53,10 +52,14 @@ export const BlockStoreItem = (props: BlockStoreItemProps) => {
             }}
             data={{
                 type: 'block-type',
-                data: props.item
-            }}>
-            {draggableProps => (
-                <div {...draggableProps.componentProps} className={blockStoreItem}>
+                data: props.item,
+            }}
+        >
+            {(draggableProps) => (
+                <div
+                    {...draggableProps.componentProps}
+                    className={blockStoreItem}
+                >
                     <div className="store-item ">
                         <p className="store-item-title">
                             <span className="name">{title}</span>
@@ -77,4 +80,4 @@ export const BlockStoreItem = (props: BlockStoreItemProps) => {
             )}
         </DnDDraggable>
     );
-}
+};

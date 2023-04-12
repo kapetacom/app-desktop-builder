@@ -1,17 +1,13 @@
-import {
-    Asset,
-    ItemType,
-    IResourceTypeProvider
-} from "@kapeta/ui-web-types";
+import { Asset, ItemType, IResourceTypeProvider } from '@kapeta/ui-web-types';
 
 import {
     BlockDefinition,
     BlockInstance,
     Connection,
-    Resource
-} from "@kapeta/schemas";
+    Resource,
+} from '@kapeta/schemas';
 
-import {PlannerContextData} from "@kapeta/ui-web-plan-editor";
+import { PlannerContextData } from '@kapeta/ui-web-plan-editor';
 
 export interface DraggableResourceProps {
     name: string;
@@ -64,11 +60,14 @@ export interface EditConnectionInfo {
     creating: boolean;
 }
 
-export type EditItemInfo = EditBlockInfo | EditResourceInfo | EditConnectionInfo;
+export type EditItemInfo =
+    | EditBlockInfo
+    | EditResourceInfo
+    | EditConnectionInfo;
 
 export interface InspectBlockInfo {
     type: ItemType.BLOCK;
-    item: BlockInfo|Connection;
+    item: BlockInfo | Connection;
 }
 
 export interface InspectConnectionInfo {
@@ -84,7 +83,7 @@ export interface ConfigureItemInfo {
 }
 
 export interface ActionHandlers {
-    inspect:(info: InspectItemInfo) => void;
+    inspect: (info: InspectItemInfo) => void;
     configure: (info: ConfigureItemInfo) => void;
     edit: (info: EditItemInfo) => void;
 }

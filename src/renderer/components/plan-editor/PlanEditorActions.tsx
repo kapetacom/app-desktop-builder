@@ -1,17 +1,24 @@
-import {PlannerActionConfig, PlannerContextData, PlannerMode} from "@kapeta/ui-web-plan-editor";
-import {ButtonStyle, showDelete} from "@kapeta/ui-web-components";
+import {
+    PlannerActionConfig,
+    PlannerContextData,
+    PlannerMode,
+} from '@kapeta/ui-web-plan-editor';
+import { ButtonStyle, showDelete } from '@kapeta/ui-web-components';
 import {
     ItemType,
     IResourceTypeConverter,
-    ResourceRole
-} from "@kapeta/ui-web-types";
-import {parseKapetaUri} from '@kapeta/nodejs-utils';
-import {useEffect, useMemo} from "react";
-import {ActionHandlers} from "./types";
-import {ResourceTypeProvider} from "@kapeta/ui-web-context";
-import {Connection} from "@kapeta/schemas";
+    ResourceRole,
+} from '@kapeta/ui-web-types';
+import { parseKapetaUri } from '@kapeta/nodejs-utils';
+import { useEffect, useMemo } from 'react';
+import { ActionHandlers } from './types';
+import { ResourceTypeProvider } from '@kapeta/ui-web-context';
+import { Connection } from '@kapeta/schemas';
 
-function getConverter(planner: PlannerContextData, connection: Connection):IResourceTypeConverter|null {
+function getConverter(
+    planner: PlannerContextData,
+    connection: Connection
+): IResourceTypeConverter | null {
     try {
         const providerResource = planner.getResourceByBlockIdAndName(
             connection.provider.blockId,
@@ -27,17 +34,22 @@ function getConverter(planner: PlannerContextData, connection: Connection):IReso
         if (!providerResource || !consumerResource) {
             return null;
         }
-        return ResourceTypeProvider.getConverterFor(
-            providerResource.kind,
-            consumerResource.kind
-        ) ?? null;
+        return (
+            ResourceTypeProvider.getConverterFor(
+                providerResource.kind,
+                consumerResource.kind
+            ) ?? null
+        );
     } catch (e) {
         console.warn('Failed to get converter for connection', e);
         return null;
     }
 }
 
-function hasMapping(planner: PlannerContextData, connection: Connection):boolean {
+function hasMapping(
+    planner: PlannerContextData,
+    connection: Connection
+): boolean {
     if (!connection) {
         return false;
     }
@@ -47,9 +59,10 @@ function hasMapping(planner: PlannerContextData, connection: Connection):boolean
     return !!(converter && converter.mappingComponentType);
 }
 
-
-export const withPlanEditorActions = (planner: PlannerContextData, handlers: ActionHandlers): PlannerActionConfig => {
-
+export const withPlanEditorActions = (
+    planner: PlannerContextData,
+    handlers: ActionHandlers
+): PlannerActionConfig => {
     useEffect(() => {
         const unsubscribers = [
             planner.onResourceAdded((ref, block, resource) => {
@@ -60,8 +73,8 @@ export const withPlanEditorActions = (planner: PlannerContextData, handlers: Act
                         ref,
                         resource,
                         block,
-                    }
-                })
+                    },
+                });
             }),
             planner.onConnectionAdded((connection: Connection) => {
                 if (!hasMapping(planner, connection)) {
@@ -71,14 +84,13 @@ export const withPlanEditorActions = (planner: PlannerContextData, handlers: Act
                 handlers.edit({
                     type: ItemType.CONNECTION,
                     creating: true,
-                    item: connection
-                })
-            })
+                    item: connection,
+                });
+            }),
         ];
 
-        return () => unsubscribers.forEach(unsubscribe => unsubscribe());
+        return () => unsubscribers.forEach((unsubscribe) => unsubscribe());
     }, []);
-
 
     return useMemo(() => {
         return {
@@ -87,13 +99,13 @@ export const withPlanEditorActions = (planner: PlannerContextData, handlers: Act
                     enabled(): boolean {
                         return true; // planner.mode !== PlannerMode.VIEW;
                     },
-                    onClick(context, {block, blockInstance}) {
+                    onClick(context, { block, blockInstance }) {
                         handlers.inspect({
                             type: ItemType.BLOCK,
                             item: {
                                 instance: blockInstance!,
                                 block: block!,
-                            }
+                            },
                         });
                     },
                     buttonStyle: ButtonStyle.PRIMARY,
@@ -101,17 +113,20 @@ export const withPlanEditorActions = (planner: PlannerContextData, handlers: Act
                     label: 'Inspect',
                 },
                 {
-                    enabled(context, {blockInstance}): boolean {
+                    enabled(context, { blockInstance }): boolean {
                         return (
                             planner.mode !== PlannerMode.VIEW &&
                             !!blockInstance &&
-                            parseKapetaUri(blockInstance.block.ref).version === 'local'
+                            parseKapetaUri(blockInstance.block.ref).version ===
+                                'local'
                         );
                     },
-                    async onClick(context, {blockInstance}) {
+                    async onClick(context, { blockInstance }) {
                         const confirm = await showDelete(
                             `Delete Block Instance`,
-                            `Are you sure you want to delete ${blockInstance?.name || 'this block'}?`
+                            `Are you sure you want to delete ${
+                                blockInstance?.name || 'this block'
+                            }?`
                         );
                         if (confirm) {
                             planner.removeBlockInstance(blockInstance!.id);
@@ -122,14 +137,15 @@ export const withPlanEditorActions = (planner: PlannerContextData, handlers: Act
                     label: 'Delete',
                 },
                 {
-                    enabled(context, {blockInstance}): boolean {
+                    enabled(context, { blockInstance }): boolean {
                         return (
                             planner.mode !== PlannerMode.VIEW &&
                             !!blockInstance &&
-                            parseKapetaUri(blockInstance.block.ref).version === 'local'
+                            parseKapetaUri(blockInstance.block.ref).version ===
+                                'local'
                         );
                     },
-                    onClick(context, {blockInstance, block}) {
+                    onClick(context, { blockInstance, block }) {
                         handlers.edit({
                             type: ItemType.BLOCK,
                             item: {
@@ -145,16 +161,18 @@ export const withPlanEditorActions = (planner: PlannerContextData, handlers: Act
                 },
                 {
                     enabled(context): boolean {
-                        return context.mode === PlannerMode.CONFIGURATION ||
-                            context.mode === PlannerMode.EDIT;
+                        return (
+                            context.mode === PlannerMode.CONFIGURATION ||
+                            context.mode === PlannerMode.EDIT
+                        );
                     },
-                    onClick(context, {blockInstance, block}) {
+                    onClick(context, { blockInstance, block }) {
                         handlers.configure({
                             type: ItemType.BLOCK,
                             item: {
                                 block: block!,
                                 instance: blockInstance!,
-                            }
+                            },
                         });
                     },
                     buttonStyle: ButtonStyle.DEFAULT,
@@ -164,14 +182,15 @@ export const withPlanEditorActions = (planner: PlannerContextData, handlers: Act
             ],
             resource: [
                 {
-                    enabled(context, {blockInstance}): boolean {
+                    enabled(context, { blockInstance }): boolean {
                         return (
                             planner.mode !== PlannerMode.VIEW &&
                             !!blockInstance &&
-                            parseKapetaUri(blockInstance.block.ref).version === 'local'
+                            parseKapetaUri(blockInstance.block.ref).version ===
+                                'local'
                         );
                     },
-                    onClick(p, {resource, block, blockInstance}) {
+                    onClick(p, { resource, block, blockInstance }) {
                         handlers.edit({
                             type: ItemType.RESOURCE,
                             item: {
@@ -187,17 +206,23 @@ export const withPlanEditorActions = (planner: PlannerContextData, handlers: Act
                     label: 'Edit',
                 },
                 {
-                    enabled(context, {blockInstance}): boolean {
+                    enabled(context, { blockInstance }): boolean {
                         return (
                             planner.mode !== PlannerMode.VIEW &&
                             !!blockInstance &&
-                            parseKapetaUri(blockInstance.block.ref).version === 'local'
+                            parseKapetaUri(blockInstance.block.ref).version ===
+                                'local'
                         );
                     },
-                    async onClick(context, {blockInstance, resource, resourceRole}) {
+                    async onClick(
+                        context,
+                        { blockInstance, resource, resourceRole }
+                    ) {
                         const confirm = await showDelete(
                             `Delete Resource`,
-                            `Are you sure you want to delete ${resource?.metadata.name || 'this resource'}?`
+                            `Are you sure you want to delete ${
+                                resource?.metadata.name || 'this resource'
+                            }?`
                         );
                         if (confirm) {
                             context.removeResource(
@@ -217,7 +242,7 @@ export const withPlanEditorActions = (planner: PlannerContextData, handlers: Act
                     enabled(context): boolean {
                         return planner.mode === PlannerMode.EDIT;
                     },
-                    async onClick(context, {connection}) {
+                    async onClick(context, { connection }) {
                         const from = planner.getResourceByBlockIdAndName(
                             connection!.provider.blockId,
                             connection!.provider.resourceName,
@@ -243,7 +268,7 @@ export const withPlanEditorActions = (planner: PlannerContextData, handlers: Act
                     label: 'Delete',
                 },
                 {
-                    enabled(context,actionContext): boolean {
+                    enabled(context, actionContext): boolean {
                         if (planner.mode !== PlannerMode.EDIT) {
                             return false;
                         }
@@ -257,7 +282,7 @@ export const withPlanEditorActions = (planner: PlannerContextData, handlers: Act
 
                         return !!(converter && converter.mappingComponentType);
                     },
-                    onClick(context, {connection}) {
+                    onClick(context, { connection }) {
                         if (connection) {
                             handlers.edit({
                                 type: ItemType.CONNECTION,
@@ -271,7 +296,7 @@ export const withPlanEditorActions = (planner: PlannerContextData, handlers: Act
                     label: 'Edit mapping',
                 },
                 {
-                    enabled(planner,   actionContext): boolean {
+                    enabled(planner, actionContext): boolean {
                         const connection = actionContext.connection;
                         if (!connection) {
                             return false;
@@ -281,7 +306,7 @@ export const withPlanEditorActions = (planner: PlannerContextData, handlers: Act
 
                         return !!(converter && converter.inspectComponentType);
                     },
-                    onClick(context, {connection}) {
+                    onClick(context, { connection }) {
                         if (connection) {
                             handlers.inspect({
                                 type: ItemType.CONNECTION,
@@ -295,6 +320,5 @@ export const withPlanEditorActions = (planner: PlannerContextData, handlers: Act
                 },
             ],
         };
-
     }, [planner, handlers]);
-}
+};

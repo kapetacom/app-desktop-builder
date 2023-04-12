@@ -13,11 +13,7 @@ import { Asset } from '@kapeta/ui-web-types';
 import { useList } from 'react-use';
 import { toClass } from '@kapeta/ui-web-utils';
 import { Plan } from '@kapeta/schemas';
-import {
-    showToasty,
-    SimpleLoader,
-    ToastType,
-} from '@kapeta/ui-web-components';
+import { showToasty, SimpleLoader, ToastType } from '@kapeta/ui-web-components';
 import { observer } from 'mobx-react-lite';
 import { useLocalStorage } from '../utils/localStorage';
 import { PlanView } from './PlanView';

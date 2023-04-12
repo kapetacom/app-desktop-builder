@@ -1,4 +1,4 @@
-import React, {useContext, useMemo, useState} from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import {
     Button,
     ButtonStyle,
@@ -14,15 +14,19 @@ import {
 
 import { BlockService } from '@kapeta/ui-web-context';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
-import {BlockInstance} from "@kapeta/schemas";
-import { BlockConfigurationData, PlannerContext, PlannerMode } from '@kapeta/ui-web-plan-editor';
+import { BlockInstance } from '@kapeta/schemas';
+import {
+    BlockConfigurationData,
+    PlannerContext,
+    PlannerMode,
+} from '@kapeta/ui-web-plan-editor';
 
 import './BlockConfigurationPanel.less';
 
 type Options = { [key: string]: string };
 
 interface Props {
-    instance?: BlockInstance|null;
+    instance?: BlockInstance | null;
     open: boolean;
     onClosed: () => void;
 }
@@ -70,7 +74,10 @@ export const BlockConfigurationPanel = (props: Props) => {
                     return uri.fullName === blockUri.fullName;
                 })
                 .forEach((block) => {
-                    opts[block.version] = block.version === 'local' ? 'Local Disk' : block.version;
+                    opts[block.version] =
+                        block.version === 'local'
+                            ? 'Local Disk'
+                            : block.version;
                 });
 
             setVersionOptions(opts);
@@ -90,18 +97,23 @@ export const BlockConfigurationPanel = (props: Props) => {
                 ...instance,
                 block: {
                     ...instance.block,
-                    ref: uri.id
+                    ref: uri.id,
                 },
-                name: data.name
+                name: data.name,
             };
         });
         props.onClosed();
-    }
+    };
 
     const readOnly = planner.mode !== PlannerMode.EDIT;
 
     return (
-        <SidePanel title={panelHeader()} size={PanelSize.large} open={props.open} onClose={props.onClosed}>
+        <SidePanel
+            title={panelHeader()}
+            size={PanelSize.large}
+            open={props.open}
+            onClose={props.onClosed}
+        >
             <SimpleLoader
                 loading={loading}
                 key={props.instance?.block.ref ?? 'unknown-block'}
@@ -109,10 +121,7 @@ export const BlockConfigurationPanel = (props: Props) => {
                 text="Loading details... Please wait"
             >
                 <div className="block-configuration-panel">
-                    <FormContainer
-                        initialValue={data}
-                        onSubmitData={onSave}
-                    >
+                    <FormContainer initialValue={data} onSubmitData={onSave}>
                         <FormField
                             name="name"
                             label="Instance name"
@@ -138,7 +147,13 @@ export const BlockConfigurationPanel = (props: Props) => {
                                 onClick={props.onClosed}
                                 text="Cancel"
                             />
-                            <Button width={70} disabled={readOnly} type={ButtonType.SUBMIT} style={ButtonStyle.PRIMARY} text="Save" />
+                            <Button
+                                width={70}
+                                disabled={readOnly}
+                                type={ButtonType.SUBMIT}
+                                style={ButtonStyle.PRIMARY}
+                                text="Save"
+                            />
                         </FormButtons>
                     </FormContainer>
                 </div>

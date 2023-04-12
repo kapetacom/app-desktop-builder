@@ -24,8 +24,7 @@ interface InnerBlockTypeProps {
 }
 
 const InnerBlockType = (props: InnerBlockTypeProps) => {
-    let BlockTypeComponent: ComponentType<BlockTypeProviderProps> | null =
-        null;
+    let BlockTypeComponent: ComponentType<BlockTypeProviderProps> | null = null;
 
     if (!props.kind) {
         return <div>Select block type</div>;

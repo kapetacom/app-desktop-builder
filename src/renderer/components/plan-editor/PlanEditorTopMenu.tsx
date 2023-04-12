@@ -6,7 +6,7 @@ import { showToasty, ToastType } from '@kapeta/ui-web-components';
 import './PlanEditorTopMenu.less';
 
 interface Props {
-    readonly: boolean
+    readonly: boolean;
     version: string;
     systemId: string;
 }
