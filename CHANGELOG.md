@@ -1,3 +1,10 @@
+# [0.1.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.0.6...v0.1.0) (2023-04-12)
+
+
+### Features
+
+* monitor instanceStatus for plan (KAP-521) ([5c29df1](https://github.com/kapetacom/app-desktop-builder/commit/5c29df188717a706286e2463cf41a881a5009f52))
+
 ## [0.0.6](https://github.com/kapetacom/app-desktop-builder/compare/v0.0.5...v0.0.6) (2023-03-01)
 
 
