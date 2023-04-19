@@ -73,7 +73,7 @@ export function ConsumerHeaderIcon() {
     </svg>;
 }
 
-export function getAssetTitle(asset: Asset): string {
+export function getAssetTitle(asset: Asset<any>): string {
     return getSchemaTitle(asset.data);
 }
 

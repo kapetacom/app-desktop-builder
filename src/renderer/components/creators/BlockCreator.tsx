@@ -30,6 +30,8 @@ const createNewBlock = () => {
     };
 };
 
+const noop = () => {};
+
 const selectableHandler = (file: FileInfo) => {
     return file.path.endsWith('/kapeta.yml');
 };
@@ -39,12 +41,12 @@ export const BlockCreator = (props: Props) => {
         <AssetCreator
             state={props.state}
             onStateChanged={props.onStateChanged}
-            onAssetAdded={props.onAssetAdded}
+            onAssetAdded={props.onAssetAdded ?? noop}
             skipFiles={props.files}
             title="Create new block..."
             createNewKind={createNewBlock}
             fileName="kapeta.yml"
-            onDone={props.onDone}
+            onDone={props.onDone ?? noop}
             fileSelectableHandler={selectableHandler}
             assetService={props.assetService}
             formRenderer={BlockForm}
