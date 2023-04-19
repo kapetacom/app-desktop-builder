@@ -61,3 +61,38 @@
         }
     }
 }
+
+.modal-plan-settings {
+
+    .panel-container {
+        height: 600px;
+    }
+
+    .panel-content,
+    .tab-container,
+    .form-container,
+    .tab-pages,
+    .tab-page {
+        height: 100%;
+    }
+
+    .form-container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .configuration-editor {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        height: ~'calc(100% - 20px)';
+    }
+
+    p.info {
+        font-size: 12px;
+        background-color: @gray-light;
+        padding:10px;
+        margin: 0 0 10px;
+    }
+
+}
