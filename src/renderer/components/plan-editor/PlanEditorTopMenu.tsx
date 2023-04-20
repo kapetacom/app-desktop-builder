@@ -17,7 +17,7 @@ import {
     ButtonStyle, useFormContextField, DSLConverters, DSL_LANGUAGE_ID, DSLEntity
 } from '@kapeta/ui-web-components';
 import './PlanEditorTopMenu.less';
-import {Plan} from "@kapeta/schemas/dist/cjs";
+import {Plan} from "@kapeta/schemas";
 import {PlannerContext} from "@kapeta/ui-web-plan-editor";
 import {PlanForm} from "../forms/PlanForm";
 

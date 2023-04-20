@@ -20,7 +20,7 @@ interface MiniPlanProps {
     systemId: string
 }
 
-const MiniPlan = withPlannerContext(forwardRef((props: MiniPlanProps, ref) => {
+const MiniPlan = withPlannerContext(forwardRef((props: MiniPlanProps, ref: ForwardedRef<HTMLDivElement>) => {
     return (
         <div ref={ref} >
             Plan goes here
@@ -125,8 +125,6 @@ export const PlanOverview = (props: Props) => {
                             return onPlanRemove(asset);
                         },
                     });
-
-                    console.log('asset', asset);
 
                     return (
                         <PlanOverviewItem
