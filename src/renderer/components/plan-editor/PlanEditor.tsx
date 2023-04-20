@@ -1,7 +1,7 @@
 import {parseKapetaUri} from '@kapeta/nodejs-utils';
 import {Planner2, PlannerContext, PlannerMode, withPlannerContext} from "@kapeta/ui-web-plan-editor";
 import {PlanEditorTopMenu} from "./PlanEditorTopMenu";
-import React, {forwardRef, MutableRefObject, useContext, useMemo, useState} from "react";
+import React, {ForwardedRef, forwardRef, useContext, useMemo, useState} from "react";
 import {withPlanEditorActions} from "./PlanEditorActions";
 import {PlanEditorToolBoxPanel} from "./panels/toolbox/PlanEditorToolBoxPanel";
 import {ResourceTypeProvider} from "@kapeta/ui-web-context";
@@ -13,9 +13,10 @@ import './PlanEditor.less'
 
 interface Props {
     systemId: string
+    ref: ForwardedRef<HTMLDivElement>
 }
 
-export const PlanEditor = withPlannerContext(forwardRef((props: Props, ref: MutableRefObject<HTMLDivElement>) => {
+export const PlanEditor = withPlannerContext(forwardRef((props: Props, ref: ForwardedRef<HTMLDivElement>) => {
     const uri = parseKapetaUri(props.systemId);
     const planner = useContext(PlannerContext);
 
@@ -39,8 +40,7 @@ export const PlanEditor = withPlannerContext(forwardRef((props: Props, ref: Muta
     const readonly = planner.mode !== PlannerMode.EDIT;
 
     return (
-        <div className={'plan-editor'}
-             ref={ref}>
+        <div className={'plan-editor'} ref={ref}>
             <PlanEditorTopMenu
                 readonly={readonly}
                 version={uri.version}
@@ -53,7 +53,7 @@ export const PlanEditor = withPlannerContext(forwardRef((props: Props, ref: Muta
             />
 
             <BlockConfigurationPanel
-                instance={configInfo?.item.instance}
+                instance={configInfo?.item.instance ?? null}
                 open={!!configInfo}
                 onClosed={() => setConfigInfo(null)}
             />

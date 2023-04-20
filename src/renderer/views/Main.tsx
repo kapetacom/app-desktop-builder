@@ -1,103 +1,65 @@
-import React from 'react';
-import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+import React, {useEffect} from 'react';
+import {Tab, TabList, TabPanel, Tabs} from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import './Main.less';
-import {
-    PlannerModelRef,
-    PlannerModelReader,
-} from '@kapeta/ui-web-plan-editor';
-import PlanOverview from 'renderer/components/plan-overview/PlanOverview';
+import {PlanOverview} from '../components/plan-overview/PlanOverview';
 
-import { BlockService, PlannerService } from '@kapeta/ui-web-context';
-import { Asset } from '@kapeta/ui-web-types';
-import { useList } from 'react-use';
-import { toClass } from '@kapeta/ui-web-utils';
-import { Plan } from '@kapeta/schemas';
+import {Asset} from '@kapeta/ui-web-types';
+import {useAsyncFn} from 'react-use';
+import {toClass} from '@kapeta/ui-web-utils';
+import {Plan} from '@kapeta/schemas';
 import {
-    showToasty,
     SimpleLoader,
-    ToastType,
 } from '@kapeta/ui-web-components';
-import { observer } from 'mobx-react-lite';
-import { useLocalStorage } from '../utils/localStorage';
-import { PlanView } from './PlanView';
 
-export default observer(function Main() {
+import {useLocalStorage} from '../utils/localStorage';
+import {PlanView} from './PlanView';
+import {PlannerService} from "@kapeta/ui-web-context";
+import {getAssetTitle} from "../components/plan-editor/helpers";
+
+export default function Main() {
     const [activeTab, setActiveTab] = useLocalStorage<number>(
         '$main_activeTab',
         0
     );
+
     const [openPlanRefs, setOpenPlanRefs] = useLocalStorage<string[]>(
         '$main_openPlans',
         []
-    ); // might need manual serialization
-    const [
-        planModelRefs,
-        {
-            set: setPlanModels,
-            push: pushPlanModels,
-            removeAt: removePlanModels,
-        },
-    ] = useList<PlannerModelRef>([]);
-    const [error, setError] = useLocalStorage('$main_error', '');
+    );
 
-    const openPlans: PlannerModelRef[] = [];
-    openPlanRefs.forEach((ref) => {
-        const modelRef = planModelRefs.find((model) => model.ref === ref);
-        if (modelRef) {
-            openPlans.push(modelRef);
-        }
-    });
 
-    const reader: PlannerModelReader = new PlannerModelReader(BlockService);
-
-    const loadAsset = async (
-        planAsset: Asset<Plan>
-    ): Promise<PlannerModelRef> => {
-        return {
-            ref: planAsset.ref,
-            version: planAsset.version,
-            model: await reader.load(planAsset.data, planAsset.ref),
-        };
-    };
-
-    const loadPlans = async () => {
-        let planAssets: Asset<Plan>[] = [];
+    let [planAssets, reloadPlans] = useAsyncFn(async () => {
+        console.log('Loading plans');
         try {
             setError('');
-            planAssets = await PlannerService.list();
-        } catch (e: unknown) {
-            setError(`Failed to load plans: ${(e as Error).message}`);
-            return;
+            return PlannerService.list();
+        } catch (e: any) {
+            console.log('Failed to load plans', e);
+            setError(`Failed to load plans: ${e.message}`);
         }
+        return [];
+    }, []);
 
-        const planPromises: Promise<PlannerModelRef>[] =
-            planAssets.map(loadAsset);
+    useEffect(() => {
+        reloadPlans();
+    }, []);
 
-        try {
-            const planListResults: PromiseSettledResult<PlannerModelRef>[] =
-                await Promise.allSettled(planPromises);
-            const planList: PlannerModelRef[] = [];
-            planListResults.forEach((plan) => {
-                if (plan.status === 'fulfilled') {
-                    planList.push(plan.value);
-                } else {
-                    console.error('Failed to load plan', plan.reason);
-                    showToasty({
-                        title: 'Failed to load plan',
-                        type: ToastType.DANGER,
-                        message: `${plan.reason}`,
-                    });
-                }
-            });
-            setPlanModels(planList);
-        } catch (e: unknown) {
-            setError(`Failed to load plans models: ${(e as Error).message}`);
-        }
-    };
+    const [error, setError] = useLocalStorage('$main_error', '');
 
-    const onPlanSelected = (plan: PlannerModelRef) => {
-        const items = openPlans.filter((openPlan: PlannerModelRef) => {
+    const openPlans: Asset<Plan>[] = [];
+    if (planAssets.value) {
+        console.log('planAssets.value', planAssets.value);
+        openPlanRefs.forEach((ref) => {
+            const assetRefs = planAssets.value.find((asset) => asset.ref === ref);
+            if (assetRefs) {
+                openPlans.push(assetRefs);
+            }
+        });
+    }
+
+    const onPlanSelected = (plan: Asset<Plan>) => {
+        const items = openPlans.filter((openPlan: Asset<Plan>) => {
             return openPlan.ref === plan.ref;
         });
         const exists = items.length > 0;
@@ -113,15 +75,12 @@ export default observer(function Main() {
     };
 
     const onAssetAdded = async (asset: Asset<Plan>) => {
-        console.log('Loading asset', asset);
-        const plannerModelRef = await loadAsset(asset);
-        console.log('Loaded asset', plannerModelRef);
-        pushPlanModels(plannerModelRef);
-        onPlanSelected(plannerModelRef);
+        await reloadPlans();
+        onPlanSelected(asset);
     };
 
-    const onTabClosed = (plan: PlannerModelRef) => {
-        const newOpenPlans = openPlans.filter((openPlan: PlannerModelRef) => {
+    const onTabClosed = (plan: Asset<Plan>) => {
+        const newOpenPlans = openPlans.filter((openPlan: Asset<Plan>) => {
             return openPlan.ref !== plan.ref;
         });
         setOpenPlanRefs(newOpenPlans.map((p) => p.ref));
@@ -136,7 +95,7 @@ export default observer(function Main() {
     });
 
     return (
-        <SimpleLoader loader={loadPlans} text="Loading plans...">
+        <SimpleLoader loading={planAssets.loading} text="Loading plans...">
             <div className="main-container">
                 {!error && (
                     <Tabs
@@ -148,7 +107,7 @@ export default observer(function Main() {
                     >
                         <TabList>
                             {openPlans.map(
-                                (plan: PlannerModelRef, index: number) => {
+                                (plan: Asset<Plan>, index: number) => {
                                     return (
                                         <Tab key={plan.ref}>
                                             <div
@@ -159,16 +118,16 @@ export default observer(function Main() {
                                                         : ''
                                                 }
                                             >
-                                                {plan.model.name} [
+                                                {getAssetTitle(plan)} [
                                                 {plan.version}]{' '}
                                                 <button
-                                                    style={{ all: 'unset' }}
+                                                    style={{all: 'unset'}}
                                                     type="button"
                                                     onClick={() => {
                                                         onTabClosed(plan);
                                                     }}
                                                 >
-                                                    <i className="fal fa-times close-plan" />
+                                                    <i className="fal fa-times close-plan"/>
                                                 </button>
                                             </div>
                                         </Tab>
@@ -178,11 +137,11 @@ export default observer(function Main() {
 
                             <Tab>
                                 {' '}
-                                <i className="fa fa-plus add-plan" />
+                                <i className="fa fa-plus add-plan"/>
                             </Tab>
                         </TabList>
                         {openPlans.map(
-                            (plan: PlannerModelRef, index: number) => {
+                            (plan: Asset<Plan>, index: number) => {
                                 return (
                                     <TabPanel key={plan.ref}>
                                         <PlanView
@@ -201,20 +160,11 @@ export default observer(function Main() {
                                 onPlanSelected={onPlanSelected}
                                 onAssetAdded={onAssetAdded}
                                 size={400}
-                                onPlanChanged={loadPlans}
+                                onPlanChanged={reloadPlans}
                                 itemDeleted={(plan) => {
                                     onTabClosed(plan);
-                                    removePlanModels(
-                                        planModelRefs.findIndex(
-                                            (deletedPlan: PlannerModelRef) => {
-                                                return (
-                                                    deletedPlan.ref === plan.ref
-                                                );
-                                            }
-                                        )
-                                    );
                                 }}
-                                plans={planModelRefs || []}
+                                plans={planAssets.value || []}
                             />
                         </TabPanel>
                     </Tabs>
@@ -223,4 +173,4 @@ export default observer(function Main() {
             </div>
         </SimpleLoader>
     );
-});
+};

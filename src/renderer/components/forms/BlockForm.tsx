@@ -98,7 +98,7 @@ export const BlockForm = (props: Props) => {
                 help="Give your block a human-friendly title"
             />
 
-            <InnerBlockType kind={kindField.get()} creating={props.creating} />
+            <InnerBlockType kind={kindField.get()} creating={props.creating ?? false} />
         </div>
     );
 };

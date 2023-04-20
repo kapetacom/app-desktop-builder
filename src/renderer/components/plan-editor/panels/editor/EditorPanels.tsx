@@ -261,18 +261,10 @@ export const EditorPanels: React.FC<Props> = (props) => {
                 planner.updateBlockDefinition(props.info.item.instance.block.ref, data as BlockDefinition);
                 break;
             case ItemType.RESOURCE:
-                const consumerIx = props.info.item.block.spec.consumers?.indexOf(props.info.item.resource) ?? -1;
-                const providerIx = props.info.item.block.spec.providers?.indexOf(props.info.item.resource) ?? -1;
-                const block = cloneDeep(props.info.item.block) as BlockDefinition;
-                if (consumerIx > -1) {
-                    block.spec.consumers![consumerIx] = data as Resource;
-                } else if (providerIx > -1) {
-                    block.spec.providers![providerIx] = data as Resource;
-                } else {
-                    console.warn('Could not find resource in block');
-                    return;
-                }
-                planner.updateBlockDefinition(props.info.item.ref, block);
+                const resource = props.info.item.resource as Resource;
+                const role = props.info.item.block?.spec?.consumers?.indexOf(resource) > -1 ?
+                    ResourceRole.CONSUMES : ResourceRole.PROVIDES;
+                planner.updateResource(props.info.item.ref, resource.metadata.name, role, data as Resource);
                 break;
         }
         props.onClosed();
