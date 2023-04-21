@@ -1,9 +1,5 @@
 import { createRoot } from 'react-dom/client';
-import {
-    Checkbox,
-    LoaderType,
-    SimpleLoader,
-} from '@kapeta/ui-web-components';
+import { Checkbox, LoaderType, SimpleLoader } from '@kapeta/ui-web-components';
 import { StatusCheck } from '../main/SplashScreenStatus';
 
 const root = createRoot(document.getElementById('root')!);

@@ -24,8 +24,7 @@ interface InnerBlockTypeProps {
 }
 
 const InnerBlockType = (props: InnerBlockTypeProps) => {
-    let BlockTypeComponent: ComponentType<BlockTypeProviderProps> | null =
-        null;
+    let BlockTypeComponent: ComponentType<BlockTypeProviderProps> | null = null;
 
     if (!props.kind) {
         return <div>Select block type</div>;
@@ -98,7 +97,10 @@ export const BlockForm = (props: Props) => {
                 help="Give your block a human-friendly title"
             />
 
-            <InnerBlockType kind={kindField.get()} creating={props.creating ?? false} />
+            <InnerBlockType
+                kind={kindField.get()}
+                creating={props.creating ?? false}
+            />
         </div>
     );
 };

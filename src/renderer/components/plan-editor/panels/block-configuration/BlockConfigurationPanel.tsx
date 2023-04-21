@@ -1,4 +1,4 @@
-import React, {useContext, useMemo, useState} from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import {
     Button,
     ButtonStyle,
@@ -10,19 +10,32 @@ import {
     PanelSize,
     SidePanel,
     SimpleLoader,
+    TabContainer,
+    TabPage,
+    EntityEditorForm,
 } from '@kapeta/ui-web-components';
 
 import { BlockService } from '@kapeta/ui-web-context';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
-import {BlockInstance} from "@kapeta/schemas";
-import { BlockConfigurationData, PlannerContext, PlannerMode } from '@kapeta/ui-web-plan-editor';
+import { BlockInstance } from '@kapeta/schemas';
+import {
+    BlockConfigurationData,
+    PlannerContext,
+    PlannerMode,
+} from '@kapeta/ui-web-plan-editor';
 
 import './BlockConfigurationPanel.less';
+import { useAsyncFn } from 'react-use';
+import {
+    getInstanceConfig,
+    setInstanceConfig,
+} from '../../../../api/LocalConfigService';
 
 type Options = { [key: string]: string };
 
 interface Props {
-    instance?: BlockInstance|null;
+    systemId: string;
+    instance?: BlockInstance | null;
     open: boolean;
     onClosed: () => void;
 }
@@ -40,19 +53,34 @@ export const BlockConfigurationPanel = (props: Props) => {
         return `Configure ${props.instance?.name}`;
     };
 
+    const [instanceConfig, reloadConfig] = useAsyncFn(async () => {
+        if (!props.instance?.id) {
+            return undefined;
+        }
+        return getInstanceConfig(props.systemId, props.instance!.id);
+    }, [props.systemId, props.instance?.id]);
+
+    useEffect(() => {
+        if (props.open) {
+            reloadConfig();
+        }
+    }, [props.systemId, planner.plan, props.open]);
+
     const data: BlockConfigurationData = useMemo<BlockConfigurationData>(() => {
         if (!props.instance) {
             return {
                 version: '',
                 name: '',
+                configuration: {},
             };
         }
         const uri = parseKapetaUri(props.instance.block.ref);
         return {
             version: uri.version,
             name: props.instance.name,
+            configuration: instanceConfig.value,
         };
-    }, [props.instance]);
+    }, [props.instance, instanceConfig.value]);
 
     const loader = async () => {
         if (!props.instance) {
@@ -70,7 +98,10 @@ export const BlockConfigurationPanel = (props: Props) => {
                     return uri.fullName === blockUri.fullName;
                 })
                 .forEach((block) => {
-                    opts[block.version] = block.version === 'local' ? 'Local Disk' : block.version;
+                    opts[block.version] =
+                        block.version === 'local'
+                            ? 'Local Disk'
+                            : block.version;
                 });
 
             setVersionOptions(opts);
@@ -79,10 +110,11 @@ export const BlockConfigurationPanel = (props: Props) => {
         }
     };
 
-    const onSave = (data: BlockConfigurationData) => {
+    const onSave = async (data: BlockConfigurationData) => {
         if (!props.instance?.id) {
             return;
         }
+
         planner.updateBlockInstance(props.instance.id, (instance) => {
             const uri = parseKapetaUri(instance.block.ref);
             uri.version = data.version;
@@ -90,18 +122,38 @@ export const BlockConfigurationPanel = (props: Props) => {
                 ...instance,
                 block: {
                     ...instance.block,
-                    ref: uri.id
+                    ref: uri.id,
                 },
-                name: data.name
+                name: data.name,
             };
         });
+
+        await setInstanceConfig(
+            props.systemId,
+            props.instance.id,
+            data.configuration
+        );
+        await reloadConfig();
+
         props.onClosed();
-    }
+    };
 
     const readOnly = planner.mode !== PlannerMode.EDIT;
 
+    const block = useMemo(() => {
+        if (!props.instance?.block.ref) {
+            return undefined;
+        }
+        return planner.getBlockByRef(props.instance.block.ref);
+    }, [props.instance?.block.ref]);
+
     return (
-        <SidePanel title={panelHeader()} size={PanelSize.large} open={props.open} onClose={props.onClosed}>
+        <SidePanel
+            title={panelHeader()}
+            size={PanelSize.large}
+            open={props.open}
+            onClose={props.onClosed}
+        >
             <SimpleLoader
                 loading={loading}
                 key={props.instance?.block.ref ?? 'unknown-block'}
@@ -109,26 +161,40 @@ export const BlockConfigurationPanel = (props: Props) => {
                 text="Loading details... Please wait"
             >
                 <div className="block-configuration-panel">
-                    <FormContainer
-                        initialValue={data}
-                        onSubmitData={onSave}
-                    >
-                        <FormField
-                            name="name"
-                            label="Instance name"
-                            help="This related only to the instance of the block and not the block itself."
-                            readOnly={readOnly}
-                            type={FormFieldType.STRING}
-                        />
+                    <FormContainer initialValue={data} onSubmitData={onSave}>
+                        <TabContainer>
+                            <TabPage id={'general'} title={'General'}>
+                                <FormField
+                                    name="name"
+                                    label="Instance name"
+                                    help="This related only to the instance of the block and not the block itself."
+                                    readOnly={readOnly}
+                                    type={FormFieldType.STRING}
+                                />
 
-                        <FormField
-                            name="version"
-                            label="Version"
-                            options={versionOptions}
-                            help="The current version used by this plan"
-                            readOnly={readOnly}
-                            type={FormFieldType.ENUM}
-                        />
+                                <FormField
+                                    name="version"
+                                    label="Version"
+                                    options={versionOptions}
+                                    help="The current version used by this plan"
+                                    readOnly={readOnly}
+                                    type={FormFieldType.ENUM}
+                                />
+                            </TabPage>
+                            {block?.spec.configuration?.types?.length > 0 && (
+                                <TabPage
+                                    id={'configuration'}
+                                    title={'Configuration'}
+                                >
+                                    <EntityEditorForm
+                                        entities={
+                                            block?.spec.configuration?.types
+                                        }
+                                        name={'configuration'}
+                                    />
+                                </TabPage>
+                            )}
+                        </TabContainer>
 
                         <FormButtons>
                             <Button
@@ -138,7 +204,13 @@ export const BlockConfigurationPanel = (props: Props) => {
                                 onClick={props.onClosed}
                                 text="Cancel"
                             />
-                            <Button width={70} disabled={readOnly} type={ButtonType.SUBMIT} style={ButtonStyle.PRIMARY} text="Save" />
+                            <Button
+                                width={70}
+                                disabled={readOnly}
+                                type={ButtonType.SUBMIT}
+                                style={ButtonStyle.PRIMARY}
+                                text="Save"
+                            />
                         </FormButtons>
                     </FormContainer>
                 </div>

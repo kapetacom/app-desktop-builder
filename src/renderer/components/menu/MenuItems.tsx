@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-    toClass,
-    createHexagonPath,
-    Orientation,
-} from '@kapeta/ui-web-utils';
+import { toClass, createHexagonPath, Orientation } from '@kapeta/ui-web-utils';
 import { SVGText } from '@kapeta/ui-web-components';
 
 import { MenuItem } from './MenuDataModel';

@@ -1,7 +1,7 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 
-import {toClass} from '@kapeta/ui-web-utils';
-import {InstanceEventType, InstanceService} from '@kapeta/ui-web-context';
+import { toClass } from '@kapeta/ui-web-utils';
+import { InstanceEventType, InstanceService } from '@kapeta/ui-web-context';
 import {
     FormContainer,
     Modal,
@@ -12,48 +12,85 @@ import {
     ToastType,
     Button,
     ConfigurationEditor,
+    EntityEditor,
     FormButtons,
     ButtonType,
-    ButtonStyle, useFormContextField, DSLConverters, DSL_LANGUAGE_ID, DSLEntity
+    ButtonStyle,
+    useFormContextField,
+    DSLConverters,
+    DSL_LANGUAGE_ID,
+    DSLEntity,
 } from '@kapeta/ui-web-components';
 import './PlanEditorTopMenu.less';
-import {Plan} from "@kapeta/schemas";
-import {PlannerContext} from "@kapeta/ui-web-plan-editor";
-import {PlanForm} from "../forms/PlanForm";
+import { Entity, Plan } from '@kapeta/schemas';
+import { PlannerContext } from '@kapeta/ui-web-plan-editor';
+import { PlanForm } from '../forms/PlanForm';
+import { useAsync, useAsyncFn } from 'react-use';
+import {
+    getInstanceConfig,
+    getPlanConfig,
+    setPlanConfig,
+} from '../../api/LocalConfigService';
 
-
-const ConfigEditor = () => {
+const ConfigSchemaEditor = () => {
     const configurationField = useFormContextField('spec.configuration');
     const configuration = configurationField.get();
     const result = {
         code: configuration?.source?.value || '',
-        entities: configuration?.types?.map ? configuration?.types?.map(DSLConverters.fromSchemaEntity) : []
+        entities: configuration?.types?.map
+            ? configuration?.types?.map(DSLConverters.fromSchemaEntity)
+            : [],
     };
 
-    const setConfiguration = (code:string, results: DSLEntity[]) =>  {
+    const setConfiguration = (code: string, results: DSLEntity[]) => {
         const types = results.map(DSLConverters.toSchemaEntity);
         const configuration = {
             types,
             source: {
                 type: DSL_LANGUAGE_ID,
-                value: code
-            }
+                value: code,
+            },
         };
         configurationField.set(configuration);
-    }
+    };
 
     return (
-        <ConfigurationEditor value={result} onChange={(result) => {
-            result.entities && setConfiguration(result.code, result.entities);
-        }} />
-    )
+        <ConfigurationEditor
+            value={result}
+            onChange={(result) => {
+                result.entities &&
+                    setConfiguration(result.code, result.entities);
+            }}
+        />
+    );
+};
+
+interface ConfigValueProps {
+    systemId: string;
 }
 
+const ConfigValueEditor = (props: ConfigValueProps) => {
+    const configurationSchemaField = useFormContextField('spec.configuration');
+    const configurationField = useFormContextField('configuration');
+
+    const configurationSchema = configurationSchemaField.get();
+
+    return (
+        <EntityEditor
+            entities={configurationSchema.types ?? []}
+            value={configurationField.get({})}
+            onChange={async (value) => {
+                configurationField.set(value);
+            }}
+        />
+    );
+};
+
 interface Props {
-    readonly: boolean
+    readonly: boolean;
     version: string;
     systemId: string;
-    plan: Plan
+    plan: Plan;
 }
 
 export const PlanEditorTopMenu = (props: Props) => {
@@ -103,6 +140,26 @@ export const PlanEditorTopMenu = (props: Props) => {
         );
     }, [props.systemId]);
 
+    const [planConfig, reloadConfig] = useAsyncFn(async () => {
+        if (!showSettings) {
+            return {};
+        }
+        return getPlanConfig(props.systemId);
+    }, [props.systemId, showSettings]);
+
+    const data = useMemo(() => {
+        return {
+            ...planner.plan,
+            configuration: planConfig.value,
+        };
+    }, [planConfig.value, planner.plan]);
+
+    useEffect(() => {
+        if (showSettings) {
+            reloadConfig();
+        }
+    }, [props.systemId, planner.plan, showSettings]);
+
     return (
         <div className={containerClass}>
             <div className="buttons">
@@ -137,7 +194,7 @@ export const PlanEditorTopMenu = (props: Props) => {
 
                 <button
                     type="button"
-                    onClick={ () => {
+                    onClick={() => {
                         setShowSettings(true);
                     }}
                 >
@@ -145,25 +202,59 @@ export const PlanEditorTopMenu = (props: Props) => {
                     <span>Settings</span>
                 </button>
             </div>
-            <Modal title={'Settings'} size={ModalSize.large}
-                   open={showSettings}
-                   className={'modal-plan-settings'}
-                   onClose={() => setShowSettings(false)}>
-                <FormContainer initialValue={planner.plan}
-                               onSubmitData={(data) => {
-                    planner.updatePlanMetadata(data.metadata, data.spec.configuration);
-                    setShowSettings(false);
-                }}>
+            <Modal
+                title={'Settings'}
+                size={ModalSize.large}
+                open={showSettings}
+                className={'modal-plan-settings'}
+                onClose={() => setShowSettings(false)}
+            >
+                <FormContainer
+                    initialValue={data}
+                    onSubmitData={async (data) => {
+                        planner.updatePlanMetadata(
+                            data.metadata,
+                            data.spec.configuration
+                        );
+                        await setPlanConfig(props.systemId, data.configuration);
+                        setShowSettings(false);
+                    }}
+                >
                     <TabContainer defaultTab={'general'}>
                         <TabPage id={'general'} title={'General'}>
                             <PlanForm />
                         </TabPage>
-                        <TabPage id={'configuration'} title={'Configuration'}>
-                            <div className={'configuration-editor'}>
-                                <p className='info'>Define configuration data types for this plan</p>
-                                <ConfigEditor />
-                            </div>
-                        </TabPage>
+                        {planner.plan?.spec.configuration?.types?.length >
+                            0 && (
+                            <TabPage
+                                id={'configuration'}
+                                title={'Configuration'}
+                            >
+                                <div className={'configuration-editor'}>
+                                    <p className="info">
+                                        Define configuration locally for this
+                                        plan
+                                    </p>
+                                    <ConfigValueEditor
+                                        systemId={props.systemId}
+                                    />
+                                </div>
+                            </TabPage>
+                        )}
+                        {!props.readonly && (
+                            <TabPage
+                                id={'config-schema'}
+                                title={'Configuration Schema'}
+                            >
+                                <div className={'configuration-schema-editor'}>
+                                    <p className="info">
+                                        Define configuration data types for this
+                                        plan
+                                    </p>
+                                    <ConfigSchemaEditor />
+                                </div>
+                            </TabPage>
+                        )}
                     </TabContainer>
                     <FormButtons>
                         <Button
@@ -175,7 +266,12 @@ export const PlanEditorTopMenu = (props: Props) => {
                             }}
                             text="Cancel"
                         />
-                        <Button width={70} type={ButtonType.SUBMIT} style={ButtonStyle.PRIMARY} text="Save" />
+                        <Button
+                            width={70}
+                            type={ButtonType.SUBMIT}
+                            style={ButtonStyle.PRIMARY}
+                            text="Save"
+                        />
                     </FormButtons>
                 </FormContainer>
             </Modal>

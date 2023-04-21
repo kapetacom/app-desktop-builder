@@ -1,32 +1,34 @@
-import React, {ForwardedRef, forwardRef, useState} from 'react';
+import React, { ForwardedRef, forwardRef, useState } from 'react';
 
-import {AssetService, BlockService,} from '@kapeta/ui-web-context';
-import {showDelete, showToasty, ToastType,} from '@kapeta/ui-web-components';
+import { AssetService, BlockService } from '@kapeta/ui-web-context';
+import { showDelete, showToasty, ToastType } from '@kapeta/ui-web-components';
 
-import {Planner2, PlannerMode, withPlannerContext,} from '@kapeta/ui-web-plan-editor';
+import {
+    Planner2,
+    PlannerMode,
+    withPlannerContext,
+} from '@kapeta/ui-web-plan-editor';
 
-import {Asset} from '@kapeta/ui-web-types';
+import { Asset } from '@kapeta/ui-web-types';
 import PlanOverviewPlaceHolder from './PlanOverviewPlaceHolder';
-import {MenuItem} from '../menu/MenuDataModel';
-import {PlanOverviewItem} from './PlanOverviewItem';
-import {PlanOverviewTopBar} from './PlanOverviewTopBar';
+import { MenuItem } from '../menu/MenuDataModel';
+import { PlanOverviewItem } from './PlanOverviewItem';
+import { PlanOverviewTopBar } from './PlanOverviewTopBar';
 
 import './PlanOverview.less';
-import {Plan} from "@kapeta/schemas";
-import {useAsync} from "react-use";
-import {getAssetTitle} from "../plan-editor/helpers";
+import { Plan } from '@kapeta/schemas';
+import { useAsync } from 'react-use';
+import { getAssetTitle } from '../plan-editor/helpers';
 
 interface MiniPlanProps {
-    systemId: string
+    systemId: string;
 }
 
-const MiniPlan = withPlannerContext(forwardRef((props: MiniPlanProps, ref: ForwardedRef<HTMLDivElement>) => {
-    return (
-        <div ref={ref} >
-            Plan goes here
-        </div>
-    );
-}));
+const MiniPlan = withPlannerContext(
+    forwardRef((props: MiniPlanProps, ref: ForwardedRef<HTMLDivElement>) => {
+        return <div ref={ref}>Plan goes here</div>;
+    })
+);
 
 interface Props {
     plans: Asset<Plan>[];
@@ -67,24 +69,22 @@ export const PlanOverview = (props: Props) => {
                 message: `Deleted ${getAssetTitle(plan)} from your plan list`,
                 type: ToastType.ALERT,
             });
-
         } catch (e) {
             return false;
         }
         return true;
     };
 
-
     const onPlanCreated = (asset?: Asset) => {
         props.onPlanChanged && props.onPlanChanged();
         if (asset && props.onAssetAdded) {
             props.onAssetAdded(asset);
         }
-    }
+    };
 
     if (props.plans.length < 1) {
         return (
-            <div style={{position: 'relative'}}>
+            <div style={{ position: 'relative' }}>
                 <PlanOverviewTopBar
                     onDone={(asset) => {
                         onPlanCreated(asset);
@@ -96,8 +96,8 @@ export const PlanOverview = (props: Props) => {
                 <PlanOverviewPlaceHolder>
                     <p>
                         {' '}
-                        No plans found please open existing plans or create
-                        a new one{' '}
+                        No plans found please open existing plans or create a
+                        new one{' '}
                     </p>
                 </PlanOverviewPlaceHolder>
             </div>
@@ -105,7 +105,7 @@ export const PlanOverview = (props: Props) => {
     }
 
     return (
-        <div style={{position: 'relative'}}>
+        <div style={{ position: 'relative' }}>
             <PlanOverviewTopBar
                 onDone={(asset) => {
                     onPlanCreated(asset);
@@ -136,21 +136,22 @@ export const PlanOverview = (props: Props) => {
                             menuItems={menuItem}
                             onClick={() => {
                                 props.onPlanSelected &&
-                                props.onPlanSelected(asset);
+                                    props.onPlanSelected(asset);
                             }}
                             toggleMenu={(indexIn: number) => {
                                 setOpenMenu(indexIn);
                             }}
                         >
-                            <MiniPlan systemId={asset.ref}
-                                      plan={asset.data}
-                                      blockAssets={blockAssets.value ?? []}
-                                      mode={PlannerMode.VIEW}/>
-
+                            <MiniPlan
+                                systemId={asset.ref}
+                                plan={asset.data}
+                                blockAssets={blockAssets.value ?? []}
+                                mode={PlannerMode.VIEW}
+                            />
                         </PlanOverviewItem>
                     );
                 })}
             </div>
         </div>
     );
-}
+};

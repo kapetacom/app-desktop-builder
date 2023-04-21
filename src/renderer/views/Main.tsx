@@ -1,21 +1,19 @@
-import React, {useEffect} from 'react';
-import {Tab, TabList, TabPanel, Tabs} from 'react-tabs';
+import React, { useEffect } from 'react';
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import './Main.less';
-import {PlanOverview} from '../components/plan-overview/PlanOverview';
+import { PlanOverview } from '../components/plan-overview/PlanOverview';
 
-import {Asset} from '@kapeta/ui-web-types';
-import {useAsyncFn} from 'react-use';
-import {toClass} from '@kapeta/ui-web-utils';
-import {Plan} from '@kapeta/schemas';
-import {
-    SimpleLoader,
-} from '@kapeta/ui-web-components';
+import { Asset } from '@kapeta/ui-web-types';
+import { useAsyncFn } from 'react-use';
+import { toClass } from '@kapeta/ui-web-utils';
+import { Plan } from '@kapeta/schemas';
+import { SimpleLoader } from '@kapeta/ui-web-components';
 
-import {useLocalStorage} from '../utils/localStorage';
-import {PlanView} from './PlanView';
-import {PlannerService} from "@kapeta/ui-web-context";
-import {getAssetTitle} from "../components/plan-editor/helpers";
+import { useLocalStorage } from '../utils/localStorage';
+import { PlanView } from './PlanView';
+import { PlannerService } from '@kapeta/ui-web-context';
+import { getAssetTitle } from '../components/plan-editor/helpers';
 
 export default function Main() {
     const [activeTab, setActiveTab] = useLocalStorage<number>(
@@ -27,7 +25,6 @@ export default function Main() {
         '$main_openPlans',
         []
     );
-
 
     let [planAssets, reloadPlans] = useAsyncFn(async () => {
         console.log('Loading plans');
@@ -51,7 +48,9 @@ export default function Main() {
     if (planAssets.value) {
         console.log('planAssets.value', planAssets.value);
         openPlanRefs.forEach((ref) => {
-            const assetRefs = planAssets.value.find((asset) => asset.ref === ref);
+            const assetRefs = planAssets.value.find(
+                (asset) => asset.ref === ref
+            );
             if (assetRefs) {
                 openPlans.push(assetRefs);
             }
@@ -121,13 +120,13 @@ export default function Main() {
                                                 {getAssetTitle(plan)} [
                                                 {plan.version}]{' '}
                                                 <button
-                                                    style={{all: 'unset'}}
+                                                    style={{ all: 'unset' }}
                                                     type="button"
                                                     onClick={() => {
                                                         onTabClosed(plan);
                                                     }}
                                                 >
-                                                    <i className="fal fa-times close-plan"/>
+                                                    <i className="fal fa-times close-plan" />
                                                 </button>
                                             </div>
                                         </Tab>
@@ -137,24 +136,22 @@ export default function Main() {
 
                             <Tab>
                                 {' '}
-                                <i className="fa fa-plus add-plan"/>
+                                <i className="fa fa-plus add-plan" />
                             </Tab>
                         </TabList>
-                        {openPlans.map(
-                            (plan: Asset<Plan>, index: number) => {
-                                return (
-                                    <TabPanel key={plan.ref}>
-                                        <PlanView
-                                            systemId={
-                                                openPlans[activeTab]
-                                                    ? openPlans[activeTab].ref
-                                                    : ''
-                                            }
-                                        />
-                                    </TabPanel>
-                                );
-                            }
-                        )}
+                        {openPlans.map((plan: Asset<Plan>, index: number) => {
+                            return (
+                                <TabPanel key={plan.ref}>
+                                    <PlanView
+                                        systemId={
+                                            openPlans[activeTab]
+                                                ? openPlans[activeTab].ref
+                                                : ''
+                                        }
+                                    />
+                                </TabPanel>
+                            );
+                        })}
                         <TabPanel>
                             <PlanOverview
                                 onPlanSelected={onPlanSelected}
@@ -173,4 +170,4 @@ export default function Main() {
             </div>
         </SimpleLoader>
     );
-};
+}
