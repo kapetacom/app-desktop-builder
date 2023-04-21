@@ -1,32 +1,37 @@
-import React, {useEffect, useMemo} from 'react';
-import { PanelSize, SidePanel, TabContainer, TabPage } from '@kapeta/ui-web-components';
+import React, { useEffect, useMemo } from 'react';
+import {
+    PanelSize,
+    SidePanel,
+    TabContainer,
+    TabPage,
+} from '@kapeta/ui-web-components';
 import { InstanceEventType, InstanceService } from '@kapeta/ui-web-context';
 
-import {BlockValidator, LogPanel } from '@kapeta/ui-web-plan-editor';
-import {useAsync} from "react-use";
-import {BlockInfo} from "../../types";
+import { BlockValidator, LogPanel } from '@kapeta/ui-web-plan-editor';
+import { useAsync } from 'react-use';
+import { BlockInfo } from '../../types';
 import './BlockInspectorPanel.less';
 
 interface BlockInspectorPanelProps {
-    systemId: string
-    info?: BlockInfo|null
-    open: boolean
+    systemId: string;
+    info?: BlockInfo | null;
+    open: boolean;
     onClosed: () => void;
 }
 
-export const BlockInspectorPanel = (props:BlockInspectorPanelProps) =>{
-    const {info} = props;
-    const {block, instance} = info ? info : {block: null, instance: null};
+export const BlockInspectorPanel = (props: BlockInspectorPanelProps) => {
+    const { info } = props;
+    const { block, instance } = info ? info : { block: null, instance: null };
     const blockRef = instance?.block.ref;
 
     const emitter = useMemo(() => {
-        const listeners:((entry: any) => void)[] = [];
+        const listeners: ((entry: any) => void)[] = [];
         return {
             listeners,
             onLog: (listener: (entry: any) => void) => {
                 listeners.push(listener);
-            }
-        }
+            },
+        };
     }, [blockRef]);
 
     useEffect(() => {
@@ -38,12 +43,20 @@ export const BlockInspectorPanel = (props:BlockInspectorPanelProps) =>{
             emitter.listeners.forEach((listener) => {
                 listener(entry);
             });
-        }
+        };
 
-        InstanceService.subscribe(blockRef, InstanceEventType.EVENT_INSTANCE_LOG, onInstanceLog);
+        InstanceService.subscribe(
+            blockRef,
+            InstanceEventType.EVENT_INSTANCE_LOG,
+            onInstanceLog
+        );
 
         return () => {
-            InstanceService.unsubscribe(blockRef, InstanceEventType.EVENT_INSTANCE_LOG, onInstanceLog);
+            InstanceService.unsubscribe(
+                blockRef,
+                InstanceEventType.EVENT_INSTANCE_LOG,
+                onInstanceLog
+            );
         };
     }, [blockRef, emitter]);
 
@@ -51,13 +64,16 @@ export const BlockInspectorPanel = (props:BlockInspectorPanelProps) =>{
         if (!instance?.id) {
             return;
         }
-        const result = await InstanceService.getInstanceLogs(props.systemId, instance?.id);
+        const result = await InstanceService.getInstanceLogs(
+            props.systemId,
+            instance?.id
+        );
         return result.ok === false ? [] : result.logs;
     }
 
     const logs = useAsync(loadLogs, [instance?.id]);
 
-    const issues = useMemo(()  => {
+    const issues = useMemo(() => {
         if (!block || !instance) {
             return [];
         }
@@ -89,19 +105,31 @@ export const BlockInspectorPanel = (props:BlockInspectorPanelProps) =>{
                             />
                         </TabPage>
                         <TabPage id="issues" title="Issues">
-                            <div className="issues-container" key={`${instance.block.ref}_issues`}>
+                            <div
+                                className="issues-container"
+                                key={`${instance.block.ref}_issues`}
+                            >
                                 {(!valid && (
                                     <>
-                                        <span>Found the following issues in block</span>
+                                        <span>
+                                            Found the following issues in block
+                                        </span>
                                         <ul className="issues-list">
                                             {issues.map((issue) => {
                                                 return (
                                                     <li>
                                                         <div className="issue-context">
-                                                            <span className="level">{issue.level}</span>:
-                                                            <span className="name">{issue.name}</span>
+                                                            <span className="level">
+                                                                {issue.level}
+                                                            </span>
+                                                            :
+                                                            <span className="name">
+                                                                {issue.name}
+                                                            </span>
                                                         </div>
-                                                        <div className="issue-message">{issue.issue}</div>
+                                                        <div className="issue-message">
+                                                            {issue.issue}
+                                                        </div>
                                                     </li>
                                                 );
                                             })}
@@ -115,4 +143,4 @@ export const BlockInspectorPanel = (props:BlockInspectorPanelProps) =>{
             )}
         </SidePanel>
     );
-}
+};

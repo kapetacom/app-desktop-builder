@@ -1,18 +1,30 @@
-import React, {useContext, useEffect, useMemo} from 'react';
+import React, { useContext, useEffect, useMemo } from 'react';
 import { Modal, ModalSize } from '@kapeta/ui-web-components';
-import { TrafficService, TrafficEventType, ResourceTypeProvider } from '@kapeta/ui-web-context';
-import {ConnectionMethodsMapping, ResourceRole, Traffic} from '@kapeta/ui-web-types';
-import {Connection} from "@kapeta/schemas";
-import {useList} from "react-use";
-import { getConnectionId, PlannerContext, PlannerContextData } from '@kapeta/ui-web-plan-editor';
+import {
+    TrafficService,
+    TrafficEventType,
+    ResourceTypeProvider,
+} from '@kapeta/ui-web-context';
+import {
+    ConnectionMethodsMapping,
+    ResourceRole,
+    Traffic,
+} from '@kapeta/ui-web-types';
+import { Connection } from '@kapeta/schemas';
+import { useList } from 'react-use';
+import {
+    getConnectionId,
+    PlannerContext,
+    PlannerContextData,
+} from '@kapeta/ui-web-plan-editor';
 
 interface ModalProps {
     connection: Connection;
     planner: PlannerContextData;
-    trafficLines: Traffic[]
+    trafficLines: Traffic[];
 }
 
-const ModalContent = ({planner, connection, trafficLines}:ModalProps) => {
+const ModalContent = ({ planner, connection, trafficLines }: ModalProps) => {
     if (!connection) {
         return null;
     }
@@ -47,30 +59,32 @@ const ModalContent = ({planner, connection, trafficLines}:ModalProps) => {
     const mapping: ConnectionMethodsMapping = connection.mapping || {};
 
     return <Inspector trafficLines={trafficLines} mapping={mapping} />;
-}
+};
 
 interface Props {
-    connection?: Connection|null;
+    connection?: Connection | null;
     open: boolean;
     onClosed: () => void;
 }
 
-
-export const ConnectionInspectorPanel = (props:Props) => {
+export const ConnectionInspectorPanel = (props: Props) => {
     const planner = useContext(PlannerContext);
 
     const [trafficLines, trafficLinesHandler] = useList<Traffic>([]);
 
-    const connectionId = useMemo(() => props.connection ? getConnectionId(props.connection) : null, [props.connection]);
+    const connectionId = useMemo(
+        () => (props.connection ? getConnectionId(props.connection) : null),
+        [props.connection]
+    );
 
     const onTrafficStart = (payload: Traffic) => {
         trafficLinesHandler.push(payload);
     };
 
     const onTrafficEnd = (payload: Traffic) => {
-        const ix = trafficLines.findIndex(t => t.id === payload.id);
+        const ix = trafficLines.findIndex((t) => t.id === payload.id);
         if (ix > -1) {
-            const newItem = {...trafficLines[ix], ...payload};
+            const newItem = { ...trafficLines[ix], ...payload };
             trafficLinesHandler.updateAt(ix, newItem);
         }
     };
@@ -81,27 +95,37 @@ export const ConnectionInspectorPanel = (props:Props) => {
         }
 
         const unsubscribes = [
-            TrafficService.subscribe(connectionId, TrafficEventType.TRAFFIC_START, onTrafficStart),
-            TrafficService.subscribe(connectionId, TrafficEventType.TRAFFIC_END, onTrafficEnd),
+            TrafficService.subscribe(
+                connectionId,
+                TrafficEventType.TRAFFIC_START,
+                onTrafficStart
+            ),
+            TrafficService.subscribe(
+                connectionId,
+                TrafficEventType.TRAFFIC_END,
+                onTrafficEnd
+            ),
         ];
 
         return () => {
-            unsubscribes.forEach(u => u());
-        }
-
-    }, [connectionId])
+            unsubscribes.forEach((u) => u());
+        };
+    }, [connectionId]);
 
     return (
         <Modal
             open={props.open}
             title="Connection Traffic Inspector"
             onClose={props.onClosed}
-            size={ModalSize.large} >
-            {props.connection &&
-                <ModalContent planner={planner}
-                              connection={props.connection}
-                              trafficLines={trafficLines} />
-            }
+            size={ModalSize.large}
+        >
+            {props.connection && (
+                <ModalContent
+                    planner={planner}
+                    connection={props.connection}
+                    trafficLines={trafficLines}
+                />
+            )}
         </Modal>
     );
-}
+};

@@ -1,11 +1,13 @@
-import {DraggableBlockProps} from "../../types";
-import {Point} from "@kapeta/ui-web-types";
-import {BlockNode} from "@kapeta/ui-web-plan-editor";
-import {InstanceStatus} from "@kapeta/ui-web-context";
+import { DraggableBlockProps } from '../../types';
+import { Point } from '@kapeta/ui-web-types';
+import { BlockNode } from '@kapeta/ui-web-plan-editor';
+import { InstanceStatus } from '@kapeta/ui-web-context';
 
 const BLOCK_SIZE = 150;
 
-export const DraggableBlock = (props: DraggableBlockProps & { point: Point }) => {
+export const DraggableBlock = (
+    props: DraggableBlockProps & { point: Point }
+) => {
     const center = BLOCK_SIZE / 2;
 
     return (

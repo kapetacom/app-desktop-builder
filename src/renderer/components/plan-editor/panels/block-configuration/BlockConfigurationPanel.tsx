@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useMemo, useState} from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import {
     Button,
     ButtonStyle,
@@ -12,23 +12,30 @@ import {
     SimpleLoader,
     TabContainer,
     TabPage,
-    EntityEditorForm
+    EntityEditorForm,
 } from '@kapeta/ui-web-components';
 
 import { BlockService } from '@kapeta/ui-web-context';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
-import {BlockInstance} from "@kapeta/schemas";
-import { BlockConfigurationData, PlannerContext, PlannerMode } from '@kapeta/ui-web-plan-editor';
+import { BlockInstance } from '@kapeta/schemas';
+import {
+    BlockConfigurationData,
+    PlannerContext,
+    PlannerMode,
+} from '@kapeta/ui-web-plan-editor';
 
 import './BlockConfigurationPanel.less';
-import {useAsyncFn} from "react-use";
-import {getInstanceConfig, setInstanceConfig} from "../../../../api/LocalConfigService";
+import { useAsyncFn } from 'react-use';
+import {
+    getInstanceConfig,
+    setInstanceConfig,
+} from '../../../../api/LocalConfigService';
 
 type Options = { [key: string]: string };
 
 interface Props {
-    systemId:string
-    instance?: BlockInstance|null;
+    systemId: string;
+    instance?: BlockInstance | null;
     open: boolean;
     onClosed: () => void;
 }
@@ -53,7 +60,6 @@ export const BlockConfigurationPanel = (props: Props) => {
         return getInstanceConfig(props.systemId, props.instance!.id);
     }, [props.systemId, props.instance?.id]);
 
-
     useEffect(() => {
         if (props.open) {
             reloadConfig();
@@ -65,14 +71,14 @@ export const BlockConfigurationPanel = (props: Props) => {
             return {
                 version: '',
                 name: '',
-                configuration: {}
+                configuration: {},
             };
         }
         const uri = parseKapetaUri(props.instance.block.ref);
         return {
             version: uri.version,
             name: props.instance.name,
-            configuration: instanceConfig.value
+            configuration: instanceConfig.value,
         };
     }, [props.instance, instanceConfig.value]);
 
@@ -92,7 +98,10 @@ export const BlockConfigurationPanel = (props: Props) => {
                     return uri.fullName === blockUri.fullName;
                 })
                 .forEach((block) => {
-                    opts[block.version] = block.version === 'local' ? 'Local Disk' : block.version;
+                    opts[block.version] =
+                        block.version === 'local'
+                            ? 'Local Disk'
+                            : block.version;
                 });
 
             setVersionOptions(opts);
@@ -113,17 +122,21 @@ export const BlockConfigurationPanel = (props: Props) => {
                 ...instance,
                 block: {
                     ...instance.block,
-                    ref: uri.id
+                    ref: uri.id,
                 },
-                name: data.name
+                name: data.name,
             };
         });
 
-        await setInstanceConfig(props.systemId, props.instance.id, data.configuration);
+        await setInstanceConfig(
+            props.systemId,
+            props.instance.id,
+            data.configuration
+        );
         await reloadConfig();
 
         props.onClosed();
-    }
+    };
 
     const readOnly = planner.mode !== PlannerMode.EDIT;
 
@@ -135,7 +148,12 @@ export const BlockConfigurationPanel = (props: Props) => {
     }, [props.instance?.block.ref]);
 
     return (
-        <SidePanel title={panelHeader()} size={PanelSize.large} open={props.open} onClose={props.onClosed}>
+        <SidePanel
+            title={panelHeader()}
+            size={PanelSize.large}
+            open={props.open}
+            onClose={props.onClosed}
+        >
             <SimpleLoader
                 loading={loading}
                 key={props.instance?.block.ref ?? 'unknown-block'}
@@ -143,10 +161,7 @@ export const BlockConfigurationPanel = (props: Props) => {
                 text="Loading details... Please wait"
             >
                 <div className="block-configuration-panel">
-                    <FormContainer
-                        initialValue={data}
-                        onSubmitData={onSave}
-                    >
+                    <FormContainer initialValue={data} onSubmitData={onSave}>
                         <TabContainer>
                             <TabPage id={'general'} title={'General'}>
                                 <FormField
@@ -167,9 +182,14 @@ export const BlockConfigurationPanel = (props: Props) => {
                                 />
                             </TabPage>
                             {block?.spec.configuration?.types?.length > 0 && (
-                                <TabPage id={'configuration'} title={'Configuration'}>
+                                <TabPage
+                                    id={'configuration'}
+                                    title={'Configuration'}
+                                >
                                     <EntityEditorForm
-                                        entities={block?.spec.configuration?.types}
+                                        entities={
+                                            block?.spec.configuration?.types
+                                        }
                                         name={'configuration'}
                                     />
                                 </TabPage>
@@ -184,7 +204,13 @@ export const BlockConfigurationPanel = (props: Props) => {
                                 onClick={props.onClosed}
                                 text="Cancel"
                             />
-                            <Button width={70} disabled={readOnly} type={ButtonType.SUBMIT} style={ButtonStyle.PRIMARY} text="Save" />
+                            <Button
+                                width={70}
+                                disabled={readOnly}
+                                type={ButtonType.SUBMIT}
+                                style={ButtonStyle.PRIMARY}
+                                text="Save"
+                            />
                         </FormButtons>
                     </FormContainer>
                 </div>

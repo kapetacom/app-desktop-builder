@@ -1,13 +1,13 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {useAsyncFn} from 'react-use';
-import {Asset, Point} from '@kapeta/ui-web-types';
-import {AssetService, BlockService} from '@kapeta/ui-web-context';
+import React, { useContext, useEffect, useState } from 'react';
+import { useAsyncFn } from 'react-use';
+import { Asset, Point } from '@kapeta/ui-web-types';
+import { AssetService, BlockService } from '@kapeta/ui-web-context';
 
-import {BlockStoreItem} from './BlockStoreItem';
-import {BlockCreator} from '../../../../creators/BlockCreator';
-import {AssetCreatorState} from '../../../../creators/AssetCreator';
+import { BlockStoreItem } from './BlockStoreItem';
+import { BlockCreator } from '../../../../creators/BlockCreator';
+import { AssetCreatorState } from '../../../../creators/AssetCreator';
 
-import {DraggableItem} from "../../../types";
+import { DraggableItem } from '../../../types';
 import { PlannerContext } from '@kapeta/ui-web-plan-editor';
 
 import './BlockStore.less';
@@ -25,7 +25,7 @@ export const BlockStore = (props: Props) => {
     const [creatorState, setCreatorState] = useState(AssetCreatorState.CLOSED);
     const [searchTerm, setSearchTerm] = useState('');
 
-    const [{value: blocks, loading}, loadBlocks] = useAsyncFn(async () => {
+    const [{ value: blocks, loading }, loadBlocks] = useAsyncFn(async () => {
         return BlockService.list();
     });
 
@@ -107,7 +107,7 @@ export const BlockStore = (props: Props) => {
                         </button>
                     </div>
                     <div className="block-store-search">
-                        <i className="search-icon fa fa-search "/>
+                        <i className="search-icon fa fa-search " />
                         <input
                             value={searchTerm}
                             onChange={(text) => {
@@ -120,25 +120,33 @@ export const BlockStore = (props: Props) => {
 
                 <div className="section">
                     {loading && <div className="section">Loading...</div>}
-                    {!loading && <div className="items">
-                        {blocks &&
-                            blocks
-                                .filter((item) => {
-                                    if (
-                                        item.data.metadata.name
-                                            .toLowerCase()
-                                            .indexOf(searchTerm.toLowerCase()) > -1
-                                    ) {
-                                        return true;
-                                    }
-                                    return false;
-                                })
-                                .map((item, ix) => {
-                                    return (
-                                        <BlockStoreItem key={item.ref} item={item} {...props} />
-                                    );
-                                })}
-                    </div>}
+                    {!loading && (
+                        <div className="items">
+                            {blocks &&
+                                blocks
+                                    .filter((item) => {
+                                        if (
+                                            item.data.metadata.name
+                                                .toLowerCase()
+                                                .indexOf(
+                                                    searchTerm.toLowerCase()
+                                                ) > -1
+                                        ) {
+                                            return true;
+                                        }
+                                        return false;
+                                    })
+                                    .map((item, ix) => {
+                                        return (
+                                            <BlockStoreItem
+                                                key={item.ref}
+                                                item={item}
+                                                {...props}
+                                            />
+                                        );
+                                    })}
+                        </div>
+                    )}
                 </div>
             </div>
         );

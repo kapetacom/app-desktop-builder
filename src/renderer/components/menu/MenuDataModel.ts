@@ -22,7 +22,7 @@ export interface MenuCategoryModel {
 export interface MenuItem {
     text: string;
     open?: boolean;
-    callback: () => boolean|Promise<boolean>;
+    callback: () => boolean | Promise<boolean>;
 }
 
 export interface MenuCategoryItem {
