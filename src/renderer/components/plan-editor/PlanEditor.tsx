@@ -53,6 +53,7 @@ export const PlanEditor = withPlannerContext(forwardRef((props: Props, ref: Forw
             />
 
             <BlockConfigurationPanel
+                systemId={props.systemId}
                 instance={configInfo?.item.instance ?? null}
                 open={!!configInfo}
                 onClosed={() => setConfigInfo(null)}
