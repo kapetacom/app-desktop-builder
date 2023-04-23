@@ -9,22 +9,25 @@ import {
 import { BlockTypeProvider } from '@kapeta/ui-web-context';
 
 import './BlockForm.less';
-import { BlockTypeProviderProps } from '@kapeta/ui-web-types';
+import { BlockTypeEditorProps } from '@kapeta/ui-web-types';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ProjectHomeFolderInputProps } from '../fields/ProjectHomeFolderInput';
 import { AutoLoadAssetNameInput } from '../fields/AutoLoadAssetNameInput';
+import {BlockDefinition} from "@kapeta/schemas";
 
 interface Props extends ProjectHomeFolderInputProps {
     creating?: boolean;
+    asset: any
 }
 
 interface InnerBlockTypeProps {
+    block: BlockDefinition
     kind?: string;
     creating?: boolean;
 }
 
 const InnerBlockType = (props: InnerBlockTypeProps) => {
-    let BlockTypeComponent: ComponentType<BlockTypeProviderProps> | null = null;
+    let BlockTypeComponent: ComponentType<BlockTypeEditorProps> | null = null;
 
     if (!props.kind) {
         return <div>Select block type</div>;
@@ -32,8 +35,8 @@ const InnerBlockType = (props: InnerBlockTypeProps) => {
 
     const currentTarget = BlockTypeProvider.get(props.kind);
 
-    if (currentTarget && currentTarget.componentType) {
-        BlockTypeComponent = currentTarget.componentType;
+    if (currentTarget && currentTarget.editorComponent) {
+        BlockTypeComponent = currentTarget.editorComponent;
     }
 
     if (!BlockTypeComponent) {
@@ -45,7 +48,7 @@ const InnerBlockType = (props: InnerBlockTypeProps) => {
             resetKeys={[props.kind]}
             fallback={<div>Failed to render block type: {props.kind}</div>}
         >
-            <BlockTypeComponent creating={props.creating} />
+            <BlockTypeComponent block={props.block} creating={props.creating} />
         </ErrorBoundary>
     );
 };
@@ -98,6 +101,7 @@ export const BlockForm = (props: Props) => {
             />
 
             <InnerBlockType
+                block={props.asset}
                 kind={kindField.get()}
                 creating={props.creating ?? false}
             />

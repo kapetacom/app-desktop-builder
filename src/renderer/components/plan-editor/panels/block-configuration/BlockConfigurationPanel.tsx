@@ -15,6 +15,8 @@ import {
     EntityEditorForm,
 } from '@kapeta/ui-web-components';
 
+import { BlockTypeProvider } from '@kapeta/ui-web-context';
+
 import { BlockService } from '@kapeta/ui-web-context';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import { BlockInstance } from '@kapeta/schemas';
@@ -66,21 +68,46 @@ export const BlockConfigurationPanel = (props: Props) => {
         }
     }, [props.systemId, planner.plan, props.open]);
 
+
+    const block = useMemo(() => {
+        if (!props.instance?.block.ref) {
+            return undefined;
+        }
+        return planner.getBlockByRef(props.instance.block.ref);
+    }, [props.instance?.block.ref]);
+
+    const typeProvider = useMemo(() => {
+        if (!block) {
+            return undefined;
+        }
+        return BlockTypeProvider.get(block.kind);
+    }, [block]);
+
     const data: BlockConfigurationData = useMemo<BlockConfigurationData>(() => {
+        let defaultConfig = {};
+        if (block && typeProvider?.createDefaultConfig) {
+            defaultConfig = typeProvider.createDefaultConfig!(block, props.instance);
+        }
+
         if (!props.instance) {
             return {
                 version: '',
                 name: '',
-                configuration: {},
+                configuration: {
+                    ...defaultConfig
+                },
             };
         }
         const uri = parseKapetaUri(props.instance.block.ref);
         return {
             version: uri.version,
             name: props.instance.name,
-            configuration: instanceConfig.value,
+            configuration: {
+                ...defaultConfig,
+                ...instanceConfig.value
+            },
         };
-    }, [props.instance, instanceConfig.value]);
+    }, [props.instance, instanceConfig.value, typeProvider, block]);
 
     const loader = async () => {
         if (!props.instance) {
@@ -139,13 +166,7 @@ export const BlockConfigurationPanel = (props: Props) => {
     };
 
     const readOnly = planner.mode !== PlannerMode.EDIT;
-
-    const block = useMemo(() => {
-        if (!props.instance?.block.ref) {
-            return undefined;
-        }
-        return planner.getBlockByRef(props.instance.block.ref);
-    }, [props.instance?.block.ref]);
+    const hasConfigComponent = !!(typeProvider && typeProvider.configComponent);
 
     return (
         <SidePanel
@@ -181,14 +202,29 @@ export const BlockConfigurationPanel = (props: Props) => {
                                     type={FormFieldType.ENUM}
                                 />
                             </TabPage>
-                            {block?.spec.configuration?.types?.length > 0 && (
+
+                            {typeProvider && typeProvider.configComponent && (
+                                <TabPage
+                                    id={'configuration'}
+                                    title={'Configuration'}
+                                >
+                                    <typeProvider.configComponent
+                                        block={block}
+                                        instance={props.instance}
+                                        readOnly={readOnly}
+                                    />
+                                </TabPage>
+                            )}
+
+                            {!hasConfigComponent &&
+                                block?.spec.configuration?.types?.length > 0 && (
                                 <TabPage
                                     id={'configuration'}
                                     title={'Configuration'}
                                 >
                                     <EntityEditorForm
                                         entities={
-                                            block?.spec.configuration?.types
+                                            block!.spec.configuration!.types!
                                         }
                                         name={'configuration'}
                                     />

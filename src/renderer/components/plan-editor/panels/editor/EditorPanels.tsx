@@ -24,7 +24,7 @@ import { parseKapetaUri } from '@kapeta/nodejs-utils';
 
 import type { IResourceTypeProvider, SchemaKind } from '@kapeta/ui-web-types';
 import { ItemType, ResourceRole } from '@kapeta/ui-web-types';
-import { BlockDefinition, Resource, Connection } from '@kapeta/schemas';
+import {BlockDefinition, Resource, Connection, Entity} from '@kapeta/schemas';
 
 import { ErrorBoundary } from 'react-error-boundary';
 import { useAsync } from 'react-use';
@@ -178,8 +178,8 @@ const InnerForm = ({ planner, info }: InnerFormProps) => {
                 title="mapping-editor"
                 source={source}
                 target={target}
-                sourceEntities={fromBlock?.spec.entities?.types ?? []}
-                targetEntities={toBlock?.spec.entities?.types ?? []}
+                sourceEntities={fromBlock?.spec.entities?.types ?? [] as Entity[]}
+                targetEntities={toBlock?.spec.entities?.types ?? [] as Entity[]}
                 value={mappingField.get(connection.mapping)}
                 onDataChanged={(change) => {
                     mappingField.set(change.data);
@@ -194,7 +194,7 @@ const InnerForm = ({ planner, info }: InnerFormProps) => {
         const kind = kindField.get(data.block.kind);
         const BlockTypeConfig = BlockTypeProvider.get(kind);
 
-        if (!BlockTypeConfig.componentType) {
+        if (!BlockTypeConfig.editorComponent) {
             return (
                 <div key={data.instance.block.ref}>
                     <BlockFields data={data.block} />
@@ -213,7 +213,9 @@ const InnerForm = ({ planner, info }: InnerFormProps) => {
                         </div>
                     )}
                 >
-                    <BlockTypeConfig.componentType creating={info.creating} />
+                    <BlockTypeConfig.editorComponent
+                        block={data.block}
+                        creating={info.creating} />
                 </ErrorBoundary>
             </div>
         );

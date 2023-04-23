@@ -28,6 +28,7 @@ import { ProjectHomeFolderInput } from '../fields/ProjectHomeFolderInput';
 
 export interface CreatingFormProps {
     creating?: boolean;
+    asset?: any;
 }
 
 export enum AssetCreatorState {
@@ -209,7 +210,7 @@ export class AssetCreator extends React.Component<Props, State> {
                                 this.saveNewEntity(data)
                             }
                         >
-                            <InnerFormRenderer creating />
+                            <InnerFormRenderer asset={this.state.newEntity} creating />
 
                             <ProjectHomeFolderInput
                                 onChange={(useProjectHome, projectHome) => {
