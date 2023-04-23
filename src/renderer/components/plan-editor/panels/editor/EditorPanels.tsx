@@ -229,7 +229,7 @@ const InnerForm = ({ planner, info }: InnerFormProps) => {
         try {
             resourceType = ResourceTypeProvider.get(kind);
 
-            if (!resourceType.componentType) {
+            if (!resourceType.editorComponent) {
                 return null;
             }
         } catch (e) {
@@ -249,7 +249,7 @@ const InnerForm = ({ planner, info }: InnerFormProps) => {
                     label="Resource kind"
                     name="kind"
                 />
-                {resourceType?.componentType && (
+                {resourceType?.editorComponent && (
                     <ErrorBoundary
                         resetKeys={[kind, info.item]}
                         fallbackRender={(props) => (
@@ -259,7 +259,7 @@ const InnerForm = ({ planner, info }: InnerFormProps) => {
                             </div>
                         )}
                     >
-                        <resourceType.componentType
+                        <resourceType.editorComponent
                             key={kind}
                             block={info.item.block}
                             creating={info.creating}
