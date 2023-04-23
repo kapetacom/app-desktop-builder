@@ -2,6 +2,7 @@ type TypeModules = { [key: string]: any };
 
 export interface KapetaAPI {
     paths: string[];
+    config: any;
     resourceTypes: TypeModules;
     blockTypes: TypeModules;
     languageTargets: TypeModules;
@@ -9,6 +10,6 @@ export interface KapetaAPI {
     setPluginPaths: (paths: string[]) => void;
 }
 // @ts-ignore
-const bw: KapetaAPI = window.Kapeta;
+const kapeta: KapetaAPI = window.Kapeta;
 
-export default bw;
+export default kapeta;

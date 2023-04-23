@@ -6,6 +6,7 @@ import {
 } from '@kapeta/ui-web-context';
 import _ from 'lodash';
 import Kapeta from './kapeta';
+import {IBlockTypeProvider, ILanguageTargetProvider, IResourceTypeProvider} from "@kapeta/ui-web-types";
 
 export async function initialise() {
     if (!window.Kapeta.config.cluster_service) {
@@ -33,7 +34,7 @@ export async function initialise() {
         return id.split(':')[1];
     }
 
-    _.forEach(Kapeta.resourceTypes, (provider, id) => {
+    _.forEach(Kapeta.resourceTypes, (provider:IResourceTypeProvider, id) => {
         if (!provider.version) {
             provider.version = getVersion(id);
         }
@@ -45,7 +46,7 @@ export async function initialise() {
         ResourceTypeProvider.register(provider);
     });
 
-    _.forEach(Kapeta.blockTypes, (provider, id) => {
+    _.forEach(Kapeta.blockTypes, (provider:IBlockTypeProvider, id) => {
         if (!provider.version) {
             provider.version = getVersion(id);
         }
@@ -57,7 +58,7 @@ export async function initialise() {
         BlockTypeProvider.register(provider);
     });
 
-    _.forEach(Kapeta.languageTargets, (provider, id) => {
+    _.forEach(Kapeta.languageTargets, (provider:ILanguageTargetProvider, id) => {
         if (!provider.version) {
             provider.version = getVersion(id);
         }
