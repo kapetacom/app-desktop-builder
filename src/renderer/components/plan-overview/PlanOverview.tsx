@@ -19,6 +19,7 @@ import './PlanOverview.less';
 import { Plan } from '@kapeta/schemas';
 import { useAsync } from 'react-use';
 import { getAssetTitle } from '../plan-editor/helpers';
+import {useBlockAssets} from "../../utils/planContextLoader";
 
 interface MiniPlanProps {
     systemId: string;
@@ -42,7 +43,7 @@ interface Props {
 export const PlanOverview = (props: Props) => {
     const [activePlanMenu, setActivePlanMenu] = useState(-1);
 
-    const blockAssets = useAsync(async () => BlockService.list(), []);
+    const blockAssets = useBlockAssets();
 
     const setOpenMenu = (index: number) => {
         if (index === activePlanMenu) {

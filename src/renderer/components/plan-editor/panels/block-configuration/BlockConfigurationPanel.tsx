@@ -32,6 +32,7 @@ import {
     getInstanceConfig,
     setInstanceConfig,
 } from '../../../../api/LocalConfigService';
+import {useBlockAssets} from "../../../../utils/planContextLoader";
 
 type Options = { [key: string]: string };
 
@@ -44,8 +45,6 @@ interface Props {
 
 export const BlockConfigurationPanel = (props: Props) => {
     const planner = useContext(PlannerContext);
-    const [loading, setLoading] = useState(true);
-    const [versionOptions, setVersionOptions] = useState<Options>({});
 
     const panelHeader = () => {
         if (!props.instance) {
@@ -109,33 +108,32 @@ export const BlockConfigurationPanel = (props: Props) => {
         };
     }, [props.instance, instanceConfig.value, typeProvider, block]);
 
-    const loader = async () => {
-        if (!props.instance) {
-            setLoading(false);
-            return;
-        }
-        setLoading(true);
-        try {
-            const blockUri = parseKapetaUri(props.instance?.block.ref);
-            const blocks = await BlockService.list();
-            const opts: Options = {};
-            blocks
-                .filter((block) => {
-                    const uri = parseKapetaUri(block.ref);
-                    return uri.fullName === blockUri.fullName;
-                })
-                .forEach((block) => {
-                    opts[block.version] =
-                        block.version === 'local'
-                            ? 'Local Disk'
-                            : block.version;
-                });
+    const blockAssets = useBlockAssets();
 
-            setVersionOptions(opts);
-        } finally {
-            setLoading(false);
+    const versionOptions: Options = useMemo(() => {
+        if (!blockAssets.value ||
+            !props.instance?.block.ref) {
+            return {} as Options;
         }
-    };
+
+        const blockUri = parseKapetaUri(props.instance?.block.ref);
+        const blocks = blockAssets.value;
+        const opts: Options = {};
+        blocks
+            .filter((block) => {
+                const uri = parseKapetaUri(block.ref);
+                return uri.fullName === blockUri.fullName;
+            })
+            .forEach((block) => {
+                opts[block.version] =
+                    block.version === 'local'
+                        ? 'Local Disk'
+                        : block.version;
+            });
+
+        return opts;
+
+    }, [props.instance?.block.ref, blockAssets.value])
 
     const onSave = async (data: BlockConfigurationData) => {
         if (!props.instance?.id) {
@@ -176,9 +174,8 @@ export const BlockConfigurationPanel = (props: Props) => {
             onClose={props.onClosed}
         >
             <SimpleLoader
-                loading={loading}
+                loading={blockAssets.loading || instanceConfig.loading}
                 key={props.instance?.block.ref ?? 'unknown-block'}
-                loader={loader}
                 text="Loading details... Please wait"
             >
                 <div className="block-configuration-panel">

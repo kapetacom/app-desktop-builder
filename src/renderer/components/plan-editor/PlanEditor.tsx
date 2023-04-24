@@ -1,29 +1,29 @@
-import { parseKapetaUri } from '@kapeta/nodejs-utils';
+import {parseKapetaUri} from '@kapeta/nodejs-utils';
 import {
     Planner2,
     PlannerContext,
     PlannerMode,
     withPlannerContext,
 } from '@kapeta/ui-web-plan-editor';
-import { PlanEditorTopMenu } from './PlanEditorTopMenu';
+import {PlanEditorTopMenu} from './PlanEditorTopMenu';
 import React, {
     ForwardedRef,
     forwardRef,
     useContext,
-    useMemo,
     useState,
 } from 'react';
-import { withPlanEditorActions } from './PlanEditorActions';
-import { PlanEditorToolBoxPanel } from './panels/toolbox/PlanEditorToolBoxPanel';
-import { ResourceTypeProvider } from '@kapeta/ui-web-context';
-import { BlockConfigurationPanel } from './panels/block-configuration/BlockConfigurationPanel';
-import { ConfigureItemInfo, EditItemInfo, InspectItemInfo } from './types';
-import { EditorPanels } from './panels/editor/EditorPanels';
-import { InspectorPanels } from './panels/InspectorPanels';
+import {withPlanEditorActions} from './PlanEditorActions';
+import {PlanEditorToolBoxPanel} from './panels/toolbox/PlanEditorToolBoxPanel';
+import {BlockConfigurationPanel} from './panels/block-configuration/BlockConfigurationPanel';
+import {ConfigureItemInfo, EditItemInfo, InspectItemInfo} from './types';
+import {EditorPanels} from './panels/editor/EditorPanels';
+import {InspectorPanels} from './panels/InspectorPanels';
 import './PlanEditor.less';
+import {IResourceTypeProvider} from "@kapeta/ui-web-types";
 
 interface Props {
     systemId: string;
+    resourceAssets: IResourceTypeProvider[];
     ref: ForwardedRef<HTMLDivElement>;
 }
 
@@ -52,7 +52,6 @@ export const PlanEditor = withPlannerContext(
             },
         });
 
-        const resourceTypes = useMemo(() => ResourceTypeProvider.list(), []);
         const readonly = planner.mode !== PlannerMode.EDIT;
 
         return (
@@ -65,7 +64,7 @@ export const PlanEditor = withPlannerContext(
 
                 <PlanEditorToolBoxPanel
                     open={!readonly}
-                    resourceAssets={resourceTypes}
+                    resourceAssets={props.resourceAssets}
                 />
 
                 <BlockConfigurationPanel
@@ -89,7 +88,7 @@ export const PlanEditor = withPlannerContext(
                     onClosed={() => setEditInfo(null)}
                 />
 
-                <Planner2 actions={actions} systemId={props.systemId} />
+                <Planner2 actions={actions} systemId={props.systemId}/>
             </div>
         );
     })
