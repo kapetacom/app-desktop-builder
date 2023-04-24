@@ -228,10 +228,6 @@ const InnerForm = ({ planner, info }: InnerFormProps) => {
         let resourceType: IResourceTypeProvider | null = null;
         try {
             resourceType = ResourceTypeProvider.get(kind);
-
-            if (!resourceType.editorComponent) {
-                return null;
-            }
         } catch (e) {
             console.warn('Failed to get resource type for kind: ', kind);
         }
