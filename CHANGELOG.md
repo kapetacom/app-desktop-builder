@@ -1,3 +1,10 @@
+## [0.1.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.1.0...v0.1.1) (2023-04-25)
+
+
+### Bug Fixes
+
+* allow creating assets with "local" namespace [KAP-435] ([b469caf](https://github.com/kapetacom/app-desktop-builder/commit/b469caf571d46fd5777ed8a64348de817ce8370a))
+
 # [0.1.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.0.6...v0.1.0) (2023-04-12)
 
 
