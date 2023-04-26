@@ -63,7 +63,13 @@ export class AssetCreator extends React.Component<Props, State> {
         super(props);
 
         this.state = {
-            newEntity: this.createNewEntity(),
+            newEntity: {
+                kind: '',
+                metadata: {
+                    name: '',
+                },
+                spec: {},
+            },
             filePanelOpen: false,
         };
     }

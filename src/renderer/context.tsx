@@ -30,43 +30,4 @@ export async function initialise() {
 
     console.log('All plugins loaded in %s ms', Date.now() - start);
 
-    function getVersion(id: string) {
-        return id.split(':')[1];
-    }
-
-    _.forEach(Kapeta.resourceTypes, (provider:IResourceTypeProvider, id) => {
-        if (!provider.version) {
-            provider.version = getVersion(id);
-        }
-        console.log(
-            'Registering resource type with version %s',
-            provider.version,
-            provider
-        );
-        ResourceTypeProvider.register(provider);
-    });
-
-    _.forEach(Kapeta.blockTypes, (provider:IBlockTypeProvider, id) => {
-        if (!provider.version) {
-            provider.version = getVersion(id);
-        }
-        console.log(
-            'Registering block type with version %s',
-            provider.version,
-            provider
-        );
-        BlockTypeProvider.register(provider);
-    });
-
-    _.forEach(Kapeta.languageTargets, (provider:ILanguageTargetProvider, id) => {
-        if (!provider.version) {
-            provider.version = getVersion(id);
-        }
-        console.log(
-            'Registering language target with version %s',
-            provider.version,
-            provider
-        );
-        BlockTargetProvider.register(provider);
-    });
 }
