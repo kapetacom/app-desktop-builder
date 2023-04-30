@@ -20,6 +20,8 @@ import {EditorPanels} from './panels/editor/EditorPanels';
 import {InspectorPanels} from './panels/InspectorPanels';
 import './PlanEditor.less';
 import {IResourceTypeProvider} from "@kapeta/ui-web-types";
+import {useAsync} from "react-use";
+import {getInstanceConfigs} from "../../api/LocalConfigService";
 
 interface Props {
     systemId: string;
@@ -51,6 +53,10 @@ export const PlanEditor = withPlannerContext(
                 setEditInfo(info);
             },
         });
+
+        const configurations = useAsync(async () => {
+            return getInstanceConfigs(props.systemId);
+        }, [props.systemId]);
 
         const readonly = planner.mode !== PlannerMode.EDIT;
 
@@ -88,7 +94,11 @@ export const PlanEditor = withPlannerContext(
                     onClosed={() => setEditInfo(null)}
                 />
 
-                <Planner2 actions={actions} systemId={props.systemId}/>
+                <Planner2
+                    actions={actions}
+                    systemId={props.systemId}
+                    configurations={configurations.value}
+                />
             </div>
         );
     })
