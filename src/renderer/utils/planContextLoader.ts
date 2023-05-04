@@ -4,26 +4,31 @@ import {
     BlockTargetProvider,
     BlockTypeProvider,
     clusterPath,
-    ResourceTypeProvider, simpleFetch
-} from "@kapeta/ui-web-context";
-import {parseKapetaUri} from "@kapeta/nodejs-utils";
-import _ from "lodash";
-import Kapeta from "../kapeta";
-import {Asset, IBlockTypeProvider, ILanguageTargetProvider, IResourceTypeProvider} from "@kapeta/ui-web-types";
-import {useMemo, useState} from "react";
-import {useAsync} from "react-use";
-import {BlockDefinition, Plan, Resource} from "@kapeta/schemas";
+    ResourceTypeProvider,
+    simpleFetch,
+} from '@kapeta/ui-web-context';
+import { parseKapetaUri } from '@kapeta/nodejs-utils';
+import _ from 'lodash';
+import Kapeta from '../kapeta';
+import {
+    Asset,
+    IBlockTypeProvider,
+    ILanguageTargetProvider,
+    IResourceTypeProvider,
+} from '@kapeta/ui-web-types';
+import { useMemo, useState } from 'react';
+import { useAsync } from 'react-use';
+import { BlockDefinition, Plan, Resource } from '@kapeta/schemas';
 
 const PROVIDER_CACHE = {};
 const BLOCK_CACHE = {};
 
 const registerMissing = () => {
-
     function getVersion(id: string) {
         return id.split(':')[1];
     }
 
-    _.forEach(Kapeta.resourceTypes, (provider:IResourceTypeProvider, id) => {
+    _.forEach(Kapeta.resourceTypes, (provider: IResourceTypeProvider, id) => {
         if (ResourceTypeProvider.exists(id)) {
             return;
         }
@@ -39,7 +44,7 @@ const registerMissing = () => {
         ResourceTypeProvider.register(provider);
     });
 
-    _.forEach(Kapeta.blockTypes, (provider:IBlockTypeProvider, id) => {
+    _.forEach(Kapeta.blockTypes, (provider: IBlockTypeProvider, id) => {
         if (BlockTypeProvider.exists(id)) {
             return;
         }
@@ -54,31 +59,32 @@ const registerMissing = () => {
         BlockTypeProvider.register(provider);
     });
 
-    _.forEach(Kapeta.languageTargets, (provider:ILanguageTargetProvider, id) => {
-        if (BlockTargetProvider.exists(id)) {
-            return;
+    _.forEach(
+        Kapeta.languageTargets,
+        (provider: ILanguageTargetProvider, id) => {
+            if (BlockTargetProvider.exists(id)) {
+                return;
+            }
+            if (!provider.version) {
+                provider.version = getVersion(id);
+            }
+            console.log(
+                'Registering language target with version %s',
+                provider.version,
+                provider
+            );
+            BlockTargetProvider.register(provider);
         }
-        if (!provider.version) {
-            provider.version = getVersion(id);
-        }
-        console.log(
-            'Registering language target with version %s',
-            provider.version,
-            provider
-        );
-        BlockTargetProvider.register(provider);
-    });
-}
+    );
+};
 
-
-
-export const loadProvider = async (providerKind:string) => {
+export const loadProvider = async (providerKind: string) => {
     if (PROVIDER_CACHE[providerKind]) {
         return;
     }
 
     const uri = parseKapetaUri(providerKind);
-    const path = `/providers/asset/${uri.handle}/${uri.name}/${uri.version}/web.js`
+    const path = `/providers/asset/${uri.handle}/${uri.name}/${uri.version}/web.js`;
     const scriptElm = document.createElement('script');
     scriptElm.setAttribute('src', clusterPath(path));
     const loaderPromise = new Promise((resolve) => {
@@ -90,13 +96,13 @@ export const loadProvider = async (providerKind:string) => {
     await loaderPromise;
     registerMissing();
     PROVIDER_CACHE[providerKind] = true;
-}
+};
 
-function parseVersion(a:string) {
+function parseVersion(a: string) {
     return a.split('.').map((v) => parseInt(v));
 }
 
-function versionIsBigger(a:string, b:string) {
+function versionIsBigger(a: string, b: string) {
     const aVersion = parseVersion(a);
     const bVersion = parseVersion(b);
 
@@ -113,18 +119,17 @@ function versionIsBigger(a:string, b:string) {
 }
 
 const fetchLocalProviders = () => {
-    return simpleFetch(clusterPath(`/providers`))
-}
+    return simpleFetch(clusterPath(`/providers`));
+};
 
 export const useBlockAssets = () => {
     return useAsync(async () => {
         const assets = await AssetService.list();
-        return assets.filter(a => a.kind !== 'core/plan');
+        return assets.filter((a) => a.kind !== 'core/plan');
     }, []);
-}
+};
 
-export const withLoadedPlanContext = (plan: Plan|undefined) => {
-
+export const withLoadedPlanContext = (plan: Plan | undefined) => {
     const [currentlyLoading, setCurrentlyLoading] = useState('');
 
     const blockAssets = useBlockAssets();
@@ -132,7 +137,7 @@ export const withLoadedPlanContext = (plan: Plan|undefined) => {
     const localProviderRefs = useAsync(async () => {
         const providers = await fetchLocalProviders();
         return providers.map((provider) => {
-            return `${provider.definition.metadata.name}:${provider.version}`
+            return `${provider.definition.metadata.name}:${provider.version}`;
         });
     }, []);
 
@@ -153,21 +158,24 @@ export const withLoadedPlanContext = (plan: Plan|undefined) => {
         return blockKinds;
     }, [plan, blockAssets.value]);
 
-    const resourceAssets = useAsync(async ():Promise<IResourceTypeProvider[]> => {
+    const resourceAssets = useAsync(async (): Promise<
+        IResourceTypeProvider[]
+    > => {
         const providerKinds = new Set<string>();
-        if (!blockAssets.value ||
-            !localProviderRefs.value) {
+        if (!blockAssets.value || !localProviderRefs.value) {
             return [];
         }
 
-        localProviderRefs.value.forEach(ref => providerKinds.add(ref));
+        localProviderRefs.value.forEach((ref) => providerKinds.add(ref));
 
         let promises = Array.from(blockRefs).map(async (blockRef) => {
             if (BLOCK_CACHE[blockRef]) {
                 return;
             }
             const blockUri = parseKapetaUri(blockRef);
-            let block = blockAssets.value.find((asset) => parseKapetaUri(asset.ref).equals(blockUri));
+            let block = blockAssets.value.find((asset) =>
+                parseKapetaUri(asset.ref).equals(blockUri)
+            );
             if (!block) {
                 block = await BlockService.get(blockRef);
                 setCurrentlyLoading(blockRef);
@@ -177,9 +185,9 @@ export const withLoadedPlanContext = (plan: Plan|undefined) => {
                 return;
             }
             providerKinds.add(block.data.kind);
-            const eachResource = (resource:Resource) => {
+            const eachResource = (resource: Resource) => {
                 providerKinds.add(resource.kind);
-            }
+            };
             block.data.spec?.providers?.forEach(eachResource);
             block.data.spec?.consumers?.forEach(eachResource);
             if (block.data.spec?.target?.kind) {
@@ -199,14 +207,17 @@ export const withLoadedPlanContext = (plan: Plan|undefined) => {
         return ResourceTypeProvider.list();
     }, [blockRefs, blockAssets.value, localProviderRefs.value]);
 
-
     return {
         resourceAssets: resourceAssets.value,
         currentlyLoading: currentlyLoading,
         blocks: blockAssets.value,
-        loading: blockAssets.loading || resourceAssets.loading || localProviderRefs.loading,
-        error: blockAssets.error || resourceAssets.error || localProviderRefs.error
-    }
-
-
-}
+        loading:
+            blockAssets.loading ||
+            resourceAssets.loading ||
+            localProviderRefs.loading,
+        error:
+            blockAssets.error ||
+            resourceAssets.error ||
+            localProviderRefs.error,
+    };
+};
