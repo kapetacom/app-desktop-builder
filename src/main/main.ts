@@ -22,7 +22,7 @@ import {
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import { KapetaAPI } from '@kapeta/nodejs-api-client';
-import { execSync, spawnSync } from 'child_process';
+import { spawnSync } from 'child_process';
 import which from 'which';
 
 import MenuBuilder from './menu';
@@ -336,7 +336,7 @@ async function checkDockerBinary() {
     try {
         await which('docker');
     } catch (e) {
-        throw new Error('docker binary not found');
+        throw new Error('docker binary not found: ' + e);
     }
 }
 
@@ -390,7 +390,6 @@ app.whenReady()
             splash.setStatus({
                 cluster: StatusCheck.ERROR,
             });
-            throw e;
         }
     })
     .then(() => {
