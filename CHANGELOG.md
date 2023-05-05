@@ -1,3 +1,11 @@
+## [0.1.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.1.1...v0.1.2) (2023-05-05)
+
+
+### Bug Fixes
+
+* bump electron to v24 w/ chrome112 ([1caa958](https://github.com/kapetacom/app-desktop-builder/commit/1caa958841c3e9dd2b1cbeb1127132a90d51896e))
+* use updated asset info in configuration panel [KAP-612] ([ee47335](https://github.com/kapetacom/app-desktop-builder/commit/ee47335d7a98c2a8540579eec94afb2acc4f06e2))
+
 ## [0.1.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.1.0...v0.1.1) (2023-04-25)
 
 
