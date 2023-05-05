@@ -332,23 +332,6 @@ const createWindow = async () => {
     new AppUpdater();
 };
 
-async function checkDockerBinary() {
-    try {
-        await which('docker');
-    } catch (e) {
-        throw new Error('docker binary not found: ' + e);
-    }
-}
-
-function checkDockerStatus() {
-    const child = spawnSync('docker', ['ps']);
-    if (child.status !== 0) {
-        console.error(child.stdout?.toString('utf-8'));
-        console.error(child.stderr?.toString('utf-8'));
-        throw new Error('Docker does not seem to be running.');
-    }
-}
-
 /**
  * Add event listeners...
  */
@@ -369,22 +352,14 @@ app.whenReady()
             docker: StatusCheck.LOADING,
             cluster: StatusCheck.LOADING,
         });
-        try {
-            await checkDockerBinary();
-            await checkDockerStatus();
-            splash.setStatus({
-                docker: StatusCheck.OK,
-            });
-        } catch (e) {
-            splash.setStatus({
-                docker: StatusCheck.ERROR,
-            });
-        }
 
         try {
             await ensureLocalCluster();
             splash.setStatus({
                 cluster: StatusCheck.OK,
+                docker: localClusterInfo.docker
+                    ? StatusCheck.OK
+                    : StatusCheck.ERROR,
             });
         } catch (e) {
             splash.setStatus({

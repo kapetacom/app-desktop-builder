@@ -7,6 +7,7 @@ import FS from 'node:fs';
 export interface ClusterInfo {
     host: string;
     port: number;
+    dockerStatus: boolean;
 }
 
 const SERVICE_FILE = Path.resolve(__dirname, '../service/index.js');
