@@ -15,7 +15,7 @@ import { Asset } from '@kapeta/ui-web-types';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import { SimpleLoader } from '@kapeta/ui-web-components';
 import { PlanEditor } from '../components/plan-editor/PlanEditor';
-import {withLoadedPlanContext} from "../utils/planContextLoader";
+import { withLoadedPlanContext } from '../utils/planContextLoader';
 
 interface PlanViewProps {
     systemId: string;
@@ -34,7 +34,6 @@ export const PlanView = (props: PlanViewProps) => {
         // We can only edit local versions
         plannerMode = PlannerMode.CONFIGURATION;
     }
-
 
     const instanceStatus = useAsyncRetry(async () => {
         const statuses = await InstanceService.getInstanceStatusForPlan(
@@ -58,12 +57,8 @@ export const PlanView = (props: PlanViewProps) => {
         [instanceStatus, props.systemId]
     );
 
-    const {
-        resourceAssets,
-        blocks,
-        loading,
-        currentlyLoading
-    } = withLoadedPlanContext(planData.value?.data);
+    const { resourceAssets, blocks, loading, currentlyLoading } =
+        withLoadedPlanContext(planData.value?.data);
 
     let loadingText = 'Loading plan...';
 
@@ -75,17 +70,13 @@ export const PlanView = (props: PlanViewProps) => {
     }
 
     return (
-        <SimpleLoader
-            loading={planData.loading || loading}
-            text={loadingText}
-        >
+        <SimpleLoader loading={planData.loading || loading} text={loadingText}>
             {planData.value && resourceAssets && blocks && (
                 <PlanEditor
                     plan={planData.value.data}
                     resourceAssets={resourceAssets}
                     instanceStates={instanceStatus.value ?? {}}
                     mode={plannerMode}
-
                     systemId={props.systemId}
                     onChange={async (plan) => {
                         console.log('Plan changed', plan);

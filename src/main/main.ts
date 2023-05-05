@@ -379,7 +379,6 @@ app.whenReady()
             splash.setStatus({
                 docker: StatusCheck.ERROR,
             });
-            throw e;
         }
 
         try {

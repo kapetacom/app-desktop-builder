@@ -17,7 +17,6 @@ import {
 
 import { BlockTypeProvider } from '@kapeta/ui-web-context';
 
-import { BlockService } from '@kapeta/ui-web-context';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import { BlockInstance } from '@kapeta/schemas';
 import {
@@ -32,7 +31,6 @@ import {
     getInstanceConfig,
     setInstanceConfig,
 } from '../../../../api/LocalConfigService';
-import {useBlockAssets} from "../../../../utils/planContextLoader";
 
 type Options = { [key: string]: string };
 
@@ -67,7 +65,6 @@ export const BlockConfigurationPanel = (props: Props) => {
         }
     }, [props.systemId, planner.plan, props.open]);
 
-
     const block = useMemo(() => {
         if (!props.instance?.block.ref) {
             return undefined;
@@ -85,7 +82,10 @@ export const BlockConfigurationPanel = (props: Props) => {
     const data: BlockConfigurationData = useMemo<BlockConfigurationData>(() => {
         let defaultConfig = {};
         if (block && typeProvider?.createDefaultConfig) {
-            defaultConfig = typeProvider.createDefaultConfig!(block, props.instance);
+            defaultConfig = typeProvider.createDefaultConfig!(
+                block,
+                props.instance
+            );
         }
 
         if (!props.instance) {
@@ -93,7 +93,7 @@ export const BlockConfigurationPanel = (props: Props) => {
                 version: '',
                 name: '',
                 configuration: {
-                    ...defaultConfig
+                    ...defaultConfig,
                 },
             };
         }
@@ -103,37 +103,31 @@ export const BlockConfigurationPanel = (props: Props) => {
             name: props.instance.name,
             configuration: {
                 ...defaultConfig,
-                ...instanceConfig.value
+                ...instanceConfig.value,
             },
         };
     }, [props.instance, instanceConfig.value, typeProvider, block]);
 
-    const blockAssets = useBlockAssets();
+    const { blockAssets } = useContext(PlannerContext);
 
     const versionOptions: Options = useMemo(() => {
-        if (!blockAssets.value ||
-            !props.instance?.block.ref) {
+        if (!props.instance?.block.ref) {
             return {} as Options;
         }
 
         const blockUri = parseKapetaUri(props.instance?.block.ref);
-        const blocks = blockAssets.value;
         const opts: Options = {};
-        blocks
-            .filter((block) => {
-                const uri = parseKapetaUri(block.ref);
+        blockAssets
+            .filter((asset) => {
+                const uri = parseKapetaUri(asset.ref);
                 return uri.fullName === blockUri.fullName;
             })
-            .forEach((block) => {
-                opts[block.version] =
-                    block.version === 'local'
-                        ? 'Local Disk'
-                        : block.version;
+            .forEach((asset) => {
+                opts[asset.version] = asset.version;
             });
 
         return opts;
-
-    }, [props.instance?.block.ref, blockAssets.value])
+    }, [props.instance?.block.ref, blockAssets]);
 
     const onSave = async (data: BlockConfigurationData) => {
         if (!props.instance?.id) {
@@ -214,19 +208,21 @@ export const BlockConfigurationPanel = (props: Props) => {
                             )}
 
                             {!hasConfigComponent &&
-                                block?.spec.configuration?.types?.length > 0 && (
-                                <TabPage
-                                    id={'configuration'}
-                                    title={'Configuration'}
-                                >
-                                    <EntityEditorForm
-                                        entities={
-                                            block!.spec.configuration!.types!
-                                        }
-                                        name={'configuration'}
-                                    />
-                                </TabPage>
-                            )}
+                                block?.spec.configuration?.types?.length >
+                                    0 && (
+                                    <TabPage
+                                        id={'configuration'}
+                                        title={'Configuration'}
+                                    >
+                                        <EntityEditorForm
+                                            entities={
+                                                block!.spec.configuration!
+                                                    .types!
+                                            }
+                                            name={'configuration'}
+                                        />
+                                    </TabPage>
+                                )}
                         </TabContainer>
 
                         <FormButtons>
