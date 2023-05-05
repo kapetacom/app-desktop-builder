@@ -1,5 +1,5 @@
 import Path from 'path';
-import React, {useEffect, useState} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Asset, FileInfo, SchemaKind } from '@kapeta/ui-web-types';
 
@@ -51,28 +51,42 @@ interface Props {
     onStateChanged: (state: AssetCreatorState) => void;
 }
 
-
-export const AssetCreator = (props:Props) => {
-
+export const AssetCreator = (props: Props) => {
     const [newEntity, setNewEntity] = useState<SchemaKind>();
     const [useProjectHome, setUseProjectHome] = useState<boolean>();
     const [projectHome, setProjectHome] = useState<string>();
-    const [filePanelOpen, setFilePanelOpen] = useState<boolean>();
 
+    const [processing, setProcessing] = useState<{
+        promise?: Promise<string>;
+        resolve?: (string) => void;
+        reject?: (any) => void;
+    }>({});
 
     const closeCreatePanel = () => {
-        setNewEntity(createNewEntity())
-        setFilePanelOpen(false);
         props.onStateChanged(AssetCreatorState.CLOSED);
     };
 
-    const closeImportPanel = () => {
-        setNewEntity(createNewEntity())
-        setFilePanelOpen(false);
-        props.onStateChanged(AssetCreatorState.CLOSED);
-    };
+    const closeFilePicker = useCallback(() => {
+        processing.resolve?.call(null);
+    }, [processing]);
 
-    const saveNewEntity = async (data: SchemaKind) => {
+    // promise based file picker callbacks
+    const waitForFilePicker = useCallback(() => {
+        const newP: typeof processing = {};
+        newP.promise = new Promise((resolve, reject) => {
+            newP.resolve = resolve;
+            newP.reject = reject;
+        });
+        // unset itself when settled
+        setProcessing(newP);
+        // eslint-disable-next-line promise/catch-or-return
+        newP.promise!.finally(() => {
+            setProcessing({});
+        });
+        return newP.promise;
+    }, [setProcessing]);
+
+    const onSubmit = async (data: SchemaKind) => {
         if (useProjectHome && projectHome) {
             const path = Path.join(projectHome, data.metadata.name);
             await createAsset(path, data);
@@ -80,7 +94,11 @@ export const AssetCreator = (props:Props) => {
         }
 
         setNewEntity(data);
-        setFilePanelOpen(true);
+
+        const filePath = await waitForFilePicker();
+        if (filePath) {
+            await createAsset(filePath, data);
+        }
     };
 
     const createAsset = async (filePath: string, content: SchemaKind) => {
@@ -90,13 +108,12 @@ export const AssetCreator = (props:Props) => {
                 content
             );
 
-            setFilePanelOpen(false);
-            setNewEntity(createNewEntity());
+            setNewEntity(props.createNewKind());
 
             if (props.onAssetAdded && assets.length > 0) {
                 props.onAssetAdded(assets[0]);
             }
-            callDone(assets.length > 0 ? assets[0] : undefined);
+            props.onDone?.call(null, assets?.[0]);
         } catch (e) {
             showToasty({
                 type: ToastType.ALERT,
@@ -104,93 +121,58 @@ export const AssetCreator = (props:Props) => {
                 message: e.message,
             });
         }
-    }
+    };
 
-    const onFileSelection = async (file: FileInfo) => {
-        if (!newEntity) {
-            return;
-        }
-        try {
-            let assets: Asset[];
+    const selectableHandler = useCallback(
+        (file: FileInfo) => {
             if (props.state === AssetCreatorState.IMPORTING) {
-                assets = await props.assetService.import(
-                    `file://${file.path}`
-                );
-                closeImportPanel();
-            } else if (props.state === AssetCreatorState.CREATING) {
-                assets = await props.assetService.create(
-                    Path.join(file.path, props.fileName),
-                    newEntity
-                );
-                closeCreatePanel();
-            } else {
-                return;
+                // Filter the selectable files / folders in the import
+                return props.fileSelectableHandler.call(null, file);
             }
+            // When creating we want only folders
+            return !!file.folder;
+        },
+        [props.state, props.fileSelectableHandler]
+    );
 
-            callDone(assets.length > 0 ? assets[0] : undefined);
-        } catch (err: any) {
-            console.error('Failed on file selection', err.stack);
-        }
-    };
-
-    const callDone = (asset?: Asset) => {
-        if (!props.onDone) {
-            return;
-        }
-
-        props.onDone(asset);
-    }
-
-    const createNewEntity = () => {
-        return props.createNewKind();
-    }
-
-    const selectableHandler = (file: FileInfo) => {
-        if (props.state === AssetCreatorState.IMPORTING) {
-            // Filter the selectable files / folders in the import
-            return props.fileSelectableHandler(file);
-        }
-        // When creating we want only folders
-        return !!file.folder;
-    };
-
-    const isFilePanelOpen = () => {
-        if (props.state === AssetCreatorState.CLOSED) {
-            return false;
-        }
-        return (
-            filePanelOpen ||
-            props.state === AssetCreatorState.IMPORTING
-        );
-    }
-
-    const isCreatePanelOpen = () => {
-        if (props.state === AssetCreatorState.CLOSED) {
-            return false;
-        }
-        return props.state === AssetCreatorState.CREATING;
-    }
-
-    const onClosedFilePanel = () => {
-        setFilePanelOpen(false);
-        if (props.state === AssetCreatorState.IMPORTING) {
-            // Closing file panel closes all for import
-            closeImportPanel();
-        }
-    }
-
+    // Initialization handler, depending on import or create
     useEffect(() => {
         if (props.state === AssetCreatorState.CREATING) {
-            //When changed to creating - set new entity
-            setNewEntity(createNewEntity());
+            // When changed to creating - set new entity
+            setNewEntity(props.createNewKind.call(null));
         }
-    }, [props.state]);
+        if (props.state === AssetCreatorState.IMPORTING) {
+            (async () => {
+                const path = await waitForFilePicker();
+                if (path) {
+                    try {
+                        const assets = props.assetService.import(
+                            `file://${path}`
+                        );
+                        props.onDone?.call(null, assets[0]);
+                    } catch (err) {
+                        showToasty({
+                            type: ToastType.ALERT,
+                            title: 'Failed to import asset',
+                            message: err.message,
+                        });
+                    }
+                }
+            })();
+        }
+    }, [
+        props.onDone,
+        props.state,
+        props.assetService,
+        props.createNewKind,
+        waitForFilePicker,
+    ]);
 
     const InnerFormRenderer = props.formRenderer;
     return (
         <>
             <SidePanel
-                open={isCreatePanelOpen()}
+                open={props.state === AssetCreatorState.CREATING}
                 size={PanelSize.medium}
                 side={PanelAlignment.right}
                 onClose={closeCreatePanel}
@@ -199,9 +181,7 @@ export const AssetCreator = (props:Props) => {
                 <div className="asset-creator-form">
                     <FormContainer
                         initialValue={newEntity}
-                        onSubmitData={(data: any) =>
-                            saveNewEntity(data)
-                        }
+                        onSubmitData={(data: any) => onSubmit(data)}
                     >
                         <InnerFormRenderer asset={newEntity} creating />
 
@@ -232,13 +212,15 @@ export const AssetCreator = (props:Props) => {
             </SidePanel>
 
             <FileBrowserDialog
-                open={isFilePanelOpen()}
+                open={!!processing.promise}
                 skipFiles={props.skipFiles}
                 service={FileSystemService}
-                onSelect={onFileSelection}
-                onClose={() => onClosedFilePanel()}
+                onSelect={(file: FileInfo) => {
+                    processing.resolve?.call(null, file.path);
+                }}
+                onClose={() => closeFilePicker()}
                 selectable={selectableHandler}
             />
         </>
     );
-}
+};
