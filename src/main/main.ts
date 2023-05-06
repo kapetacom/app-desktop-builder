@@ -22,8 +22,6 @@ import {
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import { KapetaAPI } from '@kapeta/nodejs-api-client';
-import { spawnSync } from 'child_process';
-import which from 'which';
 
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
@@ -357,7 +355,7 @@ app.whenReady()
             await ensureLocalCluster();
             splash.setStatus({
                 cluster: StatusCheck.OK,
-                docker: localClusterInfo.docker
+                docker: localClusterInfo?.dockerStatus
                     ? StatusCheck.OK
                     : StatusCheck.ERROR,
             });
