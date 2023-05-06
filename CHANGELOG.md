@@ -1,3 +1,10 @@
+## [0.1.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.1.2...v0.1.3) (2023-05-06)
+
+
+### Bug Fixes
+
+* move docker check to local cluster service and show the status ([8aaa1b3](https://github.com/kapetacom/app-desktop-builder/commit/8aaa1b3c96e13ab3f306c0f8763a9fb7368e7ecd))
+
 ## [0.1.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.1.1...v0.1.2) (2023-05-05)
 
 
