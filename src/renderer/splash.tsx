@@ -26,12 +26,12 @@ function render() {
             />
             <ul style={{ padding: '0 30px 20px', listStyleType: 'none' }}>
                 <li>
-                    <StatusIcon status={keyValuePairs.get('docker')} /> Checking
-                    Docker...
-                </li>
-                <li>
                     <StatusIcon status={keyValuePairs.get('cluster')} />{' '}
                     Starting local cluster...
+                </li>
+                <li>
+                    <StatusIcon status={keyValuePairs.get('docker')} /> Checking
+                    Docker...
                 </li>
             </ul>
         </div>
