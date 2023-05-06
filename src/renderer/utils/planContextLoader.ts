@@ -11,14 +11,13 @@ import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import _ from 'lodash';
 import Kapeta from '../kapeta';
 import {
-    Asset,
     IBlockTypeProvider,
     ILanguageTargetProvider,
     IResourceTypeProvider,
 } from '@kapeta/ui-web-types';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
-import { BlockDefinition, Plan, Resource } from '@kapeta/schemas';
+import { Plan, Resource } from '@kapeta/schemas';
 
 const PROVIDER_CACHE = {};
 const BLOCK_CACHE = {};
@@ -157,6 +156,8 @@ export const withLoadedPlanContext = (plan: Plan | undefined) => {
 
         return blockKinds;
     }, [plan, blockAssets.value]);
+
+
 
     const resourceAssets = useAsync(async (): Promise<
         IResourceTypeProvider[]

@@ -90,12 +90,12 @@ interface Props {
     readonly: boolean;
     version: string;
     systemId: string;
-    plan: Plan;
 }
 
 export const PlanEditorTopMenu = (props: Props) => {
     const planner = useContext(PlannerContext);
-    const [playing, setPlaying] = useState(false);
+    const [allPlaying, setAllPlaying] = useState(false);
+    const [anyPlaying, setAnyPlaying] = useState(false);
     const [processing, setProcessing] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
 
@@ -120,7 +120,7 @@ export const PlanEditorTopMenu = (props: Props) => {
     const containerClass = toClass({
         'top-menu': true,
         'read-only': props.readonly,
-        playing,
+        playing: anyPlaying,
     });
 
     useEffect(() => {
@@ -128,7 +128,10 @@ export const PlanEditorTopMenu = (props: Props) => {
             const status = await InstanceService.getInstanceStatusForPlan(
                 props.systemId
             );
-            setPlaying(status.filter((s) => s.status !== 'stopped').length > 0);
+            setAllPlaying(status.length > 0 &&
+                status.filter((s) => s.status === 'stopped').length === 0);
+            setAnyPlaying(status.length > 0 &&
+                status.filter((s) => s.status !== 'stopped').length > 0);
         };
         updateState().catch(() => {
             // ignore initial error
@@ -165,26 +168,27 @@ export const PlanEditorTopMenu = (props: Props) => {
             <div className="buttons">
                 <button
                     type="button"
-                    disabled={playing || processing}
+                    disabled={allPlaying || processing}
                     onClick={async () => {
                         await doProcess(async () => {
                             await InstanceService.startInstances(
                                 props.systemId
                             );
-                            setPlaying(true);
+                            setAllPlaying(true);
                         }, 'Failed to start plan');
                     }}
                 >
-                    <i className="fa fa-play" />
-                    <span>Start</span>
+
+                    {anyPlaying ? <i className="fa fa-redo" /> : <i className="fa fa-play" />}
+                    <span>{anyPlaying ? 'Restart' : 'Start'}</span>
                 </button>
                 <button
                     type="button"
-                    disabled={!playing || processing}
+                    disabled={!anyPlaying || processing}
                     onClick={async () => {
                         await doProcess(async () => {
                             await InstanceService.stopInstances(props.systemId);
-                            setPlaying(false);
+                            setAllPlaying(false);
                         }, 'Failed to stop plan');
                     }}
                 >
@@ -224,8 +228,8 @@ export const PlanEditorTopMenu = (props: Props) => {
                         <TabPage id={'general'} title={'General'}>
                             <PlanForm />
                         </TabPage>
-                        {planner.plan?.spec.configuration?.types?.length >
-                            0 && (
+                        {planner.plan?.spec?.configuration?.types &&
+                            planner.plan?.spec?.configuration?.types?.length > 0 && (
                             <TabPage
                                 id={'configuration'}
                                 title={'Configuration'}

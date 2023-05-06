@@ -22,6 +22,7 @@ const Application: React.FC = () => {
                     case 'core/deployment-target': //Unused locally
                         return;
                     case 'core/block-type':
+                    case 'core/block-type-operator':
                         if (!BlockTypeProvider.exists(ref)) {
                             return;
                         }
@@ -52,6 +53,7 @@ const Application: React.FC = () => {
                     case 'core/deployment-target': //Unused locally
                         return;
                     case 'core/block-type':
+                    case 'core/block-type-operator':
                         if (BlockTypeProvider.exists(ref)) {
                             return;
                         }
