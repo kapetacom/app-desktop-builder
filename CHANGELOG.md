@@ -1,3 +1,10 @@
+# [0.2.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.1.3...v0.2.0) (2023-05-06)
+
+
+### Features
+
+* Add support for block-type-operators ([39f9e5c](https://github.com/kapetacom/app-desktop-builder/commit/39f9e5cbe728d2bb5f5931d21c059e40c577b30c))
+
 ## [0.1.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.1.2...v0.1.3) (2023-05-06)
 
 
