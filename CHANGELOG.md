@@ -1,3 +1,10 @@
+## [0.2.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.2.0...v0.2.1) (2023-05-07)
+
+
+### Bug Fixes
+
+* Add address support for instances ([d6b88c2](https://github.com/kapetacom/app-desktop-builder/commit/d6b88c2c344695a006750301bfdcdfa172072f54))
+
 # [0.2.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.1.3...v0.2.0) (2023-05-06)
 
 
