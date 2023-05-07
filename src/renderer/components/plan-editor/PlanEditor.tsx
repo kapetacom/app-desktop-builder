@@ -15,7 +15,7 @@ import React, {
 import {withPlanEditorActions} from './PlanEditorActions';
 import {PlanEditorToolBoxPanel} from './panels/toolbox/PlanEditorToolBoxPanel';
 import {BlockConfigurationPanel} from './panels/block-configuration/BlockConfigurationPanel';
-import {ConfigureItemInfo, EditItemInfo, InspectItemInfo} from './types';
+import {ConfigureItemInfo, EditItemInfo, InspectItemInfo, InstanceInfo} from './types';
 import {EditorPanels} from './panels/editor/EditorPanels';
 import {InspectorPanels} from './panels/InspectorPanels';
 import './PlanEditor.less';
@@ -26,6 +26,7 @@ import {getInstanceConfigs} from "../../api/LocalConfigService";
 interface Props {
     systemId: string;
     resourceAssets: IResourceTypeProvider[];
+    instanceInfos?: InstanceInfo[];
     ref: ForwardedRef<HTMLDivElement>;
 }
 
@@ -42,7 +43,7 @@ export const PlanEditor = withPlannerContext(
         );
         const [editInfo, setEditInfo] = useState<EditItemInfo | null>(null);
 
-        const actions = withPlanEditorActions(planner, {
+        const actions = withPlanEditorActions(planner, props.instanceInfos ?? [], {
             inspect: (info) => {
                 setInspectInfo(info);
             },

@@ -1,19 +1,11 @@
-import {
-    PlannerActionConfig,
-    PlannerContextData,
-    PlannerMode,
-} from '@kapeta/ui-web-plan-editor';
-import { ButtonStyle, showDelete } from '@kapeta/ui-web-components';
-import {
-    ItemType,
-    IResourceTypeConverter,
-    ResourceRole,
-} from '@kapeta/ui-web-types';
-import { parseKapetaUri } from '@kapeta/nodejs-utils';
-import { useEffect, useMemo } from 'react';
-import { ActionHandlers } from './types';
-import { ResourceTypeProvider } from '@kapeta/ui-web-context';
-import { Connection } from '@kapeta/schemas';
+import {PlannerActionConfig, PlannerContextData, PlannerMode,} from '@kapeta/ui-web-plan-editor';
+import {ButtonStyle, showDelete} from '@kapeta/ui-web-components';
+import {IResourceTypeConverter, ItemType, ResourceRole,} from '@kapeta/ui-web-types';
+import {parseKapetaUri} from '@kapeta/nodejs-utils';
+import {useEffect, useMemo} from 'react';
+import {ActionHandlers, InstanceInfo} from './types';
+import {InstanceStatus, ResourceTypeProvider} from '@kapeta/ui-web-context';
+import {Connection} from '@kapeta/schemas';
 
 function getConverter(
     planner: PlannerContextData,
@@ -61,6 +53,7 @@ function hasMapping(
 
 export const withPlanEditorActions = (
     planner: PlannerContextData,
+    instanceInfos: InstanceInfo[],
     handlers: ActionHandlers
 ): PlannerActionConfig => {
     useEffect(() => {
@@ -178,6 +171,28 @@ export const withPlanEditorActions = (
                     buttonStyle: ButtonStyle.DEFAULT,
                     icon: 'fa fa-tools',
                     label: 'Configure',
+                },
+                {
+                    enabled(context, {blockInstance}): boolean {
+                        const info = instanceInfos
+                            .find(info => info.instanceId === blockInstance?.id);
+                        if (!info?.address) {
+                            return false;
+                        }
+
+                        return info.status === InstanceStatus.READY;
+                    },
+                    onClick(context, {blockInstance}) {
+                        const info = instanceInfos
+                            .find(info => info.instanceId === blockInstance?.id);
+                        if (!info?.address) {
+                            return;
+                        }
+                        window.open(info.address, blockInstance?.id);
+                    },
+                    buttonStyle: ButtonStyle.DEFAULT,
+                    icon: 'fa fa-globe',
+                    label: 'Visit',
                 },
             ],
             resource: [

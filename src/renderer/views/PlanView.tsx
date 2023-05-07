@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect, useMemo} from 'react';
 import { useAsync, useAsyncRetry } from 'react-use';
 import { PlannerMode } from '@kapeta/ui-web-plan-editor';
 
@@ -16,6 +16,7 @@ import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import { SimpleLoader } from '@kapeta/ui-web-components';
 import { PlanEditor } from '../components/plan-editor/PlanEditor';
 import { withLoadedPlanContext } from '../utils/planContextLoader';
+import {InstanceInfo} from "../components/plan-editor/types";
 
 interface PlanViewProps {
     systemId: string;
@@ -35,16 +36,22 @@ export const PlanView = (props: PlanViewProps) => {
         plannerMode = PlannerMode.CONFIGURATION;
     }
 
-    const instanceStatus = useAsyncRetry(async () => {
-        const statuses = await InstanceService.getInstanceStatusForPlan(
+    const instanceInfos = useAsyncRetry(async () => {
+        return await InstanceService.getInstanceStatusForPlan(
             props.systemId
-        );
+        ) as InstanceInfo[];
+    });
+
+    const instanceStatusMap = useMemo( () => {
+        if (!instanceInfos.value) {
+            return {};
+        }
         const result: Record<string, InstanceStatus> = {};
-        statuses.forEach((status) => {
+        instanceInfos.value.forEach((status) => {
             result[status.instanceId] = status.status;
         });
         return result;
-    });
+    }, [instanceInfos.value]);
 
     // subscribe and reload instance status
     useEffect(
@@ -52,9 +59,9 @@ export const PlanView = (props: PlanViewProps) => {
             InstanceService.subscribe(
                 props.systemId,
                 InstanceEventType.EVENT_INSTANCE_CHANGED,
-                () => instanceStatus.retry()
+                () => instanceInfos.retry()
             ),
-        [instanceStatus, props.systemId]
+        [instanceInfos, props.systemId]
     );
 
     const { resourceAssets, blocks, loading, currentlyLoading } =
@@ -75,7 +82,8 @@ export const PlanView = (props: PlanViewProps) => {
                 <PlanEditor
                     plan={planData.value.data}
                     resourceAssets={resourceAssets}
-                    instanceStates={instanceStatus.value ?? {}}
+                    instanceInfos={instanceInfos.value}
+                    instanceStates={instanceStatusMap}
                     mode={plannerMode}
                     systemId={props.systemId}
                     onChange={async (plan) => {
