@@ -1,7 +1,7 @@
 {
     "name": "@kapeta/app-desktop-builder",
     "description": "Kapeta Desktop Application",
-    "version": "0.2.3",
+    "version": "0.2.4",
     "private": true,
     "homepage": "https://kapeta.com",
     "license": "MIT",
