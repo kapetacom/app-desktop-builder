@@ -1,3 +1,10 @@
+## [0.2.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.2.2...v0.2.3) (2023-05-24)
+
+
+### Bug Fixes
+
+* Add missing module ([bb8c486](https://github.com/kapetacom/app-desktop-builder/commit/bb8c48657433b8a0d06f1dc0687cb70fb9b1a547))
+
 ## [0.2.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.2.0...v0.2.1) (2023-05-07)
 
 
