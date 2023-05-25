@@ -1,5 +1,5 @@
 import { ElectronHandler } from 'main/preload';
-import {KapetaAPI} from "./kapeta";
+import { KapetaAPI } from './kapeta';
 
 declare global {
     interface Window {

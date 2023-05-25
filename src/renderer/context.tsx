@@ -5,8 +5,12 @@ import {
     BlockTargetProvider,
 } from '@kapeta/ui-web-context';
 import _ from 'lodash';
+import {
+    IBlockTypeProvider,
+    ILanguageTargetProvider,
+    IResourceTypeProvider,
+} from '@kapeta/ui-web-types';
 import Kapeta from './kapeta';
-import {IBlockTypeProvider, ILanguageTargetProvider, IResourceTypeProvider} from "@kapeta/ui-web-types";
 
 export async function initialise() {
     if (!window.Kapeta.config.cluster_service) {
@@ -29,5 +33,4 @@ export async function initialise() {
     }
 
     console.log('All plugins loaded in %s ms', Date.now() - start);
-
 }

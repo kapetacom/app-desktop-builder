@@ -77,22 +77,22 @@ export const ConnectionInspectorPanel = (props: Props) => {
         [props.connection]
     );
 
-    const onTrafficStart = (payload: Traffic) => {
-        trafficLinesHandler.push(payload);
-    };
-
-    const onTrafficEnd = (payload: Traffic) => {
-        const ix = trafficLines.findIndex((t) => t.id === payload.id);
-        if (ix > -1) {
-            const newItem = { ...trafficLines[ix], ...payload };
-            trafficLinesHandler.updateAt(ix, newItem);
-        }
-    };
-
     useEffect(() => {
         if (!connectionId) {
-            return () => {};
+            return () => {
+                // noop
+            };
         }
+        const onTrafficStart = (payload: Traffic) => {
+            trafficLinesHandler.push(payload);
+        };
+        const onTrafficEnd = (payload: Traffic) => {
+            const ix = trafficLines.findIndex((t) => t.id === payload.id);
+            if (ix > -1) {
+                const newItem = { ...trafficLines[ix], ...payload };
+                trafficLinesHandler.updateAt(ix, newItem);
+            }
+        };
 
         const unsubscribes = [
             TrafficService.subscribe(
@@ -110,7 +110,7 @@ export const ConnectionInspectorPanel = (props: Props) => {
         return () => {
             unsubscribes.forEach((u) => u());
         };
-    }, [connectionId]);
+    }, [connectionId, trafficLines, trafficLinesHandler]);
 
     return (
         <Modal

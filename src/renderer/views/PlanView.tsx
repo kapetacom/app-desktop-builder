@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo} from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useAsync, useAsyncRetry } from 'react-use';
 import { PlannerMode } from '@kapeta/ui-web-plan-editor';
 
@@ -15,8 +15,8 @@ import { Asset } from '@kapeta/ui-web-types';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import { SimpleLoader } from '@kapeta/ui-web-components';
 import { PlanEditor } from '../components/plan-editor/PlanEditor';
-import { withLoadedPlanContext } from '../utils/planContextLoader';
-import {InstanceInfo} from "../components/plan-editor/types";
+import { useLoadedPlanContext } from '../utils/planContextLoader';
+import { InstanceInfo } from '../components/plan-editor/types';
 
 interface PlanViewProps {
     systemId: string;
@@ -37,12 +37,12 @@ export const PlanView = (props: PlanViewProps) => {
     }
 
     const instanceInfos = useAsyncRetry(async () => {
-        return await InstanceService.getInstanceStatusForPlan(
+        return (await InstanceService.getInstanceStatusForPlan(
             props.systemId
-        ) as InstanceInfo[];
+        )) as InstanceInfo[];
     });
 
-    const instanceStatusMap = useMemo( () => {
+    const instanceStatusMap = useMemo(() => {
         if (!instanceInfos.value) {
             return {};
         }
@@ -65,7 +65,7 @@ export const PlanView = (props: PlanViewProps) => {
     );
 
     const { resourceAssets, blocks, loading, currentlyLoading } =
-        withLoadedPlanContext(planData.value?.data);
+        useLoadedPlanContext(planData.value?.data);
 
     let loadingText = 'Loading plan...';
 

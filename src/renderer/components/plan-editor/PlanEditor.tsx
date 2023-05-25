@@ -5,9 +5,11 @@ import {
     PlannerMode,
     withPlannerContext,
 } from '@kapeta/ui-web-plan-editor';
-import { PlanEditorTopMenu } from './PlanEditorTopMenu';
 import React, { ForwardedRef, forwardRef, useContext, useState } from 'react';
-import { withPlanEditorActions } from './PlanEditorActions';
+import { IResourceTypeProvider } from '@kapeta/ui-web-types';
+import { useAsync } from 'react-use';
+import { PlanEditorTopMenu } from './PlanEditorTopMenu';
+import { usePlanEditorActions } from './PlanEditorActions';
 import { PlanEditorToolBoxPanel } from './panels/toolbox/PlanEditorToolBoxPanel';
 import { BlockConfigurationPanel } from './panels/block-configuration/BlockConfigurationPanel';
 import {
@@ -19,8 +21,6 @@ import {
 import { EditorPanels } from './panels/editor/EditorPanels';
 import { InspectorPanels } from './panels/InspectorPanels';
 import './PlanEditor.less';
-import { IResourceTypeProvider } from '@kapeta/ui-web-types';
-import { useAsync } from 'react-use';
 import { getInstanceConfigs } from '../../api/LocalConfigService';
 
 interface Props {
@@ -43,7 +43,7 @@ export const PlanEditor = withPlannerContext(
         );
         const [editInfo, setEditInfo] = useState<EditItemInfo | null>(null);
 
-        const actions = withPlanEditorActions(
+        const actions = usePlanEditorActions(
             planner,
             props.instanceInfos ?? [],
             {
@@ -66,7 +66,7 @@ export const PlanEditor = withPlannerContext(
         const readonly = planner.mode !== PlannerMode.EDIT;
 
         return (
-            <div className={'plan-editor'} ref={ref}>
+            <div className="plan-editor" ref={ref}>
                 <PlanEditorTopMenu
                     readonly={readonly}
                     version={uri.version}

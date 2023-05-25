@@ -1,9 +1,9 @@
-import { EditorBlockInspectorPanel } from './block-inspector/EditorBlockInspectorPanel';
 import { ItemType } from '@kapeta/ui-web-types';
 import { Connection } from '@kapeta/schemas';
+import React from 'react';
+import { EditorBlockInspectorPanel } from './block-inspector/EditorBlockInspectorPanel';
 import { BlockInfo, InspectItemInfo } from '../types';
 import { ConnectionInspectorPanel } from './connection-inspector/ConnectionInspectorPanel';
-import React from 'react';
 
 interface Props {
     systemId: string;
@@ -18,7 +18,11 @@ export const InspectorPanels = (props: Props) => {
         <>
             <EditorBlockInspectorPanel
                 systemId={props.systemId}
-                instance={inspectInfo?.type === ItemType.BLOCK ? inspectInfo?.item.instance : null}
+                instance={
+                    inspectInfo?.type === ItemType.BLOCK
+                        ? inspectInfo?.item.instance
+                        : null
+                }
                 open={inspectInfo?.type === ItemType.BLOCK}
                 onClosed={props.onClosed}
             />

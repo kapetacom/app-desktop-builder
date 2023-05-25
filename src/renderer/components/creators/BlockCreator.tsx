@@ -30,7 +30,9 @@ const createNewBlock = () => {
     };
 };
 
-const noop = () => {};
+const noop = () => {
+    // Do nothing
+};
 
 const selectableHandler = (file: FileInfo) => {
     return file.path.endsWith('/kapeta.yml');

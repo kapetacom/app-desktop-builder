@@ -9,7 +9,6 @@ import {
 } from '@kapeta/ui-web-context';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import _ from 'lodash';
-import Kapeta from '../kapeta';
 import {
     IBlockTypeProvider,
     ILanguageTargetProvider,
@@ -18,6 +17,7 @@ import {
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { Plan, Resource } from '@kapeta/schemas';
+import Kapeta from '../kapeta';
 
 const PROVIDER_CACHE = {};
 const BLOCK_CACHE = {};
@@ -98,7 +98,7 @@ export const loadProvider = async (providerKind: string) => {
 };
 
 function parseVersion(a: string) {
-    return a.split('.').map((v) => parseInt(v));
+    return a.split('.').map((v) => parseInt(v, 10));
 }
 
 function versionIsBigger(a: string, b: string) {
@@ -128,7 +128,7 @@ export const useBlockAssets = () => {
     }, []);
 };
 
-export const withLoadedPlanContext = (plan: Plan | undefined) => {
+export const useLoadedPlanContext = (plan: Plan | undefined) => {
     const [currentlyLoading, setCurrentlyLoading] = useState('');
 
     const blockAssets = useBlockAssets();
@@ -208,7 +208,7 @@ export const withLoadedPlanContext = (plan: Plan | undefined) => {
 
     return {
         resourceAssets: resourceAssets.value,
-        currentlyLoading: currentlyLoading,
+        currentlyLoading,
         blocks: blockAssets.value,
         loading:
             blockAssets.loading ||

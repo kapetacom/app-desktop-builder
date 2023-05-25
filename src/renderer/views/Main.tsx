@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import './Main.less';
-import { PlanOverview } from '../components/plan-overview/PlanOverview';
 
 import { Asset } from '@kapeta/ui-web-types';
 import { useAsyncFn } from 'react-use';
@@ -10,9 +9,10 @@ import { toClass } from '@kapeta/ui-web-utils';
 import { Plan } from '@kapeta/schemas';
 import { SimpleLoader } from '@kapeta/ui-web-components';
 
+import { PlannerService } from '@kapeta/ui-web-context';
 import { useLocalStorage } from '../utils/localStorage';
 import { PlanView } from './PlanView';
-import { PlannerService } from '@kapeta/ui-web-context';
+import { PlanOverview } from '../components/plan-overview/PlanOverview';
 import { getAssetTitle } from '../components/plan-editor/helpers';
 
 export default function Main() {
@@ -40,7 +40,7 @@ export default function Main() {
 
     useEffect(() => {
         reloadPlans();
-    }, []);
+    }, [reloadPlans]);
 
     const [error, setError] = useLocalStorage('$main_error', '');
 

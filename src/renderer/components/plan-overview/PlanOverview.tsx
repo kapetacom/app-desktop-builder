@@ -10,14 +10,14 @@ import {
 } from '@kapeta/ui-web-plan-editor';
 
 import { Asset } from '@kapeta/ui-web-types';
+import { Plan } from '@kapeta/schemas';
+import { useAsync } from 'react-use';
 import PlanOverviewPlaceHolder from './PlanOverviewPlaceHolder';
 import { MenuItem } from '../menu/MenuDataModel';
 import { PlanOverviewItem } from './PlanOverviewItem';
 import { PlanOverviewTopBar } from './PlanOverviewTopBar';
 
 import './PlanOverview.less';
-import { Plan } from '@kapeta/schemas';
-import { useAsync } from 'react-use';
 import { getAssetTitle } from '../plan-editor/helpers';
 import { useBlockAssets } from '../../utils/planContextLoader';
 

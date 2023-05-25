@@ -26,11 +26,15 @@ export const EditorBlockInspectorPanel = (props: Props) => {
                 listeners.push(listener);
             },
         };
+        // cache this per blockRef
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [blockRef]);
 
     useEffect(() => {
         if (!blockRef) {
-            return;
+            return () => {
+                // noop
+            };
         }
 
         const onInstanceLog = (entry: any) => {

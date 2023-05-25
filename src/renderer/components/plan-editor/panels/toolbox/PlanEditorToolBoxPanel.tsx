@@ -5,7 +5,6 @@ import {
     PanelSize,
     SidePanel,
 } from '@kapeta/ui-web-components';
-import BlockStore from './blockstore/BlockStore';
 import {
     Asset,
     ItemType,
@@ -17,8 +16,10 @@ import {
     DnDDraggable,
     PlannerContext,
     PlannerPayload,
+    BlockOutletProvider,
 } from '@kapeta/ui-web-plan-editor';
 import { BlockDefinition } from '@kapeta/schemas';
+import { BlockStore } from './blockstore/BlockStore';
 import { BlockResourceTool } from './BlockResourceTool';
 import { ConsumerHeaderIcon, ProviderHeaderIcon } from '../../helpers';
 import { DraggableItem } from '../../types';
@@ -26,7 +27,6 @@ import { DraggableResource } from './DraggableResource';
 import { DraggableBlock } from './DraggableBlock';
 
 import './PlannerToolboxSidePanel.less';
-import { BlockOutletProvider } from '@kapeta/ui-web-plan-editor';
 
 const toPlannerPayload = (config: IResourceTypeProvider): PlannerPayload => {
     return {
@@ -34,7 +34,7 @@ const toPlannerPayload = (config: IResourceTypeProvider): PlannerPayload => {
         data: {
             title: config.title || config.kind,
             kind: config.kind,
-            config: config,
+            config,
         },
     };
 };
@@ -140,13 +140,16 @@ export const PlanEditorToolBoxPanel = (props: Props) => {
                                 </div>
                             </div>
                             <div className="resource-listing">
-                                {consumers.map((consumer, index: number) => {
+                                {consumers.map((consumer) => {
                                     const data = toPlannerPayload(consumer);
                                     const draggable = toDraggableItem(consumer);
 
                                     return (
                                         <DnDDraggable
-                                            key={index}
+                                            key={
+                                                consumer.definition.metadata
+                                                    .name
+                                            }
                                             data={data}
                                             onDragStart={(evt) => {
                                                 handlers.onItemDragStart(
@@ -163,10 +166,10 @@ export const PlanEditorToolBoxPanel = (props: Props) => {
                                                 handlers.onItemDragEnd();
                                             }}
                                         >
-                                            {(props) => (
+                                            {(dragProps) => (
                                                 <BlockResourceTool
                                                     onMouseDown={
-                                                        props.componentProps
+                                                        dragProps.componentProps
                                                             .onMouseDown
                                                     }
                                                     resource={consumer}
@@ -187,14 +190,17 @@ export const PlanEditorToolBoxPanel = (props: Props) => {
                                 </div>
                             </div>
                             <div className="resource-listing">
-                                {providers.map((provider, index: number) => {
+                                {providers.map((provider) => {
                                     const data = toPlannerPayload(provider);
                                     const draggable = toDraggableItem(provider);
 
                                     return (
                                         <DnDDraggable
                                             data={data}
-                                            key={index}
+                                            key={
+                                                provider.definition.metadata
+                                                    .name
+                                            }
                                             onDragStart={(evt) => {
                                                 handlers.onItemDragStart(
                                                     draggable
@@ -210,10 +216,10 @@ export const PlanEditorToolBoxPanel = (props: Props) => {
                                                 handlers.onItemDragEnd();
                                             }}
                                         >
-                                            {(props) => (
+                                            {(dragProps) => (
                                                 <BlockResourceTool
                                                     onMouseDown={
-                                                        props.componentProps
+                                                        dragProps.componentProps
                                                             .onMouseDown
                                                     }
                                                     resource={provider}
