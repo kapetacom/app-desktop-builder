@@ -157,8 +157,6 @@ export const withLoadedPlanContext = (plan: Plan | undefined) => {
         return blockKinds;
     }, [plan, blockAssets.value]);
 
-
-
     const resourceAssets = useAsync(async (): Promise<
         IResourceTypeProvider[]
     > => {
@@ -174,7 +172,7 @@ export const withLoadedPlanContext = (plan: Plan | undefined) => {
                 return;
             }
             const blockUri = parseKapetaUri(blockRef);
-            let block = blockAssets.value.find((asset) =>
+            let block = blockAssets.value?.find((asset) =>
                 parseKapetaUri(asset.ref).equals(blockUri)
             );
             if (!block) {

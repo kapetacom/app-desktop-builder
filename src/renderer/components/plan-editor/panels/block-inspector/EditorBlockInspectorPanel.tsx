@@ -2,11 +2,10 @@ import React, { useEffect, useMemo } from 'react';
 import { InstanceEventType, InstanceService } from '@kapeta/ui-web-context';
 
 import { BlockInspectorPanel } from '@kapeta/ui-web-plan-editor';
-import {useAsync} from 'react-use';
+import { useAsync } from 'react-use';
 
-import {BlockInstance} from "@kapeta/schemas";
-import {getInstanceConfig} from "../../../../api/LocalConfigService";
-
+import { BlockInstance } from '@kapeta/schemas';
+import { getInstanceConfig } from '../../../../api/LocalConfigService';
 
 interface Props {
     systemId: string;
@@ -73,14 +72,14 @@ export const EditorBlockInspectorPanel = (props: Props) => {
         return result.ok === false ? [] : result.logs;
     }, [instance?.id, props.open]);
 
-    return instance ?
-            <BlockInspectorPanel
-                systemId={props.systemId}
-                open={props.open}
-                onClosed={props.onClosed}
-                logs={logs.value}
-                emitter={emitter}
-                instance={instance}
-                configuration={instanceConfig.value}
-            /> : null;
+    return instance ? (
+        <BlockInspectorPanel
+            open={props.open}
+            onClosed={props.onClosed}
+            logs={logs.value}
+            emitter={emitter}
+            instance={instance}
+            configuration={instanceConfig.value}
+        />
+    ) : null;
 };
