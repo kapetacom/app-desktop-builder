@@ -43,6 +43,8 @@ export const BlockResourceTool = (props: Props) => {
 
     return (
         <div
+            role="menuitem"
+            tabIndex={-1}
             className={getResourceTagClasses(props.resource)}
             onMouseDown={props.onMouseDown}
         >

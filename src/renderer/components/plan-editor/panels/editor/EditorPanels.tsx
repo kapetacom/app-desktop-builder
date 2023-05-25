@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useCallback, useContext, useMemo } from 'react';
 import {
     AssetNameInput,
     Button,
@@ -26,17 +26,13 @@ import type { IResourceTypeProvider, SchemaKind } from '@kapeta/ui-web-types';
 import { ItemType, ResourceRole } from '@kapeta/ui-web-types';
 import { BlockDefinition, Resource, Connection, Entity } from '@kapeta/schemas';
 
-import { ErrorBoundary } from 'react-error-boundary';
+import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import { useAsync } from 'react-use';
 import { cloneDeep } from 'lodash';
 import { PlannerContext, PlannerContextData } from '@kapeta/ui-web-plan-editor';
 import { BlockInfo, EditItemInfo } from '../../types';
 
 import './ItemEditorPanel.less';
-
-function onMappingChanged(change) {
-    console.log('mapping change', change);
-}
 
 function getVersions(dataKindUri) {
     const versions: { [key: string]: string } = {};
@@ -131,6 +127,21 @@ interface InnerFormProps {
 }
 
 const InnerForm = ({ planner, info }: InnerFormProps) => {
+    const mappingField = useFormContextField('mapping');
+    const kindField = useFormContextField('kind');
+    const getErrorFallback = useCallback(
+        // eslint-disable-next-line react/no-unstable-nested-components
+        (kind) => (props: FallbackProps) => {
+            return (
+                <div>
+                    Failed to render block type: {kind}. <br />
+                    Error: {props.error.message}
+                </div>
+            );
+        },
+        []
+    );
+
     if (info.type === ItemType.CONNECTION) {
         const connection = info.item as Connection;
 
@@ -158,20 +169,17 @@ const InnerForm = ({ planner, info }: InnerFormProps) => {
             source.kind,
             target.kind
         );
-
         if (!ConverterType) {
             return null;
         }
 
         const MappingComponent = ConverterType.mappingComponentType;
-
         if (!MappingComponent) {
             return null;
         }
 
         const fromBlock = planner.getBlockById(connection.provider.blockId);
         const toBlock = planner.getBlockById(connection.consumer.blockId);
-        const mappingField = useFormContextField('mapping');
 
         return (
             <MappingComponent
@@ -194,7 +202,6 @@ const InnerForm = ({ planner, info }: InnerFormProps) => {
 
     if (info.type === ItemType.BLOCK) {
         const data = info.item as BlockInfo;
-        const kindField = useFormContextField('kind');
         const kind = kindField.get(data.block.kind);
         const BlockTypeConfig = BlockTypeProvider.get(kind);
 
@@ -205,19 +212,13 @@ const InnerForm = ({ planner, info }: InnerFormProps) => {
                 </div>
             );
         }
+        const EditorComponent = BlockTypeConfig.editorComponent;
 
         return (
             <div key={kind}>
                 <BlockFields data={data.block} />
-                <ErrorBoundary
-                    fallbackRender={(props) => (
-                        <div>
-                            Failed to render block type: {kind}. <br />
-                            Error: {props.error.message}
-                        </div>
-                    )}
-                >
-                    <BlockTypeConfig.editorComponent
+                <ErrorBoundary fallbackRender={getErrorFallback(kind)}>
+                    <EditorComponent
                         block={data.block}
                         creating={info.creating}
                     />
@@ -228,7 +229,6 @@ const InnerForm = ({ planner, info }: InnerFormProps) => {
 
     if (info.type === ItemType.RESOURCE) {
         const data = info.item.resource as Resource;
-        const kindField = useFormContextField('kind');
         const kind = kindField.get(data.kind) || data.kind;
         let resourceType: IResourceTypeProvider | null = null;
         try {
@@ -253,12 +253,7 @@ const InnerForm = ({ planner, info }: InnerFormProps) => {
                 {resourceType?.editorComponent && (
                     <ErrorBoundary
                         resetKeys={[kind, info.item]}
-                        fallbackRender={(props) => (
-                            <div>
-                                Failed to render resource type: {kind}. <br />
-                                Error: {props.error.message}
-                            </div>
-                        )}
+                        fallbackRender={getErrorFallback(kind)}
                     >
                         <resourceType.editorComponent
                             key={kind}
@@ -294,7 +289,7 @@ export const EditorPanels: React.FC<Props> = (props) => {
                     data as BlockDefinition
                 );
                 break;
-            case ItemType.RESOURCE:
+            case ItemType.RESOURCE: {
                 const resource = props.info.item.resource as Resource;
                 const role = props.info.item.block?.spec?.consumers?.includes(
                     resource
@@ -308,6 +303,7 @@ export const EditorPanels: React.FC<Props> = (props) => {
                     data as Resource
                 );
                 break;
+            }
         }
         props.onClosed();
     };
@@ -322,7 +318,7 @@ export const EditorPanels: React.FC<Props> = (props) => {
                 case ItemType.BLOCK:
                     planner.removeBlockInstance(props.info.item.instance.id);
                     break;
-                case ItemType.RESOURCE:
+                case ItemType.RESOURCE: {
                     const resource = props.info.item.resource;
                     const resourceType = ResourceTypeProvider.get(
                         resource.kind
@@ -333,6 +329,7 @@ export const EditorPanels: React.FC<Props> = (props) => {
                         resourceType.role
                     );
                     break;
+                }
             }
         }
         props.onClosed();

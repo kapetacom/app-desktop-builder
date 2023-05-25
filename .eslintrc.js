@@ -20,6 +20,7 @@ module.exports = {
         'react/jsx-filename-extension': [1, { extensions: ['.tsx', '.jsx'] }],
         'react/jsx-props-no-spreading': 'off',
         'react/no-unused-prop-types': 'warn',
+        'react/prop-types': 'off',
         // Override airbnb rule
         // Labels for inputs can either be with `<label htmlFor={...}>` and ids,
         // or via nesting <label><input/></label>
@@ -45,6 +46,7 @@ module.exports = {
         'no-use-before-define': 'off',
         'prefer-const': 'off',
         'prefer-destructuring': 'off',
+        'default-case': 'off',
     },
     overrides: [
         {

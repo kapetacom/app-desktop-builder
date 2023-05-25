@@ -162,8 +162,8 @@ export const BlockStore = (props: Props) => {
                 onAssetAdded={props.onBlockAdded}
                 onDone={async () => {
                     setCreatorState(AssetCreatorState.CLOSED);
-                    const blocks = await loadBlocks();
-                    planner.setBlockAssets(blocks ?? []);
+                    const blocksAssets = await loadBlocks();
+                    planner.setBlockAssets(blocksAssets ?? []);
                 }}
                 files={
                     (blocks &&
