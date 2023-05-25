@@ -63,14 +63,14 @@ export const BlockConfigurationPanel = (props: Props) => {
         if (props.open) {
             reloadConfig();
         }
-    }, [props.systemId, planner.plan, props.open]);
+    }, [props.systemId, planner.plan, props.open, reloadConfig]);
 
     const block = useMemo(() => {
         if (!props.instance?.block.ref) {
             return undefined;
         }
-        return planner.getBlockByRef(props.instance.block.ref);
-    }, [props.instance?.block.ref]);
+        return planner.getBlockByRef.call(null, props.instance.block.ref);
+    }, [props.instance?.block.ref, planner.getBlockByRef]);
 
     const typeProvider = useMemo(() => {
         if (!block) {
@@ -129,28 +129,28 @@ export const BlockConfigurationPanel = (props: Props) => {
         return opts;
     }, [props.instance?.block.ref, blockAssets]);
 
-    const onSave = async (data: BlockConfigurationData) => {
+    const onSave = async (blockData: BlockConfigurationData) => {
         if (!props.instance?.id) {
             return;
         }
 
         planner.updateBlockInstance(props.instance.id, (instance) => {
             const uri = parseKapetaUri(instance.block.ref);
-            uri.version = data.version;
+            uri.version = blockData.version;
             return {
                 ...instance,
                 block: {
                     ...instance.block,
                     ref: uri.id,
                 },
-                name: data.name,
+                name: blockData.name,
             };
         });
 
         await setInstanceConfig(
             props.systemId,
             props.instance.id,
-            data.configuration!
+            blockData.configuration!
         );
         await reloadConfig();
 

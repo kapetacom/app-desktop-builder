@@ -186,9 +186,9 @@ export const AssetCreator = (props: Props) => {
                         <InnerFormRenderer asset={newEntity} creating />
 
                         <ProjectHomeFolderInput
-                            onChange={(useProjectHome, projectHome) => {
-                                setUseProjectHome(useProjectHome);
-                                setProjectHome(projectHome);
+                            onChange={(newUseProjectHome, newProjectHome) => {
+                                setUseProjectHome(newUseProjectHome);
+                                setProjectHome(newProjectHome);
                             }}
                         />
 

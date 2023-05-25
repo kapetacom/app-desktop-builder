@@ -1,6 +1,11 @@
 import React, { useEffect } from 'react';
 import { DefaultContext } from '@kapeta/ui-web-components';
-import {AssetService, BlockTargetProvider, BlockTypeProvider, ResourceTypeProvider} from '@kapeta/ui-web-context';
+import {
+    AssetService,
+    BlockTargetProvider,
+    BlockTypeProvider,
+    ResourceTypeProvider,
+} from '@kapeta/ui-web-context';
 
 import Main from './Main';
 import 'react-toastify/dist/ReactToastify.css';
@@ -14,12 +19,12 @@ const Application: React.FC = () => {
                 return; // We don't care about updated here
             }
 
-            const ref = `${evt.payload.asset.handle}/${evt.payload.asset.name}:${evt.payload.asset.version}`
+            const ref = `${evt.payload.asset.handle}/${evt.payload.asset.name}:${evt.payload.asset.version}`;
 
             if (evt.payload.type === 'removed') {
                 console.log('REMOVED', evt.payload);
                 switch (evt.payload.definition.kind) {
-                    case 'core/deployment-target': //Unused locally
+                    case 'core/deployment-target': // Unused locally
                         return;
                     case 'core/block-type':
                     case 'core/block-type-operator':
@@ -42,15 +47,15 @@ const Application: React.FC = () => {
                     default:
                         return;
                 }
-                //Reload - something was removed that we care about
-                window.location.reload()
+                // Reload - something was removed that we care about
+                window.location.reload();
                 return;
             }
 
             if (evt.payload.type === 'added') {
                 console.log('ADDED', evt.payload);
                 switch (evt.payload.definition.kind) {
-                    case 'core/deployment-target': //Unused locally
+                    case 'core/deployment-target': // Unused locally
                         return;
                     case 'core/block-type':
                     case 'core/block-type-operator':
@@ -73,11 +78,9 @@ const Application: React.FC = () => {
                     default:
                         return;
                 }
-                //Reload - something was added that we care about
-                window.location.reload()
-                return;
+                // Reload - something was added that we care about
+                window.location.reload();
             }
-
         });
     });
 

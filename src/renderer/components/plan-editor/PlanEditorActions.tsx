@@ -1,11 +1,19 @@
-import {PlannerActionConfig, PlannerContextData, PlannerMode,} from '@kapeta/ui-web-plan-editor';
-import {ButtonStyle, showDelete} from '@kapeta/ui-web-components';
-import {IResourceTypeConverter, ItemType, ResourceRole,} from '@kapeta/ui-web-types';
-import {parseKapetaUri} from '@kapeta/nodejs-utils';
-import {useEffect, useMemo} from 'react';
-import {ActionHandlers, InstanceInfo} from './types';
-import {InstanceStatus, ResourceTypeProvider} from '@kapeta/ui-web-context';
-import {Connection} from '@kapeta/schemas';
+import {
+    PlannerActionConfig,
+    PlannerContextData,
+    PlannerMode,
+} from '@kapeta/ui-web-plan-editor';
+import { ButtonStyle, showDelete } from '@kapeta/ui-web-components';
+import {
+    IResourceTypeConverter,
+    ItemType,
+    ResourceRole,
+} from '@kapeta/ui-web-types';
+import { parseKapetaUri } from '@kapeta/nodejs-utils';
+import { useEffect, useMemo } from 'react';
+import { InstanceStatus, ResourceTypeProvider } from '@kapeta/ui-web-context';
+import { Connection } from '@kapeta/schemas';
+import { ActionHandlers, InstanceInfo } from './types';
 
 function getConverter(
     planner: PlannerContextData,
@@ -51,7 +59,7 @@ function hasMapping(
     return !!(converter && converter.mappingComponentType);
 }
 
-export const withPlanEditorActions = (
+export const usePlanEditorActions = (
     planner: PlannerContextData,
     instanceInfos: InstanceInfo[],
     handlers: ActionHandlers
@@ -83,7 +91,7 @@ export const withPlanEditorActions = (
         ];
 
         return () => unsubscribers.forEach((unsubscribe) => unsubscribe());
-    }, []);
+    }, [planner, handlers]);
 
     return useMemo(() => {
         return {
@@ -173,18 +181,20 @@ export const withPlanEditorActions = (
                     label: 'Configure',
                 },
                 {
-                    enabled(context, {blockInstance}): boolean {
-                        const info = instanceInfos
-                            .find(info => info.instanceId === blockInstance?.id);
+                    enabled(context, { blockInstance }): boolean {
+                        const info = instanceInfos.find(
+                            (ix) => ix.instanceId === blockInstance?.id
+                        );
                         if (!info?.address) {
                             return false;
                         }
 
                         return info.status === InstanceStatus.READY;
                     },
-                    onClick(context, {blockInstance}) {
-                        const info = instanceInfos
-                            .find(info => info.instanceId === blockInstance?.id);
+                    onClick(context, { blockInstance }) {
+                        const info = instanceInfos.find(
+                            (ix) => ix.instanceId === blockInstance?.id
+                        );
                         if (!info?.address) {
                             return;
                         }
@@ -311,13 +321,13 @@ export const withPlanEditorActions = (
                     label: 'Edit mapping',
                 },
                 {
-                    enabled(planner, actionContext): boolean {
+                    enabled(context, actionContext): boolean {
                         const connection = actionContext.connection;
                         if (!connection) {
                             return false;
                         }
 
-                        const converter = getConverter(planner, connection);
+                        const converter = getConverter(context, connection);
 
                         return !!(converter && converter.inspectComponentType);
                     },
@@ -335,5 +345,5 @@ export const withPlanEditorActions = (
                 },
             ],
         };
-    }, [planner, handlers]);
+    }, [planner, handlers, instanceInfos]);
 };

@@ -11,17 +11,17 @@ import { BlockTypeProvider } from '@kapeta/ui-web-context';
 import './BlockForm.less';
 import { BlockTypeEditorProps } from '@kapeta/ui-web-types';
 import { ErrorBoundary } from 'react-error-boundary';
+import { BlockDefinition } from '@kapeta/schemas';
 import { ProjectHomeFolderInputProps } from '../fields/ProjectHomeFolderInput';
 import { AutoLoadAssetNameInput } from '../fields/AutoLoadAssetNameInput';
-import {BlockDefinition} from "@kapeta/schemas";
 
 interface Props extends ProjectHomeFolderInputProps {
     creating?: boolean;
-    asset: any
+    asset: any;
 }
 
 interface InnerBlockTypeProps {
-    block: BlockDefinition
+    block: BlockDefinition;
     kind?: string;
     creating?: boolean;
 }

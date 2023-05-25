@@ -1,5 +1,5 @@
-import { DraggableResourceProps } from '../../types';
 import { Point } from '@kapeta/ui-web-types';
+import { DraggableResourceProps } from '../../types';
 import {
     BlockResourceTool,
     RESOURCE_TAG_HEIGHT,
@@ -11,7 +11,7 @@ export const DraggableResource = (
 ) => {
     return (
         <div
-            className={'plan-item-dragged resource'}
+            className="plan-item-dragged resource"
             style={{
                 position: 'absolute',
                 zIndex: 100,
