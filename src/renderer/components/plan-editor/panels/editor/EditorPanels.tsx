@@ -296,11 +296,11 @@ export const EditorPanels: React.FC<Props> = (props) => {
                 break;
             case ItemType.RESOURCE:
                 const resource = props.info.item.resource as Resource;
-                const role =
-                    props.info.item.block?.spec?.consumers?.indexOf(resource) >
-                    -1
-                        ? ResourceRole.CONSUMES
-                        : ResourceRole.PROVIDES;
+                const role = props.info.item.block?.spec?.consumers?.includes(
+                    resource
+                )
+                    ? ResourceRole.CONSUMES
+                    : ResourceRole.PROVIDES;
                 planner.updateResource(
                     props.info.item.ref,
                     resource.metadata.name,

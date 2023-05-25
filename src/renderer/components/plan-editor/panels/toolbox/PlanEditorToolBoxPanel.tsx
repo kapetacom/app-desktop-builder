@@ -26,6 +26,7 @@ import { DraggableResource } from './DraggableResource';
 import { DraggableBlock } from './DraggableBlock';
 
 import './PlannerToolboxSidePanel.less';
+import { BlockOutletProvider } from '@kapeta/ui-web-plan-editor';
 
 const toPlannerPayload = (config: IResourceTypeProvider): PlannerPayload => {
     return {
@@ -103,10 +104,12 @@ export const PlanEditorToolBoxPanel = (props: Props) => {
             {draggableItem &&
                 draggableItemPosition &&
                 draggableItem.type === ItemType.BLOCK && (
-                    <DraggableBlock
-                        {...draggableItem.data}
-                        point={draggableItemPosition}
-                    />
+                    <BlockOutletProvider>
+                        <DraggableBlock
+                            {...draggableItem.data}
+                            point={draggableItemPosition}
+                        />
+                    </BlockOutletProvider>
                 )}
 
             <SidePanel

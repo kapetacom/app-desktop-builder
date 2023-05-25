@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo } from 'react';
 import {
     Button,
     ButtonStyle,
@@ -36,7 +36,7 @@ type Options = { [key: string]: string };
 
 interface Props {
     systemId: string;
-    instance?: BlockInstance | null;
+    instance?: BlockInstance;
     open: boolean;
     onClosed: () => void;
 }
@@ -84,7 +84,7 @@ export const BlockConfigurationPanel = (props: Props) => {
         if (block && typeProvider?.createDefaultConfig) {
             defaultConfig = typeProvider.createDefaultConfig!(
                 block,
-                props.instance
+                props.instance!
             );
         }
 
@@ -150,7 +150,7 @@ export const BlockConfigurationPanel = (props: Props) => {
         await setInstanceConfig(
             props.systemId,
             props.instance.id,
-            data.configuration
+            data.configuration!
         );
         await reloadConfig();
 
@@ -168,14 +168,14 @@ export const BlockConfigurationPanel = (props: Props) => {
             onClose={props.onClosed}
         >
             <SimpleLoader
-                loading={blockAssets.loading || instanceConfig.loading}
+                loading={!blockAssets || instanceConfig.loading}
                 key={props.instance?.block.ref ?? 'unknown-block'}
                 text="Loading details... Please wait"
             >
                 <div className="block-configuration-panel">
                     <FormContainer initialValue={data} onSubmitData={onSave}>
                         <TabContainer>
-                            <TabPage id={'general'} title={'General'}>
+                            <TabPage id="general" title="General">
                                 <FormField
                                     name="name"
                                     label="Instance name"
@@ -194,32 +194,35 @@ export const BlockConfigurationPanel = (props: Props) => {
                                 />
                             </TabPage>
 
-                            {typeProvider && typeProvider.configComponent && (
-                                <TabPage
-                                    id={'configuration'}
-                                    title={'Configuration'}
-                                >
-                                    <typeProvider.configComponent
-                                        block={block}
-                                        instance={props.instance}
-                                        readOnly={readOnly}
-                                    />
-                                </TabPage>
-                            )}
+                            {typeProvider &&
+                                typeProvider.configComponent &&
+                                block &&
+                                props.instance && (
+                                    <TabPage
+                                        id="configuration"
+                                        title="Configuration"
+                                    >
+                                        <typeProvider.configComponent
+                                            block={block}
+                                            instance={props.instance}
+                                            readOnly={readOnly}
+                                        />
+                                    </TabPage>
+                                )}
 
                             {!hasConfigComponent &&
-                                block?.spec.configuration?.types?.length >
-                                    0 && (
+                                (block?.spec.configuration?.types?.length ||
+                                    0) > 0 && (
                                     <TabPage
-                                        id={'configuration'}
-                                        title={'Configuration'}
+                                        id="configuration"
+                                        title="Configuration"
                                     >
                                         <EntityEditorForm
                                             entities={
                                                 block!.spec.configuration!
                                                     .types!
                                             }
-                                            name={'configuration'}
+                                            name="configuration"
                                         />
                                     </TabPage>
                                 )}

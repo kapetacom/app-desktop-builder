@@ -47,7 +47,7 @@ export default function Main() {
     const openPlans: Asset<Plan>[] = [];
     if (planAssets.value) {
         openPlanRefs.forEach((ref) => {
-            const assetRefs = planAssets.value.find(
+            const assetRefs = planAssets.value?.find(
                 (asset) => asset.ref === ref
             );
             if (assetRefs) {

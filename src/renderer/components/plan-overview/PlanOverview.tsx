@@ -19,7 +19,7 @@ import './PlanOverview.less';
 import { Plan } from '@kapeta/schemas';
 import { useAsync } from 'react-use';
 import { getAssetTitle } from '../plan-editor/helpers';
-import {useBlockAssets} from "../../utils/planContextLoader";
+import { useBlockAssets } from '../../utils/planContextLoader';
 
 interface MiniPlanProps {
     systemId: string;
@@ -61,7 +61,7 @@ export const PlanOverview = (props: Props) => {
             );
 
             if (!confirm) {
-                return;
+                return false;
             }
             await AssetService.remove(plan.ref);
             props.itemDeleted && props.itemDeleted(plan);

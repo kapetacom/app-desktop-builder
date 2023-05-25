@@ -1,27 +1,27 @@
-import {parseKapetaUri} from '@kapeta/nodejs-utils';
+import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import {
     Planner2,
     PlannerContext,
     PlannerMode,
     withPlannerContext,
 } from '@kapeta/ui-web-plan-editor';
-import {PlanEditorTopMenu} from './PlanEditorTopMenu';
-import React, {
-    ForwardedRef,
-    forwardRef,
-    useContext,
-    useState,
-} from 'react';
-import {withPlanEditorActions} from './PlanEditorActions';
-import {PlanEditorToolBoxPanel} from './panels/toolbox/PlanEditorToolBoxPanel';
-import {BlockConfigurationPanel} from './panels/block-configuration/BlockConfigurationPanel';
-import {ConfigureItemInfo, EditItemInfo, InspectItemInfo, InstanceInfo} from './types';
-import {EditorPanels} from './panels/editor/EditorPanels';
-import {InspectorPanels} from './panels/InspectorPanels';
+import { PlanEditorTopMenu } from './PlanEditorTopMenu';
+import React, { ForwardedRef, forwardRef, useContext, useState } from 'react';
+import { withPlanEditorActions } from './PlanEditorActions';
+import { PlanEditorToolBoxPanel } from './panels/toolbox/PlanEditorToolBoxPanel';
+import { BlockConfigurationPanel } from './panels/block-configuration/BlockConfigurationPanel';
+import {
+    ConfigureItemInfo,
+    EditItemInfo,
+    InspectItemInfo,
+    InstanceInfo,
+} from './types';
+import { EditorPanels } from './panels/editor/EditorPanels';
+import { InspectorPanels } from './panels/InspectorPanels';
 import './PlanEditor.less';
-import {IResourceTypeProvider} from "@kapeta/ui-web-types";
-import {useAsync} from "react-use";
-import {getInstanceConfigs} from "../../api/LocalConfigService";
+import { IResourceTypeProvider } from '@kapeta/ui-web-types';
+import { useAsync } from 'react-use';
+import { getInstanceConfigs } from '../../api/LocalConfigService';
 
 interface Props {
     systemId: string;
@@ -43,17 +43,21 @@ export const PlanEditor = withPlannerContext(
         );
         const [editInfo, setEditInfo] = useState<EditItemInfo | null>(null);
 
-        const actions = withPlanEditorActions(planner, props.instanceInfos ?? [], {
-            inspect: (info) => {
-                setInspectInfo(info);
-            },
-            configure: (info) => {
-                setConfigInfo(info);
-            },
-            edit: (info) => {
-                setEditInfo(info);
-            },
-        });
+        const actions = withPlanEditorActions(
+            planner,
+            props.instanceInfos ?? [],
+            {
+                inspect: (info) => {
+                    setInspectInfo(info);
+                },
+                configure: (info) => {
+                    setConfigInfo(info);
+                },
+                edit: (info) => {
+                    setEditInfo(info);
+                },
+            }
+        );
 
         const configurations = useAsync(async () => {
             return getInstanceConfigs(props.systemId);
@@ -76,7 +80,7 @@ export const PlanEditor = withPlannerContext(
 
                 <BlockConfigurationPanel
                     systemId={props.systemId}
-                    instance={configInfo?.item.instance ?? null}
+                    instance={configInfo?.item.instance}
                     open={!!configInfo}
                     onClosed={() => setConfigInfo(null)}
                 />

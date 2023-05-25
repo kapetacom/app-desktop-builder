@@ -8,16 +8,16 @@ import {
 } from '@kapeta/schemas';
 
 import { PlannerContextData } from '@kapeta/ui-web-plan-editor';
-import {InstanceStatus} from "@kapeta/ui-web-context";
+import { InstanceStatus } from '@kapeta/ui-web-context';
 
 export interface InstanceInfo {
-    systemId: string
-    instanceId: string
-    status: InstanceStatus
-    pid: string|number
-    type: 'local'|'docker'
-    health: string
-    address: string
+    systemId: string;
+    instanceId: string;
+    status: InstanceStatus;
+    pid: string | number;
+    type: 'local' | 'docker';
+    health: string;
+    address: string;
 }
 
 export interface DraggableResourceProps {
@@ -28,7 +28,6 @@ export interface DraggableResourceProps {
 
 export interface DraggableBlockProps {
     name: string;
-    title?: string;
     block: Asset<BlockDefinition>;
     planner: PlannerContextData;
 }
