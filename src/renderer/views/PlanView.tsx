@@ -78,7 +78,7 @@ export const PlanView = (props: PlanViewProps) => {
 
     return (
         <SimpleLoader loading={planData.loading || loading} text={loadingText}>
-            {planData.value && resourceAssets && blocks && (
+            {!planData.loading && !loading && planData.value && resourceAssets && blocks && (
                 <PlanEditor
                     plan={planData.value.data}
                     resourceAssets={resourceAssets}
