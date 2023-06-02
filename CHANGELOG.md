@@ -1,3 +1,10 @@
+## [0.2.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.2.4...v0.2.5) (2023-06-02)
+
+
+### Bug Fixes
+
+* Handle loading order for dependencies and bump local-cluster-service ([#26](https://github.com/kapetacom/app-desktop-builder/issues/26)) ([f119231](https://github.com/kapetacom/app-desktop-builder/commit/f11923152909ee2a2a2285d2923e72d8e213a212))
+
 ## [0.2.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.2.3...v0.2.4) (2023-05-24)
 
 
