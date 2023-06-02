@@ -138,7 +138,7 @@ export const useLoadedPlanContext = (plan: Plan | undefined) => {
         return providers.map((provider) => {
             return `${provider.definition.metadata.name}:${provider.version}`;
         });
-    }, []);
+    }, [plan]);
 
     const blockRefs = useMemo(() => {
         const blockKinds = new Set<string>();
@@ -158,11 +158,12 @@ export const useLoadedPlanContext = (plan: Plan | undefined) => {
     }, [plan, blockAssets.value]);
 
     const resourceAssets = useAsync(async (): Promise<
-        IResourceTypeProvider[]
+        IResourceTypeProvider[]|null
     > => {
         const providerKinds = new Set<string>();
         if (!blockAssets.value || !localProviderRefs.value) {
-            return [];
+            //Return null to indicate that we are still loading
+            return null;
         }
 
         localProviderRefs.value.forEach((ref) => providerKinds.add(ref));
@@ -204,7 +205,7 @@ export const useLoadedPlanContext = (plan: Plan | undefined) => {
         await Promise.allSettled(promises);
 
         return ResourceTypeProvider.list();
-    }, [blockRefs, blockAssets.value, localProviderRefs.value]);
+    }, [blockRefs, blockAssets.loading, blockAssets.value, localProviderRefs.loading, localProviderRefs.value]);
 
     return {
         resourceAssets: resourceAssets.value,
@@ -213,7 +214,8 @@ export const useLoadedPlanContext = (plan: Plan | undefined) => {
         loading:
             blockAssets.loading ||
             resourceAssets.loading ||
-            localProviderRefs.loading,
+            localProviderRefs.loading ||
+            !resourceAssets.value,
         error:
             blockAssets.error ||
             resourceAssets.error ||
