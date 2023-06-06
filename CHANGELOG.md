@@ -1,3 +1,10 @@
+## [0.3.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.3.0...v0.3.1) (2023-06-06)
+
+
+### Bug Fixes
+
+* Operator host within docker ([6a1703e](https://github.com/kapetacom/app-desktop-builder/commit/6a1703ebac5419aab0462c9e12d5150b180b0377))
+
 # [0.3.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.2.5...v0.3.0) (2023-06-06)
 
 
