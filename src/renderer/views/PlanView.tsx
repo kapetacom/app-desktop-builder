@@ -78,33 +78,40 @@ export const PlanView = (props: PlanViewProps) => {
 
     return (
         <SimpleLoader loading={planData.loading || loading} text={loadingText}>
-            {!planData.loading && !loading && planData.value && resourceAssets && blocks && (
-                <PlanEditor
-                    plan={planData.value.data}
-                    resourceAssets={resourceAssets}
-                    instanceInfos={instanceInfos.value}
-                    instanceStates={instanceStatusMap}
-                    mode={plannerMode}
-                    systemId={props.systemId}
-                    onChange={async (plan) => {
-                        console.log('Plan changed', plan);
-                        try {
-                            await AssetService.update(props.systemId, plan);
-                        } catch (e) {
-                            console.error('Failed to update plan', e);
-                        }
-                    }}
-                    onAssetChange={async (asset) => {
-                        console.log('Asset changed', asset);
-                        try {
-                            await AssetService.update(asset.ref, asset.data);
-                        } catch (e) {
-                            console.error('Failed to update asset', e);
-                        }
-                    }}
-                    blockAssets={blocks}
-                />
-            )}
+            {!planData.loading &&
+                !loading &&
+                planData.value &&
+                resourceAssets &&
+                blocks && (
+                    <PlanEditor
+                        plan={planData.value.data}
+                        resourceAssets={resourceAssets}
+                        instanceInfos={instanceInfos.value}
+                        instanceStates={instanceStatusMap}
+                        mode={plannerMode}
+                        systemId={props.systemId}
+                        onChange={async (plan) => {
+                            console.log('Plan changed', plan);
+                            try {
+                                await AssetService.update(props.systemId, plan);
+                            } catch (e) {
+                                console.error('Failed to update plan', e);
+                            }
+                        }}
+                        onAssetChange={async (asset) => {
+                            console.log('Asset changed', asset);
+                            try {
+                                await AssetService.update(
+                                    asset.ref,
+                                    asset.data
+                                );
+                            } catch (e) {
+                                console.error('Failed to update asset', e);
+                            }
+                        }}
+                        blockAssets={blocks}
+                    />
+                )}
         </SimpleLoader>
     );
 };

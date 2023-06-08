@@ -158,11 +158,11 @@ export const useLoadedPlanContext = (plan: Plan | undefined) => {
     }, [plan, blockAssets.value]);
 
     const resourceAssets = useAsync(async (): Promise<
-        IResourceTypeProvider[]|null
+        IResourceTypeProvider[] | null
     > => {
         const providerKinds = new Set<string>();
         if (!blockAssets.value || !localProviderRefs.value) {
-            //Return null to indicate that we are still loading
+            // Return null to indicate that we are still loading
             return null;
         }
 
@@ -205,7 +205,13 @@ export const useLoadedPlanContext = (plan: Plan | undefined) => {
         await Promise.allSettled(promises);
 
         return ResourceTypeProvider.list();
-    }, [blockRefs, blockAssets.loading, blockAssets.value, localProviderRefs.loading, localProviderRefs.value]);
+    }, [
+        blockRefs,
+        blockAssets.loading,
+        blockAssets.value,
+        localProviderRefs.loading,
+        localProviderRefs.value,
+    ]);
 
     return {
         resourceAssets: resourceAssets.value,
