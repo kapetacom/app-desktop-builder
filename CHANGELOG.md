@@ -1,3 +1,11 @@
+## [0.3.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.3.1...v0.3.2) (2023-06-09)
+
+
+### Bug Fixes
+
+* bump and migrate to BlockLayout ([383a599](https://github.com/kapetacom/app-desktop-builder/commit/383a5990a63b6fa1f343bd437d62f4abb1c02305))
+* fix types in build for formRow project home ([a538279](https://github.com/kapetacom/app-desktop-builder/commit/a538279871c9ddcea5c32ac0c0ca038642bd37fb))
+
 ## [0.3.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.3.0...v0.3.1) (2023-06-06)
 
 
