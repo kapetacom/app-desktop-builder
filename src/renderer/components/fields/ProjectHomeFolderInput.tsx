@@ -38,6 +38,8 @@ export const ProjectHomeFolderInput = (props: ProjectHomeFolderInputProps) => {
     return (
         <SimpleLoader loading={loadingStored}>
             <FormRow
+                name="project_home"
+                value={projectHome}
                 label="Project folder"
                 help={
                     isEnabled
