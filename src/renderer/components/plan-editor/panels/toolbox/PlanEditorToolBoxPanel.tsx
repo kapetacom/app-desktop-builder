@@ -4,6 +4,7 @@ import {
     PanelAlignment,
     PanelSize,
     SidePanel,
+    BlockLayout,
 } from '@kapeta/ui-web-components';
 import {
     Asset,
@@ -16,7 +17,6 @@ import {
     DnDDraggable,
     PlannerContext,
     PlannerPayload,
-    BlockOutletProvider,
 } from '@kapeta/ui-web-plan-editor';
 import { BlockDefinition } from '@kapeta/schemas';
 import { BlockStore } from './blockstore/BlockStore';
@@ -104,12 +104,10 @@ export const PlanEditorToolBoxPanel = (props: Props) => {
             {draggableItem &&
                 draggableItemPosition &&
                 draggableItem.type === ItemType.BLOCK && (
-                    <BlockOutletProvider>
-                        <DraggableBlock
-                            {...draggableItem.data}
-                            point={draggableItemPosition}
-                        />
-                    </BlockOutletProvider>
+                    <DraggableBlock
+                        {...draggableItem.data}
+                        point={draggableItemPosition}
+                    />
                 )}
 
             <SidePanel
