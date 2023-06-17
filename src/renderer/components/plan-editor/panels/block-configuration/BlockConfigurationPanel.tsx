@@ -218,6 +218,33 @@ export const BlockConfigurationPanel = (props: Props) => {
                                         title="Configuration"
                                     >
                                         <EntityEditorForm
+                                            instances={planner.plan?.spec.blocks?.map(
+                                                (blockInstance) => {
+                                                    const block =
+                                                        planner.getBlockById(
+                                                            blockInstance.id
+                                                        );
+                                                    return {
+                                                        name: blockInstance.name,
+                                                        id: blockInstance.id,
+                                                        providers:
+                                                            block?.spec.providers?.map(
+                                                                (provider) => {
+                                                                    return {
+                                                                        name: provider
+                                                                            .metadata
+                                                                            .name,
+                                                                        portType:
+                                                                            provider
+                                                                                .spec
+                                                                                ?.port
+                                                                                ?.type,
+                                                                    };
+                                                                }
+                                                            ) ?? [],
+                                                    };
+                                                }
+                                            )}
                                             entities={
                                                 block!.spec.configuration!
                                                     .types!

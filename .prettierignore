@@ -1,0 +1,5 @@
+dist/*
+.erb/
+.husky/
+release/*
+node_modules/*

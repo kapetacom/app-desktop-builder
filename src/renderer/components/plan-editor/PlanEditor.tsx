@@ -7,7 +7,7 @@ import {
 } from '@kapeta/ui-web-plan-editor';
 import React, { ForwardedRef, forwardRef, useContext, useState } from 'react';
 import { IResourceTypeProvider } from '@kapeta/ui-web-types';
-import { useAsync } from 'react-use';
+import { useAsync, useAsyncFn } from 'react-use';
 import { PlanEditorTopMenu } from './PlanEditorTopMenu';
 import { usePlanEditorActions } from './PlanEditorActions';
 import { PlanEditorToolBoxPanel } from './panels/toolbox/PlanEditorToolBoxPanel';
@@ -59,7 +59,7 @@ export const PlanEditor = withPlannerContext(
             }
         );
 
-        const configurations = useAsync(async () => {
+        const [configurations, reloadConfiguration] = useAsyncFn(async () => {
             return getInstanceConfigs(props.systemId);
         }, [props.systemId]);
 
@@ -82,7 +82,10 @@ export const PlanEditor = withPlannerContext(
                     systemId={props.systemId}
                     instance={configInfo?.item.instance}
                     open={!!configInfo}
-                    onClosed={() => setConfigInfo(null)}
+                    onClosed={async () => {
+                        setConfigInfo(null);
+                        await reloadConfiguration();
+                    }}
                 />
 
                 <InspectorPanels
