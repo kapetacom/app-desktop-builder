@@ -1,3 +1,10 @@
+# [0.4.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.3.3...v0.4.0) (2023-06-17)
+
+
+### Features
+
+* Add instance support in configuration ([#28](https://github.com/kapetacom/app-desktop-builder/issues/28)) ([f5e2daa](https://github.com/kapetacom/app-desktop-builder/commit/f5e2daab9fd28514ab7710752cc92c94b6eee4fc))
+
 ## [0.3.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.3.2...v0.3.3) (2023-06-17)
 
 
