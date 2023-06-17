@@ -1,3 +1,10 @@
+## [0.3.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.3.2...v0.3.3) (2023-06-17)
+
+
+### Bug Fixes
+
+* Upgrade dependencies ([1744a08](https://github.com/kapetacom/app-desktop-builder/commit/1744a0814426f6c922f110d2758eb4b36d6eb9d4))
+
 ## [0.3.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.3.1...v0.3.2) (2023-06-09)
 
 
