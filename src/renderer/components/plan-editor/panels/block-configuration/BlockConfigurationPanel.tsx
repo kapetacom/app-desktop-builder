@@ -220,7 +220,7 @@ export const BlockConfigurationPanel = (props: Props) => {
                                         <EntityEditorForm
                                             instances={planner.plan?.spec.blocks?.map(
                                                 (blockInstance) => {
-                                                    const block =
+                                                    const blockDef =
                                                         planner.getBlockById(
                                                             blockInstance.id
                                                         );
@@ -228,7 +228,7 @@ export const BlockConfigurationPanel = (props: Props) => {
                                                         name: blockInstance.name,
                                                         id: blockInstance.id,
                                                         providers:
-                                                            block?.spec.providers?.map(
+                                                            blockDef?.spec.providers?.map(
                                                                 (provider) => {
                                                                     return {
                                                                         name: provider
