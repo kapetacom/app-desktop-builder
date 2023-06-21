@@ -1,3 +1,10 @@
+# [0.5.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.4.0...v0.5.0) (2023-06-21)
+
+
+### Features
+
+* Bump local cluster service to include public address endpoints ([e78ff19](https://github.com/kapetacom/app-desktop-builder/commit/e78ff19266fc5892a0d327cba582ba25cf43cb13))
+
 # [0.4.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.3.3...v0.4.0) (2023-06-17)
 
 
