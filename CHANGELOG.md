@@ -1,3 +1,10 @@
+# [0.6.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.5.0...v0.6.0) (2023-06-21)
+
+
+### Features
+
+* Add support for auto-reloading instances on config change ([055526e](https://github.com/kapetacom/app-desktop-builder/commit/055526e73f9a580d54461dc4fb4d63416a232c3d))
+
 # [0.5.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.4.0...v0.5.0) (2023-06-21)
 
 
