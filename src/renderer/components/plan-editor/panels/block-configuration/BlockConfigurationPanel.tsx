@@ -19,11 +19,7 @@ import { BlockTypeProvider } from '@kapeta/ui-web-context';
 
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import { BlockInstance } from '@kapeta/schemas';
-import {
-    BlockConfigurationData,
-    PlannerContext,
-    PlannerMode,
-} from '@kapeta/ui-web-plan-editor';
+import { PlannerContext, PlannerMode } from '@kapeta/ui-web-plan-editor';
 
 import './BlockConfigurationPanel.less';
 import { useAsyncFn } from 'react-use';
@@ -33,6 +29,12 @@ import {
 } from '../../../../api/LocalConfigService';
 
 type Options = { [key: string]: string };
+
+interface BlockConfigurationData {
+    version: string;
+    name: string;
+    configuration?: { [key: string]: string };
+}
 
 interface Props {
     systemId: string;
