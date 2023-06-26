@@ -1,3 +1,10 @@
+## [0.6.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.6.0...v0.6.1) (2023-06-26)
+
+
+### Bug Fixes
+
+* inline BlockConfigurationData from planner ([9ee0c27](https://github.com/kapetacom/app-desktop-builder/commit/9ee0c27319e1d1cf264bffc15c1deb8fa43e3563))
+
 # [0.6.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.5.0...v0.6.0) (2023-06-21)
 
 
