@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import './Main.less';
 
@@ -10,10 +9,13 @@ import { Plan } from '@kapeta/schemas';
 import { SimpleLoader } from '@kapeta/ui-web-components';
 
 import { PlannerService } from '@kapeta/ui-web-context';
+import { TopBar } from 'renderer/components/shell/TopBar';
 import { useLocalStorage } from '../utils/localStorage';
 import { PlanView } from './PlanView';
 import { PlanOverview } from '../components/plan-overview/PlanOverview';
 import { getAssetTitle } from '../components/plan-editor/helpers';
+import { Button, Tab, Tabs } from '@mui/material';
+import { TabPanel } from 'renderer/components/shell/TabPanel';
 
 export default function Main() {
     const [activeTab, setActiveTab] = useLocalStorage<number>(
@@ -96,62 +98,92 @@ export default function Main() {
         <SimpleLoader loading={planAssets.loading} text="Loading plans...">
             <div className="main-container">
                 {!error && (
-                    <Tabs
-                        selectedIndex={activeTab}
-                        forceRenderTabPanel={false}
-                        onSelect={(tabIndex: number) => {
-                            setActiveTab(tabIndex);
-                        }}
-                    >
-                        <TabList>
-                            {openPlans.map(
-                                (plan: Asset<Plan>, index: number) => {
-                                    return (
-                                        <Tab key={plan.ref}>
-                                            <div
-                                                className={
-                                                    index !== activeTab - 1 &&
-                                                    index !== activeTab
-                                                        ? 'separator'
-                                                        : ''
+                    <>
+                        <TopBar>
+                            <Tabs
+                                sx={(theme) => ({
+                                    '& .MuiTabs-indicator': {
+                                        display: 'none',
+                                    },
+                                    '& .MuiButton-root': {
+                                        color: theme.palette.common.white,
+                                    },
+                                })}
+                                value={activeTab}
+                                // forceRenderTabPanel={false}
+                                onChange={(
+                                    evt: React.SyntheticEvent,
+                                    tabIndex: number
+                                ) => {
+                                    setActiveTab(tabIndex);
+                                }}
+                            >
+                                {openPlans.map(
+                                    (plan: Asset<Plan>, index: number) => {
+                                        return (
+                                            <Tab
+                                                sx={(theme) => ({
+                                                    '&.Mui-selected': {
+                                                        backgroundColor:
+                                                            theme.palette
+                                                                .primary.main,
+                                                        color: theme.palette
+                                                            .common.white,
+                                                    },
+                                                })}
+                                                value={index + 1}
+                                                key={plan.ref}
+                                                label={
+                                                    <div>
+                                                        {getAssetTitle(plan)} [
+                                                        {plan.version}]{' '}
+                                                        <button
+                                                            style={{
+                                                                all: 'unset',
+                                                            }}
+                                                            type="button"
+                                                            onClick={() => {
+                                                                onTabClosed(
+                                                                    plan
+                                                                );
+                                                            }}
+                                                        >
+                                                            <i className="fal fa-times close-plan" />
+                                                        </button>
+                                                    </div>
                                                 }
-                                            >
-                                                {getAssetTitle(plan)} [
-                                                {plan.version}]{' '}
-                                                <button
-                                                    style={{ all: 'unset' }}
-                                                    type="button"
-                                                    onClick={() => {
-                                                        onTabClosed(plan);
-                                                    }}
-                                                >
-                                                    <i className="fal fa-times close-plan" />
-                                                </button>
-                                            </div>
-                                        </Tab>
-                                    );
-                                }
-                            )}
+                                            />
+                                        );
+                                    }
+                                )}
+                                <Button
+                                    onClick={() => {
+                                        setActiveTab(0);
+                                    }}
+                                >
+                                    <i className="fa fa-plus add-plan" />
+                                </Button>
+                            </Tabs>
+                        </TopBar>
 
-                            <Tab>
-                                {' '}
-                                <i className="fa fa-plus add-plan" />
-                            </Tab>
-                        </TabList>
                         {openPlans.map((plan: Asset<Plan>, index: number) => {
                             return (
-                                <TabPanel key={plan.ref}>
+                                <TabPanel
+                                    key={plan.ref}
+                                    index={index + 1}
+                                    value={activeTab}
+                                >
                                     <PlanView
                                         systemId={
-                                            openPlans[activeTab]
-                                                ? openPlans[activeTab].ref
+                                            openPlans[activeTab - 1]
+                                                ? openPlans[activeTab - 1].ref
                                                 : ''
                                         }
                                     />
                                 </TabPanel>
                             );
                         })}
-                        <TabPanel>
+                        <TabPanel index={0} value={activeTab}>
                             <PlanOverview
                                 onPlanSelected={onPlanSelected}
                                 onAssetAdded={onAssetAdded}
@@ -163,7 +195,7 @@ export default function Main() {
                                 plans={planAssets.value || []}
                             />
                         </TabPanel>
-                    </Tabs>
+                    </>
                 )}
                 {error && <div className="error-details">{error}</div>}
             </div>
