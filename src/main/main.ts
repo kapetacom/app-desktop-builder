@@ -298,7 +298,7 @@ const createWindow = async () => {
           )
         : '';
     await mainWindow.loadURL(
-        `${resolveHtmlPath(`index.html`)}#cluster_service=${clusterServiceURL}`
+        `${resolveHtmlPath(`index.html`)}?cluster_service=${clusterServiceURL}`
     );
 
     mainWindow.on('show', showDock);

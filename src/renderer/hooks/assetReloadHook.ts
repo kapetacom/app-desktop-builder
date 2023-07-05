@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import { DefaultContext } from '@kapeta/ui-web-components';
+import { useEffect } from 'react';
 import {
     AssetService,
     BlockTargetProvider,
@@ -7,12 +6,7 @@ import {
     ResourceTypeProvider,
 } from '@kapeta/ui-web-context';
 
-import Main from './Main';
-import 'react-toastify/dist/ReactToastify.css';
-
-import './Application.less';
-
-const Application: React.FC = () => {
+export const useAssetReload = () => {
     useEffect(() => {
         return AssetService.subscribe((evt) => {
             if (['added', 'removed'].indexOf(evt.payload.type) === -1) {
@@ -83,12 +77,4 @@ const Application: React.FC = () => {
             }
         });
     });
-
-    return (
-        <DefaultContext>
-            <Main />
-        </DefaultContext>
-    );
 };
-
-export default Application;
