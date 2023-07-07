@@ -1,27 +1,15 @@
 import React, { useState } from 'react';
 
-import './MainLayout.less';
-import { toClass } from '@kapeta/ui-web-utils';
-import { Link } from 'react-router-dom';
-import { Context, MenuSection } from '../views/console/types';
-import { FragmentMenuItem } from '@kapeta/web-microfrontend/browser';
 import {
-    Drawer as MuiDrawer,
     ListItemIcon,
     ListItemText,
     styled,
     Divider,
-    Button,
     IconButton,
     Collapse,
-    AppBar,
-    Toolbar,
-    Box,
-    Avatar,
-    Typography,
-    Stack,
-    MenuItem,
 } from '@mui/material';
+import './MainLayout.less';
+import { Context, MenuSection } from './types/shell';
 import { MiniDrawer } from './components/MiniDrawer';
 import { ContextPicker } from './components/ContextPicker';
 import { KapetaIcon } from './components/KapetaIcon';
@@ -32,7 +20,6 @@ import {
     SidebarListItemButton,
 } from './components/SidebarMenu';
 import { CustomIcon } from './components/CustomIcon';
-import { TopBar } from './components/TopBar';
 
 interface ConsoleLocation {
     pathname: string;
@@ -52,7 +39,7 @@ interface Props {
     location: ConsoleLocation;
     contexts?: Context[];
     manageOrganizationUrl?: string;
-    handle: string;
+    handle?: string;
     children?: any;
     topBar?: React.ReactNode;
 }
