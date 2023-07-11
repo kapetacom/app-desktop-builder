@@ -79,7 +79,7 @@ export const PlanOverview = (props: Props) => {
     const onPlanCreated = (asset?: Asset) => {
         props.onPlanChanged && props.onPlanChanged();
         if (asset && props.onAssetAdded) {
-            navigateTo(`/plans/${encodeURIComponent(asset.ref)}`);
+            navigateTo(`/edit/${encodeURIComponent(asset.ref)}`);
         }
     };
 
@@ -137,7 +137,7 @@ export const PlanOverview = (props: Props) => {
                             menuItems={menuItem}
                             onClick={() => {
                                 navigateTo(
-                                    `/plans/${encodeURIComponent(asset.ref)}`,
+                                    `/edit/${encodeURIComponent(asset.ref)}`,
                                     {}
                                 );
                             }}

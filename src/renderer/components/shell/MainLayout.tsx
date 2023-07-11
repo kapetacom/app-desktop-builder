@@ -8,6 +8,7 @@ import {
     IconButton,
     Collapse,
 } from '@mui/material';
+import { useMatches } from 'react-router-dom';
 import './MainLayout.less';
 import { Context, MenuSection } from './types/shell';
 import { MiniDrawer } from './components/MiniDrawer';
@@ -38,7 +39,6 @@ interface Props {
     menu: MenuSection[];
     location: ConsoleLocation;
     contexts?: Context[];
-    manageOrganizationUrl?: string;
     handle?: string;
     children?: any;
     topBar?: React.ReactNode;
@@ -50,6 +50,8 @@ export const MainLayout = (props: Props) => {
     const normalizedPath = currentLocation.pathname.replace(/\/+$/, '');
     const [isOpen, setIsOpen] = useState(true);
     const toggle = () => setIsOpen(!isOpen);
+
+    const matches = useMatches();
 
     return (
         <section className="main-layout">
@@ -75,27 +77,16 @@ export const MainLayout = (props: Props) => {
                     {props.menu
                         .filter((item) => !item.hidden)
                         .map((item, ix) => {
-                            const path = `/${props.handle}/${item.id}`;
-                            const linkPath = `${path}${
-                                item.path ? item.path : ''
-                            }`.replace(/\/+$/, '');
-                            const open = normalizedPath.startsWith(path);
-                            let current = normalizedPath === linkPath;
-                            const hasSubMenu =
-                                item.submenu && item.submenu.length > 0;
-                            if (!hasSubMenu && open) {
-                                current = true;
-                            }
-                            const toggleIcon = open ? (
-                                <i className="fa fa-chevron-up" />
-                            ) : (
-                                <i className="fa fa-chevron-down" />
+                            const linkPath = item.path;
+
+                            const current = !!matches.find(
+                                (m) => m.pathname === linkPath
                             );
 
-                            return [
+                            return (
                                 <SidebarListItem key={`${linkPath}-item`}>
                                     <SidebarListItemButton
-                                        href={linkPath}
+                                        href={item.path}
                                         selected={current}
                                     >
                                         <ListItemIcon>
@@ -108,49 +99,9 @@ export const MainLayout = (props: Props) => {
                                             )}
                                         </ListItemIcon>
                                         <ListItemText primary={item.name} />
-                                        {hasSubMenu ? toggleIcon : null}
                                     </SidebarListItemButton>
-                                </SidebarListItem>,
-                                hasSubMenu ? (
-                                    <Collapse
-                                        in={open}
-                                        timeout="auto"
-                                        unmountOnExit
-                                        key={`${linkPath}-collapse`}
-                                    >
-                                        <SidebarList disablePadding>
-                                            {item.submenu?.map(
-                                                (subItem, six) => {
-                                                    const subPath = `${path}${subItem.url}`;
-                                                    return (
-                                                        <SidebarListItem
-                                                            key={subPath + six}
-                                                        >
-                                                            <SidebarListItemButton
-                                                                selected={
-                                                                    normalizedPath ===
-                                                                    subPath.replace(
-                                                                        /\/+$/,
-                                                                        ''
-                                                                    )
-                                                                }
-                                                                href={subPath}
-                                                            >
-                                                                <ListItemIcon />
-                                                                <ListItemText
-                                                                    primary={
-                                                                        subItem.name
-                                                                    }
-                                                                />
-                                                            </SidebarListItemButton>
-                                                        </SidebarListItem>
-                                                    );
-                                                }
-                                            )}
-                                        </SidebarList>
-                                    </Collapse>
-                                ) : null,
-                            ];
+                                </SidebarListItem>
+                            );
                         })}
 
                     <Divider />
