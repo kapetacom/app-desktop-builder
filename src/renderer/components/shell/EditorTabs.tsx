@@ -3,6 +3,7 @@ import { PlannerService } from '@kapeta/ui-web-context';
 import { Button, Tab, Tabs } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAsyncRetry } from 'react-use';
+import { getAssetTitle } from '../plan-editor/helpers';
 
 interface TabOptions {
     defaultUrl?: string;
