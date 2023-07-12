@@ -2,16 +2,12 @@ import React, { ForwardedRef, forwardRef, useState } from 'react';
 
 import { AssetService, BlockService } from '@kapeta/ui-web-context';
 import { showDelete, showToasty, ToastType } from '@kapeta/ui-web-components';
+import { useNavigate } from 'react-router-dom';
 
-import {
-    Planner2,
-    PlannerMode,
-    withPlannerContext,
-} from '@kapeta/ui-web-plan-editor';
+import { PlannerMode, withPlannerContext } from '@kapeta/ui-web-plan-editor';
 
 import { Asset } from '@kapeta/ui-web-types';
 import { Plan } from '@kapeta/schemas';
-import { useAsync } from 'react-use';
 import PlanOverviewPlaceHolder from './PlanOverviewPlaceHolder';
 import { MenuItem } from '../menu/MenuDataModel';
 import { PlanOverviewItem } from './PlanOverviewItem';
@@ -20,7 +16,6 @@ import { PlanOverviewTopBar } from './PlanOverviewTopBar';
 import './PlanOverview.less';
 import { getAssetTitle } from '../plan-editor/helpers';
 import { useBlockAssets } from '../../utils/planContextLoader';
-import { useNavigate } from 'react-router-dom';
 
 interface MiniPlanProps {
     systemId: string;

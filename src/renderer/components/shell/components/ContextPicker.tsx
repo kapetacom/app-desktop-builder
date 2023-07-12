@@ -1,6 +1,6 @@
 import { Avatar, ListItemIcon, ListItemText, useTheme } from '@mui/material';
 import React from 'react';
-import { Context } from '../views/console/types';
+import { Context } from '../types';
 import {
     SidebarList,
     SidebarListItem,

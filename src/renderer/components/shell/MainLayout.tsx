@@ -76,11 +76,21 @@ export const MainLayout = (props: Props) => {
                 <SidebarList>
                     {props.menu
                         .filter((item) => !item.hidden)
-                        .map((item, ix) => {
+                        .map((item) => {
                             const linkPath = item.path;
 
                             const current = !!matches.find(
                                 (m) => m.pathname === linkPath
+                            );
+                            let icon = item.error ? (
+                                <i className="fa fa-exclamation-triangle" />
+                            ) : (
+                                <CustomIcon icon="Block" />
+                            );
+                            icon = item.loading ? (
+                                <i className="fa fa-circle-notch fa-spin" />
+                            ) : (
+                                icon
                             );
 
                             return (
@@ -89,15 +99,7 @@ export const MainLayout = (props: Props) => {
                                         href={item.path}
                                         selected={current}
                                     >
-                                        <ListItemIcon>
-                                            {item.loading ? (
-                                                <i className="fa fa-circle-notch fa-spin" />
-                                            ) : item.error ? (
-                                                <i className="fa fa-exclamation-triangle" />
-                                            ) : (
-                                                <CustomIcon icon={'Block'} />
-                                            )}
-                                        </ListItemIcon>
+                                        <ListItemIcon>{icon}</ListItemIcon>
                                         <ListItemText primary={item.name} />
                                     </SidebarListItemButton>
                                 </SidebarListItem>

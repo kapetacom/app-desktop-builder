@@ -53,7 +53,7 @@ export const TopBar = (props: TopBarProps) => {
                 {/* flex to push buttons to the right  */}
                 <Box flexGrow={1} />
                 <Stack
-                    direction={'row'}
+                    direction="row"
                     divider={<Divider orientation="vertical" flexItem />}
                     spacing={2}
                 >
@@ -85,8 +85,7 @@ export const TopBar = (props: TopBarProps) => {
                             sx={(theme) => ({
                                 width: 32,
                                 height: 32,
-                                border:
-                                    '2px solid ' + theme.palette.common.white,
+                                border: `2px solid ${theme.palette.common.white}`,
                             })}
                             src={props.profile?.avatar}
                             alt={props.profile?.name}
@@ -233,7 +232,7 @@ export const TopBar = (props: TopBarProps) => {
                         </ListItemIcon>
                         <ListItemText primary="Settings" />
                     </MenuItem>
-                    <MenuItem component="a" href={`/logout`}>
+                    <MenuItem component="a" href="/logout">
                         <ListItemIcon>
                             <i className="far fa-sign-out" />
                         </ListItemIcon>

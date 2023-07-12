@@ -74,6 +74,7 @@ const router = createHashRouter([
 
                     return (
                         <iframe
+                            title="Deployments"
                             src={`https://web-deployments.kapeta.com/${identity.value}?token=`}
                             width="100%"
                             height="100%"
