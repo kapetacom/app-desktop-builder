@@ -51,6 +51,7 @@ const useEditorTabs = (opts: TabOptions) => {
                     navigate(newTab);
                 } else {
                     navigate(defaultUrl);
+                    return [defaultUrl];
                 }
             }
             return tabState?.filter((tab) => tab !== tabUrl);
