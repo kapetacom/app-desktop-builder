@@ -1,28 +1,34 @@
+import React from 'react';
 import './shared-libraries';
 
-import React from 'react';
 import { Provider } from 'mobx-react';
 import { SimpleLoader } from '@kapeta/ui-web-components';
-import { useAsync } from 'react-use';
+import { Await, useAsyncError, useLoaderData } from 'react-router-dom';
 
-import Application from './views/Application';
+// import Application from './views/Application';
 
 import './index.less';
+import { Shell } from './views/Shell';
 
-import { initialise } from './context';
+const ErrorContainer = () => {
+    const error = useAsyncError() as Error;
+    return <pre>{error.message}</pre>;
+};
 
 export const Root = () => {
-    const { loading, error } = useAsync(async () => {
-        await initialise();
-    });
+    const data = useLoaderData();
+    // TODO: Remove this mobx provider
     return (
         <Provider>
-            <SimpleLoader text="Initialising application..." loading={loading}>
-                <>
-                    {error ? <pre>{error.message}</pre> : null}
-                    {!loading && !error && <Application key="main" />}
-                </>
-            </SimpleLoader>
+            <React.Suspense
+                fallback={
+                    <SimpleLoader text="Initialising application..." loading />
+                }
+            >
+                <Await resolve={data} errorElement={<ErrorContainer />}>
+                    <Shell key="main" />
+                </Await>
+            </React.Suspense>
         </Provider>
     );
 };

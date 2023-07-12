@@ -1,15 +1,4 @@
 /* Initialise contexts */
-import {
-    ResourceTypeProvider,
-    BlockTypeProvider,
-    BlockTargetProvider,
-} from '@kapeta/ui-web-context';
-import _ from 'lodash';
-import {
-    IBlockTypeProvider,
-    ILanguageTargetProvider,
-    IResourceTypeProvider,
-} from '@kapeta/ui-web-types';
 import Kapeta from './kapeta';
 
 export async function initialise() {
@@ -33,4 +22,5 @@ export async function initialise() {
     }
 
     console.log('All plugins loaded in %s ms', Date.now() - start);
+    return Kapeta.paths;
 }

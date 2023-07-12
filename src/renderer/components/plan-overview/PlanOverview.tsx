@@ -20,6 +20,7 @@ import { PlanOverviewTopBar } from './PlanOverviewTopBar';
 import './PlanOverview.less';
 import { getAssetTitle } from '../plan-editor/helpers';
 import { useBlockAssets } from '../../utils/planContextLoader';
+import { useNavigate } from 'react-router-dom';
 
 interface MiniPlanProps {
     systemId: string;
@@ -33,14 +34,13 @@ const MiniPlan = withPlannerContext(
 
 interface Props {
     plans: Asset<Plan>[];
-    size: number;
     onPlanChanged?: () => void;
     onAssetAdded?: (asset: Asset) => void;
     itemDeleted?: (plan: Asset<Plan>) => void;
-    onPlanSelected?: (plan: Asset<Plan>) => void;
 }
 
 export const PlanOverview = (props: Props) => {
+    const navigateTo = useNavigate();
     const [activePlanMenu, setActivePlanMenu] = useState(-1);
 
     const blockAssets = useBlockAssets();
@@ -79,7 +79,7 @@ export const PlanOverview = (props: Props) => {
     const onPlanCreated = (asset?: Asset) => {
         props.onPlanChanged && props.onPlanChanged();
         if (asset && props.onAssetAdded) {
-            props.onAssetAdded(asset);
+            navigateTo(`/edit/${encodeURIComponent(asset.ref)}`);
         }
     };
 
@@ -136,8 +136,10 @@ export const PlanOverview = (props: Props) => {
                             activeMenu={activePlanMenu}
                             menuItems={menuItem}
                             onClick={() => {
-                                props.onPlanSelected &&
-                                    props.onPlanSelected(asset);
+                                navigateTo(
+                                    `/edit/${encodeURIComponent(asset.ref)}`,
+                                    {}
+                                );
                             }}
                             toggleMenu={(indexIn: number) => {
                                 setOpenMenu(indexIn);
