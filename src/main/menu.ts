@@ -32,8 +32,6 @@ export default class MenuBuilder {
                 : this.buildDefaultTemplate();
 
         const menu = Menu.buildFromTemplate(template);
-        Menu.setApplicationMenu(menu);
-
         return menu;
     }
 
@@ -185,6 +183,99 @@ export default class MenuBuilder {
             ],
         };
 
+        const submenuTabs: MenuItemConstructorOptions = {
+            label: 'Tab',
+            submenu: [
+                {
+                    label: 'New Tab',
+                    accelerator: 'CmdOrCtrl+T',
+                    click: () => {
+                        this.mainWindow?.webContents.send(
+                            'ipc-main',
+                            'tabs',
+                            'new'
+                        );
+                    },
+                },
+                {
+                    label: 'Reopen Closed Tab',
+                    accelerator: 'CmdOrCtrl+Shift+T',
+                    click: () => {
+                        this.mainWindow?.webContents.send(
+                            'ipc-main',
+                            'tabs',
+                            'reopen'
+                        );
+                    },
+                },
+                {
+                    label: 'Close Tab',
+                    accelerator: 'CmdOrCtrl+W',
+                    click: () => {
+                        this.mainWindow?.webContents.send(
+                            'ipc-main',
+                            'tabs',
+                            'close'
+                        );
+                    },
+                },
+                ...[
+                    'Ctrl+Tab',
+                    'CmdOrCtrl+Option+Right',
+                    'CmdOrCtrl+Shift+]',
+                ].map((accelerator, i) => ({
+                    label: 'Next Tab',
+                    accelerator,
+                    visible: i === 0,
+                    click: () => {
+                        this.mainWindow?.webContents.send(
+                            'ipc-main',
+                            'tabs',
+                            'next'
+                        );
+                    },
+                })),
+                ...[
+                    'Ctrl+Shift+Tab',
+                    'CmdOrCtrl+Option+Left',
+                    'CmdOrCtrl+Shift+[',
+                ].map((accelerator, i) => ({
+                    label: 'Previous Tab',
+                    accelerator,
+                    visible: i === 0,
+                    click: () => {
+                        this.mainWindow?.webContents.send(
+                            'ipc-main',
+                            'tabs',
+                            'prev'
+                        );
+                    },
+                })),
+                ...[
+                    'CmdOrCtrl+1',
+                    'CmdOrCtrl+2',
+                    'CmdOrCtrl+3',
+                    'CmdOrCtrl+4',
+                    'CmdOrCtrl+5',
+                    'CmdOrCtrl+6',
+                    'CmdOrCtrl+7',
+                    'CmdOrCtrl+8',
+                    'CmdOrCtrl+9',
+                ].map((accelerator, i) => ({
+                    label: `Switch to Tab ${i + 1}`,
+                    accelerator,
+                    click: () => {
+                        this.mainWindow?.webContents.send(
+                            'ipc-main',
+                            'tabs',
+                            'switch',
+                            i
+                        );
+                    },
+                })),
+            ],
+        };
+
         const subMenuView =
             process.env.NODE_ENV === 'development' ||
             process.env.DEBUG_PROD === 'true'
@@ -196,6 +287,7 @@ export default class MenuBuilder {
             subMenuEdit,
             subMenuView,
             subMenuWindow,
+            submenuTabs,
             subMenuHelp,
         ];
     }

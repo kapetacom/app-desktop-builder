@@ -15,6 +15,7 @@ import {
     BrowserWindow,
     dialog,
     Menu,
+    MenuItem,
     MenuItemConstructorOptions,
     shell,
     Tray,
@@ -28,7 +29,6 @@ import { resolveHtmlPath } from './util';
 import { ClusterInfo, ClusterService } from './ClusterService';
 import { SplashScreen } from './SplashScreen';
 import { StatusCheck } from './SplashScreenStatus';
-import MenuItem = Electron.MenuItem;
 
 type TrayMenuItem = MenuItemConstructorOptions | MenuItem;
 
@@ -317,7 +317,8 @@ const createWindow = async () => {
     });
 
     const menuBuilder = new MenuBuilder(mainWindow);
-    menuBuilder.buildMenu();
+    const menu = menuBuilder.buildMenu();
+    Menu.setApplicationMenu(menu);
 
     // Open urls in the user's browser
     mainWindow.webContents.setWindowOpenHandler((edata) => {

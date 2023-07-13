@@ -6,7 +6,6 @@ import {
     styled,
     Divider,
     IconButton,
-    Collapse,
 } from '@mui/material';
 import { useMatches } from 'react-router-dom';
 import './MainLayout.less';

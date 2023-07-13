@@ -10,11 +10,14 @@ import { EditorTabs } from 'renderer/components/shell/EditorTabs';
 import './Shell.less';
 import { useAsync } from 'react-use';
 import { IdentityService } from '@kapeta/ui-web-context';
+import { useTabManager } from 'renderer/hooks/tabManager';
 import { useLocalStorage } from '../utils/localStorage';
 
 export function Shell() {
     const [error, setError] = useLocalStorage('$main_error', '');
     const location = useLocation();
+
+    useTabManager();
 
     const identity = useAsync(() => {
         return IdentityService.getCurrent();
