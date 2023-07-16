@@ -1,3 +1,10 @@
+## [0.7.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.1...v0.7.2) (2023-07-16)
+
+
+### Bug Fixes
+
+* Bumped dependencies to fix cross-platform issues ([c8d5c37](https://github.com/kapetacom/app-desktop-builder/commit/c8d5c37a667d0b0510f007870569eb430a30fa1d))
+
 ## [0.7.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.0...v0.7.1) (2023-07-16)
 
 
