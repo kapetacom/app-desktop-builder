@@ -1,3 +1,10 @@
+# [0.7.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.6.1...v0.7.0) (2023-07-16)
+
+
+### Features
+
+* Upgrade local cluster service to typescript version ([392f84a](https://github.com/kapetacom/app-desktop-builder/commit/392f84ad000959e1d571022846b0cfe0eaff8117))
+
 ## [0.6.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.6.0...v0.6.1) (2023-06-26)
 
 
