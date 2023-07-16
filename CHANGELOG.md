@@ -1,3 +1,10 @@
+## [0.7.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.2...v0.7.3) (2023-07-16)
+
+
+### Bug Fixes
+
+* add cross env to package.json ([6a2274d](https://github.com/kapetacom/app-desktop-builder/commit/6a2274df01e410ee6672754dd2a5a70fd5be43f6))
+
 ## [0.7.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.1...v0.7.2) (2023-07-16)
 
 
