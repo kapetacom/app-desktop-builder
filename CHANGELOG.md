@@ -1,3 +1,10 @@
+## [0.7.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.3...v0.7.4) (2023-07-16)
+
+
+### Bug Fixes
+
+* Get default export ([d4b33ac](https://github.com/kapetacom/app-desktop-builder/commit/d4b33ac783b5b2563a7cbddea8203aea81480d2d))
+
 ## [0.7.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.2...v0.7.3) (2023-07-16)
 
 
