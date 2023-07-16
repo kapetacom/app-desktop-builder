@@ -1,3 +1,10 @@
+## [0.7.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.0...v0.7.1) (2023-07-16)
+
+
+### Bug Fixes
+
+* Handle minor diffs on Linux (Ubuntu) ([#31](https://github.com/kapetacom/app-desktop-builder/issues/31)) ([7e6ce9e](https://github.com/kapetacom/app-desktop-builder/commit/7e6ce9e97cb7be943ce4f25151b03f229d6021a3))
+
 # [0.7.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.6.1...v0.7.0) (2023-07-16)
 
 
