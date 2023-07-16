@@ -1,3 +1,10 @@
+## [0.7.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.4...v0.7.5) (2023-07-16)
+
+
+### Bug Fixes
+
+* Bumped to fix issue in TS version of local cluster service ([b320d22](https://github.com/kapetacom/app-desktop-builder/commit/b320d22a6382993f9301819cfd578b5898732eca))
+
 ## [0.7.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.3...v0.7.4) (2023-07-16)
 
 
