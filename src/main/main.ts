@@ -373,7 +373,9 @@ app.whenReady()
         await refreshTray();
         app.on('activate', ensureWindow);
         splash.close();
-        app.show();
+        if (app.show) {
+            app.show();
+        }
     })
     .catch((err) => {
         console.error(err);

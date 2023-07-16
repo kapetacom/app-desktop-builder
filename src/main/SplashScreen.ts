@@ -34,7 +34,7 @@ export class SplashScreen {
     }
 
     close() {
-        this.activeWindow?.close();
+        this.activeWindow?.destroy();
         this.activeWindow = null;
     }
 
