@@ -1,3 +1,10 @@
+## [0.7.9](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.8...v0.7.9) (2023-07-17)
+
+
+### Bug Fixes
+
+* Add Avanir Next font to desktop app ([#33](https://github.com/kapetacom/app-desktop-builder/issues/33)) ([ee1f8a1](https://github.com/kapetacom/app-desktop-builder/commit/ee1f8a1f17bbcb91b7e416c4347a7dd4c3ebbcff))
+
 ## [0.7.8](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.7...v0.7.8) (2023-07-17)
 
 
