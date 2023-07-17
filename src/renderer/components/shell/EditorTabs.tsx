@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { PlannerService } from '@kapeta/ui-web-context';
-import { Button, Tab, Tabs } from '@mui/material';
+import { Button, IconButton } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAsyncRetry } from 'react-use';
 import { getAssetTitle } from '../plan-editor/helpers';
@@ -108,7 +109,7 @@ export const EditorTabs = () => {
                 } else if (/\/blockhub\b/.test(url)) {
                     // If it is a blockhub tab:
                     label = 'Blockhub';
-                    icon = <CustomIcon icon="ListView" />;
+                    icon = <CustomIcon icon="Block" />;
                 }
 
                 // ...
@@ -121,21 +122,35 @@ export const EditorTabs = () => {
                         icon={icon}
                         iconPosition="start"
                         label={
-                            <div>
-                                {label}
-                                &nbsp;
-                                <button
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    maxWidth: 'calc(100% - 32px)',
+                                    alignItems: 'center',
+                                }}
+                            >
+                                <span
                                     style={{
-                                        all: 'unset',
+                                        height: '1em',
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
                                     }}
+                                >
+                                    {label}
+                                </span>
+
+                                <IconButton
                                     type="button"
+                                    sx={{
+                                        mr: '-14px',
+                                    }}
                                     onClick={(e) => {
                                         e.preventDefault();
                                         closeTab(url);
                                     }}
                                 >
-                                    <i className="fal fa-times close-plan" />
-                                </button>
+                                    <CloseIcon />
+                                </IconButton>
                             </div>
                         }
                     />

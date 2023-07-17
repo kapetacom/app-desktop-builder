@@ -110,6 +110,7 @@
         "@kapeta/ui-web-plan-editor": "<2",
         "@kapeta/ui-web-types": "<2",
         "@kapeta/ui-web-utils": "<2",
+        "@mui/icons-material": "^5.14.0",
         "@mui/material": "^5.13.6",
         "@mui/system": "^5.14.0",
         "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",

@@ -17,6 +17,8 @@ export const KapetaTab = styled(Tab, {
 })<{ variant?: 'deploy' | 'edit' }>(
     {
         minHeight: '52px',
+        maxHeight: '52px',
+        maxWidth: '214px',
     },
     ({ variant, theme }) => {
         const bg =
