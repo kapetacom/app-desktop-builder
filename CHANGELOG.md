@@ -1,3 +1,10 @@
+## [0.7.10](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.9...v0.7.10) (2023-07-17)
+
+
+### Bug Fixes
+
+* Bumps local cluster service for linux compatibilty ([2741362](https://github.com/kapetacom/app-desktop-builder/commit/27413621075616b076e5781582450a09aec44844))
+
 ## [0.7.9](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.8...v0.7.9) (2023-07-17)
 
 
