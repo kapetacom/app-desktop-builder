@@ -40,7 +40,7 @@ export const PlanCreator = (props: PlanImportProps) => {
 
     return (
         <div className="plan-creator">
-            <div className="actions">
+            <div className="px-actions">
                 <Button text="Create" onClick={openCreatePanel} width={90} />
                 <Button text="Import" onClick={openImportPanel} width={90} />
             </div>

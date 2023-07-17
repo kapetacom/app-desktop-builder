@@ -6,6 +6,7 @@ import { toClass } from '@kapeta/ui-web-utils';
 import { TopBar } from 'renderer/components/shell/TopBar';
 import { MainLayout } from 'renderer/components/shell/MainLayout';
 import { EditorTabs } from 'renderer/components/shell/EditorTabs';
+import { CustomIcon } from 'renderer/components/shell/components/CustomIcon';
 
 import './Shell.less';
 import { useAsync } from 'react-use';
@@ -64,6 +65,7 @@ export function Shell() {
                     name: 'Edit',
                     url: '',
                     open: false,
+                    icon: <CustomIcon icon="Plan" />,
                 },
                 {
                     id: 'deploy',
@@ -72,6 +74,7 @@ export function Shell() {
                     name: 'Deploy',
                     url: '',
                     open: false,
+                    icon: <CustomIcon icon="Deploy" />,
                 },
                 {
                     id: 'blockhub',
@@ -80,6 +83,7 @@ export function Shell() {
                     name: 'Blockhub',
                     url: 'https://app.kapeta.com/blockhub',
                     open: false,
+                    icon: <CustomIcon icon="Block" />,
                 },
             ]}
             contexts={contexts.value}

@@ -10,6 +10,7 @@ export interface MenuSection {
     open: boolean;
     hidden?: boolean;
     requiredAccess?: string[];
+    icon?: React.ReactNode;
     // submenu?: FragmentMenuItem[];
 }
 

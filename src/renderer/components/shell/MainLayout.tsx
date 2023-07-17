@@ -85,7 +85,7 @@ export const MainLayout = (props: Props) => {
                             let icon = item.error ? (
                                 <i className="fa fa-exclamation-triangle" />
                             ) : (
-                                <CustomIcon icon="Block" />
+                                item.icon || <CustomIcon icon="Block" />
                             );
                             icon = item.loading ? (
                                 <i className="fa fa-circle-notch fa-spin" />
