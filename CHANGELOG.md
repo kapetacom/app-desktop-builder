@@ -1,3 +1,10 @@
+## [0.7.6](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.5...v0.7.6) (2023-07-17)
+
+
+### Bug Fixes
+
+* Windows paths for docker daemon ([0c39302](https://github.com/kapetacom/app-desktop-builder/commit/0c3930287c95580fc393ae652d8ac985e021e126))
+
 ## [0.7.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.4...v0.7.5) (2023-07-16)
 
 
