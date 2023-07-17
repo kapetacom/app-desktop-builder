@@ -1,3 +1,10 @@
+## [0.7.7](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.6...v0.7.7) (2023-07-17)
+
+
+### Bug Fixes
+
+* More fixes for cross platform in local cluster ([81155d6](https://github.com/kapetacom/app-desktop-builder/commit/81155d6e72828dc6ef2fd1e0caa454baa84cc063))
+
 ## [0.7.6](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.5...v0.7.6) (2023-07-17)
 
 
