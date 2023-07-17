@@ -5,6 +5,7 @@ import BlockIcon from './icons/BlockIcon.svg';
 import ResourceIcon from './icons/ResourceIcon.svg';
 import ExpandIcon from './icons/ExpandIcon.svg';
 import DeployIcon from './icons/DeployIcon.svg';
+import PlanIcon from './icons/PlanIcon.svg';
 
 const customIcons = {
     ListView: ListViewIcon,
@@ -12,13 +13,22 @@ const customIcons = {
     Resource: ResourceIcon,
     Expand: ExpandIcon,
     Deploy: DeployIcon,
+    Plan: PlanIcon,
 };
 
 interface CustomIconProps {
     icon: keyof typeof customIcons;
+    className?: any;
 }
 
 export const CustomIcon = (props: CustomIconProps) => {
+    console.log(props);
     const Icon = customIcons[props.icon];
-    return <SvgIcon component={Icon} viewBox="0 0 24 24" />;
+    return (
+        <SvgIcon
+            className={props.className}
+            component={Icon}
+            viewBox="0 0 24 24"
+        />
+    );
 };

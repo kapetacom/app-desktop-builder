@@ -4,6 +4,8 @@ import { Button, Tab, Tabs } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAsyncRetry } from 'react-use';
 import { getAssetTitle } from '../plan-editor/helpers';
+import { KapetaTab, KapetaTabs } from './components/KapetaTabs';
+import { CustomIcon } from './components/CustomIcon';
 
 interface TabOptions {
     defaultUrl?: string;
@@ -79,23 +81,12 @@ export const EditorTabs = () => {
         createTab(location.pathname, { navigate: false });
     }, [location.pathname, createTab]);
 
-    console.log(location.pathname);
-
     return (
-        <Tabs
-            sx={(theme) => ({
-                // Remove mui tab indicator (underline)
-                '& .MuiTabs-indicator': {
-                    display: 'none',
-                },
-                '& .MuiButton-root': {
-                    color: theme.palette.common.white,
-                },
-            })}
-            value={location.pathname}
-        >
+        <KapetaTabs value={location.pathname}>
             {tabs?.map((url) => {
                 let label: React.ReactNode = 'New tab';
+                let variant;
+                let icon = <CustomIcon icon="Plan" />;
 
                 if (/\/edit/.test(url)) {
                     // If it is an editor tab:
@@ -108,26 +99,27 @@ export const EditorTabs = () => {
                     label = plan
                         ? `${getAssetTitle(plan)} [${plan.version}]`
                         : 'My Plans';
+                    variant = 'edit';
+                    icon = <CustomIcon icon="Plan" />;
                 } else if (/\/deployments\b/.test(url)) {
                     label = 'Deployments';
+                    variant = 'deploy';
+                    icon = <CustomIcon icon="Deploy" />;
                 } else if (/\/blockhub\b/.test(url)) {
                     // If it is a blockhub tab:
                     label = 'Blockhub';
+                    icon = <CustomIcon icon="ListView" />;
                 }
 
                 // ...
 
                 return (
-                    <Tab
-                        sx={(theme) => ({
-                            // TODO: Replace this with a proper theme / component tokens
-                            '&.Mui-selected': {
-                                backgroundColor: theme.palette.primary.main,
-                                color: theme.palette.common.white,
-                            },
-                        })}
+                    <KapetaTab
                         value={url}
                         href={url}
+                        variant={variant}
+                        icon={icon}
+                        iconPosition="start"
                         label={
                             <div>
                                 {label}
@@ -152,6 +144,6 @@ export const EditorTabs = () => {
             <Button onClick={() => createTab(defaultUrl, { navigate: true })}>
                 <i className="fa fa-plus add-plan" />
             </Button>
-        </Tabs>
+        </KapetaTabs>
     );
 };
