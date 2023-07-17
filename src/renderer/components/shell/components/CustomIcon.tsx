@@ -22,7 +22,6 @@ interface CustomIconProps {
 }
 
 export const CustomIcon = (props: CustomIconProps) => {
-    console.log(props);
     const Icon = customIcons[props.icon];
     return (
         <SvgIcon
