@@ -1,3 +1,14 @@
+## [0.7.8](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.7...v0.7.8) (2023-07-17)
+
+
+### Bug Fixes
+
+* create/import button zIndex/positioning ([1d27fe9](https://github.com/kapetacom/app-desktop-builder/commit/1d27fe9285fecb6c13437ef771813a7e8fae3a0b))
+* icons on sidebar ([989689e](https://github.com/kapetacom/app-desktop-builder/commit/989689e6fff1d9297087a7fafb720f135d8f1ea6))
+* shiny icons ([90b7289](https://github.com/kapetacom/app-desktop-builder/commit/90b72891e93f916bd9b9f429f4899281bb3e68b8))
+* svg icons considered react components ([34bd818](https://github.com/kapetacom/app-desktop-builder/commit/34bd8185a1b7288a6b00a2286e92479470d9a1f0))
+* tab icons and sizing ([39c327a](https://github.com/kapetacom/app-desktop-builder/commit/39c327af887ca3a906b21c1d979568676735ed1e))
+
 ## [0.7.7](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.6...v0.7.7) (2023-07-17)
 
 
