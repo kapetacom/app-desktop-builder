@@ -1,5 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const {default:LocalClusterService} = require('@kapeta/local-cluster-service');
+const {
+    default: LocalClusterService,
+} = require('@kapeta/local-cluster-service');
 
 (async () => {
     const result = await LocalClusterService.start();
