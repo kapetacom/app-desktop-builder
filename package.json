@@ -204,18 +204,20 @@
         ],
         "afterSign": ".erb/scripts/notarize.js",
         "mac": {
-            "target": {
-                "target": "default",
-                "arch": [
-                    "arm64",
-                    "x64"
-                ]
-            },
+            "target": [
+                {
+                    "target": "dmg",
+                    "arch": [
+                        "arm64",
+                        "x64"
+                    ]
+                }
+            ],
             "type": "distribution",
             "hardenedRuntime": true,
             "entitlements": "assets/entitlements.mac.plist",
             "entitlementsInherit": "assets/entitlements.mac.plist",
-            "gatekeeperAssess": true
+            "gatekeeperAssess": false
         },
         "dmg": {
             "contents": [
@@ -238,7 +240,10 @@
         },
         "linux": {
             "target": [
-                "AppImage"
+                "AppImage",
+                "snap",
+                "deb",
+                "rpm"
             ],
             "category": "Development"
         },
