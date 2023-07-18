@@ -1,3 +1,10 @@
+## [0.7.17](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.16...v0.7.17) (2023-07-18)
+
+
+### Bug Fixes
+
+* Added GH Tokens and file_path ([956a91e](https://github.com/kapetacom/app-desktop-builder/commit/956a91ea1fb42c3ad888b154c12b69dedbcf35c6))
+
 ## [0.7.16](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.15...v0.7.16) (2023-07-18)
 
 
