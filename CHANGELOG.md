@@ -1,3 +1,10 @@
+## [0.7.23](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.22...v0.7.23) (2023-07-18)
+
+
+### Bug Fixes
+
+* Flip quotes ([ded16a9](https://github.com/kapetacom/app-desktop-builder/commit/ded16a9c66d00a1b4c74361d1ff39810033fa60a))
+
 ## [0.7.22](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.21...v0.7.22) (2023-07-18)
 
 
