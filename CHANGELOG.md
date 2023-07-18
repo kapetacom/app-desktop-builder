@@ -1,3 +1,10 @@
+## [0.7.13](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.12...v0.7.13) (2023-07-18)
+
+
+### Bug Fixes
+
+* Adjustments to attempt to fix build ([c1e20ee](https://github.com/kapetacom/app-desktop-builder/commit/c1e20eebff4cb832ad98ccc6cf547b1011273ef3))
+
 ## [0.7.12](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.11...v0.7.12) (2023-07-18)
 
 
