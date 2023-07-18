@@ -1,3 +1,10 @@
+## [0.7.11](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.10...v0.7.11) (2023-07-18)
+
+
+### Bug Fixes
+
+* Add code signing for apple ([cf1107e](https://github.com/kapetacom/app-desktop-builder/commit/cf1107e088f8bd0606a23b752ba3a61132e32c1a))
+
 ## [0.7.10](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.9...v0.7.10) (2023-07-17)
 
 
