@@ -1,3 +1,10 @@
+## [0.7.19](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.18...v0.7.19) (2023-07-18)
+
+
+### Bug Fixes
+
+* Write the specific file we want to sign ([d783817](https://github.com/kapetacom/app-desktop-builder/commit/d7838174de7958dc1e0eff03df471eb6f6c2a494))
+
 ## [0.7.18](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.17...v0.7.18) (2023-07-18)
 
 
