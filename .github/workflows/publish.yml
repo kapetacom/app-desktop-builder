@@ -23,7 +23,10 @@ jobs:
                   npm run postinstall
                   npm run build
 
-            - name: Build artifacts
+            - name: Build and Publish
+              env:
+                  # This is used for uploading release assets to github
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: |
                   npm exec electron-builder -- --publish always --linux
 
@@ -61,9 +64,10 @@ jobs:
                   # Credential ID for signing certificate.
                   credential_id: ${{ secrets.ESIGNER_CREDENTIAL_ID }}
                   # OAuth TOTP Secret (https://www.ssl.com/how-to/automate-esigner-ev-code-signing)
+
                   totp_secret: ${{ secrets.ESIGNER_TOTP_SECRET }}
-                  # Path of code object to be signed. (DLL, JAR, EXE, MSI files vb... )
                   dir_path: ${GITHUB_WORKSPACE}/release/build
+                  file_path: ${GITHUB_WORKSPACE}/release/build/Kapeta Setup*.exe
                   # Scan code before sign
                   malware_block: false
                   # Environment Name, For Production 'PROD' or For Staging 'TEST'
