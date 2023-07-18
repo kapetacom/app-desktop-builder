@@ -1,3 +1,10 @@
+## [0.7.15](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.14...v0.7.15) (2023-07-18)
+
+
+### Bug Fixes
+
+* Adds windows and linux builds ([7f0168d](https://github.com/kapetacom/app-desktop-builder/commit/7f0168d8ef86350c5f4acb139d3def7ef7064dd1))
+
 ## [0.7.14](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.13...v0.7.14) (2023-07-18)
 
 
