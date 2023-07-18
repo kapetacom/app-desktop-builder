@@ -1,3 +1,10 @@
+## [0.7.16](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.15...v0.7.16) (2023-07-18)
+
+
+### Bug Fixes
+
+* Linux build should always publish ([54fc8db](https://github.com/kapetacom/app-desktop-builder/commit/54fc8dbb4f0dc2626c5186685f1d0dae6852d5ac))
+
 ## [0.7.15](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.14...v0.7.15) (2023-07-18)
 
 
