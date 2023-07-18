@@ -1,3 +1,10 @@
+## [0.7.21](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.20...v0.7.21) (2023-07-18)
+
+
+### Bug Fixes
+
+* Try with override true ([5070ba8](https://github.com/kapetacom/app-desktop-builder/commit/5070ba8f1a6fd39b592f60dd98bbbf64ac39f377))
+
 ## [0.7.20](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.19...v0.7.20) (2023-07-18)
 
 
