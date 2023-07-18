@@ -1,3 +1,10 @@
+## [0.7.22](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.21...v0.7.22) (2023-07-18)
+
+
+### Bug Fixes
+
+* Lint, Test and win signing ([16fffd1](https://github.com/kapetacom/app-desktop-builder/commit/16fffd1e166368f8df22666423495939c1f73b1c))
+
 ## [0.7.21](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.20...v0.7.21) (2023-07-18)
 
 
