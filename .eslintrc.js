@@ -2,7 +2,6 @@ module.exports = {
     extends: ['erb', 'plugin:@typescript-eslint/recommended'],
     rules: {
         '@typescript-eslint/ban-ts-comment': 'off',
-        '@typescript-eslint/no-explicit-any': 'warn',
         '@typescript-eslint/no-shadow': 'error',
         'no-shadow': 'off',
         // A temporary hack related to IDE not resolving correct package.json
@@ -21,6 +20,8 @@ module.exports = {
         'react/jsx-props-no-spreading': 'off',
         'react/no-unused-prop-types': 'warn',
         'react/prop-types': 'off',
+        '@typescript-eslint/no-explicit-any': 'off',
+        '@typescript-eslint/no-non-null-assertion': 'off',
         // Override airbnb rule
         // Labels for inputs can either be with `<label htmlFor={...}>` and ids,
         // or via nesting <label><input/></label>
@@ -41,7 +42,7 @@ module.exports = {
         'no-multi-assign': 'off',
         'no-underscore-dangle': 'off',
         'no-continue': 'off',
-        'no-unused-expressions': 'warn',
+        'no-unused-expressions': 'off',
         'no-unused-vars': 'off',
         'no-use-before-define': 'off',
         'prefer-const': 'off',

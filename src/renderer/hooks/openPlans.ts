@@ -7,13 +7,13 @@ export const useOpenPlans = () => {
     );
 
     const addOpenPlanRef = (ref: string) => {
-        if (!openPlanRefs.includes(ref)) {
+        if (openPlanRefs && !openPlanRefs.includes(ref)) {
             setOpenPlanRefs([...openPlanRefs, ref]);
         }
     };
 
     const removeOpenPlanRef = (ref: string) => {
-        if (openPlanRefs.includes(ref)) {
+        if (openPlanRefs && openPlanRefs.includes(ref)) {
             setOpenPlanRefs(openPlanRefs.filter((r) => r !== ref));
         }
     };

@@ -117,7 +117,6 @@ export const EditorTabs = () => {
                 return (
                     <KapetaTab
                         value={url}
-                        href={url}
                         variant={variant}
                         icon={icon}
                         iconPosition="start"

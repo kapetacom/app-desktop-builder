@@ -22,7 +22,6 @@ import {
 } from './types';
 
 interface TopBarProps {
-    section?: MenuSection;
     profile?: UserProfile;
     notifications?: KapetaNotification[];
     changes?: ChangeSet[];

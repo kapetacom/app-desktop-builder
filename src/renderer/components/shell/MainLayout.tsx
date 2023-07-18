@@ -6,7 +6,6 @@ import {
     styled,
     Divider,
     IconButton,
-    Collapse,
 } from '@mui/material';
 import { useMatches } from 'react-router-dom';
 import './MainLayout.less';
@@ -47,7 +46,6 @@ interface Props {
 export const MainLayout = (props: Props) => {
     const currentLocation = props.location;
 
-    const normalizedPath = currentLocation.pathname.replace(/\/+$/, '');
     const [isOpen, setIsOpen] = useState(true);
     const toggle = () => setIsOpen(!isOpen);
 

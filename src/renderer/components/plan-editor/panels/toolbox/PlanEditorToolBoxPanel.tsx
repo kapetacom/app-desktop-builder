@@ -4,7 +4,6 @@ import {
     PanelAlignment,
     PanelSize,
     SidePanel,
-    BlockLayout,
 } from '@kapeta/ui-web-components';
 import {
     Asset,

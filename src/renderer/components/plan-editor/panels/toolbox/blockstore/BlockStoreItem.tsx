@@ -41,13 +41,13 @@ export const BlockStoreItem = (props: BlockStoreItemProps) => {
 
     return (
         <DnDDraggable
-            onDragStart={(evt) => {
+            onDragStart={() => {
                 props.onItemDragStart?.(draggable);
             }}
             onDrag={(evt) => {
                 props.onItemDrag?.(draggable, evt.zone.end);
             }}
-            onDrop={(evt) => {
+            onDrop={() => {
                 props.onItemDragEnd?.(draggable);
             }}
             data={{

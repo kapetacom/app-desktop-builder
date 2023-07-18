@@ -13,7 +13,6 @@ import { PlanOverview } from './components/plan-overview/PlanOverview';
 
 const router = createHashRouter([
     {
-        basePath: '/',
         path: '*',
         Component: Root,
         async loader() {
@@ -43,18 +42,15 @@ const router = createHashRouter([
                             }, [reloadPlans]);
 
                             return (
-                                <PlanOverview
-                                    plans={planAssets.value || []}
-                                    size={PlannerNodeSize.MEDIUM}
-                                />
+                                <PlanOverview plans={planAssets.value || []} />
                             );
                         },
                     },
                     {
                         path: ':systemId',
-                        Component: (props) => {
+                        Component: () => {
                             const params = useParams();
-                            return <PlanView systemId={params.systemId} />;
+                            return <PlanView systemId={params.systemId!} />;
                         },
                     },
                 ],

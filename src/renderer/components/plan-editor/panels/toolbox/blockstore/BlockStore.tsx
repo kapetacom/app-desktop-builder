@@ -136,7 +136,7 @@ export const BlockStore = (props: Props) => {
                                         }
                                         return false;
                                     })
-                                    .map((item, ix) => {
+                                    .map((item) => {
                                         return (
                                             <BlockStoreItem
                                                 key={item.ref}

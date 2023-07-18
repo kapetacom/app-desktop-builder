@@ -1,6 +1,6 @@
 import React, { ForwardedRef, forwardRef, useState } from 'react';
 
-import { AssetService, BlockService } from '@kapeta/ui-web-context';
+import { AssetService } from '@kapeta/ui-web-context';
 import { showDelete, showToasty, ToastType } from '@kapeta/ui-web-components';
 import { useNavigate } from 'react-router-dom';
 
