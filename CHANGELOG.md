@@ -1,3 +1,10 @@
+## [0.7.18](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.17...v0.7.18) (2023-07-18)
+
+
+### Bug Fixes
+
+* Sign all *.exe ([4cbc601](https://github.com/kapetacom/app-desktop-builder/commit/4cbc601bfdb25d0b2b98fb18d2c9ebccfa7eb8e5))
+
 ## [0.7.17](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.16...v0.7.17) (2023-07-18)
 
 
