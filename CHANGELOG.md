@@ -1,3 +1,10 @@
+## [0.7.12](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.11...v0.7.12) (2023-07-18)
+
+
+### Bug Fixes
+
+* Use notarytool instead of deprecated alttool ([1ab50df](https://github.com/kapetacom/app-desktop-builder/commit/1ab50df7b64aec2ca0783ce8a9ac58a47d184fa9))
+
 ## [0.7.11](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.10...v0.7.11) (2023-07-18)
 
 
