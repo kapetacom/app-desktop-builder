@@ -67,7 +67,7 @@ jobs:
 
                   totp_secret: ${{ secrets.ESIGNER_TOTP_SECRET }}
                   dir_path: ${GITHUB_WORKSPACE}/release/build
-                  file_path: ${GITHUB_WORKSPACE}/release/build/Kapeta Setup*.exe
+                  file_path: ${GITHUB_WORKSPACE}/release/build/*.exe
                   # Scan code before sign
                   malware_block: false
                   # Environment Name, For Production 'PROD' or For Staging 'TEST'
