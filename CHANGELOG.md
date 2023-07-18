@@ -1,3 +1,10 @@
+## [0.7.20](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.19...v0.7.20) (2023-07-18)
+
+
+### Bug Fixes
+
+* Try wrapping path in quotes ([4077d5b](https://github.com/kapetacom/app-desktop-builder/commit/4077d5bad96672674087b7490d2d9459dc9f0cdf))
+
 ## [0.7.19](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.18...v0.7.19) (2023-07-18)
 
 
