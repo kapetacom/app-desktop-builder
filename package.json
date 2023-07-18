@@ -204,6 +204,7 @@
         ],
         "afterSign": ".erb/scripts/notarize.js",
         "mac": {
+            "category": "public.app-category.developer-tools",
             "target": [
                 {
                     "target": "dmg",
@@ -236,16 +237,17 @@
         "win": {
             "target": [
                 "nsis"
+            ],
+            "signingHashAlgorithms": [
+                "sha256"
             ]
         },
         "linux": {
             "target": [
-                "AppImage",
-                "snap",
-                "deb",
-                "rpm"
+                "AppImage"
             ],
-            "category": "Development"
+            "category": "Development",
+            "maintainer": "support@kapeta.com"
         },
         "directories": {
             "app": "release/app",
@@ -260,7 +262,15 @@
             "owner": "kapetacom",
             "repo": "app-desktop-builder",
             "releaseType": "release"
-        }
+        },
+        "protocols": [
+            {
+                "name": "kapeta",
+                "schemes": [
+                    "kapeta"
+                ]
+            }
+        ]
     },
     "release": {
         "plugins": [

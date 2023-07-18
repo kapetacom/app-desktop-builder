@@ -5,6 +5,77 @@ on:
             - created
 
 jobs:
+    publish_linux:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout git repo
+              uses: actions/checkout@v3
+
+            - name: Install Node and NPM
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 18
+                  cache: npm
+
+            - name: Install and build
+              run: |
+                  npm install
+                  npm run postinstall
+                  npm run build
+
+            - name: Build artifacts
+              run: |
+                  npm exec electron-builder -- --publish --linux
+
+    publish_win:
+        runs-on: windows-latest
+        steps:
+            - name: Checkout git repo
+              uses: actions/checkout@v3
+
+            - name: Install Node and NPM
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 18
+                  cache: npm
+
+            - name: Install and build
+              run: |
+                  npm install
+                  npm run postinstall
+                  npm run build
+
+            - name: Build artifacts
+              run: |
+                  npm exec electron-builder -- --publish never --win
+
+            - name: Sign Artifact with CodeSignTool
+              uses: sslcom/esigner-codesign@develop
+              with:
+                  # Sign and timestamp code object.
+                  command: sign
+                  # SSL.com account username
+                  username: ${{ secrets.ESIGNER_USERNAME }}
+                  # SSL.com account password.
+                  password: ${{ secrets.ESIGNER_PASSWORD }}
+                  # Credential ID for signing certificate.
+                  credential_id: ${{ secrets.ESIGNER_CREDENTIAL_ID }}
+                  # OAuth TOTP Secret (https://www.ssl.com/how-to/automate-esigner-ev-code-signing)
+                  totp_secret: ${{ secrets.ESIGNER_TOTP_SECRET }}
+                  # Path of code object to be signed. (DLL, JAR, EXE, MSI files vb... )
+                  dir_path: ${GITHUB_WORKSPACE}/release/build
+                  # Scan code before sign
+                  malware_block: false
+                  # Environment Name, For Production 'PROD' or For Staging 'TEST'
+                  environment_name: PROD
+
+            - name: Upload Artifacts
+              uses: actions/upload-artifact@v3
+              with:
+                  name: Kapeta Setup
+                  path: release/build
+                  retention-days: 1
+
     publish_mac:
         runs-on: macos-latest
         steps:
