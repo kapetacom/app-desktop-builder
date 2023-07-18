@@ -1,3 +1,10 @@
+## [0.7.14](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.13...v0.7.14) (2023-07-18)
+
+
+### Bug Fixes
+
+* Add apple team id ([dcc8a01](https://github.com/kapetacom/app-desktop-builder/commit/dcc8a0161b044e6b7125538c5ef48f81ccb3b01a))
+
 ## [0.7.13](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.12...v0.7.13) (2023-07-18)
 
 
