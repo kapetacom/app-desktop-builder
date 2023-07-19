@@ -28,7 +28,7 @@
         "test": "jest",
         "format": "prettier --write .",
         "storybook": "start-storybook -s assets",
-        "build-storybook": "storybook build"
+        "build-storybook": "build-storybook"
     },
     "lint-staged": {
         "*.{js,jsx,ts,tsx}": [
