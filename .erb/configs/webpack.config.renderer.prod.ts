@@ -27,7 +27,8 @@ const configuration: webpack.Configuration = {
 
     entry: {
         index: [path.join(webpackPaths.srcRendererPath, 'index.tsx')],
-        splash: [path.join(webpackPaths.srcRendererPath, 'splash.tsx')],
+        splash: [path.join(webpackPaths.srcRendererPath, 'modals/splash/splash.tsx')],
+        processing: [path.join(webpackPaths.srcRendererPath, 'modals/processing/processing.tsx')],
     },
 
     output: {
@@ -115,6 +116,10 @@ const configuration: webpack.Configuration = {
         ],
     },
 
+    externals: {
+        'electron':'electron'
+    },
+
     optimization: {
         minimize: true,
         minimizer: [
@@ -165,7 +170,19 @@ const configuration: webpack.Configuration = {
         new HtmlWebpackPlugin({
             filename: 'splash.html',
             chunks: ['splash'],
-            template: path.join(webpackPaths.srcRendererPath, 'splash.ejs'),
+            template: path.join(webpackPaths.srcRendererPath, 'modals/modal.ejs'),
+            minify: {
+                collapseWhitespace: true,
+                removeAttributeQuotes: true,
+                removeComments: true,
+            },
+            isBrowser: false,
+            isDevelopment: process.env.NODE_ENV !== 'production',
+        }),
+        new HtmlWebpackPlugin({
+            filename: 'processing.html',
+            chunks: ['processing'],
+            template: path.join(webpackPaths.srcRendererPath, 'modals/modal.ejs'),
             minify: {
                 collapseWhitespace: true,
                 removeAttributeQuotes: true,

@@ -1,10 +1,9 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import './processing.less';
-import {shell} from 'electron';
+import { shell } from 'electron';
 
 const root = createRoot(document.getElementById('root')!);
-
 
 interface Props {
     text: string | null;
@@ -15,16 +14,21 @@ interface Props {
 export const ProcessingContent = (props: Props) => {
     return (
         <div className="modal-processing">
-            <a className={'btn-close'} onClick={() => window.close()}><i className={'fa fa-times'}/></a>
+            <a className={'btn-close'} onClick={() => window.close()}>
+                <i className={'fa fa-times'} />
+            </a>
             <h2>Please wait...</h2>
             {props.text && <p>{props.text}</p>}
             {props.link && (
-                <a href={props.link} onClick={(evt) => {
-                    evt.preventDefault();
-                    if (props.link) {
-                        shell.openExternal(props.link);
-                    }
-                }} >
+                <a
+                    href={props.link}
+                    onClick={(evt) => {
+                        evt.preventDefault();
+                        if (props.link) {
+                            shell.openExternal(props.link);
+                        }
+                    }}
+                >
                     {props.linkText ?? 'Click here to open in your browser.'}
                 </a>
             )}

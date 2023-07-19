@@ -24,11 +24,11 @@ import log from 'electron-log';
 import { KapetaAPI } from '@kapeta/nodejs-api-client';
 
 import MenuBuilder from './menu';
-import {createFuture, resolveHtmlPath} from './util';
+import { createFuture, resolveHtmlPath } from './util';
 import { ClusterInfo, ClusterService } from './ClusterService';
 import { SplashScreen } from './SplashScreen';
 import { StatusCheck } from './SplashScreenStatus';
-import {ModalProcessing} from "./ModalProcessing";
+import { ModalProcessing } from './ModalProcessing';
 import MenuItem = Electron.MenuItem;
 
 type TrayMenuItem = MenuItemConstructorOptions | MenuItem;
@@ -57,8 +57,6 @@ const isDebug =
 if (isDebug) {
     require('electron-debug')();
 }
-
-
 
 const RESOURCES_PATH = app.isPackaged
     ? path.join(process.resourcesPath, 'assets')
@@ -193,16 +191,19 @@ const refreshTray = async () => {
                             onVerificationCode: (url: string) => {
                                 processingModal.setProps({
                                     text: 'Continue signing in, in your browser...',
-                                    linkText: 'Click here to continue in your browser.',
+                                    linkText:
+                                        'Click here to continue in your browser.',
                                     link: url,
-                                })
+                                });
                                 shell.openExternal(url);
                             },
-                        }).then(() => {
-                            future.resolve();
-                        }).catch((err) => {
-                            future.reject(err);
-                        });
+                        })
+                            .then(() => {
+                                future.resolve();
+                            })
+                            .catch((err) => {
+                                future.reject(err);
+                            });
 
                         await future.promise;
                         await refreshTray();
@@ -217,12 +218,10 @@ const refreshTray = async () => {
                         });
                     } catch (err: any) {
                         processingModal.close();
-                        const message = err.message ?? err.error ?? 'Unknown error';
+                        const message =
+                            err.message ?? err.error ?? 'Unknown error';
                         // Failed to complete
-                        dialog.showErrorBox(
-                            'Failed to authenticate',
-                            message
-                        );
+                        dialog.showErrorBox('Failed to authenticate', message);
                     } finally {
                         processingModal.close();
                     }
@@ -370,8 +369,6 @@ app.on('window-all-closed', () => {
 app.on('quit', async () => {
     await clusterService.stop();
 });
-
-
 
 app.whenReady()
     .then(async () => {

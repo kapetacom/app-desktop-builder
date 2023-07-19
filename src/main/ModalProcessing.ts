@@ -1,6 +1,6 @@
 import { BrowserWindow } from 'electron';
 import { resolveHtmlPath } from './util';
-import {EventEmitter} from "node:events";
+import { EventEmitter } from 'node:events';
 
 interface Props {
     text?: string;
@@ -14,7 +14,7 @@ export class ModalProcessing extends EventEmitter {
         super();
     }
 
-    open(parent:BrowserWindow, props: Props) {
+    open(parent: BrowserWindow, props: Props) {
         if (this.activeWindow) {
             this.setProps(props);
             return;
@@ -36,12 +36,11 @@ export class ModalProcessing extends EventEmitter {
                 devTools: false,
                 nodeIntegration: true,
             },
-
         });
         this.activeWindow.on('close', () => {
             this.activeWindow = null;
             this.emit('close');
-        })
+        });
         this.setProps(props);
     }
 
