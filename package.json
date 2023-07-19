@@ -26,7 +26,9 @@
         "start:preload": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.preload.dev.ts",
         "start:renderer": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack serve --config ./.erb/configs/webpack.config.renderer.dev.ts",
         "test": "jest",
-        "format": "prettier --write ."
+        "format": "prettier --write .",
+        "storybook": "start-storybook -s assets",
+        "build-storybook": "storybook build"
     },
     "lint-staged": {
         "*.{js,jsx,ts,tsx}": [
@@ -42,7 +44,6 @@
             "prettier --ignore-path .eslintignore --single-quote --write"
         ]
     },
-    "browserslist": [],
     "prettier": {
         "tabWidth": 4,
         "singleQuote": true,
@@ -98,6 +99,7 @@
         "which": "^3.0.0"
     },
     "devDependencies": {
+        "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
         "@electron/notarize": "^1.2.3",
         "@electron/rebuild": "^3.2.10",
         "@emotion/react": "^11.11.1",
@@ -114,6 +116,12 @@
         "@mui/material": "^5.13.6",
         "@mui/system": "^5.14.0",
         "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",
+        "@storybook/addon-actions": "^6.5.12",
+        "@storybook/addon-links": "^6.5.12",
+        "@storybook/addons": "^6.5.12",
+        "@storybook/builder-webpack5": "^6.5.12",
+        "@storybook/manager-webpack5": "^6.5.12",
+        "@storybook/react": "^6.5.12",
         "@svgr/webpack": "^6.3.1",
         "@teamsupercell/typings-for-css-modules-loader": "^2.5.1",
         "@testing-library/jest-dom": "^5.16.5",
@@ -178,6 +186,7 @@
         "rimraf": "^3.0.2",
         "sass": "^1.54.4",
         "sass-loader": "^13.0.2",
+        "storybook": "^6.5.12",
         "style-loader": "^3.3.1",
         "terser-webpack-plugin": "^5.3.5",
         "ts-jest": "^28.0.8",
