@@ -1,3 +1,10 @@
+## [0.7.25](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.24...v0.7.25) (2023-07-19)
+
+
+### Bug Fixes
+
+* Add processing modal when signing in ([#35](https://github.com/kapetacom/app-desktop-builder/issues/35)) ([b44b6ad](https://github.com/kapetacom/app-desktop-builder/commit/b44b6ad88faa524cff641bdcaf8e1893e97c8cd9))
+
 ## [0.7.24](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.23...v0.7.24) (2023-07-19)
 
 
