@@ -1,3 +1,10 @@
+## [0.7.27](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.26...v0.7.27) (2023-07-19)
+
+
+### Bug Fixes
+
+* Storybook build ([ae3435c](https://github.com/kapetacom/app-desktop-builder/commit/ae3435c59d2b01ea5db2e9b5224f6ec11a137ba3))
+
 ## [0.7.26](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.25...v0.7.26) (2023-07-19)
 
 
