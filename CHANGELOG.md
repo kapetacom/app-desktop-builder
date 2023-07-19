@@ -1,3 +1,10 @@
+## [0.7.28](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.27...v0.7.28) (2023-07-19)
+
+
+### Bug Fixes
+
+* storybook build for electron ([5aebebf](https://github.com/kapetacom/app-desktop-builder/commit/5aebebf85e85aefd93211bed5bec41d2b569b53b))
+
 ## [0.7.27](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.26...v0.7.27) (2023-07-19)
 
 
