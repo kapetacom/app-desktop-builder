@@ -1,3 +1,10 @@
+## [0.7.26](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.25...v0.7.26) (2023-07-19)
+
+
+### Bug Fixes
+
+* Add new modals to prod build ([d4f53fc](https://github.com/kapetacom/app-desktop-builder/commit/d4f53fc9572994d90e4483324da47c2815f9ba25))
+
 ## [0.7.25](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.24...v0.7.25) (2023-07-19)
 
 
