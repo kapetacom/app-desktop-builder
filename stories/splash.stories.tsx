@@ -10,7 +10,7 @@ export default {
 export const SplashLoading = () => {
     return (
         <SplashContent
-            text={'Loading...'}
+            text="Loading..."
             dockerStatus={SplashStatusCheck.LOADING}
             localClusterStatus={SplashStatusCheck.LOADING}
         />
@@ -20,7 +20,7 @@ export const SplashLoading = () => {
 export const SplashOK = () => {
     return (
         <SplashContent
-            text={'Ready!'}
+            text="Ready!"
             dockerStatus={SplashStatusCheck.OK}
             localClusterStatus={SplashStatusCheck.OK}
         />
@@ -30,7 +30,7 @@ export const SplashOK = () => {
 export const SplashFail = () => {
     return (
         <SplashContent
-            text={'Failed to load!'}
+            text="Failed to load!"
             dockerStatus={SplashStatusCheck.ERROR}
             localClusterStatus={SplashStatusCheck.ERROR}
         />

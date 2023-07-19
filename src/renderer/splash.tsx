@@ -32,7 +32,7 @@ interface Props {
 
 export const SplashContent = (props: Props) => {
     return (
-        <div className={'splash-content'}>
+        <div className="splash-content">
             <SimpleLoader
                 loading
                 type={LoaderType.HOURGLASS}

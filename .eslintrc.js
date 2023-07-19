@@ -22,6 +22,7 @@ module.exports = {
         'react/prop-types': 'off',
         '@typescript-eslint/no-explicit-any': 'off',
         '@typescript-eslint/no-non-null-assertion': 'off',
+        'compat/compat': 'off',
         // Override airbnb rule
         // Labels for inputs can either be with `<label htmlFor={...}>` and ids,
         // or via nesting <label><input/></label>
