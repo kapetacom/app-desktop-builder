@@ -1,3 +1,10 @@
+## [0.7.24](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.23...v0.7.24) (2023-07-19)
+
+
+### Bug Fixes
+
+* Adjust splash window to only show design ([#34](https://github.com/kapetacom/app-desktop-builder/issues/34)) ([d6ec187](https://github.com/kapetacom/app-desktop-builder/commit/d6ec187b6865d6ced47dbe401df701682f1fec5b))
+
 ## [0.7.23](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.22...v0.7.23) (2023-07-18)
 
 
