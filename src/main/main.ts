@@ -24,10 +24,11 @@ import log from 'electron-log';
 import { KapetaAPI } from '@kapeta/nodejs-api-client';
 
 import MenuBuilder from './menu';
-import { resolveHtmlPath } from './util';
+import {createFuture, resolveHtmlPath} from './util';
 import { ClusterInfo, ClusterService } from './ClusterService';
 import { SplashScreen } from './SplashScreen';
 import { StatusCheck } from './SplashScreenStatus';
+import {ModalProcessing} from "./ModalProcessing";
 import MenuItem = Electron.MenuItem;
 
 type TrayMenuItem = MenuItemConstructorOptions | MenuItem;
@@ -57,6 +58,8 @@ if (isDebug) {
     require('electron-debug')();
 }
 
+
+
 const RESOURCES_PATH = app.isPackaged
     ? path.join(process.resourcesPath, 'assets')
     : path.join(__dirname, '../../assets');
@@ -77,7 +80,8 @@ const installExtensions = async () => {
         )
         .catch(console.log);
 };
-
+const loadingSplashScreen = new SplashScreen();
+const processingModal = new ModalProcessing();
 const ensureWindow = async () => {
     if (mainWindow === null) {
         await createWindow();
@@ -176,13 +180,34 @@ const refreshTray = async () => {
                 label: 'Sign in',
                 click: async () => {
                     try {
-                        await api.doDeviceAuthentication({
+                        const future = createFuture();
+                        processingModal.open(mainWindow, {
+                            text: 'Signing in...',
+                        });
+
+                        processingModal.once('close', async () => {
+                            future.reject(new Error('Sign in was cancelled'));
+                        });
+
+                        api.doDeviceAuthentication({
                             onVerificationCode: (url: string) => {
+                                processingModal.setProps({
+                                    text: 'Continue signing in, in your browser...',
+                                    linkText: 'Click here to continue in your browser.',
+                                    link: url,
+                                })
                                 shell.openExternal(url);
                             },
+                        }).then(() => {
+                            future.resolve();
+                        }).catch((err) => {
+                            future.reject(err);
                         });
+
+                        await future.promise;
                         await refreshTray();
                         const identity = await api.getCurrentIdentity();
+                        processingModal.close();
                         dialog.showMessageBoxSync({
                             type: 'info',
                             message: `You were signed in as ${
@@ -191,11 +216,15 @@ const refreshTray = async () => {
                             title: 'Signed in!',
                         });
                     } catch (err: any) {
+                        processingModal.close();
+                        const message = err.message ?? err.error ?? 'Unknown error';
                         // Failed to complete
                         dialog.showErrorBox(
                             'Failed to authenticate',
-                            e.message || e.error || 'Unknown error'
+                            message
                         );
+                    } finally {
+                        processingModal.close();
                     }
                 },
             },
@@ -342,10 +371,11 @@ app.on('quit', async () => {
     await clusterService.stop();
 });
 
-const splash = new SplashScreen();
+
+
 app.whenReady()
     .then(async () => {
-        splash.open({
+        loadingSplashScreen.open({
             text: 'Running startup checks...',
             docker: StatusCheck.LOADING,
             cluster: StatusCheck.LOADING,
@@ -353,26 +383,26 @@ app.whenReady()
 
         try {
             await ensureLocalCluster();
-            splash.setStatus({
+            loadingSplashScreen.setStatus({
                 cluster: StatusCheck.OK,
                 docker: localClusterInfo?.dockerStatus
                     ? StatusCheck.OK
                     : StatusCheck.ERROR,
             });
         } catch (e) {
-            splash.setStatus({
+            loadingSplashScreen.setStatus({
                 cluster: StatusCheck.ERROR,
             });
         }
     })
     .then(() => {
-        splash.setStatus({ text: 'Launching UI...' });
+        loadingSplashScreen.setStatus({ text: 'Launching UI...' });
         return createWindow();
     })
     .then(async () => {
         await refreshTray();
         app.on('activate', ensureWindow);
-        splash.close();
+        loadingSplashScreen.close();
         if (app.show) {
             app.show();
         }

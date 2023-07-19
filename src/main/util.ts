@@ -11,3 +11,12 @@ export function resolveHtmlPath(htmlFileName: string) {
     }
     return `file://${path.resolve(__dirname, '../renderer/', htmlFileName)}`;
 }
+
+export function createFuture() {
+    let resolve, reject;
+    const promise = new Promise((res, rej) => {
+        resolve = res;
+        reject = rej;
+    });
+    return { promise, resolve, reject };
+}

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import './index.less';
-import { SplashContent, SplashStatusCheck } from '../src/renderer/splash';
+import { SplashContent, SplashStatusCheck } from '../src/renderer/modals/splash/splash';
 
 export default {
     title: 'Splash',
