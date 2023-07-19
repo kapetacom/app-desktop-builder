@@ -33,7 +33,7 @@ jobs:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: |
                   npm run package
-                  npm exec tsc
+                  npm exec tsc --noEmit
             - name: Test
               run: |
                   npm test

@@ -1,43 +1,71 @@
+import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Checkbox, LoaderType, SimpleLoader } from '@kapeta/ui-web-components';
-import { StatusCheck } from '../main/SplashScreenStatus';
+import './splash.less';
 
 const root = createRoot(document.getElementById('root')!);
 
-function StatusIcon(props) {
-    return {
-        [StatusCheck.LOADING]: <Checkbox />,
-        [StatusCheck.OK]: <Checkbox value />,
-        [StatusCheck.ERROR]: <>❌</>,
-    }[props.status];
+export enum SplashStatusCheck {
+    LOADING = 'LOADING',
+    OK = 'OK',
+    ERROR = 'ERROR',
 }
 
-function render() {
-    const keyValuePairs = new URLSearchParams(
-        window.location.hash.substring(1)
-    );
-    // TODO: Make this a kapeta logo loader
-    const element = (
-        <div>
+export const SplashStatusIcon = (props: {
+    status: SplashStatusCheck | null;
+}) => {
+    if (!props.status) {
+        return null;
+    }
+    return {
+        [SplashStatusCheck.LOADING]: <Checkbox />,
+        [SplashStatusCheck.OK]: <Checkbox value />,
+        [SplashStatusCheck.ERROR]: <>❌</>,
+    }[props.status];
+};
+
+interface Props {
+    text?: string | null;
+    localClusterStatus: SplashStatusCheck | null;
+    dockerStatus: SplashStatusCheck | null;
+}
+
+export const SplashContent = (props: Props) => {
+    return (
+        <div className="splash-content">
             <SimpleLoader
                 loading
                 type={LoaderType.HOURGLASS}
-                text={keyValuePairs.get('text') || 'Loading...'}
+                text={props.text || 'Loading...'}
             />
             <ul style={{ padding: '0 30px 20px', listStyleType: 'none' }}>
                 <li>
-                    <StatusIcon status={keyValuePairs.get('cluster')} />{' '}
+                    <SplashStatusIcon status={props.localClusterStatus} />{' '}
                     Starting local cluster...
                 </li>
                 <li>
-                    <StatusIcon status={keyValuePairs.get('docker')} /> Checking
+                    <SplashStatusIcon status={props.dockerStatus} /> Checking
                     Docker...
                 </li>
             </ul>
         </div>
     );
+};
 
-    root.render(element);
+function render() {
+    const keyValuePairs = new URLSearchParams(
+        window.location.hash.substring(1)
+    );
+
+    root.render(
+        <SplashContent
+            text={keyValuePairs.get('text')}
+            localClusterStatus={
+                keyValuePairs.get('cluster') as SplashStatusCheck
+            }
+            dockerStatus={keyValuePairs.get('docker') as SplashStatusCheck}
+        />
+    );
 }
 
 // Allow updating the loading text by changing the hash

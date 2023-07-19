@@ -19,11 +19,14 @@ export class SplashScreen {
 
     open(initialStatus: SplashState | null = null) {
         this.activeWindow = new BrowserWindow({
-            width: 500,
-            height: 300,
             frame: false,
             alwaysOnTop: true,
+            transparent: true,
+            center: true,
+            modal: true,
+            useContentSize: true,
             hiddenInMissionControl: true,
+            resizable: false,
             webPreferences: {
                 devTools: false,
             },
