@@ -84,7 +84,8 @@
             "url": "http://localhost/"
         },
         "testPathIgnorePatterns": [
-            "release/app/dist"
+            "release/app/dist",
+            ".erb/"
         ],
         "transform": {
             "\\.(ts|tsx|js|jsx)$": "ts-jest"
