@@ -62,7 +62,12 @@ const configuration: webpack.Configuration = {
         splash: [
             `webpack-dev-server/client?http://localhost:${port}/dist`,
             'webpack/hot/only-dev-server',
-            path.join(webpackPaths.srcRendererPath, 'splash.tsx'),
+            path.join(webpackPaths.srcRendererPath, 'modals/splash/splash.tsx'),
+        ],
+        processing: [
+            `webpack-dev-server/client?http://localhost:${port}/dist`,
+            'webpack/hot/only-dev-server',
+            path.join(webpackPaths.srcRendererPath, 'modals/processing/processing.tsx'),
         ],
     },
 
@@ -203,7 +208,20 @@ const configuration: webpack.Configuration = {
         new HtmlWebpackPlugin({
             filename: 'splash.html',
             chunks: ['splash'],
-            template: path.join(webpackPaths.srcRendererPath, 'splash.ejs'),
+            template: path.join(webpackPaths.srcRendererPath, 'modals/modal.ejs'),
+            minify: {
+                collapseWhitespace: true,
+                removeAttributeQuotes: true,
+                removeComments: true,
+            },
+            isBrowser: false,
+            isDevelopment: process.env.NODE_ENV !== 'production',
+        }),
+
+        new HtmlWebpackPlugin({
+            filename: 'processing.html',
+            chunks: ['processing'],
+            template: path.join(webpackPaths.srcRendererPath, 'modals/modal.ejs'),
             minify: {
                 collapseWhitespace: true,
                 removeAttributeQuotes: true,
@@ -215,7 +233,13 @@ const configuration: webpack.Configuration = {
     ],
     resolve: {
         alias,
+
     },
+
+    externals: {
+        electron: 'electron',
+    },
+
 
     node: {
         __dirname: false,
