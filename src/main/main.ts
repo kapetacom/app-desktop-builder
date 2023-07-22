@@ -179,7 +179,7 @@ const refreshTray = async () => {
                 click: async () => {
                     try {
                         const future = createFuture();
-                        processingModal.open(mainWindow, {
+                        processingModal.open(mainWindow!, {
                             text: 'Signing in...',
                         });
 
