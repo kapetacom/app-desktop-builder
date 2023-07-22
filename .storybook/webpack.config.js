@@ -37,7 +37,7 @@ module.exports = ({ config }) => {
     ]);
 
     config.externals = {
-        'electron':'electron'
+        electron: 'electron',
     };
 
     return config;

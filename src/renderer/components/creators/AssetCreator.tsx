@@ -25,6 +25,7 @@ import { FileBrowserDialog } from '../file-browser/FileBrowserDialog';
 
 import './AssetCreator.less';
 import { ProjectHomeFolderInput } from '../fields/ProjectHomeFolderInput';
+import { replaceBase64IconWithUrl } from '../../utils/iconHelpers';
 
 export interface CreatingFormProps {
     creating?: boolean;
@@ -103,6 +104,9 @@ export const AssetCreator = (props: Props) => {
 
     const createAsset = async (filePath: string, content: SchemaKind) => {
         try {
+            if (content.spec.icon) {
+                await replaceBase64IconWithUrl(content);
+            }
             const assets: Asset[] = await AssetService.create(
                 Path.join(filePath, '/kapeta.yml'),
                 content

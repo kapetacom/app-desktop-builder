@@ -24,7 +24,13 @@ import { parseKapetaUri } from '@kapeta/nodejs-utils';
 
 import type { IResourceTypeProvider, SchemaKind } from '@kapeta/ui-web-types';
 import { ItemType, ResourceRole } from '@kapeta/ui-web-types';
-import { BlockDefinition, Resource, Connection, Entity } from '@kapeta/schemas';
+import {
+    BlockDefinition,
+    Resource,
+    Connection,
+    Entity,
+    IconType,
+} from '@kapeta/schemas';
 
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import { useAsync } from 'react-use';
@@ -33,6 +39,8 @@ import { PlannerContext, PlannerContextData } from '@kapeta/ui-web-plan-editor';
 import { BlockInfo, EditItemInfo } from '../../types';
 
 import './ItemEditorPanel.less';
+import { uploadAttachment } from '../../../../api/AttachmentService';
+import { replaceBase64IconWithUrl } from '../../../../utils/iconHelpers';
 
 function getVersions(dataKindUri) {
     const versions: { [key: string]: string } = {};
@@ -278,15 +286,19 @@ interface Props {
 export const EditorPanels: React.FC<Props> = (props) => {
     const planner = useContext(PlannerContext);
     // callbacks
-    const saveAndClose = (data: any) => {
+    const saveAndClose = async (data: any) => {
         switch (props.info?.type) {
             case ItemType.CONNECTION:
                 planner.updateConnectionMapping(data as Connection);
                 break;
             case ItemType.BLOCK:
+                const blockData = data as BlockDefinition;
+
+                await replaceBase64IconWithUrl(blockData);
+
                 planner.updateBlockDefinition(
                     props.info.item.instance.block.ref,
-                    data as BlockDefinition
+                    blockData
                 );
                 break;
             case ItemType.RESOURCE: {
