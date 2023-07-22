@@ -24,7 +24,13 @@ import { parseKapetaUri } from '@kapeta/nodejs-utils';
 
 import type { IResourceTypeProvider, SchemaKind } from '@kapeta/ui-web-types';
 import { ItemType, ResourceRole } from '@kapeta/ui-web-types';
-import { BlockDefinition, Resource, Connection, Entity, IconType } from '@kapeta/schemas';
+import {
+    BlockDefinition,
+    Resource,
+    Connection,
+    Entity,
+    IconType,
+} from '@kapeta/schemas';
 
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import { useAsync } from 'react-use';
@@ -33,8 +39,8 @@ import { PlannerContext, PlannerContextData } from '@kapeta/ui-web-plan-editor';
 import { BlockInfo, EditItemInfo } from '../../types';
 
 import './ItemEditorPanel.less';
-import {uploadAttachment} from "../../../../api/AttachmentService";
-import {replaceBase64IconWithUrl} from "../../../../utils/iconHelpers";
+import { uploadAttachment } from '../../../../api/AttachmentService';
+import { replaceBase64IconWithUrl } from '../../../../utils/iconHelpers';
 
 function getVersions(dataKindUri) {
     const versions: { [key: string]: string } = {};
