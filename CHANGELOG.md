@@ -1,3 +1,10 @@
+# [0.8.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.28...v0.8.0) (2023-07-22)
+
+
+### Features
+
+* Add support for uploading icons for blocks ([#36](https://github.com/kapetacom/app-desktop-builder/issues/36)) ([fac963e](https://github.com/kapetacom/app-desktop-builder/commit/fac963eef6c33d84b4667b41cbc9173dd568947f))
+
 ## [0.7.28](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.27...v0.7.28) (2023-07-19)
 
 
