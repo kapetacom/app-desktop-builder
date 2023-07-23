@@ -181,7 +181,7 @@ export class TrayWrapper {
             {
                 label: isRunning
                     ? `Local cluster: http://${localClusterInfo?.host}:${localClusterInfo?.port}`
-                    : 'Local cluster is stopped',
+                    : 'Local cluster is not running',
                 enabled: false,
             },
             { type: 'separator' },
@@ -190,29 +190,6 @@ export class TrayWrapper {
                 click: () => this.mainWindow.open(),
             },
             ...userMenu,
-            { type: 'separator' },
-            {
-                label: isRunning ? 'Stop local cluster' : 'Start local cluster',
-                click: async () => {
-                    if (isRunning) {
-                        localClusterInfo = null;
-                        this.mainWindow.close();
-                        await this.clusterService.stop();
-                    } else {
-                        try {
-                            await this.clusterService.start();
-                        } catch (err) {
-                            console.error(err);
-                            dialog.showErrorBox(
-                                'Failed to start local cluster',
-                                err.message
-                            );
-                        }
-                    }
-
-                    await this.update();
-                },
-            },
             { type: 'separator' },
             {
                 label: 'Open Kapeta Cloud',

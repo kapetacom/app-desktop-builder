@@ -1,6 +1,7 @@
 import { ChildProcess, fork } from 'node:child_process';
 import { EventEmitter } from 'node:events';
-
+import ClusterConfiguration from '@kapeta/local-cluster-config'
+import request from 'request';
 import Path from 'node:path';
 import FS from 'node:fs';
 
@@ -26,10 +27,55 @@ export class ClusterService extends EventEmitter {
 
     private child?: ChildProcess = undefined;
 
+    private async checkClusterStatus():Promise<ClusterInfo> {
+        const clusterAddress = ClusterConfiguration.getClusterServiceAddress();
+        if (!clusterAddress) {
+            throw new Error('No cluster service address found');
+        }
+
+        return new Promise((resolve, reject) => {
+            request.get(clusterAddress + '/status', (err, res, body) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+
+                if (res.statusCode !== 200) {
+                    reject(new Error(`Unexpected status code: ${res.statusCode}`));
+                    return;
+                }
+
+                const status = JSON.parse(body);
+
+                resolve({
+                    host: ClusterConfiguration.getClusterServiceHost(),
+                    port: parseInt(ClusterConfiguration.getClusterServicePort()),
+                    dockerStatus: status.dockerStatus,
+                });
+            });
+        })
+    }
+
     public async start(): Promise<ClusterInfo> {
         if (this.child) {
             throw new Error('Cluster service is already running');
         }
+
+        try {
+            const clusterStatus = await this.checkClusterStatus();
+            this.running = true;
+            this.info = clusterStatus;
+            this.emit('started', this.info);
+            console.log(
+                'Cluster service already listening on %s:%s ',
+                clusterStatus.host,
+                clusterStatus.port
+            );
+            return this.info;
+        } catch (err) {
+            console.debug('Cluster service was not already running...');
+        }
+
         console.log('Starting cluster service from %s', SERVICE_FILE);
         return new Promise((resolve, reject) => {
             const child = (this.child = fork(SERVICE_FILE));
