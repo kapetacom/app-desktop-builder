@@ -1,6 +1,6 @@
 import { ChildProcess, fork } from 'node:child_process';
 import { EventEmitter } from 'node:events';
-import ClusterConfiguration from '@kapeta/local-cluster-config'
+import ClusterConfiguration from '@kapeta/local-cluster-config';
 import request from 'request';
 import Path from 'node:path';
 import FS from 'node:fs';
@@ -27,7 +27,7 @@ export class ClusterService extends EventEmitter {
 
     private child?: ChildProcess = undefined;
 
-    private async checkClusterStatus():Promise<ClusterInfo> {
+    private async checkClusterStatus(): Promise<ClusterInfo> {
         const clusterAddress = ClusterConfiguration.getClusterServiceAddress();
         if (!clusterAddress) {
             throw new Error('No cluster service address found');
@@ -41,7 +41,9 @@ export class ClusterService extends EventEmitter {
                 }
 
                 if (res.statusCode !== 200) {
-                    reject(new Error(`Unexpected status code: ${res.statusCode}`));
+                    reject(
+                        new Error(`Unexpected status code: ${res.statusCode}`)
+                    );
                     return;
                 }
 
@@ -49,11 +51,13 @@ export class ClusterService extends EventEmitter {
 
                 resolve({
                     host: ClusterConfiguration.getClusterServiceHost(),
-                    port: parseInt(ClusterConfiguration.getClusterServicePort()),
+                    port: parseInt(
+                        ClusterConfiguration.getClusterServicePort()
+                    ),
                     dockerStatus: status.dockerStatus,
                 });
             });
-        })
+        });
     }
 
     public async start(): Promise<ClusterInfo> {
