@@ -1,17 +1,16 @@
 import { createRoot } from 'react-dom/client';
 import { ThemeProvider } from '@mui/material';
-import { RouterProvider, createHashRouter, useParams } from 'react-router-dom';
-import { PlannerNodeSize } from '@kapeta/ui-web-plan-editor';
+import {RouterProvider, useParams, createMemoryRouter} from 'react-router-dom';
 import { useEffect } from 'react';
 import { IdentityService, PlannerService } from '@kapeta/ui-web-context';
 import { useAsync, useAsyncFn } from 'react-use';
 import { Root } from './Root';
-import { theme } from './Theme';
+import { kapetaDark } from './Theme';
 import { initialise } from './context';
 import { PlanView } from './views/PlanView';
 import { PlanOverview } from './components/plan-overview/PlanOverview';
 
-const router = createHashRouter([
+const router = createMemoryRouter([
     {
         path: '*',
         Component: Root,
@@ -85,7 +84,11 @@ const router = createHashRouter([
 const container = document.getElementById('root')!;
 const root = createRoot(container);
 root.render(
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={kapetaDark}>
         <RouterProvider router={router} />
     </ThemeProvider>
 );
+
+window.electron.ipcRenderer.on('ipc-main', (event, args) => {
+    console.log('main event', event, 'args', args);
+});

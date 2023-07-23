@@ -10,9 +10,12 @@ export interface ClusterInfo {
     dockerStatus: boolean;
 }
 
-const SERVICE_FILE = Path.resolve(__dirname, '../service/index.js');
+const SERVICE_FILE = Path.resolve(__dirname, '../../service/index.js');
 
 export class ClusterService extends EventEmitter {
+
+    private info: ClusterInfo | null = null;
+
     constructor() {
         super();
         if (!FS.existsSync(SERVICE_FILE)) {
@@ -25,11 +28,15 @@ export class ClusterService extends EventEmitter {
     private child?: ChildProcess = undefined;
 
     public async start(): Promise<ClusterInfo> {
+        if (this.child) {
+            throw new Error('Cluster service is already running');
+        }
         console.log('Starting cluster service from %s', SERVICE_FILE);
         return new Promise((resolve, reject) => {
-            const child = (this.child = fork(SERVICE_FILE));
+            const child = (this.child = fork(SERVICE_FILE ));
             child.on('message', (msg: ClusterInfo) => {
                 this.running = true;
+                this.info = msg;
                 this.emit('started', msg);
                 console.log(
                     'Cluster service listening on %s:%s ',
@@ -43,7 +50,7 @@ export class ClusterService extends EventEmitter {
                 reject(err);
             });
             child.on('exit', (exitCode: number) => {
-                if (exitCode !== 0) {
+                if (exitCode !== null && exitCode !== 0) {
                     reject(
                         new Error(`Process exited with exitCode: ${exitCode}.`)
                     );
@@ -53,10 +60,15 @@ export class ClusterService extends EventEmitter {
         });
     }
 
+    public getInfo(): ClusterInfo | null {
+        return this.info;
+    }
+
     public async stop() {
         if (this.child) {
-            this.child.kill();
+            this.child.kill("SIGABRT");
         }
+        this.info = null;
         this.running = false;
         this.child = undefined;
         this.emit('stopped');
