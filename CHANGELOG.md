@@ -1,3 +1,10 @@
+## [0.10.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.10.0...v0.10.1) (2023-07-23)
+
+
+### Bug Fixes
+
+* Format ([5b49e22](https://github.com/kapetacom/app-desktop-builder/commit/5b49e2274347767653ac417042cef7bb22f6b79f))
+
 # [0.10.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.9.0...v0.10.0) (2023-07-23)
 
 
