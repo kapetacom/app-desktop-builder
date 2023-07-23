@@ -1,9 +1,9 @@
 import React from 'react';
 
 import './index.less';
-import {ThemeProvider} from "@mui/material";
+import { ThemeProvider } from '@mui/material';
 import { ProcessingContent } from '../src/renderer/modals/processing/ProcessingContent';
-import {kapetaLight} from "../src/renderer/Theme";
+import { kapetaLight } from '../src/renderer/Theme';
 
 export default {
     title: 'Processing Modal',

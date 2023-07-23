@@ -1,19 +1,22 @@
-import {BrowserWindow, shell} from "electron";
-import {getAssetPath, getPreloadScript, resolveHtmlPath, WindowOpenHandler} from "../helpers";
-import {MenuBuilder} from "./MenuBuilder";
-import {DockWrapper} from "./Dock";
-import {TrayWrapper} from "./Tray";
-import {ClusterService} from "../services/ClusterService";
-
+import { BrowserWindow, shell } from 'electron';
+import {
+    getAssetPath,
+    getPreloadScript,
+    resolveHtmlPath,
+    WindowOpenHandler,
+} from '../helpers';
+import { MenuBuilder } from './MenuBuilder';
+import { DockWrapper } from './Dock';
+import { TrayWrapper } from './Tray';
+import { ClusterService } from '../services/ClusterService';
 
 export class MainWindow {
-
     private _window: BrowserWindow | undefined = undefined;
     private tray: TrayWrapper;
     private dock: DockWrapper;
-    private clusterService:ClusterService
+    private clusterService: ClusterService;
 
-    constructor(clusterService:ClusterService) {
+    constructor(clusterService: ClusterService) {
         this.dock = new DockWrapper();
         this.tray = new TrayWrapper(this, clusterService);
         this.clusterService = clusterService;
@@ -37,7 +40,7 @@ export class MainWindow {
         if (this._window.close) {
             this._window.close();
         } else {
-            this._window.destroy()
+            this._window.destroy();
         }
     }
 
@@ -65,12 +68,14 @@ export class MainWindow {
         const localClusterInfo = this.clusterService.getInfo();
         const clusterServiceURL = localClusterInfo
             ? encodeURIComponent(
-                `http://${localClusterInfo.host}:${localClusterInfo.port}`
-            )
+                  `http://${localClusterInfo.host}:${localClusterInfo.port}`
+              )
             : '';
 
         await this._window.loadURL(
-            `${resolveHtmlPath(`index.html`)}?cluster_service=${clusterServiceURL}`
+            `${resolveHtmlPath(
+                `index.html`
+            )}?cluster_service=${clusterServiceURL}`
         );
 
         this._window.on('show', () => this.dock.show());

@@ -9,14 +9,11 @@
  * When running `npm run build` or `npm run build:main`, this file is compiled to
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
-import {
-    app,
-    dialog,
-} from 'electron';
-import {appInit} from './helpers';
-import {MainWindow} from "./main/MainWindow";
-import {ClusterService} from "./services/ClusterService";
-import {SplashScreen} from "./modals/SplashScreen";
+import { app, dialog } from 'electron';
+import { appInit } from './helpers';
+import { MainWindow } from './main/MainWindow';
+import { ClusterService } from './services/ClusterService';
+import { SplashScreen } from './modals/SplashScreen';
 
 const clusterService = new ClusterService();
 const splashScreen = new SplashScreen(clusterService);
@@ -32,7 +29,7 @@ appInit()
     .then(() => splashScreen.open())
     .then(async () => {
         const main = new MainWindow(clusterService);
-        await main.open()
+        await main.open();
 
         app.on('activate', () => main.open());
         if (app.show) {

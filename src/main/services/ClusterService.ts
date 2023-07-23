@@ -13,7 +13,6 @@ export interface ClusterInfo {
 const SERVICE_FILE = Path.resolve(__dirname, '../../service/index.js');
 
 export class ClusterService extends EventEmitter {
-
     private info: ClusterInfo | null = null;
 
     constructor() {
@@ -33,7 +32,7 @@ export class ClusterService extends EventEmitter {
         }
         console.log('Starting cluster service from %s', SERVICE_FILE);
         return new Promise((resolve, reject) => {
-            const child = (this.child = fork(SERVICE_FILE ));
+            const child = (this.child = fork(SERVICE_FILE));
             child.on('message', (msg: ClusterInfo) => {
                 this.running = true;
                 this.info = msg;
@@ -66,7 +65,7 @@ export class ClusterService extends EventEmitter {
 
     public async stop() {
         if (this.child) {
-            this.child.kill("SIGABRT");
+            this.child.kill('SIGABRT');
         }
         this.info = null;
         this.running = false;

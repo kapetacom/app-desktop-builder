@@ -1,16 +1,22 @@
-import {app, dialog, Menu, MenuItemConstructorOptions, shell, Tray} from "electron";
-import {KapetaAPI} from "@kapeta/nodejs-api-client";
-import {createFuture, getAssetPath} from "../helpers";
-import {ClusterService} from "../services/ClusterService";
-import {MainWindow} from "./MainWindow";
-import {ModalProcessing} from "../modals/ModalProcessing";
+import {
+    app,
+    dialog,
+    Menu,
+    MenuItemConstructorOptions,
+    shell,
+    Tray,
+} from 'electron';
+import { KapetaAPI } from '@kapeta/nodejs-api-client';
+import { createFuture, getAssetPath } from '../helpers';
+import { ClusterService } from '../services/ClusterService';
+import { MainWindow } from './MainWindow';
+import { ModalProcessing } from '../modals/ModalProcessing';
 
 import MenuItem = Electron.MenuItem;
 
 type TrayMenuItem = MenuItemConstructorOptions | MenuItem;
 
 export class TrayWrapper {
-
     private tray: Tray;
     private api = new KapetaAPI();
     private mainWindow: MainWindow;
@@ -23,7 +29,6 @@ export class TrayWrapper {
         this.tray.setToolTip('Kapeta Desktop');
         this.processingModal = new ModalProcessing();
         this.clusterService = clusterService;
-
     }
 
     public async update() {
@@ -42,7 +47,9 @@ export class TrayWrapper {
                             label: 'Account Settings',
                             click: () => {
                                 shell.openExternal(
-                                    `${this.api.getBaseUrl()}/${identity.handle}/iam`
+                                    `${this.api.getBaseUrl()}/${
+                                        identity.handle
+                                    }/iam`
                                 );
                             },
                         },
@@ -69,7 +76,8 @@ export class TrayWrapper {
 
                 memberships.forEach((membership) => {
                     const isCurrent = !!(
-                        context && context.identity.id === membership.identity.id
+                        context &&
+                        context.identity.id === membership.identity.id
                     );
                     if (isCurrent) {
                         return;
@@ -79,7 +87,9 @@ export class TrayWrapper {
                     contextMenus.push({
                         label,
                         click: async () => {
-                            await this.api.switchContextTo(membership.identity.handle);
+                            await this.api.switchContextTo(
+                                membership.identity.handle
+                            );
                             await this.update();
                         },
                     });
@@ -104,24 +114,30 @@ export class TrayWrapper {
                     click: async () => {
                         try {
                             const future = createFuture();
-                            await this.processingModal.open(this.mainWindow.window, {
-                                text: 'Signing in...',
-                            });
+                            await this.processingModal.open(
+                                this.mainWindow.window,
+                                {
+                                    text: 'Signing in...',
+                                }
+                            );
 
                             this.processingModal.once('close', async () => {
-                                future.reject(new Error('Sign in was cancelled'));
+                                future.reject(
+                                    new Error('Sign in was cancelled')
+                                );
                             });
 
-                            this.api.doDeviceAuthentication({
-                                onVerificationCode: (url: string) => {
-                                    this.processingModal.setProps({
-                                        text: 'Continue signing in, in your browser...',
-                                        linkText: 'Continue in browser',
-                                        link: url,
-                                    });
-                                    shell.openExternal(url);
-                                },
-                            })
+                            this.api
+                                .doDeviceAuthentication({
+                                    onVerificationCode: (url: string) => {
+                                        this.processingModal.setProps({
+                                            text: 'Continue signing in, in your browser...',
+                                            linkText: 'Continue in browser',
+                                            link: url,
+                                        });
+                                        shell.openExternal(url);
+                                    },
+                                })
                                 .then(() => {
                                     future.resolve();
                                 })
@@ -131,7 +147,8 @@ export class TrayWrapper {
 
                             await future.promise;
                             await this.update();
-                            const identity = await this.api.getCurrentIdentity();
+                            const identity =
+                                await this.api.getCurrentIdentity();
                             this.processingModal.close();
                             dialog.showMessageBoxSync({
                                 type: 'info',
@@ -145,7 +162,10 @@ export class TrayWrapper {
                             const message =
                                 err.message ?? err.error ?? 'Unknown error';
                             // Failed to complete
-                            dialog.showErrorBox('Failed to authenticate', message);
+                            dialog.showErrorBox(
+                                'Failed to authenticate',
+                                message
+                            );
                         } finally {
                             this.processingModal.close();
                         }
@@ -164,13 +184,13 @@ export class TrayWrapper {
                     : 'Local cluster is stopped',
                 enabled: false,
             },
-            {type: 'separator'},
+            { type: 'separator' },
             {
                 label: 'Dashboard',
                 click: () => this.mainWindow.open(),
             },
             ...userMenu,
-            {type: 'separator'},
+            { type: 'separator' },
             {
                 label: isRunning ? 'Stop local cluster' : 'Start local cluster',
                 click: async () => {
@@ -193,18 +213,17 @@ export class TrayWrapper {
                     await this.update();
                 },
             },
-            {type: 'separator'},
+            { type: 'separator' },
             {
                 label: 'Open Kapeta Cloud',
                 click: () => {
                     shell.openExternal('https://app.kapeta.com');
                 },
             },
-            {type: 'separator'},
-            {label: 'Quit Kapeta', click: () => app.quit()},
+            { type: 'separator' },
+            { label: 'Quit Kapeta', click: () => app.quit() },
         ];
         const contextMenu = Menu.buildFromTemplate(menuItems);
         this.tray.setContextMenu(contextMenu);
     }
 }
-

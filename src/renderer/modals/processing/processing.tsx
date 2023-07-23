@@ -2,9 +2,9 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import '../../index.less';
 
-import {ProcessingContent} from "./ProcessingContent";
-import {kapetaLight} from "../../Theme";
-import {ThemeProvider} from "@mui/material";
+import { ProcessingContent } from './ProcessingContent';
+import { kapetaLight } from '../../Theme';
+import { ThemeProvider } from '@mui/material';
 
 const root = createRoot(document.getElementById('root')!);
 
@@ -14,8 +14,7 @@ interface State {
     link?: string;
 }
 
-function render(state:State) {
-
+function render(state: State) {
     root.render(
         <ThemeProvider theme={kapetaLight}>
             <ProcessingContent
@@ -30,12 +29,10 @@ function render(state:State) {
     );
 }
 
-
 window.electron.ipcRenderer.on('processing', ([eventType, data]) => {
     if (eventType === 'changed') {
         render(data as State);
     }
 });
-
 
 render({});

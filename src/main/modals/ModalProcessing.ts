@@ -1,6 +1,10 @@
-import {BrowserWindow, ipcMain} from 'electron';
-import {getPreloadScript, resolveHtmlPath, WindowOpenHandler} from '../helpers';
-import {EventEmitter} from 'node:events';
+import { BrowserWindow, ipcMain } from 'electron';
+import {
+    getPreloadScript,
+    resolveHtmlPath,
+    WindowOpenHandler,
+} from '../helpers';
+import { EventEmitter } from 'node:events';
 
 interface Props {
     text?: string;

@@ -44,7 +44,6 @@ export const kapetaDark = createTheme(
     }
 );
 
-
 export const kapetaLight = createTheme(
     lightTheme,
     /**

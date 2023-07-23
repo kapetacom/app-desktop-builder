@@ -1,6 +1,10 @@
-import {BrowserWindow, ipcMain} from 'electron';
-import {attachIPCListener, getPreloadScript, resolveHtmlPath} from '../helpers';
-import {ClusterService} from "../services/ClusterService";
+import { BrowserWindow, ipcMain } from 'electron';
+import {
+    attachIPCListener,
+    getPreloadScript,
+    resolveHtmlPath,
+} from '../helpers';
+import { ClusterService } from '../services/ClusterService';
 
 export class SplashScreen {
     private win: BrowserWindow | null = null;
@@ -17,7 +21,7 @@ export class SplashScreen {
             if (this.clusterService.isRunning()) {
                 await this.clusterService.stop();
                 // We need to wait a bit for the port to be released
-                await new Promise(resolve => setTimeout(resolve, 1000));
+                await new Promise((resolve) => setTimeout(resolve, 1000));
             }
             const info = await this.clusterService.start();
             win.webContents.send('splash', ['changed', info]);
@@ -71,11 +75,10 @@ export class SplashScreen {
                 });
 
                 await this.startCluster(this.win);
-
             } catch (e) {
                 reject(e);
             }
-        })
+        });
     }
 
     close() {

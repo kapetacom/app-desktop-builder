@@ -1,22 +1,23 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
 import './index.less';
 import {
     SplashContent,
     SplashStatusCheck,
 } from '../src/renderer/modals/splash/SplashContent';
-import {kapetaDark, kapetaLight} from "../src/renderer/Theme";
-import {ThemeProvider} from "@mui/material";
+import { kapetaDark, kapetaLight } from '../src/renderer/Theme';
+import { ThemeProvider } from '@mui/material';
 
 export default {
     title: 'Splash',
 };
 
-
 export const SplashFailBoth = () => {
-
-    const [dockerStatus, setDockerStatus] = useState<SplashStatusCheck>(SplashStatusCheck.LOADING);
-    const [localClusterStatus, setLocalClusterStatus] = useState<SplashStatusCheck>(SplashStatusCheck.LOADING);
+    const [dockerStatus, setDockerStatus] = useState<SplashStatusCheck>(
+        SplashStatusCheck.LOADING
+    );
+    const [localClusterStatus, setLocalClusterStatus] =
+        useState<SplashStatusCheck>(SplashStatusCheck.LOADING);
 
     useEffect(() => {
         setTimeout(() => {
@@ -50,9 +51,11 @@ export const SplashFailBoth = () => {
     );
 };
 export const SplashFailLocalCluster = () => {
-
-    const [dockerStatus, setDockerStatus] = useState<SplashStatusCheck>(SplashStatusCheck.LOADING);
-    const [localClusterStatus, setLocalClusterStatus] = useState<SplashStatusCheck>(SplashStatusCheck.LOADING);
+    const [dockerStatus, setDockerStatus] = useState<SplashStatusCheck>(
+        SplashStatusCheck.LOADING
+    );
+    const [localClusterStatus, setLocalClusterStatus] =
+        useState<SplashStatusCheck>(SplashStatusCheck.LOADING);
 
     useEffect(() => {
         setTimeout(() => {
@@ -86,9 +89,11 @@ export const SplashFailLocalCluster = () => {
     );
 };
 export const SplashFailDocker = () => {
-
-    const [dockerStatus, setDockerStatus] = useState<SplashStatusCheck>(SplashStatusCheck.LOADING);
-    const [localClusterStatus, setLocalClusterStatus] = useState<SplashStatusCheck>(SplashStatusCheck.LOADING);
+    const [dockerStatus, setDockerStatus] = useState<SplashStatusCheck>(
+        SplashStatusCheck.LOADING
+    );
+    const [localClusterStatus, setLocalClusterStatus] =
+        useState<SplashStatusCheck>(SplashStatusCheck.LOADING);
 
     useEffect(() => {
         setTimeout(() => {
@@ -123,9 +128,11 @@ export const SplashFailDocker = () => {
 };
 
 export const SplashOk = () => {
-
-    const [dockerStatus, setDockerStatus] = useState<SplashStatusCheck>(SplashStatusCheck.LOADING);
-    const [localClusterStatus, setLocalClusterStatus] = useState<SplashStatusCheck>(SplashStatusCheck.LOADING);
+    const [dockerStatus, setDockerStatus] = useState<SplashStatusCheck>(
+        SplashStatusCheck.LOADING
+    );
+    const [localClusterStatus, setLocalClusterStatus] =
+        useState<SplashStatusCheck>(SplashStatusCheck.LOADING);
 
     useEffect(() => {
         setTimeout(() => {

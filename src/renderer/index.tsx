@@ -1,6 +1,10 @@
 import { createRoot } from 'react-dom/client';
 import { ThemeProvider } from '@mui/material';
-import {RouterProvider, useParams, createMemoryRouter} from 'react-router-dom';
+import {
+    RouterProvider,
+    useParams,
+    createMemoryRouter,
+} from 'react-router-dom';
 import { useEffect } from 'react';
 import { IdentityService, PlannerService } from '@kapeta/ui-web-context';
 import { useAsync, useAsyncFn } from 'react-use';
