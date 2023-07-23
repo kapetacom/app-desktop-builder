@@ -1,3 +1,10 @@
+# [0.9.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.8.0...v0.9.0) (2023-07-23)
+
+
+### Features
+
+* Adds improved design for splash and processing modals ([#37](https://github.com/kapetacom/app-desktop-builder/issues/37)) ([9cf9e2e](https://github.com/kapetacom/app-desktop-builder/commit/9cf9e2ef5ff19c0c2f7b73e015f1c58fc8f080e5))
+
 # [0.8.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.7.28...v0.8.0) (2023-07-22)
 
 
