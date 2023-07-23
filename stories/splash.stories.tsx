@@ -1,41 +1,160 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 import './index.less';
 import {
     SplashContent,
     SplashStatusCheck,
-} from '../src/renderer/modals/splash/splash';
+} from '../src/renderer/modals/splash/SplashContent';
+import {kapetaDark, kapetaLight} from "../src/renderer/Theme";
+import {ThemeProvider} from "@mui/material";
 
 export default {
     title: 'Splash',
 };
 
-export const SplashLoading = () => {
+
+export const SplashFailBoth = () => {
+
+    const [dockerStatus, setDockerStatus] = useState<SplashStatusCheck>(SplashStatusCheck.LOADING);
+    const [localClusterStatus, setLocalClusterStatus] = useState<SplashStatusCheck>(SplashStatusCheck.LOADING);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setDockerStatus(SplashStatusCheck.ERROR);
+        }, 1000);
+
+        setTimeout(() => {
+            setLocalClusterStatus(SplashStatusCheck.ERROR);
+        }, 2000);
+    }, []);
+
     return (
-        <SplashContent
-            text="Loading..."
-            dockerStatus={SplashStatusCheck.LOADING}
-            localClusterStatus={SplashStatusCheck.LOADING}
-        />
+        <ThemeProvider theme={kapetaLight}>
+            <SplashContent
+                onCheckDocker={() => {
+                    setDockerStatus(SplashStatusCheck.LOADING);
+                    setTimeout(() => {
+                        setDockerStatus(SplashStatusCheck.OK);
+                    }, 2000);
+                }}
+                onRestartCluster={() => {
+                    setLocalClusterStatus(SplashStatusCheck.LOADING);
+                    setTimeout(() => {
+                        setLocalClusterStatus(SplashStatusCheck.OK);
+                    }, 5000);
+                }}
+                dockerStatus={dockerStatus}
+                localClusterStatus={localClusterStatus}
+            />
+        </ThemeProvider>
+    );
+};
+export const SplashFailLocalCluster = () => {
+
+    const [dockerStatus, setDockerStatus] = useState<SplashStatusCheck>(SplashStatusCheck.LOADING);
+    const [localClusterStatus, setLocalClusterStatus] = useState<SplashStatusCheck>(SplashStatusCheck.LOADING);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setDockerStatus(SplashStatusCheck.OK);
+        }, 1000);
+
+        setTimeout(() => {
+            setLocalClusterStatus(SplashStatusCheck.ERROR);
+        }, 2000);
+    }, []);
+
+    return (
+        <ThemeProvider theme={kapetaLight}>
+            <SplashContent
+                onCheckDocker={() => {
+                    setDockerStatus(SplashStatusCheck.LOADING);
+                    setTimeout(() => {
+                        setDockerStatus(SplashStatusCheck.OK);
+                    }, 2000);
+                }}
+                onRestartCluster={() => {
+                    setLocalClusterStatus(SplashStatusCheck.LOADING);
+                    setTimeout(() => {
+                        setLocalClusterStatus(SplashStatusCheck.OK);
+                    }, 5000);
+                }}
+                dockerStatus={dockerStatus}
+                localClusterStatus={localClusterStatus}
+            />
+        </ThemeProvider>
+    );
+};
+export const SplashFailDocker = () => {
+
+    const [dockerStatus, setDockerStatus] = useState<SplashStatusCheck>(SplashStatusCheck.LOADING);
+    const [localClusterStatus, setLocalClusterStatus] = useState<SplashStatusCheck>(SplashStatusCheck.LOADING);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setDockerStatus(SplashStatusCheck.ERROR);
+        }, 1000);
+
+        setTimeout(() => {
+            setLocalClusterStatus(SplashStatusCheck.OK);
+        }, 2000);
+    }, []);
+
+    return (
+        <ThemeProvider theme={kapetaLight}>
+            <SplashContent
+                onCheckDocker={() => {
+                    setDockerStatus(SplashStatusCheck.LOADING);
+                    setTimeout(() => {
+                        setDockerStatus(SplashStatusCheck.OK);
+                    }, 2000);
+                }}
+                onRestartCluster={() => {
+                    setLocalClusterStatus(SplashStatusCheck.LOADING);
+                    setTimeout(() => {
+                        setLocalClusterStatus(SplashStatusCheck.OK);
+                    }, 5000);
+                }}
+                dockerStatus={dockerStatus}
+                localClusterStatus={localClusterStatus}
+            />
+        </ThemeProvider>
     );
 };
 
-export const SplashOK = () => {
-    return (
-        <SplashContent
-            text="Ready!"
-            dockerStatus={SplashStatusCheck.OK}
-            localClusterStatus={SplashStatusCheck.OK}
-        />
-    );
-};
+export const SplashOk = () => {
 
-export const SplashFail = () => {
+    const [dockerStatus, setDockerStatus] = useState<SplashStatusCheck>(SplashStatusCheck.LOADING);
+    const [localClusterStatus, setLocalClusterStatus] = useState<SplashStatusCheck>(SplashStatusCheck.LOADING);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setDockerStatus(SplashStatusCheck.OK);
+        }, 2000);
+
+        setTimeout(() => {
+            setLocalClusterStatus(SplashStatusCheck.OK);
+        }, 5000);
+    }, []);
+
     return (
-        <SplashContent
-            text="Failed to load!"
-            dockerStatus={SplashStatusCheck.ERROR}
-            localClusterStatus={SplashStatusCheck.ERROR}
-        />
+        <ThemeProvider theme={kapetaLight}>
+            <SplashContent
+                onCheckDocker={() => {
+                    setDockerStatus(SplashStatusCheck.LOADING);
+                    setTimeout(() => {
+                        setDockerStatus(SplashStatusCheck.OK);
+                    }, 2000);
+                }}
+                onRestartCluster={() => {
+                    setLocalClusterStatus(SplashStatusCheck.LOADING);
+                    setTimeout(() => {
+                        setLocalClusterStatus(SplashStatusCheck.OK);
+                    }, 5000);
+                }}
+                dockerStatus={dockerStatus}
+                localClusterStatus={localClusterStatus}
+            />
+        </ThemeProvider>
     );
 };

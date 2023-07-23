@@ -18,14 +18,43 @@ const LinkBehavior = React.forwardRef<
     return <RouterLink ref={ref} to={href} {...other} />;
 });
 
-export const theme = createTheme(
+export const kapetaDark = createTheme(
     darkTheme,
     /**
      * Patch MUI to use react-router links
      */
+
     {
         components: {
             MuiLink: {
+                //@ts-ignore
+                defaultProps: {
+                    component: LinkBehavior,
+                } as LinkProps,
+            },
+            MuiButtonBase: {
+                defaultProps: {
+                    LinkComponent: LinkBehavior,
+                    disableRipple: true,
+                    disableTouchRipple: true,
+                    disableFocusRipple: true,
+                },
+            },
+        },
+    }
+);
+
+
+export const kapetaLight = createTheme(
+    lightTheme,
+    /**
+     * Patch MUI to use react-router links
+     */
+
+    {
+        components: {
+            MuiLink: {
+                //@ts-ignore
                 defaultProps: {
                     component: LinkBehavior,
                 } as LinkProps,

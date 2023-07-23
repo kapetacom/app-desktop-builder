@@ -236,11 +236,6 @@ const configuration: webpack.Configuration = {
 
     },
 
-    externals: {
-        electron: 'electron',
-    },
-
-
     node: {
         __dirname: false,
         __filename: false,

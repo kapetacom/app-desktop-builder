@@ -116,10 +116,6 @@ const configuration: webpack.Configuration = {
         ],
     },
 
-    externals: {
-        'electron':'electron'
-    },
-
     optimization: {
         minimize: true,
         minimizer: [
