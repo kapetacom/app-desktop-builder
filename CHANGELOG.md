@@ -1,3 +1,10 @@
+# [0.10.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.9.0...v0.10.0) (2023-07-23)
+
+
+### Features
+
+* Check if a cluster service is already running and if it is - use that ([#38](https://github.com/kapetacom/app-desktop-builder/issues/38)) ([39a92f8](https://github.com/kapetacom/app-desktop-builder/commit/39a92f8356ce433a437f8817f41ad856affdd885))
+
 # [0.9.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.8.0...v0.9.0) (2023-07-23)
 
 
