@@ -67,8 +67,10 @@ export class SplashScreen {
                             this.close();
                             resolve();
                             break;
-                        case 'restart-cluster':
-                        case 'recheck-docker':
+                        case 'quit':
+                            process.exit();
+                            break;
+                        case 'retry':
                             await this.startCluster(this.win!);
                             break;
                     }

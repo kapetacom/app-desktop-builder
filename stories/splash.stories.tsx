@@ -32,13 +32,13 @@ export const SplashFailBoth = () => {
     return (
         <ThemeProvider theme={kapetaLight}>
             <SplashContent
-                onCheckDocker={() => {
+                onRetry={() => {
                     setDockerStatus(SplashStatusCheck.LOADING);
                     setTimeout(() => {
                         setDockerStatus(SplashStatusCheck.OK);
                     }, 2000);
                 }}
-                onRestartCluster={() => {
+                onQuit={() => {
                     setLocalClusterStatus(SplashStatusCheck.LOADING);
                     setTimeout(() => {
                         setLocalClusterStatus(SplashStatusCheck.OK);
@@ -70,13 +70,13 @@ export const SplashFailLocalCluster = () => {
     return (
         <ThemeProvider theme={kapetaLight}>
             <SplashContent
-                onCheckDocker={() => {
+                onRetry={() => {
                     setDockerStatus(SplashStatusCheck.LOADING);
                     setTimeout(() => {
                         setDockerStatus(SplashStatusCheck.OK);
                     }, 2000);
                 }}
-                onRestartCluster={() => {
+                onQuit={() => {
                     setLocalClusterStatus(SplashStatusCheck.LOADING);
                     setTimeout(() => {
                         setLocalClusterStatus(SplashStatusCheck.OK);
@@ -108,13 +108,13 @@ export const SplashFailDocker = () => {
     return (
         <ThemeProvider theme={kapetaLight}>
             <SplashContent
-                onCheckDocker={() => {
+                onRetry={() => {
                     setDockerStatus(SplashStatusCheck.LOADING);
                     setTimeout(() => {
                         setDockerStatus(SplashStatusCheck.OK);
                     }, 2000);
                 }}
-                onRestartCluster={() => {
+                onQuit={() => {
                     setLocalClusterStatus(SplashStatusCheck.LOADING);
                     setTimeout(() => {
                         setLocalClusterStatus(SplashStatusCheck.OK);
@@ -147,13 +147,13 @@ export const SplashOk = () => {
     return (
         <ThemeProvider theme={kapetaLight}>
             <SplashContent
-                onCheckDocker={() => {
+                onRetry={() => {
                     setDockerStatus(SplashStatusCheck.LOADING);
                     setTimeout(() => {
                         setDockerStatus(SplashStatusCheck.OK);
                     }, 2000);
                 }}
-                onRestartCluster={() => {
+                onQuit={() => {
                     setLocalClusterStatus(SplashStatusCheck.LOADING);
                     setTimeout(() => {
                         setLocalClusterStatus(SplashStatusCheck.OK);

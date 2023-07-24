@@ -29,8 +29,8 @@ export const SplashStatusIcon = (props: {
 interface Props {
     localClusterStatus: SplashStatusCheck;
     dockerStatus: SplashStatusCheck;
-    onRestartCluster: () => void;
-    onCheckDocker: () => void;
+    onQuit: () => void;
+    onRetry: () => void;
     onDone?: () => void;
 }
 
@@ -51,6 +51,8 @@ export const SplashContent = (props: Props) => {
     if (props.localClusterStatus === SplashStatusCheck.OK) {
         okCount += 1;
     }
+
+    const hasError = done && okCount < 2;
     const minProgress = okCount * 50;
 
     useEffect(() => {
@@ -188,12 +190,32 @@ export const SplashContent = (props: Props) => {
                     '.errors': {
                         position: 'absolute',
                         zIndex: 6,
-                        top: '50px',
-                        left: '30px',
-                        right: '30px',
-                        div: {
-                            marginBottom: '10px',
+                        padding: '16px',
+                        boxSizing: 'border-box',
+                        top: '68px',
+                        bottom: '46px',
+                        right: '46px',
+                        width: '197px',
+                        color: 'white',
+                        borderRadius: '10px',
+                        border: '1px solid rgba(255, 255, 255, 0.20)',
+                        background: 'rgba(0, 0, 0, 0.70)',
+                        boxShadow: '0px 10px 13px -6px rgba(0, 0, 0, 0.20), 0px 20px 31px 3px rgba(0, 0, 0, 0.14), 0px 8px 38px 7px rgba(0, 0, 0, 0.12)',
+                        '.error-message': {
+                            display: 'flex',
+                            'i': {
+                                fontSize: '3px',
+                                marginRight: '5px',
+                                lineHeight: 'inherit'
+                            }
                         },
+                        '.buttons': {
+                            position: 'absolute',
+                            bottom: '16px',
+                            textAlign: 'center',
+                            left:0,
+                            right:0
+                        }
                     },
                 },
                 '.progress': {
@@ -238,45 +260,63 @@ export const SplashContent = (props: Props) => {
                 </div>
             </div>
             <div className="right">
-                <div className={'errors'}>
-                    {props.localClusterStatus === SplashStatusCheck.ERROR && (
-                        <Alert severity="error" icon={false} variant="standard">
-                            <Typography variant={'body2'}>
-                                Local cluster failed to start.
-                            </Typography>
-
+                {hasError &&
+                    <div className={'errors'}>
+                        <Typography variant={'body2'}>
+                            {props.localClusterStatus === SplashStatusCheck.ERROR && (
+                                <div className={'error-message'}>
+                                    <i className="fas fa-circle"></i>
+                                    <span>
+                                        Local cluster failed to start.
+                                    </span>
+                                </div>
+                            )}
+                            {props.dockerStatus === SplashStatusCheck.ERROR && (
+                                <div className={'error-message'}>
+                                    <i className="fas fa-circle"></i>
+                                    <span>
+                                        Make sure docker is installed and running
+                                    </span>
+                                </div>
+                            )}
+                        </Typography>
+                        <div className={'buttons'}>
                             <Button
-                                sx={{ marginTop: '5px' }}
-                                color="inherit"
+                                size={'small'}
+                                sx={{
+                                    marginRight: '5px',
+                                    '&:hover': {
+                                        bgcolor: 'rgba(255, 255, 255, 0.20)'
+                                    }
+                                }}
                                 onClick={() => {
                                     setProgress(minProgress);
-                                    props.onRestartCluster();
+                                    props.onQuit();
                                 }}
-                                variant={'outlined'}
+                                color="inherit"
                             >
-                                Restart now
+                                Quit
                             </Button>
-                        </Alert>
-                    )}
-                    {props.dockerStatus === SplashStatusCheck.ERROR && (
-                        <Alert severity="error" variant="standard" icon={false}>
-                            <Typography variant={'body2'}>
-                                Make sure docker is installed and running
-                            </Typography>
                             <Button
-                                sx={{ marginTop: '5px' }}
+                                size={'small'}
+                                sx={{
+                                    border: '1px solid rgba(255, 255, 255, 0.20)',
+                                    '&:hover': {
+                                        bgcolor: 'rgba(255, 255, 255, 0.20)'
+                                    }
+                                }}
                                 onClick={() => {
                                     setProgress(minProgress);
-                                    props.onCheckDocker();
+                                    props.onRetry();
                                 }}
                                 color="inherit"
                                 variant={'outlined'}
                             >
-                                Check now
+                                Try again
                             </Button>
-                        </Alert>
-                    )}
-                </div>
+                        </div>
+                    </div>
+                }
                 <LogoTextWhite className="logo" />
                 <div className="gradients image-right" />
                 <div className="gradients image-left" />
