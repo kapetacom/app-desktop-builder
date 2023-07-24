@@ -5,6 +5,7 @@ import {
     MenuItemConstructorOptions,
     shell,
     Tray,
+    nativeTheme,
 } from 'electron';
 import { KapetaAPI } from '@kapeta/nodejs-api-client';
 import { createFuture, getAssetPath } from '../helpers';
@@ -25,7 +26,11 @@ export class TrayWrapper {
 
     constructor(mainWindow: MainWindow, clusterService: ClusterService) {
         this.mainWindow = mainWindow;
-        this.tray = new Tray(getAssetPath('icons/16x16.png'));
+        this.tray = new Tray(
+            nativeTheme.shouldUseDarkColors
+                ? getAssetPath('icons/tray_icon_dark.png')
+                : getAssetPath('icons/tray_icon_light.png')
+        );
         this.tray.setToolTip('Kapeta Desktop');
         this.processingModal = new ModalProcessing();
         this.clusterService = clusterService;

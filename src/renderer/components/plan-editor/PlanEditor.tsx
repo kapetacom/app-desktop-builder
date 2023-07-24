@@ -1,6 +1,6 @@
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import {
-    Planner2,
+    Planner,
     PlannerContext,
     PlannerMode,
     withPlannerContext,
@@ -102,7 +102,7 @@ export const PlanEditor = withPlannerContext(
                     onClosed={() => setEditInfo(null)}
                 />
 
-                <Planner2
+                <Planner
                     actions={actions}
                     systemId={props.systemId}
                     configurations={configurations.value}

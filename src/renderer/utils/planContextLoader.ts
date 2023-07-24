@@ -22,6 +22,14 @@ import Kapeta from '../kapeta';
 const PROVIDER_CACHE = {};
 const BLOCK_CACHE = {};
 
+export function normalizeKapetaUri(uri: string) {
+    if (!uri) {
+        return '';
+    }
+
+    return `kapeta://${parseKapetaUri(uri).id}`;
+}
+
 const registerMissing = () => {
     function getVersion(id: string) {
         return id.split(':')[1];
