@@ -1,3 +1,10 @@
+## [0.10.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.10.2...v0.10.3) (2023-07-24)
+
+
+### Bug Fixes
+
+* Adjust path to service when packaged ([c7b7ee5](https://github.com/kapetacom/app-desktop-builder/commit/c7b7ee5189974d4e75507ff062b06569d8cbd29a))
+
 ## [0.10.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.10.1...v0.10.2) (2023-07-24)
 
 
