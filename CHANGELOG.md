@@ -1,3 +1,10 @@
+# [0.11.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.10.3...v0.11.0) (2023-07-24)
+
+
+### Features
+
+* Bumped local cluster service to improve docker handling ([41aa9de](https://github.com/kapetacom/app-desktop-builder/commit/41aa9de15ee45a09716b7eb221bed9cf8e699856))
+
 ## [0.10.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.10.2...v0.10.3) (2023-07-24)
 
 
