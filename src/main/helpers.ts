@@ -59,9 +59,13 @@ export const getPreloadScript = () => {
 };
 
 export const initAutoUpdater = async () => {
-    log.transports.file.level = 'info';
-    autoUpdater.logger = log;
-    await autoUpdater.checkForUpdatesAndNotify();
+    try {
+        log.transports.file.level = 'info';
+        autoUpdater.logger = log;
+        await autoUpdater.checkForUpdatesAndNotify();
+    } catch (e) {
+        console.log('Failed to initialize auto updater', e);
+    }
 };
 
 export const installExtensions = async () => {
