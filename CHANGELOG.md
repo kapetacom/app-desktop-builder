@@ -1,3 +1,10 @@
+## [0.11.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.11.0...v0.11.1) (2023-07-24)
+
+
+### Bug Fixes
+
+* Made adjustments to splash according to design ([#40](https://github.com/kapetacom/app-desktop-builder/issues/40)) ([981e6e8](https://github.com/kapetacom/app-desktop-builder/commit/981e6e8fda84721c00cc8c7010df915d3ea95f39))
+
 # [0.11.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.10.3...v0.11.0) (2023-07-24)
 
 
