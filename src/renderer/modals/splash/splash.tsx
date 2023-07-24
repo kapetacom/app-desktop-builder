@@ -21,14 +21,14 @@ function render(state: State) {
                         'close',
                     ]);
                 }}
-                onRestartCluster={() => {
+                onQuit={() => {
                     window.electron.ipcRenderer.sendMessage('splash', [
-                        'restart-cluster',
+                        'quit',
                     ]);
                 }}
-                onCheckDocker={() => {
+                onRetry={() => {
                     window.electron.ipcRenderer.sendMessage('splash', [
-                        'recheck-docker',
+                        'retry',
                     ]);
                 }}
                 localClusterStatus={state.localClusterStatus}
