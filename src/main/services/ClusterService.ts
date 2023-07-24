@@ -4,7 +4,7 @@ import ClusterConfiguration from '@kapeta/local-cluster-config';
 import request from 'request';
 import Path from 'node:path';
 import FS from 'node:fs';
-import {app} from "electron";
+import { app } from 'electron';
 
 export interface ClusterInfo {
     host: string;
@@ -15,7 +15,6 @@ export interface ClusterInfo {
 const SERVICE_FILE = app.isPackaged
     ? Path.resolve(__dirname, '../service/index.js') //Relative to main.js - the entry point of the app
     : Path.resolve(__dirname, '../../service/index.js');
-
 
 export class ClusterService extends EventEmitter {
     private info: ClusterInfo | null = null;

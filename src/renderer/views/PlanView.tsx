@@ -15,7 +15,10 @@ import { Asset } from '@kapeta/ui-web-types';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import { SimpleLoader } from '@kapeta/ui-web-components';
 import { PlanEditor } from '../components/plan-editor/PlanEditor';
-import { useLoadedPlanContext } from '../utils/planContextLoader';
+import {
+    normalizeKapetaUri,
+    useLoadedPlanContext,
+} from '../utils/planContextLoader';
 import { InstanceInfo } from '../components/plan-editor/types';
 
 interface PlanViewProps {
@@ -38,9 +41,9 @@ export const PlanView = (props: PlanViewProps) => {
 
     const instanceInfos = useAsyncRetry(async () => {
         return (await InstanceService.getInstanceStatusForPlan(
-            props.systemId
+            normalizeKapetaUri(props.systemId)
         )) as InstanceInfo[];
-    });
+    }, [props.systemId]);
 
     const instanceStatusMap = useMemo(() => {
         if (!instanceInfos.value) {
@@ -57,7 +60,7 @@ export const PlanView = (props: PlanViewProps) => {
     useEffect(
         () =>
             InstanceService.subscribe(
-                props.systemId,
+                normalizeKapetaUri(props.systemId),
                 InstanceEventType.EVENT_INSTANCE_CHANGED,
                 () => instanceInfos.retry()
             ),
@@ -89,20 +92,21 @@ export const PlanView = (props: PlanViewProps) => {
                         instanceInfos={instanceInfos.value}
                         instanceStates={instanceStatusMap}
                         mode={plannerMode}
-                        systemId={props.systemId}
+                        systemId={normalizeKapetaUri(props.systemId)}
                         onChange={async (plan) => {
-                            console.log('Plan changed', plan);
                             try {
-                                await AssetService.update(props.systemId, plan);
+                                await AssetService.update(
+                                    normalizeKapetaUri(props.systemId),
+                                    plan
+                                );
                             } catch (e) {
                                 console.error('Failed to update plan', e);
                             }
                         }}
                         onAssetChange={async (asset) => {
-                            console.log('Asset changed', asset);
                             try {
                                 await AssetService.update(
-                                    asset.ref,
+                                    normalizeKapetaUri(asset.ref),
                                     asset.data
                                 );
                             } catch (e) {
