@@ -1,3 +1,10 @@
+## [0.10.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.10.1...v0.10.2) (2023-07-24)
+
+
+### Bug Fixes
+
+* Avoid building for esnext ([8a0b5c0](https://github.com/kapetacom/app-desktop-builder/commit/8a0b5c09d583f9f07849da9a168d911f7ad9625d))
+
 ## [0.10.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.10.0...v0.10.1) (2023-07-23)
 
 
