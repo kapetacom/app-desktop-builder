@@ -10,6 +10,7 @@
         "email": "info@kapeta.com",
         "name": "Kapeta Inc."
     },
+    "type": "commonjs",
     "main": "./src/main/main.ts",
     "scripts": {
         "build": "concurrently \"npm run build:main\" \"npm run build:renderer\"",

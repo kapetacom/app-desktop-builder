@@ -10,6 +10,7 @@
         "name": "Kapeta Inc."
     },
     "main": "./dist/main/main.js",
+    "type": "commonjs",
     "license": "MIT",
     "scripts": {
         "rebuild": "node -r ts-node/register ../../.erb/scripts/electron-rebuild.js",

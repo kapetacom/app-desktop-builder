@@ -1,10 +1,10 @@
 import { ElectronHandler } from 'main/preload';
-import { KapetaAPI } from './kapeta';
+import { KapetaBrowserAPI } from './kapeta';
 
 declare global {
     interface Window {
         electron: ElectronHandler;
-        Kapeta: KapetaAPI;
+        Kapeta: KapetaBrowserAPI;
     }
 }
 
