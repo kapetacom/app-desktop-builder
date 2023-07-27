@@ -1,3 +1,10 @@
+## [0.11.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.11.1...v0.11.2) (2023-07-27)
+
+
+### Bug Fixes
+
+* Auto-restart local cluster service if it crashes ([#41](https://github.com/kapetacom/app-desktop-builder/issues/41)) ([e2c2443](https://github.com/kapetacom/app-desktop-builder/commit/e2c244374ee5aa19dd44cd3507e527b27e4c3bf4))
+
 ## [0.11.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.11.0...v0.11.1) (2023-07-24)
 
 
