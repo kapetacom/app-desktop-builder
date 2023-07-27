@@ -13,6 +13,7 @@ import { kapetaDark } from './Theme';
 import { initialise } from './context';
 import { PlanView } from './views/PlanView';
 import { PlanOverview } from './components/plan-overview/PlanOverview';
+import { getToken } from './utils/tokenHelper';
 
 const router = createMemoryRouter([
     {
@@ -67,14 +68,40 @@ const router = createMemoryRouter([
                         IdentityService.getCurrent()
                     );
 
-                    if (identity.loading) {
+                    const token = useAsync(() => getToken());
+
+                    if (identity.loading || token.loading) {
                         return <div>Loading...</div>;
                     }
 
                     return (
                         <iframe
                             title="Deployments"
-                            src={`https://web-deployments.kapeta.com/${identity.value}?token=`}
+                            src={`https://web-deployments.kapeta.com/${identity.value?.handle}?token=${token.value}`}
+                            width="100%"
+                            height="100%"
+                        />
+                    );
+                },
+            },
+            {
+                path: 'blockhub',
+                Component: () => {
+                    // iframe to deployments microfrontend
+                    console.log('Loading deployments');
+                    const identity = useAsync(() =>
+                        IdentityService.getCurrent()
+                    );
+                    const token = useAsync(() => getToken());
+
+                    if (identity.loading || token.loading) {
+                        return <div>Loading...</div>;
+                    }
+
+                    return (
+                        <iframe
+                            title="Deployments"
+                            src={`https://web-registry.kapeta.com/${identity.value?.handle}?token=${token.value}`}
                             width="100%"
                             height="100%"
                         />
@@ -92,7 +119,3 @@ root.render(
         <RouterProvider router={router} />
     </ThemeProvider>
 );
-
-window.electron.ipcRenderer.on('ipc-main', (event, args) => {
-    console.log('main event', event, 'args', args);
-});

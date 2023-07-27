@@ -14,9 +14,13 @@ import { appInit } from './helpers';
 import { MainWindow } from './main/MainWindow';
 import { ClusterService } from './services/ClusterService';
 import { SplashScreen } from './modals/SplashScreen';
+import { attachHandlers } from './services/IPCService';
 
 const clusterService = new ClusterService();
 const splashScreen = new SplashScreen(clusterService);
+
+attachHandlers();
+
 app.on('window-all-closed', () => {
     // Do not close app when windows close. We still have the tray
 });
