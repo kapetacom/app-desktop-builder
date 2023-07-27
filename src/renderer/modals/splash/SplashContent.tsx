@@ -200,22 +200,23 @@ export const SplashContent = (props: Props) => {
                         borderRadius: '10px',
                         border: '1px solid rgba(255, 255, 255, 0.20)',
                         background: 'rgba(0, 0, 0, 0.70)',
-                        boxShadow: '0px 10px 13px -6px rgba(0, 0, 0, 0.20), 0px 20px 31px 3px rgba(0, 0, 0, 0.14), 0px 8px 38px 7px rgba(0, 0, 0, 0.12)',
+                        boxShadow:
+                            '0px 10px 13px -6px rgba(0, 0, 0, 0.20), 0px 20px 31px 3px rgba(0, 0, 0, 0.14), 0px 8px 38px 7px rgba(0, 0, 0, 0.12)',
                         '.error-message': {
                             display: 'flex',
-                            'i': {
+                            i: {
                                 fontSize: '3px',
                                 marginRight: '5px',
-                                lineHeight: 'inherit'
-                            }
+                                lineHeight: 'inherit',
+                            },
                         },
                         '.buttons': {
                             position: 'absolute',
                             bottom: '16px',
                             textAlign: 'center',
-                            left:0,
-                            right:0
-                        }
+                            left: 0,
+                            right: 0,
+                        },
                     },
                 },
                 '.progress': {
@@ -260,22 +261,22 @@ export const SplashContent = (props: Props) => {
                 </div>
             </div>
             <div className="right">
-                {hasError &&
+                {hasError && (
                     <div className={'errors'}>
                         <Typography variant={'body2'}>
-                            {props.localClusterStatus === SplashStatusCheck.ERROR && (
+                            {props.localClusterStatus ===
+                                SplashStatusCheck.ERROR && (
                                 <div className={'error-message'}>
                                     <i className="fas fa-circle"></i>
-                                    <span>
-                                        Local cluster failed to start.
-                                    </span>
+                                    <span>Local cluster failed to start.</span>
                                 </div>
                             )}
                             {props.dockerStatus === SplashStatusCheck.ERROR && (
                                 <div className={'error-message'}>
                                     <i className="fas fa-circle"></i>
                                     <span>
-                                        Make sure docker is installed and running
+                                        Make sure docker is installed and
+                                        running
                                     </span>
                                 </div>
                             )}
@@ -286,8 +287,8 @@ export const SplashContent = (props: Props) => {
                                 sx={{
                                     marginRight: '5px',
                                     '&:hover': {
-                                        bgcolor: 'rgba(255, 255, 255, 0.20)'
-                                    }
+                                        bgcolor: 'rgba(255, 255, 255, 0.20)',
+                                    },
                                 }}
                                 onClick={() => {
                                     setProgress(minProgress);
@@ -302,8 +303,8 @@ export const SplashContent = (props: Props) => {
                                 sx={{
                                     border: '1px solid rgba(255, 255, 255, 0.20)',
                                     '&:hover': {
-                                        bgcolor: 'rgba(255, 255, 255, 0.20)'
-                                    }
+                                        bgcolor: 'rgba(255, 255, 255, 0.20)',
+                                    },
                                 }}
                                 onClick={() => {
                                     setProgress(minProgress);
@@ -316,7 +317,7 @@ export const SplashContent = (props: Props) => {
                             </Button>
                         </div>
                     </div>
-                }
+                )}
                 <LogoTextWhite className="logo" />
                 <div className="gradients image-right" />
                 <div className="gradients image-left" />
