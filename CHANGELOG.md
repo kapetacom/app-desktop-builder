@@ -1,3 +1,10 @@
+## [0.11.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.11.2...v0.11.3) (2023-07-27)
+
+
+### Bug Fixes
+
+* dont capitalize tabs ([746bced](https://github.com/kapetacom/app-desktop-builder/commit/746bced4f6d6ac6d6835863df9f714135eab5472))
+
 ## [0.11.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.11.1...v0.11.2) (2023-07-27)
 
 
