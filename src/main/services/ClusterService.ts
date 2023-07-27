@@ -86,6 +86,7 @@ export class ClusterService extends EventEmitter {
         console.log('Starting cluster service from %s', SERVICE_FILE);
         return new Promise((resolve, reject) => {
             const child = (this.child = fork(SERVICE_FILE));
+            console.log('Cluster service started with PID: %s', child.pid);
             child.on('message', (msg: ClusterInfo) => {
                 this.running = true;
                 this.info = msg;
@@ -102,12 +103,14 @@ export class ClusterService extends EventEmitter {
                 reject(err);
             });
             child.on('exit', (exitCode: number) => {
+                console.log('Cluster service exited with code: %s', exitCode);
                 if (exitCode !== null && exitCode !== 0) {
                     reject(
                         new Error(`Process exited with exitCode: ${exitCode}.`)
                     );
                 }
                 this.stop();
+                this.start();
             });
         });
     }
