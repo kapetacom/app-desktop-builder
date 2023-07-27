@@ -18,6 +18,7 @@ const SERVICE_FILE = app.isPackaged
 
 export class ClusterService extends EventEmitter {
     private info: ClusterInfo | null = null;
+    private stoppedIntentionally:boolean = false;
 
     constructor() {
         super();
@@ -64,6 +65,7 @@ export class ClusterService extends EventEmitter {
     }
 
     public async start(): Promise<ClusterInfo> {
+        this.stoppedIntentionally = false;
         if (this.child) {
             throw new Error('Cluster service is already running');
         }
@@ -99,7 +101,7 @@ export class ClusterService extends EventEmitter {
                 resolve(msg);
             });
             child.on('error', (err) => {
-                this.stop();
+                this.stopProcess();
                 reject(err);
             });
             child.on('exit', (exitCode: number) => {
@@ -109,8 +111,10 @@ export class ClusterService extends EventEmitter {
                         new Error(`Process exited with exitCode: ${exitCode}.`)
                     );
                 }
-                this.stop();
-                this.start();
+                this.stopProcess();
+                if (!this.stoppedIntentionally) {
+                    this.start();
+                }
             });
         });
     }
@@ -119,7 +123,12 @@ export class ClusterService extends EventEmitter {
         return this.info;
     }
 
-    public async stop() {
+    public stop() {
+        this.stoppedIntentionally = true;
+        this.stopProcess();
+    }
+
+    private stopProcess() {
         if (this.child) {
             this.child.kill('SIGABRT');
         }
