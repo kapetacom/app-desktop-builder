@@ -22,9 +22,7 @@ function render(state: State) {
                     ]);
                 }}
                 onQuit={() => {
-                    window.electron.ipcRenderer.sendMessage('splash', [
-                        'quit',
-                    ]);
+                    window.electron.ipcRenderer.sendMessage('splash', ['quit']);
                 }}
                 onRetry={() => {
                     window.electron.ipcRenderer.sendMessage('splash', [

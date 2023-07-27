@@ -18,6 +18,7 @@ const SERVICE_FILE = app.isPackaged
 
 export class ClusterService extends EventEmitter {
     private info: ClusterInfo | null = null;
+    private stoppedIntentionally:boolean = false;
 
     constructor() {
         super();
@@ -64,6 +65,7 @@ export class ClusterService extends EventEmitter {
     }
 
     public async start(): Promise<ClusterInfo> {
+        this.stoppedIntentionally = false;
         if (this.child) {
             throw new Error('Cluster service is already running');
         }
@@ -86,6 +88,7 @@ export class ClusterService extends EventEmitter {
         console.log('Starting cluster service from %s', SERVICE_FILE);
         return new Promise((resolve, reject) => {
             const child = (this.child = fork(SERVICE_FILE));
+            console.log('Cluster service started with PID: %s', child.pid);
             child.on('message', (msg: ClusterInfo) => {
                 this.running = true;
                 this.info = msg;
@@ -98,16 +101,20 @@ export class ClusterService extends EventEmitter {
                 resolve(msg);
             });
             child.on('error', (err) => {
-                this.stop();
+                this.stopProcess();
                 reject(err);
             });
             child.on('exit', (exitCode: number) => {
+                console.log('Cluster service exited with code: %s', exitCode);
                 if (exitCode !== null && exitCode !== 0) {
                     reject(
                         new Error(`Process exited with exitCode: ${exitCode}.`)
                     );
                 }
-                this.stop();
+                this.stopProcess();
+                if (!this.stoppedIntentionally) {
+                    this.start();
+                }
             });
         });
     }
@@ -116,7 +123,12 @@ export class ClusterService extends EventEmitter {
         return this.info;
     }
 
-    public async stop() {
+    public stop() {
+        this.stoppedIntentionally = true;
+        this.stopProcess();
+    }
+
+    private stopProcess() {
         if (this.child) {
             this.child.kill('SIGABRT');
         }
