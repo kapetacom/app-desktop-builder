@@ -1,4 +1,4 @@
-import { BrowserWindow, shell } from 'electron';
+import { BrowserWindow } from 'electron';
 import {
     getAssetPath,
     getPreloadScript,
@@ -98,5 +98,34 @@ export class MainWindow {
 
         // Open urls in the user's browser
         this._window.webContents.setWindowOpenHandler(WindowOpenHandler);
+
+        // Hack the cookies to make iframes work with cookies
+        // Sets all cookies to SameSite=None; secure=true
+        this._window.webContents.session.webRequest.onHeadersReceived(
+            {
+                urls: ['https://*.kapeta.com/*'],
+            },
+            (details, callback) => {
+                const cookieHeader =
+                    details.responseHeaders &&
+                    Object.keys(details.responseHeaders).find(
+                        (k) => k.toLowerCase() === 'set-cookie'
+                    );
+                if (cookieHeader) {
+                    details.responseHeaders![cookieHeader] =
+                        details.responseHeaders![cookieHeader].map((cookie) => {
+                            return `${cookie.replace(
+                                /samesite=[^;]+(;|\s*$)/gi,
+                                ''
+                            )}; SameSite=none; secure=true`;
+                        });
+                }
+
+                callback({
+                    cancel: false,
+                    responseHeaders: details.responseHeaders,
+                });
+            }
+        );
     }
 }
