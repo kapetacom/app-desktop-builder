@@ -30,16 +30,17 @@ export const KapetaTab = styled(Tab, {
             }[variant];
 
         return {
-            '&.MuiTab-root': {
-                backgroundColor: bg?.enabled,
-                color: theme.tabs.text.enabled,
-            },
+            // Disabled to make active tab more visible
+            // '&.MuiTab-root': {
+            //     backgroundColor: bg?.enabled,
+            //     color: theme.tabs.text.enabled,
+            // },
             '&.Mui-selected': {
                 backgroundColor: bg?.active,
                 color: theme.tabs.text.active,
             },
             '&:hover': {
-                backgroundColor: bg?.active,
+                backgroundColor: bg?.enabled,
                 color: theme.tabs.text.active,
             },
         };
