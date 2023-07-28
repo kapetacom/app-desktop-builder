@@ -1,3 +1,16 @@
+# [0.12.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.11.4...v0.12.0) (2023-07-28)
+
+
+### Bug Fixes
+
+* make tabs work again ([16f132b](https://github.com/kapetacom/app-desktop-builder/commit/16f132b066aa1c32b625c7b08b44f9cadfd39bd7))
+* tweak tab styles to make active tab more visible ([91f2563](https://github.com/kapetacom/app-desktop-builder/commit/91f2563f2aca17c8e469db4b2750172ffe8c7af3))
+
+
+### Features
+
+* update UI when signing in/out and allow changing context [KAP-864] ([19faf87](https://github.com/kapetacom/app-desktop-builder/commit/19faf87638941fd9d58178b5cf1d06a3c51cd31b))
+
 ## [0.11.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.11.3...v0.11.4) (2023-07-28)
 
 
