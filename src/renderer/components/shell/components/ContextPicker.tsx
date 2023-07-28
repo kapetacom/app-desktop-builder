@@ -1,6 +1,6 @@
-import { Avatar, ListItemIcon, ListItemText, useTheme } from '@mui/material';
 import React from 'react';
-import { Context } from '../types';
+import { Avatar, ListItemIcon, ListItemText, useTheme } from '@mui/material';
+import { MemberIdentity } from '@kapeta/ui-web-types';
 import {
     SidebarList,
     SidebarListItem,
@@ -8,8 +8,9 @@ import {
 } from './SidebarMenu';
 
 interface ContextPickerProps {
-    contexts?: Context[];
-    handle?: string;
+    contexts?: MemberIdentity[];
+    onChangeContext: (ctx: MemberIdentity) => void;
+    handle?: MemberIdentity;
     isOpen?: boolean;
 }
 
@@ -45,16 +46,15 @@ export const ContextPicker = (props: ContextPickerProps) => {
             isOpen={props.isOpen}
         >
             {props.contexts?.map((context) => (
-                <SidebarListItem key={context.handle}>
+                <SidebarListItem key={context.identity.handle}>
                     <SidebarListItemButton
-                        // selected={context.current}
-                        href={`/${context.handle}/iam/settings/general`}
+                        onClick={() => props.onChangeContext(context)}
                     >
                         <ListItemIcon>
                             <Avatar
                                 variant="rounded"
                                 sx={
-                                    context.current
+                                    context === props.handle
                                         ? {
                                               backgroundColor:
                                                   theme.palette.info.light,
@@ -68,20 +68,19 @@ export const ContextPicker = (props: ContextPickerProps) => {
                                           }
                                 }
                             >
-                                {context.avatar || toInitials(context.name)}
+                                {/* @ts-ignore */}
+                                {context.avatar ||
+                                    toInitials(context.identity.name)}
                             </Avatar>
                         </ListItemIcon>
-                        <ListItemText>{context.name}</ListItemText>
+                        <ListItemText>{context.identity.name}</ListItemText>
                     </SidebarListItemButton>
                 </SidebarListItem>
             ))}
             <SidebarListItem>
                 <SidebarListItemButton
-                    href={
-                        props.handle
-                            ? `/${props.handle}/iam/organizations`
-                            : '#'
-                    }
+                    // Add new should trigger login?
+                    href="/iam/settings/general"
                     disabled={!props.handle}
                 >
                     <ListItemIcon>

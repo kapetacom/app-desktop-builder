@@ -1,6 +1,7 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
-export type Channels = 'ipc-main' | 'splash' | 'processing' | 'get-token';
+export type Channels = 'ipc-main' | 'splash' | 'processing' | 'auth';
+export type Procedures = 'get-token' | 'get-contexts';
 
 const electronHandler = {
     ipcRenderer: {
@@ -21,7 +22,7 @@ const electronHandler = {
         once(channel: Channels, func: (...args: unknown[]) => void) {
             ipcRenderer.once(channel, (_event, ...args) => func(...args));
         },
-        invoke(channel: Channels, ...args: any[]) {
+        invoke(channel: Procedures, ...args: any[]) {
             return ipcRenderer.invoke(channel, ...args);
         },
     },
