@@ -12,6 +12,7 @@ import './Shell.less';
 import { useAsync } from 'react-use';
 import { IdentityService } from '@kapeta/ui-web-context';
 import { useLocalStorage } from '../utils/localStorage';
+import { useKapetaContext } from 'renderer/hooks/contextHook';
 
 export function Shell() {
     const [error, setError] = useLocalStorage('$main_error', '');
@@ -21,23 +22,7 @@ export function Shell() {
         return IdentityService.getCurrent();
     });
 
-    const contexts = useAsync(async () => {
-        if (!identity.value) {
-            return [];
-        }
-        const memberships = await IdentityService.getMemberships(
-            identity.value.id
-        );
-        return [
-            { ...identity.value, current: true },
-            ...memberships.map((membership) => {
-                return {
-                    ...membership.identity,
-                    current: false,
-                };
-            }),
-        ];
-    }, [identity.value]);
+    const contexts = useKapetaContext();
 
     toClass({
         'main-container': true,
@@ -56,7 +41,6 @@ export function Shell() {
                     <EditorTabs />
                 </TopBar>
             }
-            handle={identity.value?.handle}
             menu={[
                 {
                     id: 'edit',
@@ -86,7 +70,11 @@ export function Shell() {
                     icon: <CustomIcon icon="Block" />,
                 },
             ]}
-            contexts={contexts.value}
+            context={{
+                contexts: contexts.contexts?.memberships,
+                setActiveContext: contexts.setActiveContext,
+                activeContext: contexts.activeContext,
+            }}
         >
             <Outlet />
         </MainLayout>

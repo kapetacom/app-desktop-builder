@@ -20,6 +20,7 @@ import {
     SidebarListItemButton,
 } from './components/SidebarMenu';
 import { CustomIcon } from './components/CustomIcon';
+import { MemberIdentity } from '@kapeta/ui-web-types';
 
 interface ConsoleLocation {
     pathname: string;
@@ -37,15 +38,16 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 interface Props {
     menu: MenuSection[];
     location: ConsoleLocation;
-    contexts?: Context[];
-    handle?: string;
+    context?: {
+        contexts?: MemberIdentity[];
+        activeContext?: MemberIdentity;
+        setActiveContext: (ctx: MemberIdentity) => void;
+    };
     children?: any;
     topBar?: React.ReactNode;
 }
 
 export const MainLayout = (props: Props) => {
-    const currentLocation = props.location;
-
     const [isOpen, setIsOpen] = useState(true);
     const toggle = () => setIsOpen(!isOpen);
 
@@ -108,8 +110,11 @@ export const MainLayout = (props: Props) => {
                 </SidebarList>
                 <ContextPicker
                     isOpen={isOpen}
-                    contexts={props.contexts}
-                    handle={props.handle}
+                    contexts={props.context?.contexts}
+                    handle={props.context?.activeContext}
+                    onChangeContext={(ctx) =>
+                        props.context?.setActiveContext(ctx)
+                    }
                 />
             </MiniDrawer>
 

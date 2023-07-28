@@ -63,6 +63,10 @@ export class TrayWrapper {
                             click: async () => {
                                 this.api.removeToken();
                                 await this.update();
+                                this.mainWindow.window?.webContents.send(
+                                    'auth',
+                                    'signed-out'
+                                );
                             },
                         },
                     ],
@@ -162,6 +166,11 @@ export class TrayWrapper {
                                 }!`,
                                 title: 'Signed in!',
                             });
+
+                            this.mainWindow.window?.webContents.send(
+                                'auth',
+                                'signed-in'
+                            );
                         } catch (err: any) {
                             this.processingModal.close();
                             const message =

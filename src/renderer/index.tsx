@@ -6,7 +6,7 @@ import {
     createMemoryRouter,
 } from 'react-router-dom';
 import { useEffect } from 'react';
-import { IdentityService, PlannerService } from '@kapeta/ui-web-context';
+import { PlannerService } from '@kapeta/ui-web-context';
 import { useAsync, useAsyncFn } from 'react-use';
 import { Root } from './Root';
 import { kapetaDark } from './Theme';
@@ -14,6 +14,7 @@ import { initialise } from './context';
 import { PlanView } from './views/PlanView';
 import { PlanOverview } from './components/plan-overview/PlanOverview';
 import { getToken } from './utils/tokenHelper';
+import { KapetaContextProvider, useKapetaContext } from './hooks/contextHook';
 
 const router = createMemoryRouter([
     {
@@ -64,20 +65,17 @@ const router = createMemoryRouter([
                 Component: () => {
                     // iframe to deployments microfrontend
                     console.log('Loading deployments');
-                    const identity = useAsync(() =>
-                        IdentityService.getCurrent()
-                    );
-
+                    const context = useKapetaContext();
                     const token = useAsync(() => getToken());
 
-                    if (identity.loading || token.loading) {
+                    if (context.loading || token.loading) {
                         return <div>Loading...</div>;
                     }
 
                     return (
                         <iframe
                             title="Deployments"
-                            src={`https://web-deployments.kapeta.com/${identity.value?.handle}?token=${token.value}`}
+                            src={`https://web-deployments.kapeta.com/${context.activeContext?.identity.handle}?token=${token.value}`}
                             width="100%"
                             height="100%"
                         />
@@ -87,21 +85,19 @@ const router = createMemoryRouter([
             {
                 path: 'blockhub',
                 Component: () => {
-                    // iframe to deployments microfrontend
-                    console.log('Loading deployments');
-                    const identity = useAsync(() =>
-                        IdentityService.getCurrent()
-                    );
+                    // iframe to blockhub/registry microfrontend
+                    console.log('Loading blockhub');
+                    const context = useKapetaContext();
                     const token = useAsync(() => getToken());
 
-                    if (identity.loading || token.loading) {
+                    if (context.loading || token.loading) {
                         return <div>Loading...</div>;
                     }
 
                     return (
                         <iframe
                             title="Deployments"
-                            src={`https://web-registry.kapeta.com/${identity.value?.handle}?token=${token.value}`}
+                            src={`https://web-registry.kapeta.com/${context.activeContext?.identity.handle}?token=${token.value}`}
                             width="100%"
                             height="100%"
                         />
@@ -116,6 +112,8 @@ const container = document.getElementById('root')!;
 const root = createRoot(container);
 root.render(
     <ThemeProvider theme={kapetaDark}>
-        <RouterProvider router={router} />
+        <KapetaContextProvider>
+            <RouterProvider router={router} />
+        </KapetaContextProvider>
     </ThemeProvider>
 );
