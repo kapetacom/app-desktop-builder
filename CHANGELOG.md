@@ -1,3 +1,10 @@
+## [0.11.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.11.3...v0.11.4) (2023-07-28)
+
+
+### Bug Fixes
+
+* cookie fix for iframes ([6eced51](https://github.com/kapetacom/app-desktop-builder/commit/6eced5137b9867e449bb4137faa64dc1799c268d))
+
 ## [0.11.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.11.2...v0.11.3) (2023-07-27)
 
 
