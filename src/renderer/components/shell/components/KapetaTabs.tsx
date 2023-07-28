@@ -14,7 +14,7 @@ export const KapetaTab = styled(Tab, {
     shouldForwardProp(propName) {
         return propName !== 'variant';
     },
-})<{ variant?: 'deploy' | 'edit' }>(
+})<{ variant?: 'deploy' | 'edit'; href: string }>(
     {
         minHeight: '52px',
         maxHeight: '52px',
