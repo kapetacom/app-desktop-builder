@@ -1,3 +1,10 @@
+## [0.12.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.12.0...v0.12.1) (2023-07-31)
+
+
+### Bug Fixes
+
+* Bump dependencies ([2275171](https://github.com/kapetacom/app-desktop-builder/commit/2275171b6ffefc3200f1e67e1ddcb612fb15cc69))
+
 # [0.12.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.11.4...v0.12.0) (2023-07-28)
 
 
