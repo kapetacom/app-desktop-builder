@@ -1,22 +1,31 @@
-import { Outlet, useLocation } from 'react-router-dom';
+import {Outlet, useLocation} from 'react-router-dom';
 import 'react-tabs/style/react-tabs.css';
 
-import { toClass } from '@kapeta/ui-web-utils';
+import {toClass} from '@kapeta/ui-web-utils';
 
-import { TopBar } from 'renderer/components/shell/TopBar';
-import { MainLayout } from 'renderer/components/shell/MainLayout';
-import { EditorTabs } from 'renderer/components/shell/EditorTabs';
-import { CustomIcon } from 'renderer/components/shell/components/CustomIcon';
+import {TopBar} from 'renderer/components/shell/TopBar';
+import {MainLayout} from 'renderer/components/shell/MainLayout';
+import {EditorTabs} from 'renderer/components/shell/EditorTabs';
+import {CustomIcon} from 'renderer/components/shell/components/CustomIcon';
 
 import './Shell.less';
-import { useAsync } from 'react-use';
-import { IdentityService } from '@kapeta/ui-web-context';
-import { useLocalStorage } from '../utils/localStorage';
-import { useKapetaContext } from 'renderer/hooks/contextHook';
+import {useAsync, useInterval, useList} from 'react-use';
+import {IdentityService, InstanceEventType, InstanceService, SocketService} from '@kapeta/ui-web-context';
+import {useLocalStorage} from '../utils/localStorage';
+import {useKapetaContext} from 'renderer/hooks/contextHook';
+import {KapetaNotification} from "../components/shell/types";
+import {useDockerPullEvents} from "./hooks/useDockerPullEvents";
+import {useNotificationListener, useNotifications} from "../hooks/useNotifications";
+
+
 
 export function Shell() {
     const [error, setError] = useLocalStorage('$main_error', '');
     const location = useLocation();
+
+    const [notifications, notificationsHandler] = useNotifications();
+
+    useDockerPullEvents(notificationsHandler);
 
     const identity = useAsync(() => {
         return IdentityService.getCurrent();
@@ -37,8 +46,10 @@ export function Shell() {
         <MainLayout
             location={location}
             topBar={
-                <TopBar>
-                    <EditorTabs />
+                <TopBar
+                    notifications={notifications}
+                    profile={identity.value}>
+                    <EditorTabs/>
                 </TopBar>
             }
             menu={[
@@ -49,7 +60,7 @@ export function Shell() {
                     name: 'Edit',
                     url: '',
                     open: false,
-                    icon: <CustomIcon icon="Plan" />,
+                    icon: <CustomIcon icon="Plan"/>,
                 },
                 {
                     id: 'deploy',
@@ -58,7 +69,7 @@ export function Shell() {
                     name: 'Deploy',
                     url: '',
                     open: false,
-                    icon: <CustomIcon icon="Deploy" />,
+                    icon: <CustomIcon icon="Deploy"/>,
                 },
                 {
                     id: 'blockhub',
@@ -67,7 +78,7 @@ export function Shell() {
                     name: 'Blockhub',
                     url: 'https://app.kapeta.com/blockhub',
                     open: false,
-                    icon: <CustomIcon icon="Block" />,
+                    icon: <CustomIcon icon="Block"/>,
                 },
             ]}
             context={{
@@ -76,7 +87,7 @@ export function Shell() {
                 activeContext: contexts.activeContext,
             }}
         >
-            <Outlet />
+            <Outlet/>
         </MainLayout>
     );
 }

@@ -109,13 +109,9 @@ export const PlanEditorToolBoxPanel = (props: Props) => {
                     />
                 )}
 
-            <SidePanel
+            <div
                 className="plan-editor-toolbox-container"
-                size={PanelSize.small}
-                closable={false}
-                side={PanelAlignment.right}
-                open={props.open}
-                modal={false}
+                style={{ display: props.open ? 'block' : 'none' }}
             >
                 <Tabs
                     className="toolbox-tabs"
@@ -232,7 +228,7 @@ export const PlanEditorToolBoxPanel = (props: Props) => {
                         <BlockStore {...handlers} />
                     </TabPanel>
                 </Tabs>
-            </SidePanel>
+            </div>
         </>
     );
 };
