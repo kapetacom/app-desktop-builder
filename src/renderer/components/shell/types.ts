@@ -41,14 +41,25 @@ export interface CommentNotification {
     author: UserProfile;
 }
 
+export interface ProgressNotification {
+    id: string;
+    type: 'progress';
+    message: string;
+    timestamp: number;
+    read: boolean;
+    progress: number;
+}
+
+export type StateNotificationType = 'error' | 'warning' | 'info' | 'success';
+
 export interface StateNotification {
     id: string;
-    type: 'error' | 'warning' | 'info' | 'success';
+    type: StateNotificationType;
     message: string;
     timestamp: number;
     read: boolean;
 }
-export type KapetaNotification = StateNotification | CommentNotification;
+export type KapetaNotification = StateNotification | CommentNotification | ProgressNotification;
 
 /**
  * Proposal for a new change set format

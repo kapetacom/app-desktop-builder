@@ -22,6 +22,7 @@ import { EditorPanels } from './panels/editor/EditorPanels';
 import { InspectorPanels } from './panels/InspectorPanels';
 import './PlanEditor.less';
 import { getInstanceConfigs } from '../../api/LocalConfigService';
+import {toClass} from "@kapeta/ui-web-utils";
 
 interface Props {
     systemId: string;
@@ -65,8 +66,13 @@ export const PlanEditor = withPlannerContext(
 
         const readonly = planner.mode !== PlannerMode.EDIT;
 
+        const containerClass = toClass({
+            'plan-editor': true,
+            'readonly': readonly
+        })
+
         return (
-            <div className="plan-editor" ref={ref}>
+            <div className={containerClass} ref={ref}>
                 <PlanEditorTopMenu
                     readonly={readonly}
                     version={uri.version}

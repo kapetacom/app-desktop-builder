@@ -8,16 +8,14 @@
     background-color: @gray-xdark;
     position: relative;
 
-    .block-store-container {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        right: 0;
-        width: @side-bar-size;
-    }
-
     .planner-area-position-parent {
         right: @side-bar-size;
+    }
+
+    &.readonly {
+        .planner-area-position-parent {
+            right: 0;
+        }
     }
 
     .plan-item-dragged {

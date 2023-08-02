@@ -1,9 +1,15 @@
 @import '~@kapeta/ui-web-components/styles/values';
 @import '~@kapeta/ui-web-components/styles/functions';
-
+@import '../../vars.less';
 @tab-title: @bw-menu-category-icon-color;
 
 .plan-editor-toolbox-container {
+    position: absolute;
+    right: 0;
+    top: 10px;
+    bottom: 0;
+    width: @side-bar-size;
+    z-index: 1;
     .resource-section {
         display: block;
 
