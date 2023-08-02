@@ -1,3 +1,10 @@
+# [0.13.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.12.1...v0.13.0) (2023-08-02)
+
+
+### Features
+
+* Add notifications from docker pulls and plan starts / stops ([#44](https://github.com/kapetacom/app-desktop-builder/issues/44)) ([49345c9](https://github.com/kapetacom/app-desktop-builder/commit/49345c9f437c2bf4e81b7209a335b426d529508e))
+
 ## [0.12.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.12.0...v0.12.1) (2023-07-31)
 
 
