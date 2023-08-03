@@ -1,9 +1,10 @@
 /* eslint import/prefer-default-export: off */
 import { URL } from 'url';
 import path from 'path';
-import { app, BrowserWindow, ipcMain, shell } from 'electron';
+import { session, app, BrowserWindow, ipcMain, shell } from 'electron';
 import log from 'electron-log';
 import { autoUpdater } from 'electron-updater';
+import packageJson from '../../package.json';
 
 const ENABLE_EXTENSIONS = false; //Disabled because Electron doesn't support react extension currently
 
@@ -36,9 +37,23 @@ export const appInit = async () => {
 
     await app.whenReady();
 
+    ensureUserAgent();
+
     if (isDebug() && ENABLE_EXTENSIONS) {
         await installExtensions();
     }
+};
+
+export const ensureUserAgent = () => {
+    const userAgent = 'KapetaDesktop/' + packageJson.version;
+    session.defaultSession.setUserAgent(userAgent);
+    session.defaultSession.webRequest.onBeforeSendHeaders(
+        (details, callback) => {
+            details.requestHeaders['user-agent'] = userAgent;
+            details.requestHeaders['x-kapeta'] = 'true';
+            callback({ cancel: false, requestHeaders: details.requestHeaders });
+        }
+    );
 };
 
 export const attachIPCListener = (

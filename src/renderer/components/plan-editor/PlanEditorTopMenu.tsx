@@ -1,8 +1,26 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, {
+    useCallback,
+    useContext,
+    useEffect,
+    useMemo,
+    useState,
+} from 'react';
 
 import { toClass } from '@kapeta/ui-web-utils';
-import { InstanceEventType, InstanceService } from '@kapeta/ui-web-context';
 import {
+    InstanceEventType,
+    InstanceService,
+    TaskService,
+    TaskStatus,
+} from '@kapeta/ui-web-context';
+import {
+    ButtonType,
+    ConfigurationEditor,
+    DSL_LANGUAGE_ID,
+    DSLConverters,
+    DSLEntity,
+    EntityEditor,
+    FormButtons,
     FormContainer,
     Modal,
     ModalSize,
@@ -10,23 +28,14 @@ import {
     TabContainer,
     TabPage,
     ToastType,
-    ConfigurationEditor,
-    EntityEditor,
-    FormButtons,
-    ButtonType,
-    ButtonStyle,
     useFormContextField,
-    DSLConverters,
-    DSL_LANGUAGE_ID,
-    DSLEntity,
 } from '@kapeta/ui-web-components';
 import './PlanEditorTopMenu.less';
 import { PlannerContext } from '@kapeta/ui-web-plan-editor';
-import { useAsyncFn } from 'react-use';
+import { useAsync, useAsyncFn } from 'react-use';
 import { PlanForm } from '../forms/PlanForm';
 import { getPlanConfig, setPlanConfig } from '../../api/LocalConfigService';
-import {useNotificationEmitter} from "../../hooks/useNotifications";
-import {Button, ButtonGroup, CircularProgress, Stack} from "@mui/material";
+import { Button, CircularProgress, Stack } from '@mui/material';
 
 const ConfigSchemaEditor = () => {
     const configurationField = useFormContextField('spec.configuration');
@@ -97,47 +106,63 @@ export const PlanEditorTopMenu = (props: Props) => {
     const [stopping, setStopping] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
 
-    const emitNotification = useNotificationEmitter();
-    const notificationId = 'plan-run:' + props.systemId;
+    const startPlanJobId = `plan:start:${props.systemId}`;
+    const stopPlanJobId = `plan:stop:${props.systemId}`;
 
-    const doProcess = async (handler:() => Promise<void|{error:string}>, message: string, errorMsg: string) => {
-        setProcessing(true);
+    const processTask = useCallback(
+        (task) => {
+            const active = [TaskStatus.RUNNING, TaskStatus.PENDING].includes(
+                task.status
+            );
+            if (task.id === startPlanJobId) {
+                if (processing !== active) {
+                    setProcessing(active);
+                }
+                if (starting !== active) {
+                    setStarting(active);
+                }
+            }
+            if (task.id === stopPlanJobId) {
+                if (processing !== active) {
+                    setProcessing(active);
+                }
+                if (stopping !== active) {
+                    setStopping(active);
+                }
+            }
+        },
+        [startPlanJobId, stopPlanJobId, processing, stopping, starting]
+    );
+
+    useEffect(() => {
+        return TaskService.subscribe(processTask, () => {
+            setProcessing(false);
+            setStopping(false);
+            setStarting(false);
+        });
+    }, [startPlanJobId, stopPlanJobId, processTask]);
+
+    useAsync(async () => {
+        const tasks = await TaskService.list();
+        tasks.forEach(processTask);
+    }, [startPlanJobId, stopPlanJobId, processTask]);
+
+    const doProcess = async (
+        handler: () => Promise<void | { error: string }>,
+        message: string,
+        errorMsg: string
+    ) => {
         try {
-            emitNotification({
-                type: 'progress',
-                timestamp: Date.now(),
-                progress: -1,
-                read: false,
-                id: notificationId,
-                message
-            });
             const result = await handler();
             if (result && result.error) {
                 throw new Error(result.error);
             }
-            emitNotification({
-                type: 'progress',
-                timestamp: Date.now(),
-                progress: 100,
-                read: false,
-                id: notificationId,
-                message
-            });
         } catch (e) {
             showToasty({
                 title: errorMsg,
                 message: e.message,
                 type: ToastType.DANGER,
             });
-            emitNotification({
-                type: 'error',
-                timestamp: Date.now(),
-                read: false,
-                id: notificationId,
-                message: errorMsg
-            });
-        } finally {
-            setProcessing(false);
         }
     };
 
@@ -201,20 +226,23 @@ export const PlanEditorTopMenu = (props: Props) => {
                     color={'primary'}
                     startIcon={<i className="fa fa-play" />}
                     onClick={async () => {
-                        await doProcess(async () => {
-                            setStarting(true);
-                            try {
-                                await InstanceService.startInstances(
-                                    props.systemId
-                                );
-                                setAllPlaying(true);
-                            } finally {
-                                setStarting(false);
-                            }
-                        },
+                        await doProcess(
+                            async () => {
+                                setStarting(true);
+                                try {
+                                    await InstanceService.startInstances(
+                                        props.systemId
+                                    );
+                                    setAllPlaying(true);
+                                } finally {
+                                    setStarting(false);
+                                }
+                            },
                             `Starting plan: ${props.systemId}`,
-                            'Failed to start plan');
-                    }} >
+                            'Failed to start plan'
+                        );
+                    }}
+                >
                     Start
                     {starting && (
                         <CircularProgress
@@ -235,18 +263,23 @@ export const PlanEditorTopMenu = (props: Props) => {
                     color={'warning'}
                     startIcon={<i className="fa fa-stop" />}
                     onClick={async () => {
-                        await doProcess(async () => {
-                            setStopping(true);
-                            try {
-                                await InstanceService.stopInstances(props.systemId);
-                                setAllPlaying(false);
-                            } finally {
-                                setStopping(false);
-                            }
-                        },
+                        await doProcess(
+                            async () => {
+                                setStopping(true);
+                                try {
+                                    await InstanceService.stopInstances(
+                                        props.systemId
+                                    );
+                                    setAllPlaying(false);
+                                } finally {
+                                    setStopping(false);
+                                }
+                            },
                             `Stopping plan: ${props.systemId}`,
-                            'Failed to stop plan');
-                    }} >
+                            'Failed to stop plan'
+                        );
+                    }}
+                >
                     Stop
                     {stopping && (
                         <CircularProgress
@@ -268,10 +301,10 @@ export const PlanEditorTopMenu = (props: Props) => {
                     color={'secondary'}
                     onClick={() => {
                         setShowSettings(true);
-                    }} >
+                    }}
+                >
                     Settings
                 </Button>
-
             </Stack>
             <Modal
                 title="Settings"
@@ -331,15 +364,13 @@ export const PlanEditorTopMenu = (props: Props) => {
                     <FormButtons>
                         <Button
                             type={ButtonType.BUTTON}
-
                             onClick={() => {
                                 setShowSettings(false);
                             }}
-
-                        >Cancel</Button>
-                        <Button
-                            type={ButtonType.SUBMIT}
-                        >Save</Button>
+                        >
+                            Cancel
+                        </Button>
+                        <Button type={ButtonType.SUBMIT}>Save</Button>
                     </FormButtons>
                 </FormContainer>
             </Modal>

@@ -22,7 +22,7 @@ import { EditorPanels } from './panels/editor/EditorPanels';
 import { InspectorPanels } from './panels/InspectorPanels';
 import './PlanEditor.less';
 import { getInstanceConfigs } from '../../api/LocalConfigService';
-import {toClass} from "@kapeta/ui-web-utils";
+import { toClass } from '@kapeta/ui-web-utils';
 
 interface Props {
     systemId: string;
@@ -68,8 +68,8 @@ export const PlanEditor = withPlannerContext(
 
         const containerClass = toClass({
             'plan-editor': true,
-            'readonly': readonly
-        })
+            readonly: readonly,
+        });
 
         return (
             <div className={containerClass} ref={ref}>

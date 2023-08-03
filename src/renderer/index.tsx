@@ -64,7 +64,6 @@ const router = createMemoryRouter([
                 path: 'deployments',
                 Component: () => {
                     // iframe to deployments microfrontend
-                    console.log('Loading deployments');
                     const context = useKapetaContext();
                     const token = useAsync(() => getToken());
 
@@ -74,8 +73,7 @@ const router = createMemoryRouter([
 
                     return (
                         <iframe
-                            title="Deployments"
-                            src={`https://web-deployments.kapeta.com/${context.activeContext?.identity.handle}?token=${token.value}`}
+                            src={`${window.KapetaDesktop.urls.deployments}/${context.activeContext?.identity.handle}?token=${token.value}`}
                             width="100%"
                             height="100%"
                         />
@@ -86,7 +84,6 @@ const router = createMemoryRouter([
                 path: 'blockhub',
                 Component: () => {
                     // iframe to blockhub/registry microfrontend
-                    console.log('Loading blockhub');
                     const context = useKapetaContext();
                     const token = useAsync(() => getToken());
 
@@ -96,8 +93,7 @@ const router = createMemoryRouter([
 
                     return (
                         <iframe
-                            title="Deployments"
-                            src={`https://web-registry.kapeta.com/${context.activeContext?.identity.handle}?token=${token.value}`}
+                            src={`${window.KapetaDesktop.urls.blockhub}/${context.activeContext?.identity.handle}?token=${token.value}`}
                             width="100%"
                             height="100%"
                         />

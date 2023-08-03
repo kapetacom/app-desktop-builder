@@ -1,18 +1,17 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
 import './index.less';
 
-import {kapetaDark} from '../src/renderer/Theme';
-import {ThemeProvider} from '@mui/material';
-import {TopBar} from "../src/renderer/components/shell/TopBar";
-import {MemoryRouter} from "react-router-dom";
+import { kapetaDark } from '../src/renderer/Theme';
+import { ThemeProvider } from '@mui/material';
+import { TopBar } from '../src/renderer/components/shell/TopBar';
+import { MemoryRouter } from 'react-router-dom';
 
 export default {
     title: 'Top bar',
 };
 
 export const ProgressNotifications = () => {
-
     return (
         <ThemeProvider theme={kapetaDark}>
             <MemoryRouter>
@@ -28,7 +27,7 @@ export const ProgressNotifications = () => {
                             message: 'Pulling image: kapeta/something:1.2.3',
                             type: 'progress',
                             timestamp: Date.now(),
-                            progress: 80
+                            progress: 80,
                         },
                         {
                             id: '2',
@@ -36,7 +35,7 @@ export const ProgressNotifications = () => {
                             message: 'Pulled image: hofmeister/other:2.2.0',
                             type: 'progress',
                             timestamp: Date.now(),
-                            progress: 100
+                            progress: 100,
                         },
                         {
                             id: '3',
@@ -44,14 +43,14 @@ export const ProgressNotifications = () => {
                             message: 'Pulling image: kapeta/other:2.2.0',
                             type: 'progress',
                             timestamp: Date.now(),
-                            progress: 50
+                            progress: 50,
                         },
                         {
                             id: '4',
                             read: false,
                             message: 'Something good happened!',
                             type: 'success',
-                            timestamp: Date.now()
+                            timestamp: Date.now(),
                         },
                         {
                             id: '3',
@@ -59,17 +58,16 @@ export const ProgressNotifications = () => {
                             message: 'Starting plan...',
                             type: 'progress',
                             timestamp: Date.now(),
-                            progress: -1
-                        }
-                    ]}/>
+                            progress: -1,
+                        },
+                    ]}
+                />
             </MemoryRouter>
         </ThemeProvider>
     );
 };
 
-
 export const SimpleNotifications = () => {
-
     return (
         <ThemeProvider theme={kapetaDark}>
             <MemoryRouter>
@@ -84,28 +82,28 @@ export const SimpleNotifications = () => {
                             message: 'Something went wrong!',
                             type: 'warning',
                             timestamp: Date.now(),
-                            read: false
+                            read: false,
                         },
                         {
                             id: '2',
                             message: 'Something failed bad!',
                             type: 'error',
                             timestamp: Date.now(),
-                            read: false
+                            read: false,
                         },
                         {
                             id: '3',
                             message: 'Something good happened!',
                             type: 'success',
                             timestamp: Date.now(),
-                            read: false
+                            read: false,
                         },
                         {
                             id: '4',
                             message: 'The info is here!',
                             type: 'info',
                             timestamp: Date.now(),
-                            read: false
+                            read: false,
                         },
                         {
                             id: '5',
@@ -116,17 +114,16 @@ export const SimpleNotifications = () => {
                             author: {
                                 handle: 'wejendorp',
                                 name: 'Jacob Wejendorp',
-                            }
+                            },
                         },
-
-                    ]}/>
+                    ]}
+                />
             </MemoryRouter>
         </ThemeProvider>
     );
 };
 
 export const EmptyState = () => {
-
     return (
         <ThemeProvider theme={kapetaDark}>
             <MemoryRouter>
@@ -135,4 +132,3 @@ export const EmptyState = () => {
         </ThemeProvider>
     );
 };
-

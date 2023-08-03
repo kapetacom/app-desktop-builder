@@ -1,4 +1,6 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
+import ClusterConfiguration from '@kapeta/local-cluster-config';
+import { version } from '../../package.json';
 
 export type Channels = 'ipc-main' | 'splash' | 'processing' | 'auth';
 export type Procedures = 'get-token' | 'get-contexts';
@@ -29,5 +31,18 @@ const electronHandler = {
 };
 
 contextBridge.exposeInMainWorld('electron', electronHandler);
+const kapetaDesktop = {
+    version,
+    urls: {
+        blockhub: 'https://web-registry.kapeta.com', //'http://localhost:5007'
+        deployments: 'https://web-deployments.kapeta.com',
+    },
+    cluster_service: {
+        url: ClusterConfiguration.getClusterServiceAddress(),
+    },
+};
 
+contextBridge.exposeInMainWorld('KapetaDesktop', kapetaDesktop);
+
+export type KapetaDesktop = typeof kapetaDesktop;
 export type ElectronHandler = typeof electronHandler;

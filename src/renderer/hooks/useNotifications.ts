@@ -1,25 +1,32 @@
-import {useEffect, useMemo} from "react";
-import {KapetaNotification} from "../components/shell/types";
-import {EventEmitter} from "events";
-import {useInterval, useList} from "react-use";
-import {ListActions} from "react-use/lib/useList";
+import { useEffect, useMemo } from 'react';
+import { KapetaNotification } from '../components/shell/types';
+import { EventEmitter } from 'events';
+import { useInterval, useList } from 'react-use';
+import { ListActions } from 'react-use/lib/useList';
 
 const NOTIFICATION_TTL = 60000;
 const globalEmitter = new EventEmitter();
 
-export const useNotifications = ():[KapetaNotification[], ListActions<KapetaNotification>] => {
-    const [notifications, notificationsHandler] = useList<KapetaNotification>([]);
+export const useNotifications = (): [
+    KapetaNotification[],
+    ListActions<KapetaNotification>
+] => {
+    const [notifications, notificationsHandler] = useList<KapetaNotification>(
+        []
+    );
 
     useInterval(() => {
         let anyRemoved = false;
         const newNotifications = notifications.filter((notification) => {
-            if (notification.type === 'progress' &&
-                notification.progress !== 100) {
+            if (
+                notification.type === 'progress' &&
+                notification.progress !== 100
+            ) {
                 // Don't remove active progress notifications
                 return true;
             }
 
-            if ((Date.now() - notification.timestamp) > NOTIFICATION_TTL) {
+            if (Date.now() - notification.timestamp > NOTIFICATION_TTL) {
                 anyRemoved = true;
                 return false;
             }
@@ -33,30 +40,27 @@ export const useNotifications = ():[KapetaNotification[], ListActions<KapetaNoti
     }, NOTIFICATION_TTL);
 
     useNotificationListener((notification) => {
-        notificationsHandler.upsert(
-            (a, b) => a.id === b.id,
-            notification
-        );
+        notificationsHandler.upsert((a, b) => a.id === b.id, notification);
     });
 
     return [notifications, notificationsHandler];
-}
+};
 
 export const useNotificationEmitter = () => {
     return useMemo(() => {
-        return (notification:KapetaNotification) => {
+        return (notification: KapetaNotification) => {
             globalEmitter.emit('notification', notification);
-        }
+        };
     }, []);
-}
+};
 
-
-export const useNotificationListener = (listener: (notification:KapetaNotification) => void) => {
-
+export const useNotificationListener = (
+    listener: (notification: KapetaNotification) => void
+) => {
     useEffect(() => {
         globalEmitter.on('notification', listener);
         return () => {
             globalEmitter.off('notification', listener);
-        }
+        };
     }, [listener]);
-}
+};
