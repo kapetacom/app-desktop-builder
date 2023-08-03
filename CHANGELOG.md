@@ -1,3 +1,10 @@
+# [0.14.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.13.0...v0.14.0) (2023-08-03)
+
+
+### Features
+
+* Handle loading microfrontends in "desktop mode" ([fc8eea5](https://github.com/kapetacom/app-desktop-builder/commit/fc8eea5d045b82f6b20837891d03fe55df66f736))
+
 # [0.13.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.12.1...v0.13.0) (2023-08-02)
 
 
