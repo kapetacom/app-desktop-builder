@@ -1,3 +1,10 @@
+## [0.14.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.14.0...v0.14.1) (2023-08-03)
+
+
+### Bug Fixes
+
+* Bumped local cluster service to get task support ([ff93e1d](https://github.com/kapetacom/app-desktop-builder/commit/ff93e1d58b1685c96b70146ca184a34c75b3895d))
+
 # [0.14.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.13.0...v0.14.0) (2023-08-03)
 
 
