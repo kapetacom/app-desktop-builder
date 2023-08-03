@@ -18,7 +18,7 @@ const SERVICE_FILE = app.isPackaged
 
 export class ClusterService extends EventEmitter {
     private info: ClusterInfo | null = null;
-    private stoppedIntentionally:boolean = false;
+    private stoppedIntentionally: boolean = false;
 
     constructor() {
         super();

@@ -4,7 +4,6 @@ export interface MenuSection {
     id: string;
     path?: string;
     name: string;
-    url: string;
     loading: boolean;
     error?: string;
     open: boolean;

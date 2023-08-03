@@ -56,8 +56,9 @@ export class MainWindow {
             icon: getAssetPath('icon.png'),
             webPreferences: {
                 preload: getPreloadScript(),
-                nodeIntegration: false,
+                nodeIntegration: true,
                 contextIsolation: true,
+                nodeIntegrationInSubFrames: true,
             },
         });
 
