@@ -34,7 +34,6 @@ contextBridge.exposeInMainWorld('electron', electronHandler);
 const kapetaDesktop = {
     version,
     urls: {
-        blockhub: 'https://web-registry.kapeta.com', //'http://localhost:5007'
         deployments: 'https://web-deployments.kapeta.com',
     },
     cluster_service: {
