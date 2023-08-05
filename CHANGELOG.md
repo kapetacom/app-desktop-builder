@@ -1,3 +1,10 @@
+## [0.15.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.15.0...v0.15.1) (2023-08-05)
+
+
+### Bug Fixes
+
+* Import from module - not sub path ([9ebe6c5](https://github.com/kapetacom/app-desktop-builder/commit/9ebe6c59e41ba759aed45d9ddee4d585f70fe1f6))
+
 # [0.15.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.14.1...v0.15.0) (2023-08-05)
 
 
