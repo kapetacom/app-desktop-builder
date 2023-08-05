@@ -1,3 +1,10 @@
+# [0.15.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.14.1...v0.15.0) (2023-08-05)
+
+
+### Features
+
+* Added blockhub modal ([#46](https://github.com/kapetacom/app-desktop-builder/issues/46)) ([302a0ee](https://github.com/kapetacom/app-desktop-builder/commit/302a0ee80a4f503d7031691ba21bc223c2d98113))
+
 ## [0.14.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.14.0...v0.14.1) (2023-08-03)
 
 
