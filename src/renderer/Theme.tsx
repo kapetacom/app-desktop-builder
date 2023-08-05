@@ -4,9 +4,7 @@ import {
     LinkProps as RouterLinkProps,
 } from 'react-router-dom';
 import { LinkProps } from '@mui/material/Link';
-
-// TODO: Fix this import path, and figure out light/dark theme
-import { lightTheme, darkTheme } from '@kapeta/style/dist/src/themes/mui';
+import { lightTheme, darkTheme } from '@kapeta/style';
 import { createTheme } from '@mui/material';
 
 const LinkBehavior = React.forwardRef<

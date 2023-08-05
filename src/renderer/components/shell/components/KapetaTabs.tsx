@@ -1,5 +1,5 @@
 import { Tab, Tabs } from '@mui/material';
-import { lightTheme } from '@kapeta/style/dist/src/themes/mui';
+import { lightTheme } from '@kapeta/style';
 import { createStyled } from '@mui/system';
 
 /**
@@ -21,7 +21,7 @@ export const KapetaTab = styled(Tab, {
         maxWidth: '214px',
         textTransform: 'none',
     },
-    ({ variant, theme }) => {
+    ({ variant, theme }: { variant?: 'deploy' | 'edit'; theme: any }) => {
         const bg =
             variant &&
             {
