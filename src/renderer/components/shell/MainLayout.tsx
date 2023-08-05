@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import { useMatches } from 'react-router-dom';
 import './MainLayout.less';
-import { Context, MenuSection } from './types/shell';
+import { MenuSection } from './types/shell';
 import { MiniDrawer } from './components/MiniDrawer';
 import { ContextPicker } from './components/ContextPicker';
 import { KapetaIcon } from './components/KapetaIcon';
@@ -21,6 +21,7 @@ import {
 } from './components/SidebarMenu';
 import { CustomIcon } from './components/CustomIcon';
 import { MemberIdentity } from '@kapeta/ui-web-types';
+import { BlockhubShell } from './components/BlockhubShell';
 
 interface ConsoleLocation {
     pathname: string;
@@ -48,80 +49,99 @@ interface Props {
 }
 
 export const MainLayout = (props: Props) => {
-    const [isOpen, setIsOpen] = useState(true);
-    const toggle = () => setIsOpen(!isOpen);
+    const [blockhubIsOpen, setBlockhubIsOpen] = useState(false);
+    const [drawerIsOpen, setDrawerIsOpen] = useState(true);
+    const toggleDrawer = () => setDrawerIsOpen(!drawerIsOpen);
 
     const matches = useMatches();
 
     return (
-        <section className="main-layout">
-            <MiniDrawer variant="permanent" open={isOpen}>
-                <DrawerHeader>
-                    <IconButton
-                        sx={{
-                            display: 'block',
-                            padding: 0,
-                            width: '100%',
-                            '&:hover': { backgroundColor: 'inherit' },
-                        }}
-                        onClick={toggle}
-                    >
-                        {isOpen ? (
-                            <Logo height={28} width={122} />
-                        ) : (
-                            <KapetaIcon />
-                        )}
-                    </IconButton>
-                </DrawerHeader>
-                <SidebarList>
-                    {props.menu
-                        .filter((item) => !item.hidden)
-                        .map((item) => {
-                            const linkPath = item.path;
-
-                            const current = !!matches.find(
-                                (m) => m.pathname === linkPath
-                            );
-                            let icon = item.error ? (
-                                <i className="fa fa-exclamation-triangle" />
+        <>
+            <section className="main-layout">
+                <MiniDrawer variant="permanent" open={drawerIsOpen}>
+                    <DrawerHeader>
+                        <IconButton
+                            sx={{
+                                display: 'block',
+                                padding: 0,
+                                width: '100%',
+                                '&:hover': { backgroundColor: 'inherit' },
+                            }}
+                            onClick={toggleDrawer}
+                        >
+                            {drawerIsOpen ? (
+                                <Logo height={28} width={122} />
                             ) : (
-                                item.icon || <CustomIcon icon="Block" />
-                            );
-                            icon = item.loading ? (
-                                <i className="fa fa-circle-notch fa-spin" />
-                            ) : (
-                                icon
-                            );
+                                <KapetaIcon />
+                            )}
+                        </IconButton>
+                    </DrawerHeader>
+                    <SidebarList>
+                        {props.menu
+                            .filter((item) => !item.hidden)
+                            .map((item) => {
+                                const linkPath = item.path;
 
-                            return (
-                                <SidebarListItem key={`${linkPath}-item`}>
-                                    <SidebarListItemButton
-                                        href={item.path}
-                                        selected={current}
-                                    >
-                                        <ListItemIcon>{icon}</ListItemIcon>
-                                        <ListItemText primary={item.name} />
-                                    </SidebarListItemButton>
-                                </SidebarListItem>
-                            );
-                        })}
+                                const current = !!matches.find(
+                                    (m) => m.pathname === linkPath
+                                );
+                                let icon = item.error ? (
+                                    <i className="fa fa-exclamation-triangle" />
+                                ) : (
+                                    item.icon || <CustomIcon icon="Block" />
+                                );
+                                icon = item.loading ? (
+                                    <i className="fa fa-circle-notch fa-spin" />
+                                ) : (
+                                    icon
+                                );
 
-                    <Divider />
-                </SidebarList>
-                <ContextPicker
-                    isOpen={isOpen}
-                    contexts={props.context?.contexts}
-                    handle={props.context?.activeContext}
-                    onChangeContext={(ctx) =>
-                        props.context?.setActiveContext(ctx)
-                    }
-                />
-            </MiniDrawer>
+                                return (
+                                    <SidebarListItem key={`${linkPath}-item`}>
+                                        <SidebarListItemButton
+                                            href={item.path}
+                                            selected={current}
+                                        >
+                                            <ListItemIcon>{icon}</ListItemIcon>
+                                            <ListItemText primary={item.name} />
+                                        </SidebarListItemButton>
+                                    </SidebarListItem>
+                                );
+                            })}
 
-            <section style={{ flexGrow: 1 }}>
-                {props.topBar}
-                <main>{props.children}</main>
+                        <Divider />
+                        <SidebarListItem>
+                            <SidebarListItemButton
+                                onClick={() => setBlockhubIsOpen(true)}
+                            >
+                                <ListItemIcon>
+                                    <CustomIcon icon="Block" />
+                                </ListItemIcon>
+                                <ListItemText primary={'Block Hub'} />
+                            </SidebarListItemButton>
+                        </SidebarListItem>
+                    </SidebarList>
+                    <ContextPicker
+                        isOpen={drawerIsOpen}
+                        contexts={props.context?.contexts}
+                        handle={props.context?.activeContext}
+                        onChangeContext={(ctx) =>
+                            props.context?.setActiveContext(ctx)
+                        }
+                    />
+                </MiniDrawer>
+
+                <section style={{ flexGrow: 1 }}>
+                    {props.topBar}
+                    <main>{props.children}</main>
+                </section>
             </section>
-        </section>
+
+            <BlockhubShell
+                handle={props.context?.activeContext?.identity.handle}
+                open={blockhubIsOpen}
+                onClose={() => setBlockhubIsOpen(false)}
+            />
+        </>
     );
 };

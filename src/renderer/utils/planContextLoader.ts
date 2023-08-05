@@ -10,6 +10,7 @@ import {
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import _ from 'lodash';
 import {
+    Asset,
     IBlockTypeProvider,
     ILanguageTargetProvider,
     IResourceTypeProvider,
@@ -18,6 +19,7 @@ import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { Plan, Resource } from '@kapeta/schemas';
 import Kapeta from '../kapeta';
+import { AsyncState } from 'react-use/lib/useAsyncFn';
 
 const PROVIDER_CACHE = {};
 const BLOCK_CACHE = {};
@@ -129,17 +131,61 @@ const fetchLocalProviders = () => {
     return simpleFetch(clusterPath(`/providers`));
 };
 
-export const useBlockAssets = () => {
+export const useAssets = () => {
     return useAsync(async () => {
-        const assets = await AssetService.list();
-        return assets.filter((a) => a.kind !== 'core/plan');
+        return await AssetService.list();
     }, []);
+};
+
+export const useBlockKinds = (assets: AsyncState<Asset[]>): Set<string> => {
+    return useMemo(() => {
+        if (!assets.value) {
+            return new Set<string>();
+        }
+
+        return new Set<string>(
+            assets.value
+                .filter((asset) => {
+                    // Only blocks do not have a core kind
+                    return (
+                        asset.exists &&
+                        [
+                            'core/block-type',
+                            'core/block-type-operator',
+                        ].includes(asset.kind)
+                    );
+                })
+                .map((asset) => {
+                    return parseKapetaUri(asset.ref).fullName;
+                })
+        );
+    }, [assets.value]);
+};
+
+export const useBlockAssets = (
+    assets: AsyncState<Asset[]>,
+    blockTypeKinds: Set<string>
+): Asset[] => {
+    return useMemo(() => {
+        if (!assets.value) {
+            return [];
+        }
+        return assets.value.filter((asset) => {
+            // Only blocks do not have a core kind
+            return (
+                asset.exists &&
+                blockTypeKinds.has(parseKapetaUri(asset.kind).fullName)
+            );
+        });
+    }, [assets.value]);
 };
 
 export const useLoadedPlanContext = (plan: Plan | undefined) => {
     const [currentlyLoading, setCurrentlyLoading] = useState('');
 
-    const blockAssets = useBlockAssets();
+    const assets = useAssets();
+    const blockTypeKinds = useBlockKinds(assets);
+    const blockAssets = useBlockAssets(assets, blockTypeKinds);
 
     const localProviderRefs = useAsync(async () => {
         const providers = await fetchLocalProviders();
@@ -149,27 +195,27 @@ export const useLoadedPlanContext = (plan: Plan | undefined) => {
     }, [plan]);
 
     const blockRefs = useMemo(() => {
-        const blockKinds = new Set<string>();
-        if (!plan || !blockAssets.value) {
-            return blockKinds;
+        const refs = new Set<string>();
+        if (!plan || !blockAssets) {
+            return refs;
         }
 
         plan.spec?.blocks?.forEach((block) => {
-            blockKinds.add(block.block.ref);
+            refs.add(block.block.ref);
         });
 
-        blockAssets.value.forEach((asset) => {
-            blockKinds.add(asset.ref);
+        blockAssets.forEach((asset) => {
+            refs.add(asset.ref);
         });
 
-        return blockKinds;
-    }, [plan, blockAssets.value]);
+        return refs;
+    }, [plan, blockAssets]);
 
     const resourceAssets = useAsync(async (): Promise<
         IResourceTypeProvider[] | null
     > => {
         const providerKinds = new Set<string>();
-        if (!blockAssets.value || !localProviderRefs.value) {
+        if (!blockAssets || !localProviderRefs.value) {
             // Return null to indicate that we are still loading
             return null;
         }
@@ -181,10 +227,11 @@ export const useLoadedPlanContext = (plan: Plan | undefined) => {
                 return;
             }
             const blockUri = parseKapetaUri(blockRef);
-            let block = blockAssets.value?.find((asset) =>
+            let block = blockAssets?.find((asset) =>
                 parseKapetaUri(asset.ref).equals(blockUri)
             );
             if (!block) {
+                // Will also cause installation if not already installed
                 block = await BlockService.get(blockRef);
                 setCurrentlyLoading(blockRef);
             }
@@ -215,8 +262,8 @@ export const useLoadedPlanContext = (plan: Plan | undefined) => {
         return ResourceTypeProvider.list();
     }, [
         blockRefs,
-        blockAssets.loading,
-        blockAssets.value,
+        assets.loading,
+        assets.value,
         localProviderRefs.loading,
         localProviderRefs.value,
     ]);
@@ -224,15 +271,12 @@ export const useLoadedPlanContext = (plan: Plan | undefined) => {
     return {
         resourceAssets: resourceAssets.value,
         currentlyLoading,
-        blocks: blockAssets.value,
+        blocks: blockAssets,
         loading:
-            blockAssets.loading ||
+            assets.loading ||
             resourceAssets.loading ||
             localProviderRefs.loading ||
             !resourceAssets.value,
-        error:
-            blockAssets.error ||
-            resourceAssets.error ||
-            localProviderRefs.error,
+        error: assets.error || resourceAssets.error || localProviderRefs.error,
     };
 };

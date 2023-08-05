@@ -73,14 +73,6 @@ export function Shell() {
                     open: false,
                     icon: <CustomIcon icon="Deploy" />,
                 },
-                {
-                    id: 'blockhub',
-                    path: '/blockhub',
-                    loading: false,
-                    name: 'Blockhub',
-                    open: false,
-                    icon: <CustomIcon icon="Block" />,
-                },
             ]}
             context={{
                 contexts: contexts.contexts?.memberships,

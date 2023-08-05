@@ -7,13 +7,13 @@ import {
 } from 'react-router-dom';
 import { useEffect } from 'react';
 import { PlannerService } from '@kapeta/ui-web-context';
-import { useAsync, useAsyncFn } from 'react-use';
+import { useAsyncFn } from 'react-use';
 import { Root } from './Root';
 import { kapetaDark } from './Theme';
 import { initialise } from './context';
 import { PlanView } from './views/PlanView';
 import { PlanOverview } from './components/plan-overview/PlanOverview';
-import { getToken } from './utils/tokenHelper';
+import { useAuthToken } from './utils/tokenHelper';
 import { KapetaContextProvider, useKapetaContext } from './hooks/contextHook';
 
 const router = createMemoryRouter([
@@ -65,7 +65,7 @@ const router = createMemoryRouter([
                 Component: () => {
                     // iframe to deployments microfrontend
                     const context = useKapetaContext();
-                    const token = useAsync(() => getToken());
+                    const token = useAuthToken();
 
                     if (context.loading || token.loading) {
                         return <div>Loading...</div>;
@@ -74,26 +74,6 @@ const router = createMemoryRouter([
                     return (
                         <iframe
                             src={`${window.KapetaDesktop.urls.deployments}/${context.activeContext?.identity.handle}?token=${token.value}`}
-                            width="100%"
-                            height="100%"
-                        />
-                    );
-                },
-            },
-            {
-                path: 'blockhub',
-                Component: () => {
-                    // iframe to blockhub/registry microfrontend
-                    const context = useKapetaContext();
-                    const token = useAsync(() => getToken());
-
-                    if (context.loading || token.loading) {
-                        return <div>Loading...</div>;
-                    }
-
-                    return (
-                        <iframe
-                            src={`${window.KapetaDesktop.urls.blockhub}/${context.activeContext?.identity.handle}?token=${token.value}`}
                             width="100%"
                             height="100%"
                         />

@@ -15,7 +15,11 @@ import { PlanOverviewTopBar } from './PlanOverviewTopBar';
 
 import './PlanOverview.less';
 import { getAssetTitle } from '../plan-editor/helpers';
-import { useBlockAssets } from '../../utils/planContextLoader';
+import {
+    useAssets,
+    useBlockAssets,
+    useBlockKinds,
+} from '../../utils/planContextLoader';
 
 interface MiniPlanProps {
     systemId: string;
@@ -38,7 +42,9 @@ export const PlanOverview = (props: Props) => {
     const navigateTo = useNavigate();
     const [activePlanMenu, setActivePlanMenu] = useState(-1);
 
-    const blockAssets = useBlockAssets();
+    const assets = useAssets();
+    const blockTypeKinds = useBlockKinds(assets);
+    const blockAssets = useBlockAssets(assets, blockTypeKinds);
 
     const setOpenMenu = (index: number) => {
         if (index === activePlanMenu) {
@@ -143,7 +149,7 @@ export const PlanOverview = (props: Props) => {
                             <MiniPlan
                                 systemId={asset.ref}
                                 plan={asset.data}
-                                blockAssets={blockAssets.value ?? []}
+                                blockAssets={blockAssets}
                                 mode={PlannerMode.VIEW}
                             />
                         </PlanOverviewItem>

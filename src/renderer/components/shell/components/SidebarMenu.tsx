@@ -15,6 +15,7 @@ export const SidebarList = styled(List, {
         minWidth: '40px',
         paddingRight: theme.spacing(1.5),
     },
+    gap: '24px',
     '& .MuiListItemButton-root': {
         padding: theme.spacing(1, isOpen ? 2 : 1.5),
     },
