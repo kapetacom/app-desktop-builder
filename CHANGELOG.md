@@ -1,3 +1,10 @@
+## [0.15.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.15.4...v0.15.5) (2023-08-06)
+
+
+### Bug Fixes
+
+* Max heap ([634150d](https://github.com/kapetacom/app-desktop-builder/commit/634150d43006acf697f645b69e1396a1c29f46c8))
+
 ## [0.15.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.15.3...v0.15.4) (2023-08-06)
 
 
