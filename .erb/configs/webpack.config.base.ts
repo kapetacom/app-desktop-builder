@@ -13,7 +13,7 @@ const configuration: webpack.Configuration = {
 
     stats: 'errors-only',
 
-    parallelism: 50,
+    parallelism: 20,
 
     output: {
         path: webpackPaths.srcPath,
