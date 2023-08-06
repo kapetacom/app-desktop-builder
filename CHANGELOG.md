@@ -1,3 +1,10 @@
+## [0.15.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.15.1...v0.15.2) (2023-08-06)
+
+
+### Bug Fixes
+
+* Reduce parallelism ([579ce91](https://github.com/kapetacom/app-desktop-builder/commit/579ce91a27758eb754d37ee418ee59bd9cef3c86))
+
 ## [0.15.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.15.0...v0.15.1) (2023-08-05)
 
 
