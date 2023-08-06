@@ -1,3 +1,10 @@
+## [0.15.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.15.3...v0.15.4) (2023-08-06)
+
+
+### Bug Fixes
+
+* Increase heap ([16dc6b3](https://github.com/kapetacom/app-desktop-builder/commit/16dc6b3d1ccdc5c565440331fc3d12c0e3a815d8))
+
 ## [0.15.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.15.2...v0.15.3) (2023-08-06)
 
 
