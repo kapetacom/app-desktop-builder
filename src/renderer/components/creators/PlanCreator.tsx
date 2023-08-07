@@ -46,7 +46,6 @@ export const PlanCreator = (props: PlanImportProps) => {
             </div>
             <AssetCreator
                 state={creatorState}
-                onStateChanged={setCreatorState}
                 title="Create new plan..."
                 skipFiles={props.skipFiles}
                 createNewKind={createNewPlan}

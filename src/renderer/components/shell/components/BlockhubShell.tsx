@@ -12,6 +12,8 @@ import { useAsync } from 'react-use';
 import { AssetService } from '@kapeta/ui-web-context';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import { useKapetaContext } from '../../../hooks/contextHook';
+import { versionIsBigger } from '../../../utils/versionHelpers';
+import { Asset } from '@kapeta/ui-web-types';
 
 interface Props {
     handle?: string;
@@ -29,15 +31,55 @@ export const BlockhubShell = (props: Props) => {
             case BlockhubCategory.INSTALLED:
                 const all = await api.registry().list();
                 const installedAssets = await AssetService.list();
-                return all.filter((asset) =>
-                    installedAssets.some((installed) => {
-                        const installedUri = parseKapetaUri(installed.ref);
-                        const assetUri = parseKapetaUri(
-                            asset.content.metadata.name + ':' + asset.version
-                        );
-                        return assetUri.equals(installedUri);
-                    })
-                );
+                const latest: { [p: string]: Asset<any> } = {};
+
+                installedAssets.forEach((installedAsset) => {
+                    const uri = parseKapetaUri(installedAsset.ref);
+                    if (latest[uri.fullName]) {
+                        if (
+                            versionIsBigger(
+                                installedAsset.version,
+                                latest[uri.fullName].version
+                            )
+                        ) {
+                            latest[uri.fullName] = installedAsset;
+                        }
+                        return;
+                    }
+                    latest[uri.fullName] = installedAsset;
+                    return;
+                });
+
+                return [
+                    ...Object.values(latest).map(
+                        (installedAsset): AssetDisplay<any> => {
+                            const installedUri = parseKapetaUri(
+                                installedAsset.ref
+                            );
+                            const asset = all.find((asset) => {
+                                const assetUri = parseKapetaUri(
+                                    asset.content.metadata.name +
+                                        ':' +
+                                        asset.version
+                                );
+                                return assetUri.equals(installedUri);
+                            });
+
+                            if (asset) {
+                                return asset;
+                            }
+
+                            return {
+                                content: installedAsset.data,
+                                version: installedAsset.version,
+                                readme: {
+                                    content: 'Local Asset',
+                                    type: 'text/markdown',
+                                },
+                            };
+                        }
+                    ),
+                ];
             case BlockhubCategory.OWN:
                 if (!props.handle) {
                     // Not logged in
