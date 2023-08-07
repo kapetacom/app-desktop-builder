@@ -6,6 +6,7 @@ import {
     PlannerMode,
     PlannerResourceDrawer,
     withPlannerContext,
+    randomUUID,
 } from '@kapeta/ui-web-plan-editor';
 import React, {
     ForwardedRef,
@@ -139,7 +140,29 @@ export const PlanEditor = withPlannerContext(
                                 kapetaContext.blockHub.open(
                                     planner.asset!,
                                     (selection) => {
-                                        console.log('Got selection', selection);
+                                        selection.forEach((asset, i) => {
+                                            const ref = normalizeKapetaUri(
+                                                asset.content.metadata.name +
+                                                    ':' +
+                                                    asset.version
+                                            );
+                                            planner.addBlockInstance({
+                                                name:
+                                                    asset.content.metadata
+                                                        .title ??
+                                                    parseKapetaUri(ref).name,
+                                                id: randomUUID(),
+                                                block: {
+                                                    ref,
+                                                },
+                                                dimensions: {
+                                                    top: 50 + i * 150,
+                                                    left: 50,
+                                                    width: 0,
+                                                    height: 0,
+                                                },
+                                            });
+                                        });
                                     }
                                 );
                             }}

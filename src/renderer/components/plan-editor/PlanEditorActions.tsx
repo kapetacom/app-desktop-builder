@@ -110,12 +110,10 @@ export const usePlanEditorActions = (
                     label: 'Inspect',
                 },
                 {
-                    enabled(context, { blockInstance }): boolean {
+                    enabled(context): boolean {
                         return (
-                            planner.mode !== PlannerMode.VIEW &&
-                            !!blockInstance &&
-                            parseKapetaUri(blockInstance.block.ref).version ===
-                                'local'
+                            context.mode === PlannerMode.EDIT &&
+                            context.uri?.version === 'local'
                         );
                     },
                     async onClick(context, { blockInstance }) {
@@ -136,7 +134,7 @@ export const usePlanEditorActions = (
                 {
                     enabled(context, { blockInstance }): boolean {
                         return (
-                            planner.mode !== PlannerMode.VIEW &&
+                            planner.mode === PlannerMode.EDIT &&
                             !!blockInstance &&
                             parseKapetaUri(blockInstance.block.ref).version ===
                                 'local'

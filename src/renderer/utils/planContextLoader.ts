@@ -107,26 +107,6 @@ export const loadProvider = async (providerKind: string) => {
     PROVIDER_CACHE[providerKind] = true;
 };
 
-function parseVersion(a: string) {
-    return a.split('.').map((v) => parseInt(v, 10));
-}
-
-function versionIsBigger(a: string, b: string) {
-    const aVersion = parseVersion(a);
-    const bVersion = parseVersion(b);
-
-    for (let i = 0; i < aVersion.length; i++) {
-        if (aVersion[i] > bVersion[i]) {
-            return true;
-        }
-        if (aVersion[i] < bVersion[i]) {
-            return false;
-        }
-    }
-
-    return false;
-}
-
 const fetchLocalProviders = () => {
     return simpleFetch(clusterPath(`/providers`));
 };
