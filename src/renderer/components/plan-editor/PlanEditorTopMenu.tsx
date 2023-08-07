@@ -35,7 +35,8 @@ import { PlannerContext } from '@kapeta/ui-web-plan-editor';
 import { useAsync, useAsyncFn } from 'react-use';
 import { PlanForm } from '../forms/PlanForm';
 import { getPlanConfig, setPlanConfig } from '../../api/LocalConfigService';
-import { Button, CircularProgress, Stack } from '@mui/material';
+import { Button, CircularProgress, Paper, Stack } from '@mui/material';
+import { grey } from '@mui/material/colors';
 
 const ConfigSchemaEditor = () => {
     const configurationField = useFormContextField('spec.configuration');
@@ -166,12 +167,6 @@ export const PlanEditorTopMenu = (props: Props) => {
         }
     };
 
-    const containerClass = toClass({
-        'top-menu': true,
-        'read-only': props.readonly,
-        playing: anyPlaying,
-    });
-
     useEffect(() => {
         const updateState = async () => {
             const status = await InstanceService.getInstanceStatusForPlan(
@@ -218,7 +213,23 @@ export const PlanEditorTopMenu = (props: Props) => {
     }, [props.systemId, planner.plan, showSettings, reloadConfig]);
 
     return (
-        <div className={containerClass}>
+        <Paper
+            className={'planner-top-menu'}
+            elevation={0}
+            sx={{
+                padding: '7px 10px',
+                position: 'absolute',
+                borderRadius: 0,
+                top: 0,
+                left: props.readonly ? 0 : 284,
+                borderLeft: `1px solid ${grey[200]}`,
+                right: 0,
+                height: 52,
+                lineHeight: 52,
+                zIndex: 6,
+                boxSizing: 'border-box',
+            }}
+        >
             <Stack spacing={2} direction="row">
                 <Button
                     disabled={allPlaying || processing}
@@ -374,6 +385,6 @@ export const PlanEditorTopMenu = (props: Props) => {
                     </FormButtons>
                 </FormContainer>
             </Modal>
-        </div>
+        </Paper>
     );
 };

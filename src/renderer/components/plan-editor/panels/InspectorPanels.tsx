@@ -1,8 +1,7 @@
-import { ItemType } from '@kapeta/ui-web-types';
 import { Connection } from '@kapeta/schemas';
 import React from 'react';
 import { EditorBlockInspectorPanel } from './block-inspector/EditorBlockInspectorPanel';
-import { BlockInfo, InspectItemInfo } from '../types';
+import { DataEntityType, InspectItemInfo } from '../types';
 import { ConnectionInspectorPanel } from './connection-inspector/ConnectionInspectorPanel';
 
 interface Props {
@@ -19,19 +18,19 @@ export const InspectorPanels = (props: Props) => {
             <EditorBlockInspectorPanel
                 systemId={props.systemId}
                 instance={
-                    inspectInfo?.type === ItemType.BLOCK
+                    inspectInfo?.type === DataEntityType.INSTANCE
                         ? inspectInfo?.item.instance
                         : null
                 }
-                open={inspectInfo?.type === ItemType.BLOCK}
+                open={inspectInfo?.type === DataEntityType.INSTANCE}
                 onClosed={props.onClosed}
             />
 
             <ConnectionInspectorPanel
-                open={inspectInfo?.type === ItemType.CONNECTION}
+                open={inspectInfo?.type === DataEntityType.CONNECTION}
                 onClosed={props.onClosed}
                 connection={
-                    inspectInfo?.type === ItemType.CONNECTION
+                    inspectInfo?.type === DataEntityType.CONNECTION
                         ? (inspectInfo?.item as Connection)
                         : null
                 }

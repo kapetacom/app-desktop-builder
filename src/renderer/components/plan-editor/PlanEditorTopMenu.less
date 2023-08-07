@@ -2,30 +2,6 @@
 @import '~@kapeta/ui-web-components/styles/functions.less';
 @import 'vars.less';
 
-.top-menu {
-    .container();
-    background-color: @gray-xdark;
-    color: @bw-planner-background;
-    padding: 7px 10px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: @side-bar-size;
-    height: @top-bar-size;
-    line-height: @top-bar-size;
-    z-index: 6;
-    box-sizing: border-box;
-
-    &.read-only {
-        right: 0;
-    }
-    .name {
-        display: inline-block;
-        float: left;
-        margin-right: 25px;
-    }
-}
-
 .modal-plan-settings {
     .panel-container {
         height: 600px;

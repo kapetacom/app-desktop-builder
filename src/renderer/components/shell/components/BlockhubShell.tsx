@@ -3,18 +3,23 @@ import { installerService } from '../../../api/installerService';
 import { api, assetFetcher } from '../../../api/APIService';
 import { ThemeProvider } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { BlockhubCategory, BlockhubModal } from '@kapeta/ui-web-components';
+import {
+    AssetDisplay,
+    BlockhubCategory,
+    BlockhubModal,
+} from '@kapeta/ui-web-components';
 import { useAsync } from 'react-use';
 import { AssetService } from '@kapeta/ui-web-context';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
+import { useKapetaContext } from '../../../hooks/contextHook';
 
 interface Props {
-    open: boolean;
     handle?: string;
-    onClose: () => void;
 }
 
 export const BlockhubShell = (props: Props) => {
+    const kapetaContext = useKapetaContext();
+
     const [currentCategory, setCurrentCategory] = useState<BlockhubCategory>(
         BlockhubCategory.INSTALLED
     );
@@ -45,23 +50,29 @@ export const BlockhubShell = (props: Props) => {
     }, [currentCategory, props.handle]);
 
     useEffect(() => {
-        if (props.open) {
+        if (kapetaContext.blockHub.visible) {
             setCurrentCategory(BlockhubCategory.INSTALLED);
         }
-    }, [props.open]);
+    }, [kapetaContext.blockHub.visible]);
 
     return (
         <ThemeProvider theme={kapetaLight}>
             <BlockhubModal
-                open={props.open}
+                open={kapetaContext.blockHub.visible}
                 installerService={installerService}
+                plan={kapetaContext.blockHub.opener?.source}
                 fetcher={assetFetcher}
                 assets={assets}
                 onFilterChange={(category: BlockhubCategory) => {
                     setCurrentCategory(category);
                 }}
+                onSelect={(selection: AssetDisplay[]) => {
+                    if (kapetaContext.blockHub.opener?.callback) {
+                        kapetaContext.blockHub.opener.callback(selection);
+                    }
+                }}
                 onClose={() => {
-                    props.onClose();
+                    kapetaContext.blockHub.close();
                 }}
             />
         </ThemeProvider>

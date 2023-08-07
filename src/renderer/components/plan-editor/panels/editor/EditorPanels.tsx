@@ -23,7 +23,7 @@ import {
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 
 import type { IResourceTypeProvider, SchemaKind } from '@kapeta/ui-web-types';
-import { ItemType, ResourceRole } from '@kapeta/ui-web-types';
+import { ResourceRole } from '@kapeta/ui-web-types';
 import {
     BlockDefinition,
     Resource,
@@ -36,7 +36,7 @@ import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import { useAsync } from 'react-use';
 import { cloneDeep } from 'lodash';
 import { PlannerContext, PlannerContextData } from '@kapeta/ui-web-plan-editor';
-import { BlockInfo, EditItemInfo } from '../../types';
+import { BlockInfo, DataEntityType, EditItemInfo } from '../../types';
 
 import './ItemEditorPanel.less';
 import { uploadAttachment } from '../../../../api/AttachmentService';
@@ -150,7 +150,7 @@ const InnerForm = ({ planner, info }: InnerFormProps) => {
         []
     );
 
-    if (info.type === ItemType.CONNECTION) {
+    if (info.type === DataEntityType.CONNECTION) {
         const connection = info.item as Connection;
 
         const source = planner.getResourceByBlockIdAndName(
@@ -208,7 +208,7 @@ const InnerForm = ({ planner, info }: InnerFormProps) => {
         );
     }
 
-    if (info.type === ItemType.BLOCK) {
+    if (info.type === DataEntityType.INSTANCE) {
         const data = info.item as BlockInfo;
         const kind = kindField.get(data.block.kind);
         const BlockTypeConfig = BlockTypeProvider.get(kind);
@@ -235,7 +235,7 @@ const InnerForm = ({ planner, info }: InnerFormProps) => {
         );
     }
 
-    if (info.type === ItemType.RESOURCE) {
+    if (info.type === DataEntityType.RESOURCE) {
         const data = info.item.resource as Resource;
         const kind = kindField.get(data.kind) || data.kind;
         let resourceType: IResourceTypeProvider | null = null;
@@ -288,10 +288,11 @@ export const EditorPanels: React.FC<Props> = (props) => {
     // callbacks
     const saveAndClose = async (data: any) => {
         switch (props.info?.type) {
-            case ItemType.CONNECTION:
+            case DataEntityType.CONNECTION:
                 planner.updateConnectionMapping(data as Connection);
                 break;
-            case ItemType.BLOCK:
+            case DataEntityType.INSTANCE:
+            case DataEntityType.BLOCK:
                 const blockData = data as BlockDefinition;
 
                 await replaceBase64IconWithUrl(blockData);
@@ -301,7 +302,7 @@ export const EditorPanels: React.FC<Props> = (props) => {
                     blockData
                 );
                 break;
-            case ItemType.RESOURCE: {
+            case DataEntityType.RESOURCE: {
                 const resource = props.info.item.resource as Resource;
                 const role = props.info.item.block?.spec?.consumers?.includes(
                     resource
@@ -324,13 +325,17 @@ export const EditorPanels: React.FC<Props> = (props) => {
         if (props.info?.creating) {
             // We remove the item if it was created in this session and then cancelled
             switch (props.info?.type) {
-                case ItemType.CONNECTION:
+                case DataEntityType.CONNECTION:
                     planner.removeConnection(props.info.item);
                     break;
-                case ItemType.BLOCK:
+                case DataEntityType.BLOCK:
+                    planner.removeBlockDefinition(props.info.item.asset);
                     planner.removeBlockInstance(props.info.item.instance.id);
                     break;
-                case ItemType.RESOURCE: {
+                case DataEntityType.INSTANCE:
+                    planner.removeBlockInstance(props.info.item.instance.id);
+                    break;
+                case DataEntityType.RESOURCE: {
                     const resource = props.info.item.resource;
                     const resourceType = ResourceTypeProvider.get(
                         resource.kind
@@ -349,11 +354,13 @@ export const EditorPanels: React.FC<Props> = (props) => {
 
     const initialValue = useMemo(() => {
         switch (props.info?.type) {
-            case ItemType.CONNECTION:
+            case DataEntityType.CONNECTION:
                 return cloneDeep(props.info.item);
-            case ItemType.BLOCK:
+            case DataEntityType.INSTANCE:
                 return cloneDeep(props.info.item.block);
-            case ItemType.RESOURCE:
+            case DataEntityType.BLOCK:
+                return cloneDeep(props.info.item.asset.data);
+            case DataEntityType.RESOURCE:
                 return cloneDeep(props.info.item.resource);
         }
 

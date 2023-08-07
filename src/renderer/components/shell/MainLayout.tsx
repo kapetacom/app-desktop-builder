@@ -22,6 +22,7 @@ import {
 import { CustomIcon } from './components/CustomIcon';
 import { MemberIdentity } from '@kapeta/ui-web-types';
 import { BlockhubShell } from './components/BlockhubShell';
+import { useKapetaContext } from '../../hooks/contextHook';
 
 interface ConsoleLocation {
     pathname: string;
@@ -49,7 +50,8 @@ interface Props {
 }
 
 export const MainLayout = (props: Props) => {
-    const [blockhubIsOpen, setBlockhubIsOpen] = useState(false);
+    const kapetaContext = useKapetaContext();
+
     const [drawerIsOpen, setDrawerIsOpen] = useState(true);
     const toggleDrawer = () => setDrawerIsOpen(!drawerIsOpen);
 
@@ -112,7 +114,7 @@ export const MainLayout = (props: Props) => {
                         <Divider />
                         <SidebarListItem>
                             <SidebarListItemButton
-                                onClick={() => setBlockhubIsOpen(true)}
+                                onClick={() => kapetaContext.blockHub.open()}
                             >
                                 <ListItemIcon>
                                     <CustomIcon icon="Block" />
@@ -139,8 +141,6 @@ export const MainLayout = (props: Props) => {
 
             <BlockhubShell
                 handle={props.context?.activeContext?.identity.handle}
-                open={blockhubIsOpen}
-                onClose={() => setBlockhubIsOpen(false)}
             />
         </>
     );

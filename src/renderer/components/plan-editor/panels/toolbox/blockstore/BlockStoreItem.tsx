@@ -1,12 +1,12 @@
 import React, { useContext, useMemo } from 'react';
-import { Asset, ItemType, Point } from '@kapeta/ui-web-types';
+import { Asset, Point } from '@kapeta/ui-web-types';
 import { toClass } from '@kapeta/ui-web-utils';
 import { BlockDefinition } from '@kapeta/schemas';
 
 import { DnDDraggable, PlannerContext } from '@kapeta/ui-web-plan-editor';
 
 import './BlockStoreItem.less';
-import { DraggableItem } from '../../../types';
+import { DataEntityType, DraggableItem } from '../../../types';
 
 interface BlockStoreItemProps {
     item: Asset<BlockDefinition>;
@@ -29,7 +29,7 @@ export const BlockStoreItem = (props: BlockStoreItemProps) => {
 
     const draggable: DraggableItem = useMemo(() => {
         return {
-            type: ItemType.BLOCK,
+            type: DataEntityType.INSTANCE,
             data: {
                 block: props.item,
                 name: props.item.data.metadata.name,

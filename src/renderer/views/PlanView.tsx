@@ -88,6 +88,7 @@ export const PlanView = (props: PlanViewProps) => {
                 blocks && (
                     <PlanEditor
                         plan={planData.value.data}
+                        asset={planData.value}
                         resourceAssets={resourceAssets}
                         instanceInfos={instanceInfos.value}
                         instanceStates={instanceStatusMap}
@@ -104,6 +105,9 @@ export const PlanView = (props: PlanViewProps) => {
                             }
                         }}
                         onAssetChange={async (asset) => {
+                            if (!asset.exists) {
+                                return;
+                            }
                             try {
                                 await AssetService.update(
                                     normalizeKapetaUri(asset.ref),
