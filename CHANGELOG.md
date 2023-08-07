@@ -1,3 +1,10 @@
+# [0.17.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.16.0...v0.17.0) (2023-08-07)
+
+
+### Features
+
+* Fully integrated the block hub modal into plan ([#48](https://github.com/kapetacom/app-desktop-builder/issues/48)) ([ec3c93d](https://github.com/kapetacom/app-desktop-builder/commit/ec3c93d9ea42ddd9259df397213f07922878575f))
+
 # [0.16.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.15.5...v0.16.0) (2023-08-07)
 
 
