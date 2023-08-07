@@ -1,3 +1,10 @@
+# [0.16.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.15.5...v0.16.0) (2023-08-07)
+
+
+### Features
+
+* Integrate block hub with plan editor ([#47](https://github.com/kapetacom/app-desktop-builder/issues/47)) ([3505cf4](https://github.com/kapetacom/app-desktop-builder/commit/3505cf4b478afc9751bab39b7c0c759c9001a2a0))
+
 ## [0.15.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.15.4...v0.15.5) (2023-08-06)
 
 
