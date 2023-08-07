@@ -40,6 +40,8 @@ export enum AssetCreatorState {
 
 interface Props {
     assetService: AssetStore;
+    onAssetCreateStart?: (data: SchemaKind) => void;
+    onAssetCreateEnd?: (errorMessage?: string) => void;
     onDone?: (asset?: Asset) => void;
     skipFiles: string[]; // A collection of files to prevent importing as they are already loaded
     title: string;
@@ -49,7 +51,7 @@ interface Props {
     fileSelectableHandler: (file: FileInfo) => boolean;
     onAssetAdded?: (asset: Asset) => void;
     state: AssetCreatorState;
-    onStateChanged: (state: AssetCreatorState) => void;
+    onCancel?: () => void;
 }
 
 export const AssetCreator = (props: Props) => {
@@ -62,10 +64,6 @@ export const AssetCreator = (props: Props) => {
         resolve?: (string) => void;
         reject?: (any) => void;
     }>({});
-
-    const closeCreatePanel = () => {
-        props.onStateChanged(AssetCreatorState.CLOSED);
-    };
 
     const closeFilePicker = useCallback(() => {
         processing.resolve?.call(null);
@@ -85,7 +83,7 @@ export const AssetCreator = (props: Props) => {
             setProcessing({});
         });
         return newP.promise;
-    }, [setProcessing]);
+    }, []);
 
     const onSubmit = async (data: SchemaKind) => {
         if (useProjectHome && projectHome) {
@@ -107,6 +105,11 @@ export const AssetCreator = (props: Props) => {
             if (content.spec.icon) {
                 await replaceBase64IconWithUrl(content);
             }
+
+            if (props.onAssetCreateStart) {
+                props.onAssetCreateStart(content);
+            }
+
             const assets: Asset[] = await AssetService.create(
                 Path.join(filePath, '/kapeta.yml'),
                 content
@@ -117,8 +120,19 @@ export const AssetCreator = (props: Props) => {
             if (props.onAssetAdded && assets.length > 0) {
                 props.onAssetAdded(assets[0]);
             }
-            props.onDone?.call(null, assets?.[0]);
-        } catch (e) {
+
+            if (props.onDone) {
+                props.onDone(assets[0]);
+            }
+
+            if (props.onAssetCreateEnd) {
+                props.onAssetCreateEnd();
+            }
+        } catch (e: any) {
+            if (props.onAssetCreateEnd) {
+                props.onAssetCreateEnd(e.message);
+            }
+
             showToasty({
                 type: ToastType.ALERT,
                 title: 'Failed to create asset',
@@ -136,14 +150,14 @@ export const AssetCreator = (props: Props) => {
             // When creating we want only folders
             return !!file.folder;
         },
-        [props.state, props.fileSelectableHandler]
+        [props.state]
     );
 
     // Initialization handler, depending on import or create
     useEffect(() => {
         if (props.state === AssetCreatorState.CREATING) {
             // When changed to creating - set new entity
-            setNewEntity(props.createNewKind.call(null));
+            setNewEntity(props.createNewKind());
         }
         if (props.state === AssetCreatorState.IMPORTING) {
             (async () => {
@@ -164,13 +178,7 @@ export const AssetCreator = (props: Props) => {
                 }
             })();
         }
-    }, [
-        props.onDone,
-        props.state,
-        props.assetService,
-        props.createNewKind,
-        waitForFilePicker,
-    ]);
+    }, [props.state, props.assetService, waitForFilePicker]);
 
     const InnerFormRenderer = props.formRenderer;
     return (
@@ -179,7 +187,11 @@ export const AssetCreator = (props: Props) => {
                 open={props.state === AssetCreatorState.CREATING}
                 size={PanelSize.medium}
                 side={PanelAlignment.right}
-                onClose={closeCreatePanel}
+                onClose={() => {
+                    if (props.onCancel) {
+                        props.onCancel();
+                    }
+                }}
                 title={props.title}
             >
                 <div className="asset-creator-form">
@@ -200,7 +212,11 @@ export const AssetCreator = (props: Props) => {
                             <Button
                                 type={ButtonType.BUTTON}
                                 style={ButtonStyle.DANGER}
-                                onClick={closeCreatePanel}
+                                onClick={() => {
+                                    if (props.onCancel) {
+                                        props.onCancel();
+                                    }
+                                }}
                                 width={100}
                                 text="Cancel"
                             />

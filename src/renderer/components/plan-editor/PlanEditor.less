@@ -8,13 +8,19 @@
     background-color: @gray-xdark;
     position: relative;
 
-    .planner-area-position-parent {
-        right: @side-bar-size;
+    .planner-area-container {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: auto !important;
+        height: auto !important;
+        left: @side-bar-size;
     }
 
     &.readonly {
         .planner-area-position-parent {
-            right: 0;
+            left: 0;
         }
     }
 
@@ -26,13 +32,5 @@
             padding: 2px 0 0;
             box-sizing: border-box;
         }
-    }
-}
-
-.plan-editor-toolbox-container {
-    .side-panel-container {
-        margin-top: 0;
-        top: @top-bar-size;
-        position: absolute;
     }
 }

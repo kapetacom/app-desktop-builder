@@ -23,7 +23,7 @@ jobs:
                   npm run postinstall
                   npm run build
               env:
-                  NODE_OPTIONS: "--max_old_space_size=8192"
+                  NODE_OPTIONS: '--max_old_space_size=8192'
 
             - name: Build and Publish
               env:
@@ -50,7 +50,7 @@ jobs:
                   npm run postinstall
                   npm run build
               env:
-                  NODE_OPTIONS: "--max_old_space_size=8192"
+                  NODE_OPTIONS: '--max_old_space_size=8192'
 
             - name: Build artifacts
               run: |
@@ -108,7 +108,7 @@ jobs:
                   npm run postinstall
                   npm run build
               env:
-                  NODE_OPTIONS: "--max_old_space_size=8192"
+                  NODE_OPTIONS: '--max_old_space_size=8192'
 
             - name: Publish releases
               env:

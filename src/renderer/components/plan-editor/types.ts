@@ -1,4 +1,4 @@
-import { Asset, ItemType, IResourceTypeProvider } from '@kapeta/ui-web-types';
+import { Asset, IResourceTypeProvider } from '@kapeta/ui-web-types';
 
 import {
     BlockDefinition,
@@ -33,12 +33,12 @@ export interface DraggableBlockProps {
 }
 
 export interface DraggableResourceItem {
-    type: ItemType.RESOURCE;
+    type: DataEntityType.RESOURCE;
     data: DraggableResourceProps;
 }
 
 export interface DraggableBlockItem {
-    type: ItemType.BLOCK;
+    type: DataEntityType.INSTANCE;
     data: DraggableBlockProps;
 }
 
@@ -49,14 +49,30 @@ export interface BlockInfo {
     block: BlockDefinition;
 }
 
-export interface EditBlockInfo {
-    type: ItemType.BLOCK;
+export enum DataEntityType {
+    BLOCK = 'BLOCK',
+    INSTANCE = 'INSTANCE',
+    RESOURCE = 'RESOURCE',
+    CONNECTION = 'CONNECTION',
+}
+
+export interface EditInstanceInfo {
+    type: DataEntityType.INSTANCE;
     item: BlockInfo;
     creating: boolean;
 }
 
+export interface CreateBlockInfo {
+    type: DataEntityType.BLOCK;
+    item: {
+        instance: BlockInstance;
+        asset: Asset<BlockDefinition>;
+    };
+    creating: true;
+}
+
 export interface EditResourceInfo {
-    type: ItemType.RESOURCE;
+    type: DataEntityType.RESOURCE;
     item: {
         ref: string;
         resource: Resource;
@@ -65,30 +81,31 @@ export interface EditResourceInfo {
     creating: boolean;
 }
 export interface EditConnectionInfo {
-    type: ItemType.CONNECTION;
+    type: DataEntityType.CONNECTION;
     item: Connection;
     creating: boolean;
 }
 
 export type EditItemInfo =
-    | EditBlockInfo
+    | EditInstanceInfo
     | EditResourceInfo
-    | EditConnectionInfo;
+    | EditConnectionInfo
+    | CreateBlockInfo;
 
 export interface InspectBlockInfo {
-    type: ItemType.BLOCK;
+    type: DataEntityType.INSTANCE;
     item: BlockInfo | Connection;
 }
 
 export interface InspectConnectionInfo {
-    type: ItemType.CONNECTION;
+    type: DataEntityType.CONNECTION;
     item: Connection;
 }
 
 export type InspectItemInfo = InspectBlockInfo | InspectConnectionInfo;
 
 export interface ConfigureItemInfo {
-    type: ItemType.BLOCK;
+    type: DataEntityType.INSTANCE;
     item: BlockInfo;
 }
 

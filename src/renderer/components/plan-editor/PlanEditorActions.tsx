@@ -4,16 +4,12 @@ import {
     PlannerMode,
 } from '@kapeta/ui-web-plan-editor';
 import { ButtonStyle, showDelete } from '@kapeta/ui-web-components';
-import {
-    IResourceTypeConverter,
-    ItemType,
-    ResourceRole,
-} from '@kapeta/ui-web-types';
+import { IResourceTypeConverter, ResourceRole } from '@kapeta/ui-web-types';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import { useEffect, useMemo } from 'react';
 import { InstanceStatus, ResourceTypeProvider } from '@kapeta/ui-web-context';
 import { Connection } from '@kapeta/schemas';
-import { ActionHandlers, InstanceInfo } from './types';
+import { ActionHandlers, DataEntityType, InstanceInfo } from './types';
 
 function getConverter(
     planner: PlannerContextData,
@@ -68,7 +64,7 @@ export const usePlanEditorActions = (
         const unsubscribers = [
             planner.onResourceAdded((ref, block, resource) => {
                 handlers.edit({
-                    type: ItemType.RESOURCE,
+                    type: DataEntityType.RESOURCE,
                     creating: true,
                     item: {
                         ref,
@@ -83,7 +79,7 @@ export const usePlanEditorActions = (
                 }
 
                 handlers.edit({
-                    type: ItemType.CONNECTION,
+                    type: DataEntityType.CONNECTION,
                     creating: true,
                     item: connection,
                 });
@@ -102,7 +98,7 @@ export const usePlanEditorActions = (
                     },
                     onClick(context, { block, blockInstance }) {
                         handlers.inspect({
-                            type: ItemType.BLOCK,
+                            type: DataEntityType.INSTANCE,
                             item: {
                                 instance: blockInstance!,
                                 block: block!,
@@ -148,7 +144,7 @@ export const usePlanEditorActions = (
                     },
                     onClick(context, { blockInstance, block }) {
                         handlers.edit({
-                            type: ItemType.BLOCK,
+                            type: DataEntityType.INSTANCE,
                             item: {
                                 block: block!,
                                 instance: blockInstance!,
@@ -169,7 +165,7 @@ export const usePlanEditorActions = (
                     },
                     onClick(context, { blockInstance, block }) {
                         handlers.configure({
-                            type: ItemType.BLOCK,
+                            type: DataEntityType.INSTANCE,
                             item: {
                                 block: block!,
                                 instance: blockInstance!,
@@ -217,7 +213,7 @@ export const usePlanEditorActions = (
                     },
                     onClick(p, { resource, block, blockInstance }) {
                         handlers.edit({
-                            type: ItemType.RESOURCE,
+                            type: DataEntityType.RESOURCE,
                             item: {
                                 resource: resource!,
                                 block: block!,
@@ -310,7 +306,7 @@ export const usePlanEditorActions = (
                     onClick(context, { connection }) {
                         if (connection) {
                             handlers.edit({
-                                type: ItemType.CONNECTION,
+                                type: DataEntityType.CONNECTION,
                                 item: connection,
                                 creating: false,
                             });
@@ -334,7 +330,7 @@ export const usePlanEditorActions = (
                     onClick(context, { connection }) {
                         if (connection) {
                             handlers.inspect({
-                                type: ItemType.CONNECTION,
+                                type: DataEntityType.CONNECTION,
                                 item: connection,
                             });
                         }

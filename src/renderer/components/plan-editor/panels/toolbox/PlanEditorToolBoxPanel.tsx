@@ -1,27 +1,22 @@
 import React, { useContext, useMemo, useState } from 'react';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import {
-    PanelAlignment,
-    PanelSize,
-    SidePanel,
-} from '@kapeta/ui-web-components';
-import {
     Asset,
-    ItemType,
-    Point,
     IResourceTypeProvider,
+    Point,
     ResourceRole,
 } from '@kapeta/ui-web-types';
 import {
     DnDDraggable,
     PlannerContext,
     PlannerPayload,
+    PlannerPayloadType,
 } from '@kapeta/ui-web-plan-editor';
 import { BlockDefinition } from '@kapeta/schemas';
 import { BlockStore } from './blockstore/BlockStore';
 import { BlockResourceTool } from './BlockResourceTool';
 import { ConsumerHeaderIcon, ProviderHeaderIcon } from '../../helpers';
-import { DraggableItem } from '../../types';
+import { DataEntityType, DraggableItem } from '../../types';
 import { DraggableResource } from './DraggableResource';
 import { DraggableBlock } from './DraggableBlock';
 
@@ -29,7 +24,7 @@ import './PlannerToolboxSidePanel.less';
 
 const toPlannerPayload = (config: IResourceTypeProvider): PlannerPayload => {
     return {
-        type: 'resource-type',
+        type: PlannerPayloadType.RESOURCE_TYPE,
         data: {
             title: config.title || config.kind,
             kind: config.kind,
@@ -72,7 +67,7 @@ export const PlanEditorToolBoxPanel = (props: Props) => {
         resourceConfig: IResourceTypeProvider
     ): DraggableItem => {
         return {
-            type: ItemType.RESOURCE,
+            type: DataEntityType.RESOURCE,
             data: {
                 resourceConfig,
                 planner,
@@ -93,7 +88,7 @@ export const PlanEditorToolBoxPanel = (props: Props) => {
         <>
             {draggableItem &&
                 draggableItemPosition &&
-                draggableItem.type === ItemType.RESOURCE && (
+                draggableItem.type === DataEntityType.RESOURCE && (
                     <DraggableResource
                         {...draggableItem.data}
                         point={draggableItemPosition}
@@ -102,7 +97,7 @@ export const PlanEditorToolBoxPanel = (props: Props) => {
 
             {draggableItem &&
                 draggableItemPosition &&
-                draggableItem.type === ItemType.BLOCK && (
+                draggableItem.type === DataEntityType.INSTANCE && (
                     <DraggableBlock
                         {...draggableItem.data}
                         point={draggableItemPosition}
