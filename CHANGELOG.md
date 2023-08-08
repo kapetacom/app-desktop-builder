@@ -1,3 +1,10 @@
+## [0.17.6](https://github.com/kapetacom/app-desktop-builder/compare/v0.17.5...v0.17.6) (2023-08-08)
+
+
+### Bug Fixes
+
+* Enable dev info in production build ([#51](https://github.com/kapetacom/app-desktop-builder/issues/51)) ([19181c8](https://github.com/kapetacom/app-desktop-builder/commit/19181c82d8fb97f72ea2066688005bfedea1bcea))
+
 ## [0.17.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.17.4...v0.17.5) (2023-08-08)
 
 
