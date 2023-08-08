@@ -1,3 +1,10 @@
+## [0.17.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.17.3...v0.17.4) (2023-08-08)
+
+
+### Bug Fixes
+
+* Improve error handling when selecting folder that is in use ([#50](https://github.com/kapetacom/app-desktop-builder/issues/50)) ([edaf794](https://github.com/kapetacom/app-desktop-builder/commit/edaf7940fec55b803f402d7a3fe0a5b92b313d31))
+
 ## [0.17.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.17.2...v0.17.3) (2023-08-08)
 
 
