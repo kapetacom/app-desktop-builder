@@ -7,6 +7,7 @@ import {
 import { EventEmitter } from 'node:events';
 
 interface Props {
+    title?: string;
     text?: string;
     linkText?: string;
     link?: string;
@@ -31,7 +32,7 @@ export class ModalProcessing extends EventEmitter {
             transparent: true,
             parent: parent,
             width: 400,
-            height: 200,
+            height: 230,
             center: true,
             modal: true,
             closable: true,

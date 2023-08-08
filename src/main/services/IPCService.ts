@@ -3,9 +3,13 @@ import { KapetaAPI } from '@kapeta/nodejs-api-client';
 
 export function attachHandlers() {
     ipcMain.handle('get-token', async () => {
-        const api = new KapetaAPI();
-        const token = await api.getAccessToken();
-        return token;
+        try {
+            const api = new KapetaAPI();
+            return await api.getAccessToken();
+        } catch (err) {
+            // Expected error when user is not logged in
+            console.error('Failed to get access token', err);
+        }
     });
 
     //
@@ -28,7 +32,8 @@ export function attachHandlers() {
                     current: '',
                 };
             }
-            throw err;
+
+            console.error('Failed to get contexts', err);
         }
     });
 }
