@@ -61,12 +61,19 @@ export class TrayWrapper {
                         {
                             label: 'Sign out',
                             click: async () => {
-                                this.api.removeToken();
-                                await this.update();
-                                this.mainWindow.window?.webContents.send(
-                                    'auth',
-                                    'signed-out'
-                                );
+                                try {
+                                    this.api.removeToken();
+                                    await this.update();
+                                    this.mainWindow.window?.webContents.send(
+                                        'auth',
+                                        'signed-out'
+                                    );
+                                } catch (e) {
+                                    dialog.showErrorBox(
+                                        'Failed to sign out',
+                                        e.message
+                                    );
+                                }
                             },
                         },
                     ],
@@ -96,10 +103,17 @@ export class TrayWrapper {
                     contextMenus.push({
                         label,
                         click: async () => {
-                            await this.api.switchContextTo(
-                                membership.identity.handle
-                            );
-                            await this.update();
+                            try {
+                                await this.api.switchContextTo(
+                                    membership.identity.handle
+                                );
+                                await this.update();
+                            } catch (e) {
+                                dialog.showErrorBox(
+                                    'Failed to switch context',
+                                    e.message
+                                );
+                            }
                         },
                     });
                 });
@@ -108,8 +122,15 @@ export class TrayWrapper {
                     contextMenus.push({
                         label: 'Remove context',
                         click: async () => {
-                            await this.api.removeContext();
-                            await this.update();
+                            try {
+                                await this.api.removeContext();
+                                await this.update();
+                            } catch (e) {
+                                dialog.showErrorBox(
+                                    'Failed to remove context',
+                                    e.message
+                                );
+                            }
                         },
                     });
                 }
@@ -126,7 +147,10 @@ export class TrayWrapper {
                             await this.processingModal.open(
                                 this.mainWindow.window,
                                 {
-                                    text: 'Signing in...',
+                                    title: 'Signing in...',
+                                    text: `We are signing you in to Kapeta in your browser.
+                                            This will log you in to your Kapeta account.
+                                            Cancelling will abort the process.`,
                                 }
                             );
 
@@ -140,8 +164,11 @@ export class TrayWrapper {
                                 .doDeviceAuthentication({
                                     onVerificationCode: (url: string) => {
                                         this.processingModal.setProps({
-                                            text: 'Continue signing in, in your browser...',
-                                            linkText: 'Continue in browser',
+                                            title: 'Signing in...',
+                                            text: `We are signing you in to Kapeta in your browser.
+                                                    This will log you in to your Kapeta account.
+                                                    Cancelling will abort the process.`,
+                                            linkText: 'View browser window',
                                             link: url,
                                         });
                                         shell.openExternal(url);
@@ -153,6 +180,7 @@ export class TrayWrapper {
                                 .catch((err) => {
                                     future.reject(err);
                                 });
+
 
                             await future.promise;
                             await this.update();

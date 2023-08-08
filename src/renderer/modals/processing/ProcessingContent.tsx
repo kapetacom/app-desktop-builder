@@ -1,65 +1,50 @@
 import React from 'react';
-import './ProcessingContent.less';
-import { Button, Link, Paper, Typography } from '@mui/material';
+import { Button,  Paper, Typography } from '@mui/material';
 
 interface Props {
+    title?: string | null;
     text: string | null;
     linkText: string | null;
     link: string | null;
     onLinkOpen?: (url) => void | Promise<void>;
+    onCancel?: () => void;
 }
+
+import './ProcessingContent.less';
 
 export const ProcessingContent = (props: Props) => {
     return (
         <Paper
             elevation={7}
             sx={{
-                padding: '10px',
+                padding: '0',
                 width: '100%',
                 height: '100%',
                 boxSizing: 'border-box',
                 position: 'relative',
-                a: {
-                    textDecoration: 'none',
-                },
+                '.MuiButton-root': {
+                    textTransform: 'none',
+                    ml: 1
+                }
             }}
         >
-            <Button
-                variant={'text'}
-                color={'inherit'}
-                onClick={() => {
-                    window.close();
-                }}
-                sx={{
-                    position: 'absolute',
-                    top: '10px',
-                    width: '30px',
-                    minWidth: '30px',
-                    maxWidth: '30px',
-                    right: '10px',
-                    color: 'rgba(0,0,0,0.5)',
-                    '&:hover': {
-                        color: 'rgba(0,0,0,0.8)',
-                    },
-                }}
-            >
-                <i className="fas fa-times"></i>
-            </Button>
             <Typography
                 variant={'h6'}
                 sx={{
-                    margin: '20px',
-                    fontWeight: 500,
+                    padding: '16px 24px',
+                    fontWeight: 400,
+                    fs: '20px',
+                    lh: '160%'
                 }}
             >
-                Please wait...
+                {props.title ?? 'Please wait...'}
             </Typography>
 
             {props.text && (
                 <Typography
                     variant={'body2'}
                     sx={{
-                        margin: '20px',
+                        padding: '0 24px',
                     }}
                 >
                     {props.text}
@@ -69,15 +54,19 @@ export const ProcessingContent = (props: Props) => {
             <div
                 style={{
                     textAlign: 'right',
-                    margin: '20px',
+                    padding: '38px 8px 8px 8px',
                 }}
             >
+                <Button size={'medium'} color={'inherit'} variant={'text'} onClick={() => {
+                    props.onCancel?.();
+                    window.close();
+                }}>
+                    Cancel
+                </Button>
                 {props.link && (
-                    <a href={props.link} rel="noreferrer" target="_blank">
-                        <Typography variant={'body2'}>
-                            {props.linkText ?? 'Continue in browser'}
-                        </Typography>
-                    </a>
+                    <Button href={props.link} size={'medium'} variant={'text'} color={'primary'}  rel="noreferrer" target="_blank">
+                        {props.linkText ?? 'Open in browser'}
+                    </Button>
                 )}
             </div>
         </Paper>
