@@ -15,6 +15,7 @@ interface Props {
     assetService: AssetStore;
     files: string[];
     onCancel?: () => void;
+    onError?: (e:any) => void;
     onDone?: (asset?: Asset) => void;
     onAssetAdded?: (asset: Asset) => void;
     createNewKind?: () => BlockDefinition;
@@ -48,6 +49,7 @@ export const BlockCreator = (props: Props) => {
         <AssetCreator
             state={props.state}
             onCancel={props.onCancel}
+            onError={props.onError}
             onAssetAdded={props.onAssetAdded ?? noop}
             onAssetCreateStart={props.onAssetCreateStart}
             onAssetCreateEnd={props.onAssetCreateEnd}
