@@ -48,9 +48,11 @@ export const BlockCreatorPanel = (props: Props) => {
                     ? { ...props.info?.item.asset.data }
                     : createNewBlock();
             }}
-            onAssetCreateEnd={async () => {
+
+            onDone={() => {
                 props.onClosed();
             }}
+
             onCancel={() => {
                 if (props.info?.type !== DataEntityType.BLOCK) {
                     return;
