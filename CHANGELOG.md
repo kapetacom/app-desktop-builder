@@ -1,3 +1,10 @@
+## [0.17.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.17.0...v0.17.1) (2023-08-08)
+
+
+### Bug Fixes
+
+* Use large workers to have enough memory for build ([f51222b](https://github.com/kapetacom/app-desktop-builder/commit/f51222bd928e5af9659b9f4c09d6d704c418337d))
+
 # [0.17.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.16.0...v0.17.0) (2023-08-07)
 
 
