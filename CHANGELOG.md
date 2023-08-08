@@ -1,3 +1,10 @@
+## [0.17.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.17.1...v0.17.2) (2023-08-08)
+
+
+### Bug Fixes
+
+* Implementing login wait screen according to design ([#49](https://github.com/kapetacom/app-desktop-builder/issues/49)) ([0f438dd](https://github.com/kapetacom/app-desktop-builder/commit/0f438dd63d8f7c6b6440f091f489c290b981db84))
+
 ## [0.17.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.17.0...v0.17.1) (2023-08-08)
 
 
