@@ -1,3 +1,10 @@
+## [0.17.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.17.2...v0.17.3) (2023-08-08)
+
+
+### Bug Fixes
+
+* Small design bug ([0376993](https://github.com/kapetacom/app-desktop-builder/commit/0376993c4178287c2e12961eca305b83a180506a))
+
 ## [0.17.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.17.1...v0.17.2) (2023-08-08)
 
 
