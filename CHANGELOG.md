@@ -1,3 +1,10 @@
+## [0.17.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.17.4...v0.17.5) (2023-08-08)
+
+
+### Bug Fixes
+
+* Improve cross platform handling of child processes ([db06b40](https://github.com/kapetacom/app-desktop-builder/commit/db06b40a7b5b0885346012e5d2be2ff61f5a5711))
+
 ## [0.17.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.17.3...v0.17.4) (2023-08-08)
 
 
