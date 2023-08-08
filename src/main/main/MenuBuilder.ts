@@ -19,12 +19,7 @@ export class MenuBuilder {
     }
 
     buildMenu(): Menu {
-        if (
-            process.env.NODE_ENV === 'development' ||
-            process.env.DEBUG_PROD === 'true'
-        ) {
-            this.setupDevelopmentEnvironment();
-        }
+        this.setupContextMenu();
 
         const template =
             process.platform === 'darwin'
@@ -37,7 +32,7 @@ export class MenuBuilder {
         return menu;
     }
 
-    setupDevelopmentEnvironment(): void {
+    setupContextMenu(): void {
         this.mainWindow.webContents.on('context-menu', (_, props) => {
             const { x, y } = props;
 
@@ -108,7 +103,7 @@ export class MenuBuilder {
                 },
             ],
         };
-        const subMenuViewDev: MenuItemConstructorOptions = {
+        const subMenuView: MenuItemConstructorOptions = {
             label: 'View',
             submenu: [
                 {
@@ -136,20 +131,7 @@ export class MenuBuilder {
                 },
             ],
         };
-        const subMenuViewProd: MenuItemConstructorOptions = {
-            label: 'View',
-            submenu: [
-                {
-                    label: 'Toggle Full Screen',
-                    accelerator: 'Ctrl+Command+F',
-                    click: () => {
-                        this.mainWindow.setFullScreen(
-                            !this.mainWindow.isFullScreen()
-                        );
-                    },
-                },
-            ],
-        };
+
         const subMenuWindow: DarwinMenuItemConstructorOptions = {
             label: 'Window',
             submenu: [
@@ -181,15 +163,11 @@ export class MenuBuilder {
                     click() {
                         shell.openExternal('https://docs.kapeta.com');
                     },
-                },
+                }
             ],
         };
 
-        const subMenuView =
-            process.env.NODE_ENV === 'development' ||
-            process.env.DEBUG_PROD === 'true'
-                ? subMenuViewDev
-                : subMenuViewProd;
+
 
         return [
             subMenuAbout,

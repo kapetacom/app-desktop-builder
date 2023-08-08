@@ -17,6 +17,20 @@ import MenuItem = Electron.MenuItem;
 
 type TrayMenuItem = MenuItemConstructorOptions | MenuItem;
 
+//Always use system theme
+nativeTheme.themeSource = 'system';
+
+const getTrayIcon = () => {
+    if (process.platform === 'darwin') {
+        // macOS tray is always dark so need light to be visible
+        return getAssetPath('icons/tray_icon_light.png')
+    }
+
+    return nativeTheme.shouldUseDarkColors
+        ? getAssetPath('icons/tray_icon_light.png')
+        : getAssetPath('icons/tray_icon_dark.png')
+}
+
 export class TrayWrapper {
     private tray: Tray;
     private api = new KapetaAPI();
@@ -26,14 +40,14 @@ export class TrayWrapper {
 
     constructor(mainWindow: MainWindow, clusterService: ClusterService) {
         this.mainWindow = mainWindow;
-        this.tray = new Tray(
-            nativeTheme.shouldUseDarkColors
-                ? getAssetPath('icons/tray_icon_dark.png')
-                : getAssetPath('icons/tray_icon_light.png')
-        );
+        this.tray = new Tray(getTrayIcon());
         this.tray.setToolTip('Kapeta Desktop');
         this.processingModal = new ModalProcessing();
         this.clusterService = clusterService;
+
+        nativeTheme.on('updated', () => {
+            this.tray.setImage(getTrayIcon());
+        })
     }
 
     public async update() {
