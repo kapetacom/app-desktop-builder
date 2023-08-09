@@ -1,3 +1,16 @@
+# [0.19.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.18.4...v0.19.0) (2023-08-09)
+
+
+### Bug Fixes
+
+* Polishing and fixes for cross-platform ([1c112e5](https://github.com/kapetacom/app-desktop-builder/commit/1c112e50211bd8e1bd1cc32b8c582927fc3432fd))
+* Show version in tray ([960f8d2](https://github.com/kapetacom/app-desktop-builder/commit/960f8d2b7d9b9ec0daa6ccb9b802375019a080b9))
+
+
+### Features
+
+* Auto-installs cli and core providers ([0771595](https://github.com/kapetacom/app-desktop-builder/commit/077159539c596123f4eabab606d960061b1780e5))
+
 ## [0.18.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.18.3...v0.18.4) (2023-08-09)
 
 
