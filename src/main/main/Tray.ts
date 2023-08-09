@@ -7,7 +7,7 @@ import {
     nativeTheme,
 } from 'electron';
 import {ExtendedIdentity, KapetaAPI, Membership} from '@kapeta/nodejs-api-client';
-import {createFuture, getAssetPath, ensureCLI, hasApp, showError, showMessage, showInfo} from '../helpers';
+import {createFuture, getAssetPath, ensureCLI, hasApp, showError, showInfo, appVersion} from '../helpers';
 import {ClusterService} from '../services/ClusterService';
 import {MainWindow} from './MainWindow';
 import {ModalProcessing} from '../modals/ModalProcessing';
@@ -60,6 +60,11 @@ export class TrayWrapper {
             },
             {type: 'separator'},
             ...await this.createCLIMenu(),
+            {
+                label: 'Version: ' + appVersion(),
+                enabled: false,
+                type: 'normal'
+            },
             {label: 'Quit Kapeta', click: () => app.quit()},
         ];
 

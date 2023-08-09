@@ -46,8 +46,12 @@ export const appInit = async () => {
     }
 };
 
+export const appVersion = () => {
+    return packageJson.version
+}
+
 export const ensureUserAgent = () => {
-    const userAgent = 'KapetaDesktop/' + packageJson.version;
+    const userAgent = 'KapetaDesktop/' + appVersion();
     session.defaultSession.setUserAgent(userAgent);
     session.defaultSession.webRequest.onBeforeSendHeaders(
         (details, callback) => {
