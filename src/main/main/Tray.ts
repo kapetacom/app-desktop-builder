@@ -6,14 +6,24 @@ import {
     Tray,
     nativeTheme,
 } from 'electron';
-import {ExtendedIdentity, KapetaAPI, Membership} from '@kapeta/nodejs-api-client';
-import {createFuture, getAssetPath, ensureCLI, hasApp, showError, showInfo, appVersion} from '../helpers';
-import {ClusterService} from '../services/ClusterService';
-import {MainWindow} from './MainWindow';
-import {ModalProcessing} from '../modals/ModalProcessing';
+import {
+    ExtendedIdentity,
+    KapetaAPI,
+    Membership,
+} from '@kapeta/nodejs-api-client';
+import {
+    createFuture,
+    getAssetPath,
+    showError,
+    showInfo,
+    appVersion,
+} from '../helpers';
+import { ClusterService } from '../services/ClusterService';
+import { MainWindow } from './MainWindow';
+import { ModalProcessing } from '../modals/ModalProcessing';
 
 import MenuItem = Electron.MenuItem;
-import {MemberIdentity} from "@kapeta/ui-web-types";
+import { MemberIdentity } from '@kapeta/ui-web-types';
 
 type TrayMenuItem = MenuItemConstructorOptions | MenuItem;
 
@@ -22,8 +32,8 @@ nativeTheme.themeSource = 'system';
 
 const getTrayIcon = () => {
     // All trays seem to be dark?
-    return getAssetPath('icons/tray_icon_light.png')
-}
+    return getAssetPath('icons/tray_icon_light.png');
+};
 
 export class TrayWrapper {
     private tray: Tray;
@@ -41,7 +51,7 @@ export class TrayWrapper {
 
         nativeTheme.on('updated', () => {
             this.tray.setImage(getTrayIcon());
-        })
+        });
     }
 
     public async update() {
@@ -53,37 +63,22 @@ export class TrayWrapper {
                 click: () => this.mainWindow.show(),
             },
             ...userMenu,
-            {type: 'separator'},
+            { type: 'separator' },
             {
                 label: 'Open Kapeta Cloud',
-                click: () => shell.openExternal('https://app.kapeta.com')
+                click: () => shell.openExternal('https://app.kapeta.com'),
             },
-            {type: 'separator'},
-            ...await this.createCLIMenu(),
+            { type: 'separator' },
             {
                 label: 'Version: ' + appVersion(),
                 enabled: false,
-                type: 'normal'
+                type: 'normal',
             },
-            {label: 'Quit Kapeta', click: () => app.quit()},
+            { label: 'Quit Kapeta', click: () => app.quit() },
         ];
 
         const contextMenu = Menu.buildFromTemplate(menuItems);
         this.tray.setContextMenu(contextMenu);
-    }
-
-    private async createCLIMenu():Promise<TrayMenuItem[]> {
-        if (await this.hasCLI()) {
-            return [];
-        }
-
-        return [
-            {
-                label: 'Install Kapeta Command Line Tool',
-                click: () => this.installCLI()
-            },
-            {type: 'separator'},
-        ]
     }
 
     private async createUserMenu(): Promise<TrayMenuItem[]> {
@@ -112,16 +107,14 @@ export class TrayWrapper {
             ];
 
             if (memberships.length > 0) {
-                userMenu.push(
-                    this.createMembershipMenu(context, memberships)
-                );
+                userMenu.push(this.createMembershipMenu(context, memberships));
             }
             return userMenu;
         } catch (e) {
             return [
                 {
                     label: 'Sign in',
-                    click: () => this.signIn()
+                    click: () => this.signIn(),
                 },
             ];
         }
@@ -130,9 +123,7 @@ export class TrayWrapper {
     private showAccountSettings(identity: ExtendedIdentity) {
         return () => {
             shell.openExternal(
-                `${this.api.getBaseUrl()}/${
-                    identity.handle
-                }/iam`
+                `${this.api.getBaseUrl()}/${identity.handle}/iam`
             );
         };
     }
@@ -141,16 +132,16 @@ export class TrayWrapper {
         try {
             this.api.removeToken();
             await this.update();
-            this.mainWindow.window?.webContents.send(
-                'auth',
-                'signed-out'
-            );
+            this.mainWindow.window?.webContents.send('auth', 'signed-out');
         } catch (e) {
-            showError('Failed to sign out')
+            showError('Failed to sign out');
         }
     }
 
-    private createMembershipMenu(context: MemberIdentity | null, memberships: Membership[]) {
+    private createMembershipMenu(
+        context: MemberIdentity | null,
+        memberships: Membership[]
+    ) {
         const contextMenus: MenuItemConstructorOptions[] = [];
         const membershipMenu: TrayMenuItem = {
             type: 'submenu',
@@ -162,8 +153,7 @@ export class TrayWrapper {
 
         memberships.forEach((membership) => {
             const isCurrent = !!(
-                context &&
-                context.identity.id === membership.identity.id
+                context && context.identity.id === membership.identity.id
             );
             if (isCurrent) {
                 return;
@@ -187,34 +177,25 @@ export class TrayWrapper {
 
     private async selectContext(membership: Membership) {
         try {
-            await this.api.switchContextTo(
-                membership.identity.handle
-            );
+            await this.api.switchContextTo(membership.identity.handle);
             await this.update();
         } catch (e) {
-            showError(
-                `Failed to switch context: ${e.message}`
-            );
+            showError(`Failed to switch context: ${e.message}`);
         }
     }
 
     private async signIn() {
         try {
             const future = createFuture();
-            await this.processingModal.open(
-                this.mainWindow.window,
-                {
-                    title: 'Signing in...',
-                    text: `We are signing you in to Kapeta in your browser.
+            await this.processingModal.open(this.mainWindow.window, {
+                title: 'Signing in...',
+                text: `We are signing you in to Kapeta in your browser.
                                             This will log you in to your Kapeta account.
                                             Cancelling will abort the process.`,
-                }
-            );
+            });
 
             this.processingModal.once('close', async () => {
-                future.reject(
-                    new Error('Sign in was cancelled')
-                );
+                future.reject(new Error('Sign in was cancelled'));
             });
 
             this.api
@@ -238,26 +219,20 @@ export class TrayWrapper {
                     future.reject(err);
                 });
 
-
             await future.promise;
             await this.update();
-            const identity =
-                await this.api.getCurrentIdentity();
+            const identity = await this.api.getCurrentIdentity();
             this.processingModal.close();
-            showInfo(`You were signed in as ${identity.name || identity.handle}!`);
-
-            this.mainWindow.window?.webContents.send(
-                'auth',
-                'signed-in'
+            showInfo(
+                `You were signed in as ${identity.name || identity.handle}!`
             );
+
+            this.mainWindow.window?.webContents.send('auth', 'signed-in');
         } catch (err: any) {
             this.processingModal.close();
-            const message =
-                err.message ?? err.error ?? 'Authentication failed';
+            const message = err.message ?? err.error ?? 'Authentication failed';
             // Failed to complete
-            showError(
-                message
-            );
+            showError(message);
         } finally {
             this.processingModal.close();
         }
@@ -268,57 +243,7 @@ export class TrayWrapper {
             await this.api.removeContext();
             await this.update();
         } catch (e) {
-            showError(
-                `Failed to remove context: ${e.message}`
-            );
+            showError(`Failed to remove context: ${e.message}`);
         }
-    }
-
-    private async hasCLI() {
-        return await hasApp('kap');
-    }
-
-    private async installCLI() {
-        const task = await ensureCLI();
-        if (!task) {
-            return;
-        }
-
-        await this.processingModal.open(
-            this.mainWindow.window,
-            {
-                title: 'Installing Kapeta CLI',
-                text: `Please wait while we're installing the kapeta command line tool...`,
-            }
-        );
-
-        const onCloseHandler = async () => {
-            task.abort();
-            showError(
-                'The installation of the Kapeta CLI was aborted. '
-            );
-        };
-
-        this.processingModal.once('close', onCloseHandler);
-
-        try {
-            await task.wait();
-
-            showInfo(`You now have the Kapeta CLI available as "kap" in your terminal`);
-            await this.update();
-        } catch (e) {
-            if (e.code === 'ABORTED') {
-                return;
-            }
-
-            console.warn('Failed to install CLI', e);
-            showError(
-                'The installation failed. Please try again. ',
-            );
-        } finally {
-            this.processingModal.off('close', onCloseHandler);
-            this.processingModal.close();
-        }
-
     }
 }

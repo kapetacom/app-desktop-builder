@@ -11,7 +11,7 @@ export default {
 
 export const ProcessingModal = () => {
     return (
-        <div style={{ width: '400px'}}>
+        <div style={{ width: '400px' }}>
             <ThemeProvider theme={kapetaLight}>
                 <ProcessingContent
                     title={'Signing in...'}

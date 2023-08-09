@@ -3,7 +3,7 @@ import { Paper, Alert, Typography, Button } from '@mui/material';
 import LogoSquareDark from '../../../../assets/logo_square_dark.svg';
 import LogoTextWhite from '../../../../assets/logo_text_white.svg';
 import ImageRocket from '../../../../assets/images/rocket.png';
-import {isMac} from "../../utils/osUtils";
+import { isMac } from '../../utils/osUtils';
 export enum SplashStatusCheck {
     LOADING = 'LOADING',
     OK = 'OK',
@@ -289,10 +289,13 @@ export const SplashContent = (props: Props) => {
             <div className="right">
                 {hasError && (
                     <div className={'errors'}>
-                        <Typography variant={'body2'} sx={{
-                            fontSize: '13px',
-                            lineHeight: '18px'
-                        }} >
+                        <Typography
+                            variant={'body2'}
+                            sx={{
+                                fontSize: '13px',
+                                lineHeight: '18px',
+                            }}
+                        >
                             {props.localClusterStatus ===
                                 SplashStatusCheck.ERROR && (
                                 <div className={'error-message'}>
@@ -312,9 +315,7 @@ export const SplashContent = (props: Props) => {
                             {props.npmStatus === SplashStatusCheck.ERROR && (
                                 <div className={'error-message'}>
                                     <i className="fas fa-circle"></i>
-                                    <span>
-                                        Make sure NPM is installed
-                                    </span>
+                                    <span>Make sure NPM is installed</span>
                                 </div>
                             )}
                         </Typography>

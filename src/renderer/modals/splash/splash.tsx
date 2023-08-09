@@ -41,22 +41,24 @@ function render(state: State) {
 window.electron.ipcRenderer.on('splash', ([eventType, data]) => {
     if (eventType === 'changed') {
         render({
-            localClusterStatus: data.localClusterStatus === undefined ?
-                SplashStatusCheck.LOADING
-                : (data.localClusterStatus ?
-                    SplashStatusCheck.OK
-                    : SplashStatusCheck.ERROR),
-            dockerStatus: data.dockerStatus === undefined ?
-                SplashStatusCheck.LOADING
-                : (data.dockerStatus ?
-                    SplashStatusCheck.OK
-                    : SplashStatusCheck.ERROR),
-            npmStatus: data.npmStatus === undefined ?
-                SplashStatusCheck.LOADING
-                : (data.npmStatus ?
-                    SplashStatusCheck.OK
-                    : SplashStatusCheck.ERROR)
-
+            localClusterStatus:
+                data.localClusterStatus === undefined
+                    ? SplashStatusCheck.LOADING
+                    : data.localClusterStatus
+                    ? SplashStatusCheck.OK
+                    : SplashStatusCheck.ERROR,
+            dockerStatus:
+                data.dockerStatus === undefined
+                    ? SplashStatusCheck.LOADING
+                    : data.dockerStatus
+                    ? SplashStatusCheck.OK
+                    : SplashStatusCheck.ERROR,
+            npmStatus:
+                data.npmStatus === undefined
+                    ? SplashStatusCheck.LOADING
+                    : data.npmStatus
+                    ? SplashStatusCheck.OK
+                    : SplashStatusCheck.ERROR,
         });
     }
 

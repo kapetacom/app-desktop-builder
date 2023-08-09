@@ -163,11 +163,9 @@ export class MenuBuilder {
                     click() {
                         shell.openExternal('https://docs.kapeta.com');
                     },
-                }
+                },
             ],
         };
-
-
 
         return [
             subMenuAbout,

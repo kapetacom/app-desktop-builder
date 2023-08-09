@@ -15,7 +15,7 @@ interface Props {
     assetService: AssetStore;
     files: string[];
     onCancel?: () => void;
-    onError?: (e:any) => void;
+    onError?: (e: any) => void;
     onDone?: (asset?: Asset) => void;
     onAssetAdded?: (asset: Asset) => void;
     createNewKind?: () => BlockDefinition;

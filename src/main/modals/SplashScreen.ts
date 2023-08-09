@@ -1,10 +1,11 @@
-import { BrowserWindow, ipcMain } from 'electron';
+import { BrowserWindow } from 'electron';
 import {
-    attachIPCListener, ensureCLI,
+    attachIPCListener,
     getPreloadScript,
-    resolveHtmlPath, hasApp,
+    resolveHtmlPath,
 } from '../helpers';
 import { ClusterService } from '../services/ClusterService';
+import { hasApp } from '@kapeta/nodejs-process';
 
 export class SplashScreen {
     private win: BrowserWindow | null = null;
@@ -16,17 +17,16 @@ export class SplashScreen {
     }
 
     private async checkNpm() {
-        if (await hasApp('npm')) {
-            await ensureCLI();
+        try {
             this.setStatus({
-                npmStatus: true,
-            })
-            return;
+                npmStatus: await hasApp('npm'),
+            });
+        } catch (e) {
+            console.log('Failed to check npm', e);
+            this.setStatus({
+                npmStatus: false,
+            });
         }
-
-        this.setStatus({
-            npmStatus: false,
-        });
     }
     private async startCluster(win: BrowserWindow) {
         try {
@@ -43,16 +43,15 @@ export class SplashScreen {
 
             this.setStatus({
                 localClusterStatus: !!info,
-                dockerStatus: !!(info?.dockerStatus)
+                dockerStatus: !!info?.dockerStatus,
             });
-
         } catch (e) {
             console.log('Failed to start cluster service', e);
             win.webContents.send('splash', ['failed', e]);
         }
     }
 
-    private setStatus(status:any) {
+    private setStatus(status: any) {
         if (!this.win) {
             return;
         }
@@ -111,7 +110,6 @@ export class SplashScreen {
                 });
 
                 await this.performTests(this.win);
-
             } catch (e) {
                 reject(e);
             }
@@ -120,11 +118,7 @@ export class SplashScreen {
 
     private async performTests(win: BrowserWindow) {
         this.setStatus({});
-        await Promise.allSettled([
-            this.checkNpm(),
-            this.startCluster(win)
-        ]);
-
+        await Promise.allSettled([this.checkNpm(), this.startCluster(win)]);
     }
 
     close() {

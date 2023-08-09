@@ -1,7 +1,7 @@
 import process from 'node:process';
-import {userInfo} from "os";
-import {spawnSync} from "child_process";
-import {dialog} from "electron";
+import { userInfo } from 'os';
+import { spawnSync } from 'child_process';
+import { dialog } from 'electron';
 
 const args = [
     '-ilc',
@@ -13,21 +13,19 @@ const env = {
     DISABLE_AUTO_UPDATE: 'true',
 };
 
-
 export const detectDefaultShell = () => {
-    const {env} = process;
+    const { env } = process;
 
     if (process.platform === 'win32') {
         return env.COMSPEC || 'cmd.exe';
     }
 
     try {
-        const {shell} = userInfo();
+        const { shell } = userInfo();
         if (shell) {
             return shell;
         }
-    } catch {
-    }
+    } catch {}
 
     if (process.platform === 'darwin') {
         return env.SHELL || '/bin/zsh';
@@ -42,13 +40,13 @@ function parseEnv(env: string) {
     env = env.split('_SHELL_ENV_DELIMITER_')[1];
     const returnValue = {};
 
-    for (const line of env.split('\n').filter(line => Boolean(line))) {
+    for (const line of env.split('\n').filter((line) => Boolean(line))) {
         const [key, ...values] = line.split('=');
         returnValue[key] = values.join('=');
     }
 
     return returnValue;
-};
+}
 
 export function shellEnvSync(shell?: string): NodeJS.ProcessEnv {
     if (process.platform === 'win32') {
@@ -56,11 +54,11 @@ export function shellEnvSync(shell?: string): NodeJS.ProcessEnv {
     }
 
     try {
-        const {stdout} = spawnSync(shell || defaultShell, args, {
+        const { stdout } = spawnSync(shell || defaultShell, args, {
             env: {
                 ...process.env,
-                ...env
-            }
+                ...env,
+            },
         });
         return parseEnv(stdout.toString());
     } catch (error) {
@@ -73,7 +71,7 @@ export function shellEnvSync(shell?: string): NodeJS.ProcessEnv {
 }
 
 export function shellPathSync() {
-    const {PATH} = shellEnvSync();
+    const { PATH } = shellEnvSync();
     return PATH;
 }
 
@@ -82,12 +80,14 @@ export function fixPath() {
         return;
     }
 
-    process.env.PATH = shellPathSync() || [
-        './node_modules/.bin',
-        '/.nodebrew/current/bin',
-        '/usr/local/bin',
-        process.env.PATH,
-    ].join(':');
+    process.env.PATH =
+        shellPathSync() ||
+        [
+            './node_modules/.bin',
+            '/.nodebrew/current/bin',
+            '/usr/local/bin',
+            process.env.PATH,
+        ].join(':');
 }
 
 fixPath();

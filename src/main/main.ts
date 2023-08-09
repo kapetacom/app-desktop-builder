@@ -18,8 +18,6 @@ import { ClusterService } from './services/ClusterService';
 import { SplashScreen } from './modals/SplashScreen';
 import { attachHandlers } from './services/IPCService';
 
-
-
 const clusterService = new ClusterService();
 const splashScreen = new SplashScreen(clusterService);
 
@@ -39,8 +37,6 @@ app.on('window-all-closed', () => {
 app.on('quit', async () => {
     await clusterService.stop();
 });
-
-
 
 appInit()
     .then(() => splashScreen.open())

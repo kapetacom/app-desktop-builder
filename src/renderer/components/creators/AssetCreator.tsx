@@ -52,7 +52,7 @@ interface Props {
     onAssetAdded?: (asset: Asset) => void;
     state: AssetCreatorState;
     onCancel?: () => void;
-    onError?: (e:any) => void;
+    onError?: (e: any) => void;
 }
 
 export const AssetCreator = (props: Props) => {
@@ -130,7 +130,6 @@ export const AssetCreator = (props: Props) => {
                 props.onAssetCreateEnd();
             }
         } catch (e: any) {
-
             if (props.onError) {
                 props.onError(e);
             }

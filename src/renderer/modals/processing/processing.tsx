@@ -1,11 +1,11 @@
 import React from 'react';
-import {createRoot} from 'react-dom/client';
+import { createRoot } from 'react-dom/client';
 import '../../index.less';
 
-import {ProcessingContent} from './ProcessingContent';
-import {kapetaLight} from '../../Theme';
-import {CssBaseline, ThemeProvider} from '@mui/material';
-import {MemoryRouter} from "react-router-dom";
+import { ProcessingContent } from './ProcessingContent';
+import { kapetaLight } from '../../Theme';
+import { CssBaseline, ThemeProvider } from '@mui/material';
+import { MemoryRouter } from 'react-router-dom';
 
 const root = createRoot(document.getElementById('root')!);
 

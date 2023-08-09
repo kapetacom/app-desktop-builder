@@ -19,8 +19,9 @@ export const SplashFailAll = () => {
     const [localClusterStatus, setLocalClusterStatus] =
         useState<SplashStatusCheck>(SplashStatusCheck.LOADING);
 
-    const [npmStatus, setNpmStatus] =
-        useState<SplashStatusCheck>(SplashStatusCheck.LOADING);
+    const [npmStatus, setNpmStatus] = useState<SplashStatusCheck>(
+        SplashStatusCheck.LOADING
+    );
 
     useEffect(() => {
         setTimeout(() => {
@@ -65,8 +66,9 @@ export const SplashFailLocalCluster = () => {
     const [localClusterStatus, setLocalClusterStatus] =
         useState<SplashStatusCheck>(SplashStatusCheck.LOADING);
 
-    const [npmStatus, setNpmStatus] =
-        useState<SplashStatusCheck>(SplashStatusCheck.LOADING);
+    const [npmStatus, setNpmStatus] = useState<SplashStatusCheck>(
+        SplashStatusCheck.LOADING
+    );
 
     useEffect(() => {
         setTimeout(() => {
@@ -111,8 +113,9 @@ export const SplashFailDocker = () => {
     const [localClusterStatus, setLocalClusterStatus] =
         useState<SplashStatusCheck>(SplashStatusCheck.LOADING);
 
-    const [npmStatus, setNpmStatus] =
-        useState<SplashStatusCheck>(SplashStatusCheck.LOADING);
+    const [npmStatus, setNpmStatus] = useState<SplashStatusCheck>(
+        SplashStatusCheck.LOADING
+    );
 
     useEffect(() => {
         setTimeout(() => {
@@ -158,8 +161,9 @@ export const SplashOk = () => {
     const [localClusterStatus, setLocalClusterStatus] =
         useState<SplashStatusCheck>(SplashStatusCheck.LOADING);
 
-    const [npmStatus, setNpmStatus] =
-        useState<SplashStatusCheck>(SplashStatusCheck.LOADING);
+    const [npmStatus, setNpmStatus] = useState<SplashStatusCheck>(
+        SplashStatusCheck.LOADING
+    );
 
     useEffect(() => {
         setTimeout(() => {
