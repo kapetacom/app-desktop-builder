@@ -1,3 +1,10 @@
+# [0.18.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.17.6...v0.18.0) (2023-08-09)
+
+
+### Features
+
+* Auto-install Kapeta CLI on start ([#52](https://github.com/kapetacom/app-desktop-builder/issues/52)) ([7e2343e](https://github.com/kapetacom/app-desktop-builder/commit/7e2343e3a2b9db7e6b4f368899118b9a1c999a1a))
+
 ## [0.17.6](https://github.com/kapetacom/app-desktop-builder/compare/v0.17.5...v0.17.6) (2023-08-08)
 
 
