@@ -1,3 +1,10 @@
+## [0.18.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.18.3...v0.18.4) (2023-08-09)
+
+
+### Bug Fixes
+
+* Adjust modal height depending on OS ([03451bb](https://github.com/kapetacom/app-desktop-builder/commit/03451bb32c475bc21411939fa143770709123521))
+
 ## [0.18.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.18.2...v0.18.3) (2023-08-09)
 
 
