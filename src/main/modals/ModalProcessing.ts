@@ -28,7 +28,7 @@ export class ModalProcessing extends EventEmitter {
         this.win = new BrowserWindow({
             frame: false,
             show: true,
-            transparent: true,
+            transparent: process.platform === 'darwin',
             alwaysOnTop: false,
             parent: parent,
             width: 500,

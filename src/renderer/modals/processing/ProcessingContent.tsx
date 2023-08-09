@@ -11,11 +11,11 @@ interface Props {
 }
 
 import './ProcessingContent.less';
-import {isWindows} from "../../utils/osUtils";
+import {isMac} from "../../utils/osUtils";
 
 export const ProcessingContent = (props: Props) => {
-    const borderRadius = isWindows() ? '0px' : '10px';
-    const elevation = isWindows() ? 0 : 7;
+    const borderRadius = isMac() ? '10px' : '0px';
+    const elevation = isMac() ? 7 : 0;
 
     return (
         <Paper

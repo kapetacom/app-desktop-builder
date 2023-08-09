@@ -77,7 +77,7 @@ export class SplashScreen {
             this.win = new BrowserWindow({
                 frame: false,
                 alwaysOnTop: true,
-                transparent: true,
+                transparent: process.platform === 'darwin',
                 center: true,
                 modal: true,
                 width: 516,
