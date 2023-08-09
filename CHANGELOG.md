@@ -1,3 +1,10 @@
+## [0.18.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.18.1...v0.18.2) (2023-08-09)
+
+
+### Bug Fixes
+
+* Handle windows modals ([bf4508a](https://github.com/kapetacom/app-desktop-builder/commit/bf4508a0fcf6543104d08e1f6b5f5404fdcaa20a))
+
 ## [0.18.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.18.0...v0.18.1) (2023-08-09)
 
 
