@@ -1,3 +1,10 @@
+## [0.18.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.18.0...v0.18.1) (2023-08-09)
+
+
+### Bug Fixes
+
+* Cross platform issues ([#53](https://github.com/kapetacom/app-desktop-builder/issues/53)) ([3bf1a01](https://github.com/kapetacom/app-desktop-builder/commit/3bf1a01dfee10430aa33cbfe3d0c26f7a5e7983d))
+
 # [0.18.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.17.6...v0.18.0) (2023-08-09)
 
 
