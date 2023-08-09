@@ -32,7 +32,7 @@ export class ModalProcessing extends EventEmitter {
             alwaysOnTop: false,
             parent: parent,
             width: 500,
-            height: 250,
+            height: process.platform === 'darwin' ? 250 : 220,
             center: true,
             modal: true,
             closable: true,
