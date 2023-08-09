@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button,  Paper, Typography } from '@mui/material';
+import {Box, Button, CircularProgress, Paper, Stack, Typography} from '@mui/material';
 
 interface Props {
     title?: string | null;
@@ -15,8 +15,9 @@ import './ProcessingContent.less';
 export const ProcessingContent = (props: Props) => {
     return (
         <Paper
-            elevation={7}
+            elevation={0}
             sx={{
+                borderRadius:0,
                 padding: '0',
                 width: '100%',
                 height: '100%',
@@ -28,6 +29,7 @@ export const ProcessingContent = (props: Props) => {
                 }
             }}
         >
+
             <Typography
                 variant={'h6'}
                 sx={{
@@ -40,16 +42,22 @@ export const ProcessingContent = (props: Props) => {
                 {props.title ?? 'Please wait...'}
             </Typography>
 
-            {props.text && (
-                <Typography
-                    variant={'body2'}
-                    sx={{
-                        padding: '0 24px',
-                    }}
-                >
-                    {props.text}
-                </Typography>
-            )}
+            <Stack direction={'row'}
+                   sx={{
+                       padding: '0 24px',
+                   }}>
+                <Box sx={{mr:2}}>
+                    <CircularProgress size={64}/>
+                </Box>
+                {props.text && (
+                    <Typography
+                        variant={'body2'}
+
+                    >
+                        {props.text}
+                    </Typography>
+                )}
+            </Stack>
 
             <div
                 style={{
@@ -64,7 +72,8 @@ export const ProcessingContent = (props: Props) => {
                     Cancel
                 </Button>
                 {props.link && (
-                    <Button href={props.link} size={'medium'} variant={'text'} color={'primary'}  rel="noreferrer" target="_blank">
+                    <Button href={props.link} size={'medium'} variant={'text'} color={'primary'} rel="noreferrer"
+                            target="_blank">
                         {props.linkText ?? 'Open in browser'}
                     </Button>
                 )}

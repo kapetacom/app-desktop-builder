@@ -1,22 +1,38 @@
 import { BrowserWindow, ipcMain } from 'electron';
 import {
-    attachIPCListener,
+    attachIPCListener, ensureCLI,
     getPreloadScript,
-    resolveHtmlPath,
+    resolveHtmlPath, hasApp,
 } from '../helpers';
 import { ClusterService } from '../services/ClusterService';
 
 export class SplashScreen {
     private win: BrowserWindow | null = null;
     private clusterService: ClusterService;
+    private status: any = {};
 
     constructor(clusterService: ClusterService) {
         this.clusterService = clusterService;
     }
 
+    private async checkNpm() {
+        if (await hasApp('npm')) {
+            await ensureCLI();
+            this.setStatus({
+                npmStatus: true,
+            })
+            return;
+        }
+
+        this.setStatus({
+            npmStatus: false,
+        });
+    }
     private async startCluster(win: BrowserWindow) {
         try {
-            win.webContents.send('splash', ['start']);
+            delete this.status.localClusterStatus;
+            delete this.status.dockerStatus;
+            this.setStatus({});
 
             if (this.clusterService.isRunning()) {
                 await this.clusterService.stop();
@@ -24,11 +40,27 @@ export class SplashScreen {
                 await new Promise((resolve) => setTimeout(resolve, 1000));
             }
             const info = await this.clusterService.start();
-            win.webContents.send('splash', ['changed', info]);
+
+            this.setStatus({
+                localClusterStatus: !!info,
+                dockerStatus: !!(info?.dockerStatus)
+            });
+
         } catch (e) {
             console.log('Failed to start cluster service', e);
             win.webContents.send('splash', ['failed', e]);
         }
+    }
+
+    private setStatus(status:any) {
+        if (!this.win) {
+            return;
+        }
+        this.status = {
+            ...this.status,
+            ...status,
+        };
+        this.win.webContents.send('splash', ['changed', this.status]);
     }
 
     /**
@@ -38,6 +70,8 @@ export class SplashScreen {
         if (this.win) {
             throw new Error('Splash screen is already open');
         }
+
+        this.status = {};
 
         return new Promise<void>(async (resolve, reject) => {
             this.win = new BrowserWindow({
@@ -71,16 +105,26 @@ export class SplashScreen {
                             process.exit();
                             break;
                         case 'retry':
-                            await this.startCluster(this.win!);
+                            await this.performTests(this.win!);
                             break;
                     }
                 });
 
-                await this.startCluster(this.win);
+                await this.performTests(this.win);
+
             } catch (e) {
                 reject(e);
             }
         });
+    }
+
+    private async performTests(win: BrowserWindow) {
+        this.setStatus({});
+        await Promise.allSettled([
+            this.checkNpm(),
+            this.startCluster(win)
+        ]);
+
     }
 
     close() {

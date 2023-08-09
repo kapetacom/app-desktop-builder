@@ -1,4 +1,4 @@
-import { BrowserWindow, ipcMain } from 'electron';
+import { BrowserWindow } from 'electron';
 import {
     getPreloadScript,
     resolveHtmlPath,
@@ -31,8 +31,8 @@ export class ModalProcessing extends EventEmitter {
             alwaysOnTop: true,
             transparent: true,
             parent: parent,
-            width: 400,
-            height: 230,
+            width: 500,
+            height: 250,
             center: true,
             modal: true,
             closable: true,
