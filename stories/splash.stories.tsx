@@ -12,17 +12,24 @@ export default {
     title: 'Splash',
 };
 
-export const SplashFailBoth = () => {
+export const SplashFailAll = () => {
     const [dockerStatus, setDockerStatus] = useState<SplashStatusCheck>(
         SplashStatusCheck.LOADING
     );
     const [localClusterStatus, setLocalClusterStatus] =
         useState<SplashStatusCheck>(SplashStatusCheck.LOADING);
 
+    const [npmStatus, setNpmStatus] =
+        useState<SplashStatusCheck>(SplashStatusCheck.LOADING);
+
     useEffect(() => {
         setTimeout(() => {
             setDockerStatus(SplashStatusCheck.ERROR);
         }, 1000);
+
+        setTimeout(() => {
+            setNpmStatus(SplashStatusCheck.ERROR);
+        }, 600);
 
         setTimeout(() => {
             setLocalClusterStatus(SplashStatusCheck.ERROR);
@@ -44,6 +51,7 @@ export const SplashFailBoth = () => {
                         setLocalClusterStatus(SplashStatusCheck.OK);
                     }, 5000);
                 }}
+                npmStatus={npmStatus}
                 dockerStatus={dockerStatus}
                 localClusterStatus={localClusterStatus}
             />
@@ -57,10 +65,17 @@ export const SplashFailLocalCluster = () => {
     const [localClusterStatus, setLocalClusterStatus] =
         useState<SplashStatusCheck>(SplashStatusCheck.LOADING);
 
+    const [npmStatus, setNpmStatus] =
+        useState<SplashStatusCheck>(SplashStatusCheck.LOADING);
+
     useEffect(() => {
         setTimeout(() => {
             setDockerStatus(SplashStatusCheck.OK);
         }, 1000);
+
+        setTimeout(() => {
+            setNpmStatus(SplashStatusCheck.ERROR);
+        }, 600);
 
         setTimeout(() => {
             setLocalClusterStatus(SplashStatusCheck.ERROR);
@@ -82,6 +97,7 @@ export const SplashFailLocalCluster = () => {
                         setLocalClusterStatus(SplashStatusCheck.OK);
                     }, 5000);
                 }}
+                npmStatus={npmStatus}
                 dockerStatus={dockerStatus}
                 localClusterStatus={localClusterStatus}
             />
@@ -95,10 +111,17 @@ export const SplashFailDocker = () => {
     const [localClusterStatus, setLocalClusterStatus] =
         useState<SplashStatusCheck>(SplashStatusCheck.LOADING);
 
+    const [npmStatus, setNpmStatus] =
+        useState<SplashStatusCheck>(SplashStatusCheck.LOADING);
+
     useEffect(() => {
         setTimeout(() => {
             setDockerStatus(SplashStatusCheck.ERROR);
         }, 1000);
+
+        setTimeout(() => {
+            setNpmStatus(SplashStatusCheck.OK);
+        }, 600);
 
         setTimeout(() => {
             setLocalClusterStatus(SplashStatusCheck.OK);
@@ -120,6 +143,7 @@ export const SplashFailDocker = () => {
                         setLocalClusterStatus(SplashStatusCheck.OK);
                     }, 5000);
                 }}
+                npmStatus={npmStatus}
                 dockerStatus={dockerStatus}
                 localClusterStatus={localClusterStatus}
             />
@@ -134,10 +158,17 @@ export const SplashOk = () => {
     const [localClusterStatus, setLocalClusterStatus] =
         useState<SplashStatusCheck>(SplashStatusCheck.LOADING);
 
+    const [npmStatus, setNpmStatus] =
+        useState<SplashStatusCheck>(SplashStatusCheck.LOADING);
+
     useEffect(() => {
         setTimeout(() => {
             setDockerStatus(SplashStatusCheck.OK);
         }, 2000);
+
+        setTimeout(() => {
+            setNpmStatus(SplashStatusCheck.OK);
+        }, 600);
 
         setTimeout(() => {
             setLocalClusterStatus(SplashStatusCheck.OK);
@@ -159,6 +190,7 @@ export const SplashOk = () => {
                         setLocalClusterStatus(SplashStatusCheck.OK);
                     }, 5000);
                 }}
+                npmStatus={npmStatus}
                 dockerStatus={dockerStatus}
                 localClusterStatus={localClusterStatus}
             />

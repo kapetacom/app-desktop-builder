@@ -56,7 +56,12 @@ export function shellEnvSync(shell?: string): NodeJS.ProcessEnv {
     }
 
     try {
-        const {stdout} = spawnSync(shell || defaultShell, args, {env});
+        const {stdout} = spawnSync(shell || defaultShell, args, {
+            env: {
+                ...process.env,
+                ...env
+            }
+        });
         return parseEnv(stdout.toString());
     } catch (error) {
         if (shell) {
