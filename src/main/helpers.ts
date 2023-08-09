@@ -5,6 +5,7 @@ import { session, app, BrowserWindow, ipcMain, shell } from 'electron';
 import log from 'electron-log';
 import { autoUpdater } from 'electron-updater';
 import packageJson from '../../package.json';
+import {spawn} from "@kapeta/nodejs-process";
 
 const ENABLE_EXTENSIONS = false; //Disabled because Electron doesn't support react extension currently
 
@@ -120,4 +121,39 @@ export function createFuture() {
         reject = rej;
     });
     return { promise, resolve, reject };
+}
+
+export async function hasApp(appName) {
+    const cmd = (process.platform === 'win32') ? 'where' : 'which';
+    const task = spawn(cmd, [appName]);
+
+    try {
+        let result = false;
+        task.process.on('exit', (code) => {
+            result = code === 0;
+        });
+        await task.wait();
+        return result;
+    } catch (e) {
+        return false;
+    }
+}
+
+export async function hasCLI() {
+    return hasApp('kap')
+}
+
+export async function ensureCLI() {
+    if (await hasCLI()) {
+        return null;
+    }
+    const task = spawn('npm', ['install', '-g', '@kapeta/kap'], {
+        stdio: "pipe"
+    });
+
+    task.onData((data) => {
+        console.log('[Kapeta CLI install] ', data.line);
+    });
+
+    return task;
 }

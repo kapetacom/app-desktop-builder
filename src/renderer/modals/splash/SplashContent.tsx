@@ -29,10 +29,13 @@ export const SplashStatusIcon = (props: {
 interface Props {
     localClusterStatus: SplashStatusCheck;
     dockerStatus: SplashStatusCheck;
+    npmStatus: SplashStatusCheck;
     onQuit: () => void;
     onRetry: () => void;
     onDone?: () => void;
 }
+
+const TOTAL_STEPS = 3;
 
 const DONE_STATES = [SplashStatusCheck.OK, SplashStatusCheck.ERROR];
 
@@ -42,7 +45,8 @@ export const SplashContent = (props: Props) => {
     let text = 'Loading...';
     const done =
         DONE_STATES.includes(props.dockerStatus) &&
-        DONE_STATES.includes(props.localClusterStatus);
+        DONE_STATES.includes(props.localClusterStatus) &&
+        DONE_STATES.includes(props.npmStatus);
 
     let okCount = 0;
     if (props.dockerStatus === SplashStatusCheck.OK) {
@@ -52,11 +56,15 @@ export const SplashContent = (props: Props) => {
         okCount += 1;
     }
 
-    const hasError = done && okCount < 2;
-    const minProgress = okCount * 50;
+    if (props.npmStatus === SplashStatusCheck.OK) {
+        okCount += 1;
+    }
+
+    const hasError = done && okCount < TOTAL_STEPS;
+    const minProgress = okCount * (100 / TOTAL_STEPS);
 
     useEffect(() => {
-        if (okCount === 2) {
+        if (okCount === TOTAL_STEPS) {
             props.onDone && props.onDone();
         }
     }, [okCount, props.onDone]);
@@ -64,23 +72,25 @@ export const SplashContent = (props: Props) => {
     if (done) {
         if (
             props.dockerStatus === SplashStatusCheck.OK &&
-            props.localClusterStatus === SplashStatusCheck.OK
+            props.localClusterStatus === SplashStatusCheck.OK &&
+            props.npmStatus === SplashStatusCheck.OK
         ) {
             text = 'Starting kapeta...';
         }
 
         if (
             props.dockerStatus === SplashStatusCheck.ERROR ||
-            props.localClusterStatus === SplashStatusCheck.ERROR
+            props.localClusterStatus === SplashStatusCheck.ERROR ||
+            props.npmStatus === SplashStatusCheck.ERROR
         ) {
             text = 'Failed...';
         }
     } else {
-        if (props.localClusterStatus !== SplashStatusCheck.LOADING) {
+        if (props.npmStatus === SplashStatusCheck.LOADING) {
+            text = 'Checking npm...';
+        } else if (props.dockerStatus === SplashStatusCheck.LOADING) {
             text = 'Checking docker...';
-        }
-
-        if (props.dockerStatus !== SplashStatusCheck.LOADING) {
+        } else if (props.localClusterStatus === SplashStatusCheck.LOADING) {
             text = 'Starting cluster...';
         }
     }
@@ -246,6 +256,17 @@ export const SplashContent = (props: Props) => {
                         </span>
                     </div>
                     <div>
+                        <SplashStatusIcon status={props.npmStatus} />
+                        <span>
+                            {props.npmStatus === SplashStatusCheck.LOADING &&
+                                'Checking NPM...'}
+                            {props.npmStatus === SplashStatusCheck.OK &&
+                                'NPM found.'}
+                            {props.npmStatus === SplashStatusCheck.ERROR &&
+                                'NPM not found.'}
+                        </span>
+                    </div>
+                    <div>
                         <SplashStatusIcon status={props.localClusterStatus} />
                         <span>
                             {props.localClusterStatus ===
@@ -263,7 +284,10 @@ export const SplashContent = (props: Props) => {
             <div className="right">
                 {hasError && (
                     <div className={'errors'}>
-                        <Typography variant={'body2'}>
+                        <Typography variant={'body2'} sx={{
+                            fontSize: '13px',
+                            lineHeight: '18px'
+                        }} >
                             {props.localClusterStatus ===
                                 SplashStatusCheck.ERROR && (
                                 <div className={'error-message'}>
@@ -277,6 +301,14 @@ export const SplashContent = (props: Props) => {
                                     <span>
                                         Make sure docker is installed and
                                         running
+                                    </span>
+                                </div>
+                            )}
+                            {props.npmStatus === SplashStatusCheck.ERROR && (
+                                <div className={'error-message'}>
+                                    <i className="fas fa-circle"></i>
+                                    <span>
+                                        Make sure NPM is installed
                                     </span>
                                 </div>
                             )}

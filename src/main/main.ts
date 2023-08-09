@@ -16,10 +16,19 @@ import { ClusterService } from './services/ClusterService';
 import { SplashScreen } from './modals/SplashScreen';
 import { attachHandlers } from './services/IPCService';
 
+import './shell/shell-helpers';
+
 const clusterService = new ClusterService();
 const splashScreen = new SplashScreen(clusterService);
 
 attachHandlers();
+
+const singleInstanceLock = app.requestSingleInstanceLock();
+if (!singleInstanceLock) {
+    // We only want one instance of the app running at a time
+    app.quit();
+    process.exit();
+}
 
 app.on('window-all-closed', () => {
     // Do not close app when windows close. We still have the tray
@@ -29,13 +38,21 @@ app.on('quit', async () => {
     await clusterService.stop();
 });
 
+
+
 appInit()
     .then(() => splashScreen.open())
     .then(async () => {
         const main = new MainWindow(clusterService);
         await main.open();
 
-        app.on('activate', () => main.open());
+        app.on('second-instance', (event, commandLine, workingDirectory) => {
+            // TODO: Handle if the user tries to open a file
+            // Someone tried to run a second instance, we should focus our window.
+            main.show();
+        });
+
+        app.on('activate', () => main.show());
         if (app.show) {
             app.show();
         }

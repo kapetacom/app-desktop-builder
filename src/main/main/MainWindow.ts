@@ -129,4 +129,27 @@ export class MainWindow {
             }
         );
     }
+
+    async show() {
+        if (!this.window) {
+            return this.open();
+        }
+
+        if (this.isMinimized()) {
+            this.restore();
+        }
+        this.focus();
+    }
+
+    isMinimized() {
+        return this.window?.isMinimized();
+    }
+
+    restore() {
+        this.window?.restore();
+    }
+
+    focus() {
+        this.window?.focus();
+    }
 }

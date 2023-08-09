@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Kapeta
+Comment=The future of Software
+Exec=Kapeta.AppImage
+Icon=com.example.YourApplication
+Keywords=development;infrastructure;code;
+StartupNotify=true
+Terminal=false

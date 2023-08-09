@@ -10,6 +10,7 @@ const root = createRoot(document.getElementById('root')!);
 interface State {
     localClusterStatus: SplashStatusCheck;
     dockerStatus: SplashStatusCheck;
+    npmStatus: SplashStatusCheck;
 }
 
 function render(state: State) {
@@ -31,6 +32,7 @@ function render(state: State) {
                 }}
                 localClusterStatus={state.localClusterStatus}
                 dockerStatus={state.dockerStatus}
+                npmStatus={state.npmStatus}
             />
         </ThemeProvider>
     );
@@ -39,10 +41,22 @@ function render(state: State) {
 window.electron.ipcRenderer.on('splash', ([eventType, data]) => {
     if (eventType === 'changed') {
         render({
-            localClusterStatus: SplashStatusCheck.OK,
-            dockerStatus: data.dockerStatus
-                ? SplashStatusCheck.OK
-                : SplashStatusCheck.ERROR,
+            localClusterStatus: data.localClusterStatus === undefined ?
+                SplashStatusCheck.LOADING
+                : (data.localClusterStatus ?
+                    SplashStatusCheck.OK
+                    : SplashStatusCheck.ERROR),
+            dockerStatus: data.dockerStatus === undefined ?
+                SplashStatusCheck.LOADING
+                : (data.dockerStatus ?
+                    SplashStatusCheck.OK
+                    : SplashStatusCheck.ERROR),
+            npmStatus: data.npmStatus === undefined ?
+                SplashStatusCheck.LOADING
+                : (data.npmStatus ?
+                    SplashStatusCheck.OK
+                    : SplashStatusCheck.ERROR)
+
         });
     }
 
@@ -50,6 +64,7 @@ window.electron.ipcRenderer.on('splash', ([eventType, data]) => {
         render({
             localClusterStatus: SplashStatusCheck.ERROR,
             dockerStatus: SplashStatusCheck.ERROR,
+            npmStatus: SplashStatusCheck.ERROR,
         });
     }
 
@@ -57,6 +72,7 @@ window.electron.ipcRenderer.on('splash', ([eventType, data]) => {
         render({
             localClusterStatus: SplashStatusCheck.LOADING,
             dockerStatus: SplashStatusCheck.LOADING,
+            npmStatus: SplashStatusCheck.LOADING,
         });
     }
 });
@@ -64,4 +80,5 @@ window.electron.ipcRenderer.on('splash', ([eventType, data]) => {
 render({
     localClusterStatus: SplashStatusCheck.LOADING,
     dockerStatus: SplashStatusCheck.LOADING,
+    npmStatus: SplashStatusCheck.LOADING,
 });
