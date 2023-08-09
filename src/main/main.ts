@@ -9,6 +9,8 @@
  * When running `npm run build` or `npm run build:main`, this file is compiled to
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
+import './shell/shell-helpers';
+
 import { app, dialog } from 'electron';
 import { appInit } from './helpers';
 import { MainWindow } from './main/MainWindow';
@@ -16,7 +18,7 @@ import { ClusterService } from './services/ClusterService';
 import { SplashScreen } from './modals/SplashScreen';
 import { attachHandlers } from './services/IPCService';
 
-import './shell/shell-helpers';
+
 
 const clusterService = new ClusterService();
 const splashScreen = new SplashScreen(clusterService);

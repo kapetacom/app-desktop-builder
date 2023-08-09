@@ -1,6 +1,5 @@
 import {
     app,
-    dialog,
     Menu,
     MenuItemConstructorOptions,
     shell,
@@ -8,14 +7,13 @@ import {
     nativeTheme,
 } from 'electron';
 import {ExtendedIdentity, KapetaAPI, Membership} from '@kapeta/nodejs-api-client';
-import {createFuture, getAssetPath, ensureCLI, hasApp} from '../helpers';
+import {createFuture, getAssetPath, ensureCLI, hasApp, showError, showMessage, showInfo} from '../helpers';
 import {ClusterService} from '../services/ClusterService';
 import {MainWindow} from './MainWindow';
 import {ModalProcessing} from '../modals/ModalProcessing';
 
 import MenuItem = Electron.MenuItem;
 import {MemberIdentity} from "@kapeta/ui-web-types";
-import {spawn} from "@kapeta/nodejs-process";
 
 type TrayMenuItem = MenuItemConstructorOptions | MenuItem;
 
@@ -23,14 +21,8 @@ type TrayMenuItem = MenuItemConstructorOptions | MenuItem;
 nativeTheme.themeSource = 'system';
 
 const getTrayIcon = () => {
-    if (process.platform === 'darwin') {
-        // macOS tray is always dark so need light to be visible
-        return getAssetPath('icons/tray_icon_light.png')
-    }
-
-    return nativeTheme.shouldUseDarkColors
-        ? getAssetPath('icons/tray_icon_light.png')
-        : getAssetPath('icons/tray_icon_dark.png')
+    // All trays seem to be dark?
+    return getAssetPath('icons/tray_icon_light.png')
 }
 
 export class TrayWrapper {
@@ -140,22 +132,17 @@ export class TrayWrapper {
         };
     }
 
-    private signOut() {
-        return async () => {
-            try {
-                this.api.removeToken();
-                await this.update();
-                this.mainWindow.window?.webContents.send(
-                    'auth',
-                    'signed-out'
-                );
-            } catch (e) {
-                dialog.showErrorBox(
-                    'Failed to sign out',
-                    e.message
-                );
-            }
-        };
+    private async signOut() {
+        try {
+            this.api.removeToken();
+            await this.update();
+            this.mainWindow.window?.webContents.send(
+                'auth',
+                'signed-out'
+            );
+        } catch (e) {
+            showError('Failed to sign out')
+        }
     }
 
     private createMembershipMenu(context: MemberIdentity | null, memberships: Membership[]) {
@@ -200,9 +187,8 @@ export class TrayWrapper {
             );
             await this.update();
         } catch (e) {
-            dialog.showErrorBox(
-                'Failed to switch context',
-                e.message
+            showError(
+                `Failed to switch context: ${e.message}`
             );
         }
     }
@@ -253,13 +239,7 @@ export class TrayWrapper {
             const identity =
                 await this.api.getCurrentIdentity();
             this.processingModal.close();
-            dialog.showMessageBoxSync({
-                type: 'info',
-                message: `You were signed in as ${
-                    identity.name || identity.handle
-                }!`,
-                title: 'Signed in!',
-            });
+            showInfo(`You were signed in as ${identity.name || identity.handle}!`);
 
             this.mainWindow.window?.webContents.send(
                 'auth',
@@ -268,10 +248,9 @@ export class TrayWrapper {
         } catch (err: any) {
             this.processingModal.close();
             const message =
-                err.message ?? err.error ?? 'Unknown error';
+                err.message ?? err.error ?? 'Authentication failed';
             // Failed to complete
-            dialog.showErrorBox(
-                'Failed to authenticate',
+            showError(
                 message
             );
         } finally {
@@ -284,9 +263,8 @@ export class TrayWrapper {
             await this.api.removeContext();
             await this.update();
         } catch (e) {
-            dialog.showErrorBox(
-                'Failed to remove context',
-                e.message
+            showError(
+                `Failed to remove context: ${e.message}`
             );
         }
     }
@@ -311,8 +289,7 @@ export class TrayWrapper {
 
         const onCloseHandler = async () => {
             task.abort();
-            dialog.showErrorBox(
-                'Installation aborted',
+            showError(
                 'The installation of the Kapeta CLI was aborted. '
             );
         };
@@ -322,20 +299,16 @@ export class TrayWrapper {
         try {
             await task.wait();
 
-            dialog.showMessageBoxSync({
-                type: 'info',
-                message: `You now have the Kapeta CLI available as "kap" in your terminal`,
-                title: 'Installation succeeded',
-            });
+            showInfo(`You now have the Kapeta CLI available as "kap" in your terminal`);
+            await this.update();
         } catch (e) {
             if (e.code === 'ABORTED') {
                 return;
             }
 
             console.warn('Failed to install CLI', e);
-            dialog.showErrorBox(
-                'Installation failed',
-                'The installation failed. Please try again. '
+            showError(
+                'The installation failed. Please try again. ',
             );
         } finally {
             this.processingModal.off('close', onCloseHandler);

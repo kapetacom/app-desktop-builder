@@ -1,11 +1,12 @@
 /* eslint import/prefer-default-export: off */
-import { URL } from 'url';
+import {URL} from 'url';
 import path from 'path';
-import { session, app, BrowserWindow, ipcMain, shell } from 'electron';
+import {session, app, BrowserWindow, ipcMain, shell, dialog} from 'electron';
 import log from 'electron-log';
-import { autoUpdater } from 'electron-updater';
+import {autoUpdater} from 'electron-updater';
 import packageJson from '../../package.json';
 import {spawn} from "@kapeta/nodejs-process";
+import MessageBoxOptions = Electron.MessageBoxOptions;
 
 const ENABLE_EXTENSIONS = false; //Disabled because Electron doesn't support react extension currently
 
@@ -52,7 +53,7 @@ export const ensureUserAgent = () => {
         (details, callback) => {
             details.requestHeaders['user-agent'] = userAgent;
             details.requestHeaders['x-kapeta'] = 'true';
-            callback({ cancel: false, requestHeaders: details.requestHeaders });
+            callback({cancel: false, requestHeaders: details.requestHeaders});
         }
     );
 };
@@ -101,7 +102,7 @@ export const WindowOpenHandler = (
     edata: Electron.HandlerDetails
 ): { action: 'deny' } => {
     shell.openExternal(edata.url);
-    return { action: 'deny' };
+    return {action: 'deny'};
 };
 
 export function resolveHtmlPath(htmlFileName: string) {
@@ -120,12 +121,14 @@ export function createFuture() {
         resolve = res;
         reject = rej;
     });
-    return { promise, resolve, reject };
+    return {promise, resolve, reject};
 }
 
 export async function hasApp(appName) {
-    const cmd = (process.platform === 'win32') ? 'where' : 'which';
-    const task = spawn(cmd, [appName]);
+    const {cmd, args} = (process.platform === 'win32') ?
+        {cmd: 'where', args: ['/Q']} :
+        {cmd: 'which', args: []}
+    const task = spawn(cmd, [...args, appName]);
 
     try {
         let result = false;
@@ -148,7 +151,7 @@ export async function ensureCLI() {
         return null;
     }
     const task = spawn('npm', ['install', '-g', '@kapeta/kap'], {
-        stdio: "pipe"
+        shell: true
     });
 
     task.onData((data) => {
@@ -156,4 +159,30 @@ export async function ensureCLI() {
     });
 
     return task;
+}
+
+export function showError(message: string) {
+    const opts: MessageBoxOptions = {
+        type: 'error',
+        message: message
+    };
+    return showMessage(opts);
+}
+
+export function showInfo(message: string) {
+    const opts: MessageBoxOptions = {
+        type: 'info',
+        message: message
+    };
+    return showMessage(opts);
+}
+
+export function showMessage(opts: MessageBoxOptions) {
+    const wins = BrowserWindow.getAllWindows();
+    const win = wins.length > 0 ? wins[0] : null;
+    if (win) {
+        dialog.showMessageBoxSync(win, opts);
+    } else {
+        dialog.showMessageBoxSync(opts);
+    }
 }
