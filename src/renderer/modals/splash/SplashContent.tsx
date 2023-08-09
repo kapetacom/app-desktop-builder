@@ -3,6 +3,7 @@ import { Paper, Alert, Typography, Button } from '@mui/material';
 import LogoSquareDark from '../../../../assets/logo_square_dark.svg';
 import LogoTextWhite from '../../../../assets/logo_text_white.svg';
 import ImageRocket from '../../../../assets/images/rocket.png';
+import {isWindows} from "../../utils/osUtils";
 export enum SplashStatusCheck {
     LOADING = 'LOADING',
     OK = 'OK',
@@ -120,14 +121,18 @@ export const SplashContent = (props: Props) => {
         };
     }, [done, minProgress, props.dockerStatus, props.localClusterStatus]);
 
+    //Windows can't do transparent modals
+    const borderRadius = isWindows() ? '0px' : '10px';
+    const elevation = isWindows() ? 0 : 7;
+
     return (
         <Paper
-            elevation={7}
+            elevation={elevation}
             sx={{
                 position: 'relative',
                 overflow: 'hidden',
                 bgcolor: '#001E36',
-                borderRadius: '10px',
+                borderRadius,
                 width: 516,
                 height: 316,
                 display: 'flex',

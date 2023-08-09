@@ -11,13 +11,17 @@ interface Props {
 }
 
 import './ProcessingContent.less';
+import {isWindows} from "../../utils/osUtils";
 
 export const ProcessingContent = (props: Props) => {
+    const borderRadius = isWindows() ? '0px' : '10px';
+    const elevation = isWindows() ? 0 : 7;
+
     return (
         <Paper
-            elevation={0}
+            elevation={elevation}
             sx={{
-                borderRadius:0,
+                borderRadius,
                 padding: '0',
                 width: '100%',
                 height: '100%',

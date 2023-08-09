@@ -28,8 +28,8 @@ export class ModalProcessing extends EventEmitter {
         this.win = new BrowserWindow({
             frame: false,
             show: true,
-            alwaysOnTop: true,
             transparent: true,
+            alwaysOnTop: false,
             parent: parent,
             width: 500,
             height: 250,
