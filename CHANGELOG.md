@@ -1,3 +1,10 @@
+## [0.18.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.18.2...v0.18.3) (2023-08-09)
+
+
+### Bug Fixes
+
+* Transparency only makes sense on mac ([36d27df](https://github.com/kapetacom/app-desktop-builder/commit/36d27df61e1a2188dfc0ed7ca97df05125a401c0))
+
 ## [0.18.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.18.1...v0.18.2) (2023-08-09)
 
 
