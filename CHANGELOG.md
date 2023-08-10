@@ -1,3 +1,10 @@
+## [0.19.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.19.4...v0.19.5) (2023-08-10)
+
+
+### Bug Fixes
+
+* Hook in creation and deletion on empty state UI ([1c7516a](https://github.com/kapetacom/app-desktop-builder/commit/1c7516aaa598338bf5b0308d6356a0cc8d85a2a6))
+
 ## [0.19.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.19.3...v0.19.4) (2023-08-10)
 
 
