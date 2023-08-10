@@ -7,6 +7,7 @@ import ExpandIcon from './icons/ExpandIcon.svg';
 import DeployIcon from './icons/DeployIcon.svg';
 import PlanIcon from './icons/PlanIcon.svg';
 
+
 const customIcons = {
     ListView: ListViewIcon,
     Block: BlockIcon,

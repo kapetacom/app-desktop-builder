@@ -180,6 +180,8 @@ export const AssetCreator = (props: Props) => {
                             message: err.message,
                         });
                     }
+                } else {
+                    props.onCancel && props.onCancel();
                 }
             })();
         }
