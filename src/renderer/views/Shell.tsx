@@ -9,19 +9,14 @@ import { EditorTabs } from 'renderer/components/shell/EditorTabs';
 import { CustomIcon } from 'renderer/components/shell/components/CustomIcon';
 
 import './Shell.less';
-import { useAsync, useInterval, useList } from 'react-use';
+import { useAsync } from 'react-use';
 import {
     IdentityService,
-    InstanceEventType,
-    InstanceService,
-    SocketService,
 } from '@kapeta/ui-web-context';
 import { useLocalStorage } from '../utils/localStorage';
 import { useKapetaContext } from 'renderer/hooks/contextHook';
-import { KapetaNotification } from '../components/shell/types';
 import { useBackgroundTasks } from './hooks/useBackgroundTasks';
 import {
-    useNotificationListener,
     useNotifications,
 } from '../hooks/useNotifications';
 

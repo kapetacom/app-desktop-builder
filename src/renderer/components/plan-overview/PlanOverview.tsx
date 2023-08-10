@@ -118,7 +118,7 @@ export const PlanOverview = (props: Props) => {
             />
 
             <div className="plan-overview-wrapper">
-                {props.plans.map((asset: Asset<Plan>, index) => {
+                {props.plans.map((asset, index) => {
                     // overwrite the callback now that we have hold of the plannerModelRef that we want to delete
                     const menuItem: MenuItem[] = [];
                     menuItem.push({
@@ -151,6 +151,7 @@ export const PlanOverview = (props: Props) => {
                                 plan={asset.data}
                                 blockAssets={blockAssets}
                                 mode={PlannerMode.VIEW}
+                                asset={asset}
                             />
                         </PlanOverviewItem>
                     );
