@@ -1,3 +1,10 @@
+# [0.21.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.20.0...v0.21.0) (2023-08-10)
+
+
+### Features
+
+* Include previews in blockhub ([38bbd3f](https://github.com/kapetacom/app-desktop-builder/commit/38bbd3f45c627a9a41d53610ec45dd1eb216732e))
+
 # [0.20.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.19.5...v0.20.0) (2023-08-10)
 
 
