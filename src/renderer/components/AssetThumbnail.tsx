@@ -19,20 +19,21 @@ import {
 import { useLoadedPlanContext } from '../utils/planContextLoader';
 import { Plan } from '@kapeta/schemas';
 
-interface Props {
+const CONTAINER_CLASS = 'asset-thumbnail';
+interface InnerProps {
     asset: Asset<SchemaKind>;
     width: number;
     height: number;
     onClick?: (asset: Asset<SchemaKind>) => void;
 }
 
-export const AssetThumbnailContainer = (props: Props & PropsWithChildren) => {
+export const AssetThumbnailContainer = (props: InnerProps & PropsWithChildren) => {
     const title =
         props.asset.data.metadata.title ?? props.asset.data.metadata.name;
 
     return (
         <Stack
-            className={'asset-thumbnail'}
+            className={CONTAINER_CLASS}
             onClick={() => props.onClick?.(props.asset)}
             direction={'column'}
             gap={0}
@@ -92,65 +93,89 @@ export const AssetThumbnailContainer = (props: Props & PropsWithChildren) => {
     );
 };
 
-const InnerPreview = (props: Props) => {
+const InnerPreview = (props: InnerProps) => {
     const kind = props.asset.data.kind;
-    switch (kind) {
-        case CoreTypes.PLAN:
-            const context = useLoadedPlanContext(props.asset.data as Plan);
-            return (
-                <SimpleLoader loading={context.loading}>
-                    {!context.loading && (
-                        <PlanPreview
-                            asset={props.asset}
-                            width={props.width}
-                            height={props.height}
-                            blocks={context.blocks}
-                        />
-                    )}
-                </SimpleLoader>
-            );
-        case CoreTypes.BLOCK_TYPE:
-        case CoreTypes.BLOCK_TYPE_OPERATOR:
-            return (
-                <BlockTypePreview
-                    width={props.width}
-                    height={props.height}
-                    blockType={BlockTypeProvider.get(props.asset.ref)}
-                />
-            );
-        case CoreTypes.PROVIDER_INTERNAL:
-        case CoreTypes.PROVIDER_OPERATOR:
-        case CoreTypes.PROVIDER_EXTENSION:
-            return (
-                <ResourceTypePreview
-                    width={props.width}
-                    height={props.height}
-                    resourceType={ResourceTypeProvider.get(props.asset.ref)}
-                />
-            );
-        default:
-            if (kind.startsWith('core/')) {
+    try {
+        switch (kind) {
+            case CoreTypes.PLAN:
+                const context = useLoadedPlanContext(props.asset.data as Plan);
                 return (
-                    <AssetKindIcon
-                        size={Math.min(props.width, props.height)}
-                        asset={props.asset.data}
+                    <SimpleLoader loading={context.loading}>
+                        {!context.loading && (
+                            <PlanPreview
+                                asset={props.asset}
+                                width={props.width}
+                                height={props.height}
+                                blocks={context.blocks}
+                            />
+                        )}
+                    </SimpleLoader>
+                );
+            case CoreTypes.BLOCK_TYPE:
+            case CoreTypes.BLOCK_TYPE_OPERATOR:
+                return (
+                    <BlockTypePreview
+                        width={props.width}
+                        height={props.height}
+                        blockType={BlockTypeProvider.get(props.asset.ref)}
                     />
                 );
-            }
+            case CoreTypes.PROVIDER_INTERNAL:
+            case CoreTypes.PROVIDER_OPERATOR:
+            case CoreTypes.PROVIDER_EXTENSION:
+                return (
+                    <ResourceTypePreview
+                        width={props.width}
+                        height={props.height}
+                        resourceType={ResourceTypeProvider.get(props.asset.ref)}
+                    />
+                );
+            default:
+                if (kind.startsWith('core/')) {
+                    return (
+                        <AssetKindIcon
+                            size={Math.min(props.width, props.height)}
+                            asset={props.asset.data}
+                        />
+                    );
+                }
 
-            return (
-                <BlockPreview
-                    width={props.width}
-                    height={props.height}
-                    resources={true}
-                    block={props.asset.data}
-                    blockType={BlockTypeProvider.get(props.asset.data.kind)}
-                />
-            );
+                return (
+                    <BlockPreview
+                        width={props.width}
+                        height={props.height}
+                        resources={true}
+                        block={props.asset.data}
+                        blockType={BlockTypeProvider.get(props.asset.data.kind)}
+                    />
+                );
+        }
+    } catch (e) {
+        console.warn('Failed to render preview', e);
+        return (
+            <AssetKindIcon
+                size={Math.min(props.width, props.height)}
+                asset={props.asset.data}
+            />
+        );
     }
 };
 
+interface Props extends InnerProps {
+    hideMetadata?: boolean;
+}
+
+
+
 export const AssetThumbnail = (props: Props) => {
+    if (props.hideMetadata) {
+        return <Box className={CONTAINER_CLASS} sx={{
+            position: 'relative',
+            textAlign: 'center'
+        }} >
+            <InnerPreview {...props} height={props.height} />
+        </Box>
+    }
     return (
         <AssetThumbnailContainer {...props}>
             <InnerPreview {...props} height={props.height - 88} />

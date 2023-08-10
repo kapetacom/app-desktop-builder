@@ -14,6 +14,9 @@ import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import { useKapetaContext } from '../../../hooks/contextHook';
 import { versionIsBigger } from '../../../utils/versionHelpers';
 import { Asset } from '@kapeta/ui-web-types';
+import {AssetThumbnail} from "../../AssetThumbnail";
+import {normalizeKapetaUri} from "../../../utils/planContextLoader";
+
 
 interface Props {
     handle?: string;
@@ -115,6 +118,26 @@ export const BlockhubShell = (props: Props) => {
                 }}
                 onClose={() => {
                     kapetaContext.blockHub.close();
+                }}
+                previewRenderer={(asset, size) => {
+                    const assetRef = normalizeKapetaUri(`${asset.content.metadata.name}:${asset.version}`);
+                    return (
+                        <AssetThumbnail
+                            width={size.width}
+                            height={size.height}
+                            hideMetadata={true}
+                            asset={{
+                                kind: asset.content.kind,
+                                version: asset.version,
+                                data: asset.content,
+                                exists: true,
+                                ref: assetRef,
+                                editable: asset.version === 'local',
+                                ymlPath: '',
+                                path: '',
+                            }}
+                        />
+                    );
                 }}
             />
         </ThemeProvider>
