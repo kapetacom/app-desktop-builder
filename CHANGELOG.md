@@ -1,3 +1,10 @@
+## [0.19.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.19.0...v0.19.1) (2023-08-10)
+
+
+### Bug Fixes
+
+* Bug when passing parameters to mini plan ([5c61940](https://github.com/kapetacom/app-desktop-builder/commit/5c619400c0ac39a8132c0719f3b2e980c1252e4e))
+
 # [0.19.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.18.4...v0.19.0) (2023-08-09)
 
 
