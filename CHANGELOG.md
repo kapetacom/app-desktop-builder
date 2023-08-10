@@ -1,3 +1,10 @@
+# [0.20.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.19.5...v0.20.0) (2023-08-10)
+
+
+### Features
+
+* Fully implemented AssetThumbnails ([efc7992](https://github.com/kapetacom/app-desktop-builder/commit/efc79926208bd19dd5274c548985fe9745e6c64d))
+
 ## [0.19.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.19.4...v0.19.5) (2023-08-10)
 
 
