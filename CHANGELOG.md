@@ -1,3 +1,10 @@
+## [0.19.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.19.2...v0.19.3) (2023-08-10)
+
+
+### Bug Fixes
+
+* Bumps local cluster to sync context ([077c597](https://github.com/kapetacom/app-desktop-builder/commit/077c5973a8228dff6a5533a5194f2895a8e2bd72))
+
 ## [0.19.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.19.1...v0.19.2) (2023-08-10)
 
 
