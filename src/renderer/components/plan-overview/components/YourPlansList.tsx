@@ -5,17 +5,18 @@ import {Plan} from "@kapeta/schemas";
 import {Image} from "@mui/icons-material";
 import {toClass} from "@kapeta/ui-web-utils";
 import {AssetThumbnail} from "../../AssetThumbnail";
+import {useKapetaContext} from "../../../hooks/contextHook";
 
 
 interface Props {
     plans: Asset<Plan>[];
     onPlanOpen?: (plan:Asset<Plan>) => void;
     onPlanCreate?: () => void;
-    onPlanFind?: () => void;
     onPlanImport?: () => void;
 }
 
 const YourPlansListInner = (props: Props) => {
+    const kapetaContext = useKapetaContext();
 
     if (props.plans.length < 1) {
         return <Stack
@@ -51,7 +52,9 @@ const YourPlansListInner = (props: Props) => {
                         <p>
                             <a style={{marginLeft: 0}} onClick={props.onPlanCreate}>Create</a>
                             <span>,</span>
-                            <a onClick={props.onPlanFind}>Find</a>
+                            <a onClick={() => {
+                                kapetaContext.blockHub.open();
+                            }}>Find</a>
                             <span>or</span>
                             <a onClick={props.onPlanImport}>Import</a>
                             <span>a new Plan to see it here.</span>

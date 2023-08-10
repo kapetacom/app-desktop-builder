@@ -80,6 +80,12 @@ export const PlanOverview = (props: Props) => {
                     onOpenSample={props.onPlanSelected}/>
                 }
                 <YourPlansList onPlanOpen={props.onPlanSelected}
+                               onPlanCreate={() => {
+                                   setCreatorState(AssetCreatorState.CREATING);
+                               }}
+                               onPlanImport={() => {
+                                   setCreatorState(AssetCreatorState.IMPORTING);
+                               }}
                                plans={props.plans}/>
             </Stack>
             {props.assetService &&
