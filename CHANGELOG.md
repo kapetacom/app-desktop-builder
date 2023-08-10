@@ -1,3 +1,10 @@
+## [0.19.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.19.1...v0.19.2) (2023-08-10)
+
+
+### Bug Fixes
+
+* Fixes tabs and syncs profile / context state between UI and main ([#54](https://github.com/kapetacom/app-desktop-builder/issues/54)) ([8ccb44b](https://github.com/kapetacom/app-desktop-builder/commit/8ccb44bcf7d647db87dc8dcffa2b47f1e1e839e2))
+
 ## [0.19.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.19.0...v0.19.1) (2023-08-10)
 
 
