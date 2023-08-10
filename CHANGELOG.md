@@ -1,3 +1,10 @@
+## [0.19.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.19.3...v0.19.4) (2023-08-10)
+
+
+### Bug Fixes
+
+* Implemented most of editor start screen ([#55](https://github.com/kapetacom/app-desktop-builder/issues/55)) ([d47583f](https://github.com/kapetacom/app-desktop-builder/commit/d47583fae5bdcc96f2bd9229cf4a68be84ca6937))
+
 ## [0.19.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.19.2...v0.19.3) (2023-08-10)
 
 
