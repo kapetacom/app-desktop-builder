@@ -21,8 +21,6 @@ import { attachHandlers } from './services/IPCService';
 const clusterService = new ClusterService();
 const splashScreen = new SplashScreen(clusterService);
 
-
-
 const singleInstanceLock = app.requestSingleInstanceLock();
 if (!singleInstanceLock) {
     // We only want one instance of the app running at a time

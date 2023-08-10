@@ -1,18 +1,17 @@
-import React from "react";
-import {Button, Stack, Typography} from "@mui/material";
-import {CustomIcon} from "../../shell/components/CustomIcon";
+import React from 'react';
+import { Button, Stack, Typography } from '@mui/material';
+import { CustomIcon } from '../../shell/components/CustomIcon';
 import AddIcon from '../../shell/components/icons/large/AddIcon.svg';
 import ImportIcon from '../../shell/components/icons/large/ImportIcon.svg';
 import BlockHubIcon from '../../shell/components/icons/large/BlockHubIcon.svg';
-import {useKapetaContext} from "../../../hooks/contextHook";
+import { useKapetaContext } from '../../../hooks/contextHook';
 interface XLButtonProps {
-    variant: 'edit' | 'blockhub' | 'import'
-    label: string
-    onClick?: () => void
+    variant: 'edit' | 'blockhub' | 'import';
+    label: string;
+    onClick?: () => void;
 }
 
 const XLButton = (props: XLButtonProps) => {
-
     let icon,
         color = 'primary.contrastText',
         bgColor,
@@ -21,17 +20,17 @@ const XLButton = (props: XLButtonProps) => {
         borderHover;
 
     switch (props.variant) {
-        case "blockhub":
+        case 'blockhub':
             icon = <BlockHubIcon />;
             bgColor = '#455A64';
             bgColorHover = '#263238';
             break;
-        case "edit":
+        case 'edit':
             icon = <AddIcon />;
             bgColor = 'primary.main';
             bgColorHover = 'primary.dark';
             break;
-        case "import":
+        case 'import':
             icon = <ImportIcon />;
             color = '#455A64';
             border = '1px dashed #455A64';
@@ -57,30 +56,32 @@ const XLButton = (props: XLButtonProps) => {
                 '&:hover': {
                     bgcolor: bgColorHover,
                     border: borderHover,
-                    boxShadow: 3
-                }
-            }}>
+                    boxShadow: 3,
+                },
+            }}
+        >
             {icon}
-            <Typography>
-                {props.label}
-            </Typography>
+            <Typography>{props.label}</Typography>
         </Button>
-    )
-}
+    );
+};
 
 interface Props {
-    onPlanCreate?: () => void
-    onPlanImport?: () => void
+    onPlanCreate?: () => void;
+    onPlanImport?: () => void;
 }
 
-export const GetStartedHeader = (props:Props) => {
+export const GetStartedHeader = (props: Props) => {
     const kapetaContext = useKapetaContext();
 
     return (
-        <Stack direction={'column'} sx={{
-            pt: 2,
-            pb: 2,
-        }}>
+        <Stack
+            direction={'column'}
+            sx={{
+                pt: 2,
+                pb: 2,
+            }}
+        >
             <Typography variant={'h6'} pb={2} pt={2}>
                 Get started
             </Typography>
@@ -90,25 +91,25 @@ export const GetStartedHeader = (props:Props) => {
                     '.xl-button': {
                         flex: 1,
                     },
-                    gap: 3
+                    gap: 3,
                 }}
-                >
+            >
                 <XLButton
-                    variant={"edit"}
+                    variant={'edit'}
                     label={'New Plan'}
                     onClick={props.onPlanCreate}
                 />
                 <XLButton
-                    variant={"blockhub"}
+                    variant={'blockhub'}
                     label={'Block Hub'}
                     onClick={() => kapetaContext.blockHub.open()}
                 />
                 <XLButton
-                    variant={"import"}
+                    variant={'import'}
                     label={'Import'}
                     onClick={props.onPlanImport}
                 />
             </Stack>
         </Stack>
-    )
-}
+    );
+};

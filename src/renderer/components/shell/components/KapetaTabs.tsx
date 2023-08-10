@@ -2,7 +2,7 @@ import { Tab, Tabs } from '@mui/material';
 import { lightTheme } from '@kapeta/style';
 import { createStyled } from '@mui/system';
 
-export type KapetaTabsType = 'deploy' | 'edit'
+export type KapetaTabsType = 'deploy' | 'edit';
 /**
  * Example of a custom tab component
  */

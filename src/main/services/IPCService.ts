@@ -1,8 +1,8 @@
 import { ipcMain } from 'electron';
 import { KapetaAPI } from '@kapeta/nodejs-api-client';
-import {MainWindow} from "../main/MainWindow";
+import { MainWindow } from '../main/MainWindow';
 
-export function attachHandlers(main:MainWindow) {
+export function attachHandlers(main: MainWindow) {
     ipcMain.handle('get-token', async () => {
         try {
             const api = new KapetaAPI();
@@ -59,7 +59,7 @@ export function attachHandlers(main:MainWindow) {
         }
     });
 
-    ipcMain.handle('set-context', async (evt, ...args:any[]) => {
+    ipcMain.handle('set-context', async (evt, ...args: any[]) => {
         try {
             const api = new KapetaAPI();
             const handle = args && args[0] ? args[0] : undefined;
@@ -73,7 +73,6 @@ export function attachHandlers(main:MainWindow) {
             console.error('Failed to set context', args, err);
         }
     });
-
 
     ipcMain.handle('refresh-context', async () => {
         try {

@@ -53,7 +53,6 @@ export class TrayWrapper {
         });
     }
 
-
     public async update() {
         let userMenu = await this.createUserMenu();
 
@@ -124,9 +123,7 @@ export class TrayWrapper {
     private showAccountSettings(identity: ExtendedIdentity) {
         const api = new KapetaAPI();
         return () => {
-            shell.openExternal(
-                `${api.getBaseUrl()}/${identity.handle}/iam`
-            );
+            shell.openExternal(`${api.getBaseUrl()}/${identity.handle}/iam`);
         };
     }
 
@@ -205,18 +202,18 @@ export class TrayWrapper {
             });
 
             api.doDeviceAuthentication({
-                    onVerificationCode: (url: string) => {
-                        this.processingModal.setProps({
-                            title: 'Signing in...',
-                            text: `We are signing you in to Kapeta in your browser.
+                onVerificationCode: (url: string) => {
+                    this.processingModal.setProps({
+                        title: 'Signing in...',
+                        text: `We are signing you in to Kapeta in your browser.
                                                     This will log you in to your Kapeta account.
                                                     Cancelling will abort the process.`,
-                            linkText: 'View browser window',
-                            link: url,
-                        });
-                        shell.openExternal(url);
-                    },
-                })
+                        linkText: 'View browser window',
+                        link: url,
+                    });
+                    shell.openExternal(url);
+                },
+            })
                 .then(() => {
                     future.resolve();
                 })
@@ -253,8 +250,7 @@ export class TrayWrapper {
             showError(`Failed to remove context: ${e.message}`);
         }
     }
-    private emitAuthEvent(message:string) {
+    private emitAuthEvent(message: string) {
         this.mainWindow.window?.webContents.send('auth', message);
     }
-
 }

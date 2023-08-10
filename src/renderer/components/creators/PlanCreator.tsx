@@ -29,7 +29,6 @@ const selectableHandler = (file: FileInfo) => {
 };
 
 export const PlanCreator = (props: PlanImportProps) => {
-
     return (
         <AssetCreator
             state={props.state}

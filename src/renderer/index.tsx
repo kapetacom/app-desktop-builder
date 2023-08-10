@@ -7,7 +7,7 @@ import {
     useNavigate,
 } from 'react-router-dom';
 import { useEffect } from 'react';
-import {AssetService, PlannerService} from '@kapeta/ui-web-context';
+import { AssetService, PlannerService } from '@kapeta/ui-web-context';
 import { useAsyncFn } from 'react-use';
 import { Root } from './Root';
 import { kapetaDark } from './Theme';
@@ -52,14 +52,21 @@ const router = createMemoryRouter([
                                 <PlanOverview
                                     assetService={AssetService}
                                     onPlanAdded={(plan) => {
-                                        navigateTo(`/edit/${encodeURIComponent(plan.ref)}`);
+                                        navigateTo(
+                                            `/edit/${encodeURIComponent(
+                                                plan.ref
+                                            )}`
+                                        );
                                     }}
-
                                     onPlanSelected={(plan) => {
-                                        navigateTo(`/edit/${encodeURIComponent(plan.ref)}`);
+                                        navigateTo(
+                                            `/edit/${encodeURIComponent(
+                                                plan.ref
+                                            )}`
+                                        );
                                     }}
-
-                                    plans={planAssets.value || []} />
+                                    plans={planAssets.value || []}
+                                />
                             );
                         },
                     },
@@ -105,7 +112,9 @@ const router = createMemoryRouter([
 
                     return (
                         <iframe
-                            src={`${window.KapetaDesktop.urls.settings}/${context.activeContext?.identity.handle ?? ''}?token=${token.value}`}
+                            src={`${window.KapetaDesktop.urls.settings}/${
+                                context.activeContext?.identity.handle ?? ''
+                            }?token=${token.value}`}
                             width="100%"
                             height="100%"
                         />

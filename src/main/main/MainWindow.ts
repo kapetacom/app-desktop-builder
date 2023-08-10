@@ -154,6 +154,6 @@ export class MainWindow {
     }
 
     update() {
-        return this.tray.update()
+        return this.tray.update();
     }
 }

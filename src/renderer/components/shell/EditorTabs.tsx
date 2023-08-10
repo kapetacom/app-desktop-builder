@@ -5,10 +5,10 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAsyncRetry } from 'react-use';
 import { getAssetTitle } from '../plan-editor/helpers';
-import {KapetaTab, KapetaTabs, KapetaTabsType} from './components/KapetaTabs';
+import { KapetaTab, KapetaTabs, KapetaTabsType } from './components/KapetaTabs';
 import { CustomIcon } from './components/CustomIcon';
-import {navigate} from "@storybook/addon-links";
-import {Person} from "@mui/icons-material";
+import { navigate } from '@storybook/addon-links';
+import { Person } from '@mui/icons-material';
 const DEFAULT_URL = '/edit';
 const useEditorTabs = () => {
     const location = useLocation();
@@ -27,9 +27,7 @@ const useEditorTabs = () => {
     const createTab = useCallback(
         (url = DEFAULT_URL, tabOpts: { navigate?: boolean } = {}) => {
             setTabs((tabState) => {
-                return tabState.includes(url)
-                    ? tabState
-                    : [... tabState, url];
+                return tabState.includes(url) ? tabState : [...tabState, url];
             });
             if (tabOpts.navigate) {
                 navigate(url);
@@ -41,11 +39,12 @@ const useEditorTabs = () => {
     const closeTab = (tabUrl: string) => {
         // If the tab we're closing is the current tab, navigate to the previous tab, or default url if there is no previous tab
         setTabs((tabState) => {
-            const newTabState = tabState.filter((tab) => tab !== tabUrl)
+            const newTabState = tabState.filter((tab) => tab !== tabUrl);
             if (location.pathname === tabUrl) {
                 // Closing current tab
                 const i = tabState.findIndex((tab) => tab === tabUrl) ?? -1;
-                const nextTab = i > -1 ? tabState[i - 1] || tabState[i + 1] : tabState[0];
+                const nextTab =
+                    i > -1 ? tabState[i - 1] || tabState[i + 1] : tabState[0];
                 if (nextTab) {
                     navigate(nextTab);
                 } else {
@@ -67,7 +66,6 @@ const useEditorTabs = () => {
 };
 
 export const EditorTabs = () => {
-
     const location = useLocation();
     const navigate = useNavigate();
     const planAssets = useAsyncRetry(() => PlannerService.list(), []);
@@ -82,12 +80,11 @@ export const EditorTabs = () => {
         createTab(location.pathname, { navigate: false });
     }, [location.pathname, createTab]);
 
-
     return (
         <KapetaTabs value={location.pathname}>
             {tabs.map((url) => {
                 let label: React.ReactNode = 'New tab';
-                let variant:KapetaTabsType = 'edit';
+                let variant: KapetaTabsType = 'edit';
                 let icon = <CustomIcon icon="Plan" />;
 
                 if (url.startsWith('/edit')) {
@@ -110,7 +107,6 @@ export const EditorTabs = () => {
                         icon = <CustomIcon icon="Plan" />;
                         label = 'My plans';
                     }
-
                 } else if (url.startsWith('/deployments')) {
                     label = 'Deployments';
                     variant = 'deploy';
@@ -118,7 +114,7 @@ export const EditorTabs = () => {
                 } else if (url.startsWith('/settings')) {
                     variant = 'deploy';
                     label = 'Settings';
-                    icon =  <Person />
+                    icon = <Person />;
                 } else {
                     console.warn('Unknown tab url', url);
                     return null;

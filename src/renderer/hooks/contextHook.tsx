@@ -1,9 +1,14 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import {Asset, Identity, MemberIdentity, SchemaKind} from '@kapeta/ui-web-types';
-import {useAsyncRetry, useClickAway} from 'react-use';
+import {
+    Asset,
+    Identity,
+    MemberIdentity,
+    SchemaKind,
+} from '@kapeta/ui-web-types';
+import { useAsyncRetry, useClickAway } from 'react-use';
 import { AssetDisplay } from '@kapeta/ui-web-components';
 import { Plan } from '@kapeta/schemas';
-import {IdentityService} from "@kapeta/ui-web-context";
+import { IdentityService } from '@kapeta/ui-web-context';
 
 export type BlockHubSelectionCallback = (selection: AssetDisplay[]) => void;
 
@@ -21,7 +26,7 @@ interface KapetaContextData {
     profile?: Identity;
     setProfile: (identity: Identity) => void;
     setActiveContext: (ctx: MemberIdentity) => void;
-    logOut: () => Promise<boolean>
+    logOut: () => Promise<boolean>;
     contexts?: {
         memberships: MemberIdentity[];
         current: string;
@@ -81,14 +86,18 @@ const createKapetaContext = (): KapetaContextData => {
         profile,
         setProfile,
         activeContext,
-        setActiveContext: (context?:MemberIdentity|undefined) => {
-            const handle = !context || context.identity.type === 'user' ?
-                undefined : context.identity.handle;
+        setActiveContext: (context?: MemberIdentity | undefined) => {
+            const handle =
+                !context || context.identity.type === 'user'
+                    ? undefined
+                    : context.identity.handle;
             setActiveContext(context);
             window.electron.ipcRenderer.invoke('set-context', handle);
         },
         logOut: async () => {
-            const logOutPromise = window.electron.ipcRenderer.invoke('log-out') as Promise<boolean>
+            const logOutPromise = window.electron.ipcRenderer.invoke(
+                'log-out'
+            ) as Promise<boolean>;
             if (await logOutPromise) {
                 console.log('logged out', logOutPromise);
                 setActiveContext(undefined);

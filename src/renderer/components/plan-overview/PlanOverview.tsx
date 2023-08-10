@@ -1,17 +1,16 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
-import {AssetService, AssetStore} from '@kapeta/ui-web-context';
-import {showDelete, showToasty, ToastType} from '@kapeta/ui-web-components';
-import {Asset} from '@kapeta/ui-web-types';
-import {Plan} from '@kapeta/schemas';
-import {getAssetTitle} from '../plan-editor/helpers';
-import {GetStartedHeader} from "./components/GetStartedHeader";
-import {SamplePlanSection} from "./components/SamplePlanSection";
-import {Box, Stack} from "@mui/material";
-import {YourPlansList} from "./components/YourPlansList";
-import {PlanCreator} from "../creators/PlanCreator";
-import {AssetCreatorState} from "../creators/AssetCreator";
-
+import { AssetService, AssetStore } from '@kapeta/ui-web-context';
+import { showDelete, showToasty, ToastType } from '@kapeta/ui-web-components';
+import { Asset } from '@kapeta/ui-web-types';
+import { Plan } from '@kapeta/schemas';
+import { getAssetTitle } from '../plan-editor/helpers';
+import { GetStartedHeader } from './components/GetStartedHeader';
+import { SamplePlanSection } from './components/SamplePlanSection';
+import { Box, Stack } from '@mui/material';
+import { YourPlansList } from './components/YourPlansList';
+import { PlanCreator } from '../creators/PlanCreator';
+import { AssetCreatorState } from '../creators/AssetCreator';
 
 interface Props {
     plans: Asset<Plan>[];
@@ -23,8 +22,9 @@ interface Props {
 }
 
 export const PlanOverview = (props: Props) => {
-
-    const [creatorState, setCreatorState] = useState<AssetCreatorState>(AssetCreatorState.CLOSED);
+    const [creatorState, setCreatorState] = useState<AssetCreatorState>(
+        AssetCreatorState.CLOSED
+    );
 
     const onPlanRemove = async (plan: Asset<Plan>) => {
         try {
@@ -55,18 +55,23 @@ export const PlanOverview = (props: Props) => {
     };
 
     return (
-        <Box sx={{
-            width: '100%',
-            height: '100%',
-            pt: '50px',
-            boxSizing: 'border-box',
-            overflow: 'auto',
-            bgcolor: 'white',
-        }}>
-            <Stack direction={'column'} sx={{
-                margin: '0 auto',
-                maxWidth: '1152px'
-            }}>
+        <Box
+            sx={{
+                width: '100%',
+                height: '100%',
+                pt: '50px',
+                boxSizing: 'border-box',
+                overflow: 'auto',
+                bgcolor: 'white',
+            }}
+        >
+            <Stack
+                direction={'column'}
+                sx={{
+                    margin: '0 auto',
+                    maxWidth: '1152px',
+                }}
+            >
                 <GetStartedHeader
                     onPlanCreate={() => {
                         setCreatorState(AssetCreatorState.CREATING);
@@ -75,20 +80,24 @@ export const PlanOverview = (props: Props) => {
                         setCreatorState(AssetCreatorState.IMPORTING);
                     }}
                 />
-                {props.plans.length < 1 && props.sample && <SamplePlanSection
-                    sample={props.sample}
-                    onOpenSample={props.onPlanSelected}/>
-                }
-                <YourPlansList onPlanOpen={props.onPlanSelected}
-                               onPlanCreate={() => {
-                                   setCreatorState(AssetCreatorState.CREATING);
-                               }}
-                               onPlanImport={() => {
-                                   setCreatorState(AssetCreatorState.IMPORTING);
-                               }}
-                               plans={props.plans}/>
+                {props.plans.length < 1 && props.sample && (
+                    <SamplePlanSection
+                        sample={props.sample}
+                        onOpenSample={props.onPlanSelected}
+                    />
+                )}
+                <YourPlansList
+                    onPlanOpen={props.onPlanSelected}
+                    onPlanCreate={() => {
+                        setCreatorState(AssetCreatorState.CREATING);
+                    }}
+                    onPlanImport={() => {
+                        setCreatorState(AssetCreatorState.IMPORTING);
+                    }}
+                    plans={props.plans}
+                />
             </Stack>
-            {props.assetService &&
+            {props.assetService && (
                 <PlanCreator
                     state={creatorState}
                     assetService={props.assetService}
@@ -101,7 +110,8 @@ export const PlanOverview = (props: Props) => {
                     skipFiles={props.plans.map((plan) => {
                         return plan.ref;
                     })}
-                />}
+                />
+            )}
         </Box>
     );
 };

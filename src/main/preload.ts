@@ -3,7 +3,12 @@ import ClusterConfiguration from '@kapeta/local-cluster-config';
 import { version } from '../../package.json';
 
 export type Channels = 'ipc-main' | 'splash' | 'processing' | 'auth';
-export type Procedures = 'get-token' | 'get-contexts' | 'log-out' | 'refresh-context' | 'set-context';
+export type Procedures =
+    | 'get-token'
+    | 'get-contexts'
+    | 'log-out'
+    | 'refresh-context'
+    | 'set-context';
 
 const electronHandler = {
     ipcRenderer: {

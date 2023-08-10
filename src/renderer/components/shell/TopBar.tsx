@@ -25,7 +25,7 @@ import {
     KapetaNotification,
     StateNotificationType,
 } from './types';
-import {useKapetaContext} from "../../hooks/contextHook";
+import { useKapetaContext } from '../../hooks/contextHook';
 
 const noHoverSX = {
     cursor: 'default',
@@ -136,7 +136,9 @@ export const TopBar = (props: TopBarProps) => {
                             width: '42px',
                             height: '42px',
                             marginTop: '10px',
-                            marginRight: contexts.profile ? '' : '16px !important',
+                            marginRight: contexts.profile
+                                ? ''
+                                : '16px !important',
                             color:
                                 unreadNotifications > 0
                                     ? 'text.primary'
@@ -183,7 +185,10 @@ export const TopBar = (props: TopBarProps) => {
                                 setProfileMenuAchor(e.currentTarget as any)
                             }
                         >
-                            <UserAvatar size={32} name={contexts.profile.name} />
+                            <UserAvatar
+                                size={32}
+                                name={contexts.profile.name}
+                            />
                         </IconButton>
                     )}
                 </Stack>
@@ -401,17 +406,24 @@ export const TopBar = (props: TopBarProps) => {
                     <MenuItem
                         component={Link}
                         onClick={() => setProfileMenuAchor(null)}
-                        to={`/settings`}>
+                        to={`/settings`}
+                    >
                         <ListItemText
                             primary={contexts.profile?.name}
-                            secondary={contexts.activeContext?.identity.handle ?? contexts.profile?.handle}
+                            secondary={
+                                contexts.activeContext?.identity.handle ??
+                                contexts.profile?.handle
+                            }
                         />
                     </MenuItem>
 
-                    <MenuItem component="a" onClick={async () => {
-                        setProfileMenuAchor(null)
-                        await contexts.logOut();
-                    }}>
+                    <MenuItem
+                        component="a"
+                        onClick={async () => {
+                            setProfileMenuAchor(null);
+                            await contexts.logOut();
+                        }}
+                    >
                         <ListItemIcon>
                             <i className="far fa-sign-out" />
                         </ListItemIcon>

@@ -10,15 +10,11 @@ import { CustomIcon } from 'renderer/components/shell/components/CustomIcon';
 
 import './Shell.less';
 import { useAsync } from 'react-use';
-import {
-    IdentityService,
-} from '@kapeta/ui-web-context';
+import { IdentityService } from '@kapeta/ui-web-context';
 import { useLocalStorage } from '../utils/localStorage';
 import { useKapetaContext } from 'renderer/hooks/contextHook';
 import { useBackgroundTasks } from './hooks/useBackgroundTasks';
-import {
-    useNotifications,
-} from '../hooks/useNotifications';
+import { useNotifications } from '../hooks/useNotifications';
 
 export function Shell() {
     const [error, setError] = useLocalStorage('$main_error', '');
@@ -67,7 +63,7 @@ export function Shell() {
                     name: 'Deploy',
                     open: false,
                     icon: <CustomIcon icon="Deploy" />,
-                }
+                },
             ]}
             context={{
                 contexts: contexts.contexts?.memberships,
