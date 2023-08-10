@@ -1,8 +1,9 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { Asset, MemberIdentity, SchemaKind } from '@kapeta/ui-web-types';
-import { useAsyncRetry } from 'react-use';
+import {Asset, Identity, MemberIdentity, SchemaKind} from '@kapeta/ui-web-types';
+import {useAsyncRetry, useClickAway} from 'react-use';
 import { AssetDisplay } from '@kapeta/ui-web-components';
 import { Plan } from '@kapeta/schemas';
+import {IdentityService} from "@kapeta/ui-web-context";
 
 export type BlockHubSelectionCallback = (selection: AssetDisplay[]) => void;
 
@@ -17,7 +18,10 @@ export const useKapetaContext = () => {
 
 interface KapetaContextData {
     activeContext?: MemberIdentity;
+    profile?: Identity;
+    setProfile: (identity: Identity) => void;
     setActiveContext: (ctx: MemberIdentity) => void;
+    logOut: () => Promise<boolean>
     contexts?: {
         memberships: MemberIdentity[];
         current: string;
@@ -36,6 +40,7 @@ interface KapetaContextData {
 
 const createKapetaContext = (): KapetaContextData => {
     const [activeContext, setActiveContext] = useState<MemberIdentity>();
+    const [profile, setProfile] = useState<Identity>();
     const [blockHubVisible, setBlockHubVisible] = useState(false);
     const [blockHubOpener, setBlockHubOpener] = useState<BlockHubOpener>();
 
@@ -46,24 +51,56 @@ const createKapetaContext = (): KapetaContextData => {
         }>;
     }, []);
 
-    useEffect(() => {
-        return window.electron.ipcRenderer.on('auth', () => {
-            contextData.retry.call(null);
-        });
-    }, [contextData.retry]);
+    const profileData = useAsyncRetry(async () => {
+        return IdentityService.getCurrent();
+    }, []);
 
     useEffect(() => {
-        if (contextData.value && !activeContext) {
+        return window.electron.ipcRenderer.on('auth', () => {
+            contextData.retry();
+            profileData.retry();
+        });
+    }, [contextData.retry, profileData.retry]);
+
+    useEffect(() => {
+        if (contextData.value) {
             const active = contextData.value.memberships.find(
                 (m) => m.identity.handle === contextData.value!.current
             );
             setActiveContext(active);
         }
-    }, [contextData.value, activeContext]);
+    }, [contextData.value]);
+
+    useEffect(() => {
+        if (!profileData.loading) {
+            setProfile(profileData.value);
+        }
+    }, [profileData.value, profileData.loading]);
 
     return {
+        profile,
+        setProfile,
         activeContext,
-        setActiveContext,
+        setActiveContext: (context?:MemberIdentity|undefined) => {
+            const handle = !context || context.identity.type === 'user' ?
+                undefined : context.identity.handle;
+            setActiveContext(context);
+            window.electron.ipcRenderer.invoke('set-context', handle);
+        },
+        logOut: async () => {
+            const logOutPromise = window.electron.ipcRenderer.invoke('log-out') as Promise<boolean>
+            if (await logOutPromise) {
+                console.log('logged out', logOutPromise);
+                setActiveContext(undefined);
+                setProfile(undefined);
+                profileData.retry();
+                contextData.retry();
+                return true;
+            }
+
+            console.log('Did not log out');
+            return false;
+        },
         blockHub: {
             visible: blockHubVisible,
             opener: blockHubOpener,
@@ -86,7 +123,10 @@ const createKapetaContext = (): KapetaContextData => {
 
 export const KapetaContext = createContext<KapetaContextData>({
     activeContext: undefined,
+    profile: undefined,
+    setProfile: () => null,
     setActiveContext: () => null,
+    logOut: () => Promise.resolve(false),
     contexts: undefined,
     loading: false,
     blockHub: {

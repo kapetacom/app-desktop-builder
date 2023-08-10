@@ -80,6 +80,26 @@ const router = createMemoryRouter([
                     );
                 },
             },
+            {
+                path: 'settings',
+                Component: () => {
+                    // iframe to deployments microfrontend
+                    const context = useKapetaContext();
+                    const token = useAuthToken();
+
+                    if (context.loading || token.loading) {
+                        return <div>Loading...</div>;
+                    }
+
+                    return (
+                        <iframe
+                            src={`${window.KapetaDesktop.urls.settings}/${context.activeContext?.identity.handle ?? ''}?token=${token.value}`}
+                            width="100%"
+                            height="100%"
+                        />
+                    );
+                },
+            },
         ],
     },
 ]);

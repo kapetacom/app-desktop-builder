@@ -47,7 +47,7 @@ export function Shell() {
         <MainLayout
             location={location}
             topBar={
-                <TopBar notifications={notifications} profile={identity.value}>
+                <TopBar notifications={notifications}>
                     <EditorTabs />
                 </TopBar>
             }
@@ -67,7 +67,7 @@ export function Shell() {
                     name: 'Deploy',
                     open: false,
                     icon: <CustomIcon icon="Deploy" />,
-                },
+                }
             ]}
             context={{
                 contexts: contexts.contexts?.memberships,
