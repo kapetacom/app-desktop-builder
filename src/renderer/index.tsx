@@ -4,9 +4,10 @@ import {
     RouterProvider,
     useParams,
     createMemoryRouter,
+    useNavigate,
 } from 'react-router-dom';
 import { useEffect } from 'react';
-import { PlannerService } from '@kapeta/ui-web-context';
+import {AssetService, PlannerService} from '@kapeta/ui-web-context';
 import { useAsyncFn } from 'react-use';
 import { Root } from './Root';
 import { kapetaDark } from './Theme';
@@ -31,6 +32,7 @@ const router = createMemoryRouter([
                     {
                         index: true,
                         Component: () => {
+                            const navigateTo = useNavigate();
                             let [planAssets, reloadPlans] =
                                 useAsyncFn(async () => {
                                     console.log('Loading plans');
@@ -47,7 +49,17 @@ const router = createMemoryRouter([
                             }, [reloadPlans]);
 
                             return (
-                                <PlanOverview plans={planAssets.value || []} />
+                                <PlanOverview
+                                    assetService={AssetService}
+                                    onPlanAdded={(plan) => {
+                                        navigateTo(`/edit/${encodeURIComponent(plan.ref)}`);
+                                    }}
+
+                                    onPlanSelected={(plan) => {
+                                        navigateTo(`/edit/${encodeURIComponent(plan.ref)}`);
+                                    }}
+
+                                    plans={planAssets.value || []} />
                             );
                         },
                     },

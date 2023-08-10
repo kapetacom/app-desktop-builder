@@ -9,6 +9,7 @@ import './PlanCreator.less';
 
 interface PlanImportProps {
     assetService: AssetStore;
+    state: AssetCreatorState;
     onDone: (asset?: Asset) => void;
     skipFiles: string[];
 }
@@ -28,33 +29,19 @@ const selectableHandler = (file: FileInfo) => {
 };
 
 export const PlanCreator = (props: PlanImportProps) => {
-    const [creatorState, setCreatorState] = useState(AssetCreatorState.CLOSED);
-
-    const openImportPanel = () => {
-        setCreatorState(AssetCreatorState.IMPORTING);
-    };
-
-    const openCreatePanel = () => {
-        setCreatorState(AssetCreatorState.CREATING);
-    };
 
     return (
-        <div className="plan-creator">
-            <div className="px-actions">
-                <Button text="Create" onClick={openCreatePanel} width={90} />
-                <Button text="Import" onClick={openImportPanel} width={90} />
-            </div>
-            <AssetCreator
-                state={creatorState}
-                title="Create new plan..."
-                skipFiles={props.skipFiles}
-                createNewKind={createNewPlan}
-                fileName="kapeta.yml"
-                onDone={props.onDone}
-                fileSelectableHandler={selectableHandler}
-                assetService={props.assetService}
-                formRenderer={PlanForm}
-            />
-        </div>
+        <AssetCreator
+            state={props.state}
+            title="Create new plan..."
+            skipFiles={props.skipFiles}
+            createNewKind={createNewPlan}
+            fileName="kapeta.yml"
+            onDone={props.onDone}
+            onCancel={props.onDone}
+            fileSelectableHandler={selectableHandler}
+            assetService={props.assetService}
+            formRenderer={PlanForm}
+        />
     );
 };

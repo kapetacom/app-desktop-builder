@@ -16,10 +16,6 @@ export const ProgressNotifications = () => {
         <ThemeProvider theme={kapetaDark}>
             <MemoryRouter>
                 <TopBar
-                    profile={{
-                        handle: 'hofmeister',
-                        name: 'Henrik Hofmeister',
-                    }}
                     notifications={[
                         {
                             id: '1',
@@ -72,10 +68,6 @@ export const SimpleNotifications = () => {
         <ThemeProvider theme={kapetaDark}>
             <MemoryRouter>
                 <TopBar
-                    profile={{
-                        handle: 'hofmeister',
-                        name: 'Henrik Hofmeister',
-                    }}
                     notifications={[
                         {
                             id: '1',

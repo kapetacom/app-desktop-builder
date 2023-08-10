@@ -1,58 +1,30 @@
-import React, { ForwardedRef, forwardRef, useState } from 'react';
+import React, {useState} from 'react';
 
-import { AssetService } from '@kapeta/ui-web-context';
-import { showDelete, showToasty, ToastType } from '@kapeta/ui-web-components';
-import { useNavigate } from 'react-router-dom';
+import {AssetService, AssetStore} from '@kapeta/ui-web-context';
+import {showDelete, showToasty, ToastType} from '@kapeta/ui-web-components';
+import {Asset} from '@kapeta/ui-web-types';
+import {Plan} from '@kapeta/schemas';
+import {getAssetTitle} from '../plan-editor/helpers';
+import {GetStartedHeader} from "./components/GetStartedHeader";
+import {SamplePlanSection} from "./components/SamplePlanSection";
+import {Box, Stack} from "@mui/material";
+import {YourPlansList} from "./components/YourPlansList";
+import {PlanCreator} from "../creators/PlanCreator";
+import {AssetCreatorState} from "../creators/AssetCreator";
 
-import { PlannerMode, withPlannerContext } from '@kapeta/ui-web-plan-editor';
-
-import { Asset } from '@kapeta/ui-web-types';
-import { Plan } from '@kapeta/schemas';
-import PlanOverviewPlaceHolder from './PlanOverviewPlaceHolder';
-import { MenuItem } from '../menu/MenuDataModel';
-import { PlanOverviewItem } from './PlanOverviewItem';
-import { PlanOverviewTopBar } from './PlanOverviewTopBar';
-
-import './PlanOverview.less';
-import { getAssetTitle } from '../plan-editor/helpers';
-import {
-    useAssets,
-    useBlockAssets,
-    useBlockKinds,
-} from '../../utils/planContextLoader';
-
-interface MiniPlanProps {
-    systemId: string;
-}
-
-const MiniPlan = withPlannerContext(
-    forwardRef((props: MiniPlanProps, ref: ForwardedRef<HTMLDivElement>) => {
-        return <div ref={ref}>Plan goes here</div>;
-    })
-);
 
 interface Props {
     plans: Asset<Plan>[];
-    onPlanChanged?: () => void;
-    onAssetAdded?: (asset: Asset) => void;
-    itemDeleted?: (plan: Asset<Plan>) => void;
+    sample?: Asset<Plan>;
+    assetService?: AssetStore;
+    onPlanAdded?: (plan: Asset<Plan>) => void;
+    onPlanRemoved?: (plan: Asset<Plan>) => void;
+    onPlanSelected?: (plan: Asset<Plan>) => void;
 }
 
 export const PlanOverview = (props: Props) => {
-    const navigateTo = useNavigate();
-    const [activePlanMenu, setActivePlanMenu] = useState(-1);
 
-    const assets = useAssets();
-    const blockTypeKinds = useBlockKinds(assets);
-    const blockAssets = useBlockAssets(assets, blockTypeKinds);
-
-    const setOpenMenu = (index: number) => {
-        if (index === activePlanMenu) {
-            setActivePlanMenu(-1);
-        } else {
-            setActivePlanMenu(index);
-        }
-    };
+    const [creatorState, setCreatorState] = useState<AssetCreatorState>(AssetCreatorState.CLOSED);
 
     const onPlanRemove = async (plan: Asset<Plan>) => {
         try {
@@ -65,7 +37,7 @@ export const PlanOverview = (props: Props) => {
                 return false;
             }
             await AssetService.remove(plan.ref);
-            props.itemDeleted && props.itemDeleted(plan);
+            props.onPlanRemoved && props.onPlanRemoved(plan);
             showToasty({
                 title: 'Plan Deleted!',
                 message: `Deleted ${getAssetTitle(plan)} from your plan list`,
@@ -77,86 +49,53 @@ export const PlanOverview = (props: Props) => {
         return true;
     };
 
-    const onPlanCreated = (asset?: Asset) => {
-        props.onPlanChanged && props.onPlanChanged();
-        if (asset && props.onAssetAdded) {
-            navigateTo(`/edit/${encodeURIComponent(asset.ref)}`);
-        }
+    const onPlanCreated = (asset: Asset) => {
+        props.onPlanAdded && props.onPlanAdded(asset);
+        props.onPlanSelected && props.onPlanSelected(asset);
     };
 
-    if (props.plans.length < 1) {
-        return (
-            <div style={{ position: 'relative' }}>
-                <PlanOverviewTopBar
-                    onDone={(asset) => {
-                        onPlanCreated(asset);
+    return (
+        <Box sx={{
+            width: '100%',
+            height: '100%',
+            pt: '50px',
+            boxSizing: 'border-box',
+            overflow: 'auto',
+            bgcolor: 'white',
+        }}>
+            <Stack direction={'column'} sx={{
+                margin: '0 auto',
+                maxWidth: '1152px'
+            }}>
+                <GetStartedHeader
+                    onPlanCreate={() => {
+                        setCreatorState(AssetCreatorState.CREATING);
+                    }}
+                    onPlanImport={() => {
+                        setCreatorState(AssetCreatorState.IMPORTING);
+                    }}
+                />
+                {props.plans.length < 1 && props.sample && <SamplePlanSection
+                    sample={props.sample}
+                    onOpenSample={props.onPlanSelected}/>
+                }
+                <YourPlansList onPlanOpen={props.onPlanSelected}
+                               plans={props.plans}/>
+            </Stack>
+            {props.assetService &&
+                <PlanCreator
+                    state={creatorState}
+                    assetService={props.assetService}
+                    onDone={(newPlan) => {
+                        setCreatorState(AssetCreatorState.CLOSED);
+                        if (newPlan) {
+                            onPlanCreated(newPlan);
+                        }
                     }}
                     skipFiles={props.plans.map((plan) => {
                         return plan.ref;
                     })}
-                />
-                <PlanOverviewPlaceHolder>
-                    <p>
-                        {' '}
-                        No plans found please open existing plans or create a
-                        new one{' '}
-                    </p>
-                </PlanOverviewPlaceHolder>
-            </div>
-        );
-    }
-
-    return (
-        <div style={{ position: 'relative' }}>
-            <PlanOverviewTopBar
-                onDone={(asset) => {
-                    onPlanCreated(asset);
-                }}
-                skipFiles={props.plans.map((plan) => {
-                    return plan.ref;
-                })}
-            />
-
-            <div className="plan-overview-wrapper">
-                {props.plans.map((asset, index) => {
-                    // overwrite the callback now that we have hold of the plannerModelRef that we want to delete
-                    const menuItem: MenuItem[] = [];
-                    menuItem.push({
-                        text: 'Delete',
-                        callback: () => {
-                            return onPlanRemove(asset);
-                        },
-                    });
-
-                    return (
-                        <PlanOverviewItem
-                            name={getAssetTitle(asset)}
-                            key={asset.ref}
-                            version={asset.version}
-                            index={index}
-                            activeMenu={activePlanMenu}
-                            menuItems={menuItem}
-                            onClick={() => {
-                                navigateTo(
-                                    `/edit/${encodeURIComponent(asset.ref)}`,
-                                    {}
-                                );
-                            }}
-                            toggleMenu={(indexIn: number) => {
-                                setOpenMenu(indexIn);
-                            }}
-                        >
-                            <MiniPlan
-                                systemId={asset.ref}
-                                plan={asset.data}
-                                blockAssets={blockAssets}
-                                mode={PlannerMode.VIEW}
-                                asset={asset}
-                            />
-                        </PlanOverviewItem>
-                    );
-                })}
-            </div>
-        </div>
+                />}
+        </Box>
     );
 };
