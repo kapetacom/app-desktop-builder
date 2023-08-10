@@ -3,7 +3,7 @@ import ClusterConfiguration from '@kapeta/local-cluster-config';
 import { version } from '../../package.json';
 
 export type Channels = 'ipc-main' | 'splash' | 'processing' | 'auth';
-export type Procedures = 'get-token' | 'get-contexts';
+export type Procedures = 'get-token' | 'get-contexts' | 'log-out' | 'refresh-context' | 'set-context';
 
 const electronHandler = {
     ipcRenderer: {
@@ -35,6 +35,7 @@ const kapetaDesktop = {
     version,
     urls: {
         deployments: 'https://web-deployments.kapeta.com',
+        settings: 'https://web-identity-provider.kapeta.com',
     },
     cluster_service: {
         url: ClusterConfiguration.getClusterServiceAddress(),

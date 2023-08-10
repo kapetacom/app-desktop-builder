@@ -21,7 +21,7 @@ import { attachHandlers } from './services/IPCService';
 const clusterService = new ClusterService();
 const splashScreen = new SplashScreen(clusterService);
 
-attachHandlers();
+
 
 const singleInstanceLock = app.requestSingleInstanceLock();
 if (!singleInstanceLock) {
@@ -42,6 +42,7 @@ appInit()
     .then(() => splashScreen.open())
     .then(async () => {
         const main = new MainWindow(clusterService);
+        attachHandlers(main);
         await main.open();
 
         app.on('second-instance', (event, commandLine, workingDirectory) => {

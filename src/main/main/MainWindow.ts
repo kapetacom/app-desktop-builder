@@ -152,4 +152,8 @@ export class MainWindow {
     focus() {
         this.window?.focus();
     }
+
+    update() {
+        return this.tray.update()
+    }
 }

@@ -2,6 +2,7 @@ import { Tab, Tabs } from '@mui/material';
 import { lightTheme } from '@kapeta/style';
 import { createStyled } from '@mui/system';
 
+export type KapetaTabsType = 'deploy' | 'edit'
 /**
  * Example of a custom tab component
  */
@@ -14,7 +15,7 @@ export const KapetaTab = styled(Tab, {
     shouldForwardProp(propName) {
         return propName !== 'variant';
     },
-})<{ variant?: 'deploy' | 'edit'; href: string }>(
+})<{ variant: KapetaTabsType; href: string }>(
     {
         minHeight: '52px',
         maxHeight: '52px',

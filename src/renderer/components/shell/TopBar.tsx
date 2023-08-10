@@ -25,6 +25,7 @@ import {
     KapetaNotification,
     StateNotificationType,
 } from './types';
+import {useKapetaContext} from "../../hooks/contextHook";
 
 const noHoverSX = {
     cursor: 'default',
@@ -68,7 +69,6 @@ function getColorForType(type: StateNotificationType): string | undefined {
 }
 
 interface TopBarProps {
-    profile?: UserProfile;
     notifications?: KapetaNotification[];
     children?: React.ReactNode;
 }
@@ -82,6 +82,8 @@ export const TopBar = (props: TopBarProps) => {
     const [notifications, setNotifications] = useState(
         props.notifications ?? []
     );
+
+    const contexts = useKapetaContext();
 
     useEffect(() => {
         setNotifications((prev) => {
@@ -134,7 +136,7 @@ export const TopBar = (props: TopBarProps) => {
                             width: '42px',
                             height: '42px',
                             marginTop: '10px',
-                            marginRight: props.profile ? '' : '16px !important',
+                            marginRight: contexts.profile ? '' : '16px !important',
                             color:
                                 unreadNotifications > 0
                                     ? 'text.primary'
@@ -169,7 +171,7 @@ export const TopBar = (props: TopBarProps) => {
                         )}
                     </IconButton>
 
-                    {props.profile && (
+                    {contexts.profile && (
                         <IconButton
                             size="small"
                             sx={{
@@ -181,7 +183,7 @@ export const TopBar = (props: TopBarProps) => {
                                 setProfileMenuAchor(e.currentTarget as any)
                             }
                         >
-                            <UserAvatar size={32} name={props.profile.name} />
+                            <UserAvatar size={32} name={contexts.profile.name} />
                         </IconButton>
                     )}
                 </Stack>
@@ -396,23 +398,20 @@ export const TopBar = (props: TopBarProps) => {
                         },
                     }}
                 >
-                    <MenuItem>
-                        <ListItemText
-                            primary={props.profile?.name}
-                            secondary={props.profile?.handle}
-                        />
-                    </MenuItem>
-                    {/* TODO: use a real profile link instead when we have it */}
                     <MenuItem
                         component={Link}
-                        to={`/${props.profile?.handle}/iam/settings/general`}
-                    >
-                        <ListItemIcon>
-                            <i className="fa fa-cog" />
-                        </ListItemIcon>
-                        <ListItemText primary="Settings" />
+                        onClick={() => setProfileMenuAchor(null)}
+                        to={`/settings`}>
+                        <ListItemText
+                            primary={contexts.profile?.name}
+                            secondary={contexts.activeContext?.identity.handle ?? contexts.profile?.handle}
+                        />
                     </MenuItem>
-                    <MenuItem component="a" href="/logout">
+
+                    <MenuItem component="a" onClick={async () => {
+                        setProfileMenuAchor(null)
+                        await contexts.logOut();
+                    }}>
                         <ListItemIcon>
                             <i className="far fa-sign-out" />
                         </ListItemIcon>

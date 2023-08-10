@@ -37,7 +37,6 @@ const getTrayIcon = () => {
 
 export class TrayWrapper {
     private tray: Tray;
-    private api = new KapetaAPI();
     private mainWindow: MainWindow;
     private processingModal: ModalProcessing;
     private clusterService: ClusterService;
@@ -53,6 +52,7 @@ export class TrayWrapper {
             this.tray.setImage(getTrayIcon());
         });
     }
+
 
     public async update() {
         let userMenu = await this.createUserMenu();
@@ -85,9 +85,10 @@ export class TrayWrapper {
         let userMenu: TrayMenuItem[];
 
         try {
-            const identity = await this.api.getCurrentIdentity();
-            const context = await this.api.getCurrentContext();
-            const memberships = await this.api.getCurrentMemberships();
+            const api = new KapetaAPI();
+            const identity = await api.getCurrentIdentity();
+            const context = await api.getCurrentContext();
+            const memberships = await api.getCurrentMemberships();
 
             userMenu = [
                 {
@@ -121,18 +122,20 @@ export class TrayWrapper {
     }
 
     private showAccountSettings(identity: ExtendedIdentity) {
+        const api = new KapetaAPI();
         return () => {
             shell.openExternal(
-                `${this.api.getBaseUrl()}/${identity.handle}/iam`
+                `${api.getBaseUrl()}/${identity.handle}/iam`
             );
         };
     }
 
     private async signOut() {
         try {
-            this.api.removeToken();
+            const api = new KapetaAPI();
+            api.removeToken();
             await this.update();
-            this.mainWindow.window?.webContents.send('auth', 'signed-out');
+            this.emitAuthEvent('signed-out');
         } catch (e) {
             showError('Failed to sign out');
         }
@@ -177,7 +180,9 @@ export class TrayWrapper {
 
     private async selectContext(membership: Membership) {
         try {
-            await this.api.switchContextTo(membership.identity.handle);
+            const api = new KapetaAPI();
+            await api.switchContextTo(membership.identity.handle);
+            this.emitAuthEvent('switched-context');
             await this.update();
         } catch (e) {
             showError(`Failed to switch context: ${e.message}`);
@@ -186,6 +191,7 @@ export class TrayWrapper {
 
     private async signIn() {
         try {
+            const api = new KapetaAPI();
             const future = createFuture();
             await this.processingModal.open(this.mainWindow.window, {
                 title: 'Signing in...',
@@ -198,8 +204,7 @@ export class TrayWrapper {
                 future.reject(new Error('Sign in was cancelled'));
             });
 
-            this.api
-                .doDeviceAuthentication({
+            api.doDeviceAuthentication({
                     onVerificationCode: (url: string) => {
                         this.processingModal.setProps({
                             title: 'Signing in...',
@@ -221,13 +226,13 @@ export class TrayWrapper {
 
             await future.promise;
             await this.update();
-            const identity = await this.api.getCurrentIdentity();
+            const identity = await api.getCurrentIdentity();
             this.processingModal.close();
             showInfo(
                 `You were signed in as ${identity.name || identity.handle}!`
             );
 
-            this.mainWindow.window?.webContents.send('auth', 'signed-in');
+            this.emitAuthEvent('signed-in');
         } catch (err: any) {
             this.processingModal.close();
             const message = err.message ?? err.error ?? 'Authentication failed';
@@ -240,10 +245,16 @@ export class TrayWrapper {
 
     private async removeContext() {
         try {
-            await this.api.removeContext();
+            const api = new KapetaAPI();
+            await api.removeContext();
+            this.emitAuthEvent('switched-context');
             await this.update();
         } catch (e) {
             showError(`Failed to remove context: ${e.message}`);
         }
     }
+    private emitAuthEvent(message:string) {
+        this.mainWindow.window?.webContents.send('auth', message);
+    }
+
 }
