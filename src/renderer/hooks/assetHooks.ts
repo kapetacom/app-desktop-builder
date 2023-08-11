@@ -13,6 +13,7 @@ import useSWRImmutable from 'swr/immutable';
 
 interface AssetChangedEvent {
     type: string;
+    sourceOfChange: 'user' | 'filesystem';
     definition: SchemaKind;
     asset: {
         handle: string;
@@ -155,6 +156,11 @@ export const useAsset = <T = SchemaKind>(
             if (!evt?.asset) {
                 return;
             }
+
+            if (evt.sourceOfChange === 'user') {
+                // We don't want to reload if the user changed the asset
+                return;
+            }
             try {
                 if (
                     evt.asset.name === uri.name &&
@@ -186,7 +192,6 @@ export const useAsset = <T = SchemaKind>(
         if (!_.isEqual(asset, assetResult.data)) {
             // Only update asset if it has changed
             setAsset(assetResult.data);
-            console.log('updated asset', asset, assetResult.data);
         }
     }, [assetResult.data]);
 

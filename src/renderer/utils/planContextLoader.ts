@@ -98,7 +98,6 @@ const registerMissing = () => {
 };
 
 const loadProvider = async (providerKind: string): Promise<void> => {
-    console.log('Loading provider', providerKind);
     return new Promise(async (resolve) => {
         try {
             const uri = parseKapetaUri(providerKind);
@@ -113,7 +112,6 @@ const loadProvider = async (providerKind: string): Promise<void> => {
             // eslint-disable-next-line no-await-in-loop
             await loaderPromise;
             const result = registerMissing();
-            console.log('Provider loaded', providerKind, result);
         } catch (e) {
             console.warn('Failed to load provider', providerKind, e);
         } finally {
@@ -168,9 +166,17 @@ export const useLoadedPlanContext = (plan: Plan | undefined) => {
         return `${plan.metadata.name}:${deps.join(',')}`;
     }, [plan]);
 
+    const assetResult = useAssets();
+    const blocks = useMemo(() => {
+        return toBlocks(assetResult.data ?? []);
+    }, [assetResult.data]);
+
+    const missingData = (!plan || !assetResult.data);
+
     const results = useAsync(async () => {
-        const assets = await AssetService.list();
-        const blocks = toBlocks(assets);
+        if (missingData) {
+            return;
+        }
         const providerRefs = new Set<string>();
         const blockDefinitionRefs = new Set<string>();
         const providers = await fetchLocalProviders();
@@ -250,7 +256,11 @@ export const useLoadedPlanContext = (plan: Plan | undefined) => {
             blocks,
             providers: ResourceTypeProvider.list(),
         };
-    }, [dependencyHash]);
+    }, [
+        dependencyHash,
+        blocks,
+        missingData
+    ]);
 
     useEffect(() => {
         if (results.loading) {
@@ -260,10 +270,11 @@ export const useLoadedPlanContext = (plan: Plan | undefined) => {
     }, [results.loading]);
 
     return {
+        missingData,
         resourceAssets: results.value?.providers ?? [],
         currentlyLoading,
         blocks: results.value?.blocks ?? [],
-        loading: loading || !plan,
+        loading: loading || missingData,
         error: results.error,
     };
 };
