@@ -1,3 +1,10 @@
+## [0.21.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.21.0...v0.21.1) (2023-08-11)
+
+
+### Bug Fixes
+
+* Handle event source-of-change to still keep in sync ([7c68446](https://github.com/kapetacom/app-desktop-builder/commit/7c684465981b49e3b8ed09bf9b28df70c5e4fd8b))
+
 # [0.21.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.20.0...v0.21.0) (2023-08-10)
 
 
