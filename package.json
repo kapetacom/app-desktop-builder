@@ -195,6 +195,7 @@
         "sass-loader": "^13.0.2",
         "storybook": "^6.5.12",
         "style-loader": "^3.3.1",
+        "swr": "^2.2.0",
         "terser-webpack-plugin": "^5.3.5",
         "ts-jest": "^28.0.8",
         "ts-loader": "^9.3.1",

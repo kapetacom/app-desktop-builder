@@ -7,6 +7,7 @@ import { useAsyncFn } from 'react-use';
 import { BlockDefinition } from '@kapeta/schemas';
 import { DataEntityType, EditItemInfo } from '../types';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
+import { useAssets, useBlocks } from '../../../hooks/assetHooks';
 
 interface Props {
     open: boolean;
@@ -24,15 +25,7 @@ export const BlockCreatorPanel = (props: Props) => {
         );
     }, [props.open]);
 
-    const [{ value: blocks, loading }, loadBlocks] = useAsyncFn(async () => {
-        return BlockService.list();
-    });
-
-    useEffect(() => {
-        loadBlocks().catch(() => {
-            // Do nothing...
-        });
-    }, [loadBlocks]);
+    const blocks = useBlocks();
 
     return (
         <BlockCreator
@@ -76,7 +69,8 @@ export const BlockCreatorPanel = (props: Props) => {
                         const blockTitle =
                             block.data.metadata.title ??
                             parseKapetaUri(block.data.metadata.name).name;
-                        const result = {
+
+                        return {
                             ...instance,
                             name: instance.name || blockTitle,
                             block: {
@@ -84,17 +78,12 @@ export const BlockCreatorPanel = (props: Props) => {
                                 ref: block.ref,
                             },
                         };
-                        return result;
                     }
                 );
             }}
-            files={
-                (blocks &&
-                    blocks.map((item) => {
-                        return item.ref;
-                    })) ||
-                []
-            }
+            files={blocks.data.map((item) => {
+                return item.ref;
+            })}
         />
     );
 };

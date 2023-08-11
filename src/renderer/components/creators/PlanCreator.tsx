@@ -6,6 +6,7 @@ import { Button } from '@kapeta/ui-web-components';
 import { AssetCreator, AssetCreatorState } from './AssetCreator';
 import { PlanForm } from '../forms/PlanForm';
 import './PlanCreator.less';
+import { Plan } from '@kapeta/schemas';
 
 interface PlanImportProps {
     assetService: AssetStore;
@@ -14,13 +15,16 @@ interface PlanImportProps {
     skipFiles: string[];
 }
 
-const createNewPlan = () => {
+const createNewPlan = (): Plan => {
     return {
         kind: 'core/plan',
         metadata: {
             name: '',
         },
-        spec: {},
+        spec: {
+            blocks: [],
+            connections: [],
+        },
     };
 };
 

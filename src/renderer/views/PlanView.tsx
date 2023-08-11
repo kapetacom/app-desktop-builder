@@ -20,15 +20,14 @@ import {
     useLoadedPlanContext,
 } from '../utils/planContextLoader';
 import { InstanceInfo } from '../components/plan-editor/types';
+import { useAsset, useAssets } from '../hooks/assetHooks';
 
 interface PlanViewProps {
     systemId: string;
 }
 
 export const PlanView = (props: PlanViewProps) => {
-    const planData = useAsync(async (): Promise<Asset<Plan>> => {
-        return AssetService.get(props.systemId);
-    }, [props.systemId]);
+    const planData = useAsset<Plan>(props.systemId);
 
     let plannerMode: PlannerMode = PlannerMode.EDIT;
 
@@ -68,7 +67,7 @@ export const PlanView = (props: PlanViewProps) => {
     );
 
     const { resourceAssets, blocks, loading, currentlyLoading } =
-        useLoadedPlanContext(planData.value?.data);
+        useLoadedPlanContext(planData.data?.data);
 
     let loadingText = 'Loading plan...';
 
@@ -83,18 +82,19 @@ export const PlanView = (props: PlanViewProps) => {
         <SimpleLoader loading={planData.loading || loading} text={loadingText}>
             {!planData.loading &&
                 !loading &&
-                planData.value &&
+                planData.data &&
                 resourceAssets &&
                 blocks && (
                     <PlanEditor
-                        plan={planData.value.data}
-                        asset={planData.value}
+                        plan={planData.data.data}
+                        asset={planData.data}
                         resourceAssets={resourceAssets}
                         instanceInfos={instanceInfos.value}
                         instanceStates={instanceStatusMap}
                         mode={plannerMode}
                         systemId={normalizeKapetaUri(props.systemId)}
                         onChange={async (plan) => {
+                            planData.setData(plan);
                             try {
                                 await AssetService.update(
                                     normalizeKapetaUri(props.systemId),

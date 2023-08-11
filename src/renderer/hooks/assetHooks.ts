@@ -1,0 +1,213 @@
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import {
+    AssetService,
+    BlockTypeProvider,
+    SocketService,
+} from '@kapeta/ui-web-context';
+import { BlockDefinition, Plan } from '@kapeta/schemas';
+import { Asset, SchemaKind } from '@kapeta/ui-web-types';
+import { parseKapetaUri } from '@kapeta/nodejs-utils';
+import _ from 'lodash';
+
+import useSWRImmutable from 'swr/immutable';
+
+interface AssetChangedEvent {
+    type: string;
+    definition: SchemaKind;
+    asset: {
+        handle: string;
+        name: string;
+        version: string;
+    };
+}
+
+const ASSET_CHANGED_EVENT = 'asset-change';
+
+export interface AssetListResult<T = SchemaKind> {
+    loading: boolean;
+    data: Asset<T>[];
+}
+
+export interface AssetResult<T = SchemaKind> {
+    loading: boolean;
+    data?: Asset<T>;
+    setData: (data: T) => void;
+}
+
+export const useAssets = <T = SchemaKind>(
+    ...kinds: string[]
+): AssetListResult<T> => {
+    const [assets, setAssets] = useState<Asset<T>[]>([]);
+    const [loading, setLoading] = useState(true);
+    const assetResults = useSWRImmutable('local-assets', async () => {
+        try {
+            return await AssetService.list();
+        } catch (e: any) {
+            console.warn('Failed to load assets', e);
+        }
+    });
+
+    const data = useMemo(() => {
+        if (!assetResults.data) {
+            return [];
+        }
+
+        if (!kinds || kinds.length === 0) {
+            return assetResults.data as Asset<T>[];
+        }
+        return assetResults.data.filter((asset) => {
+            return kinds.includes(asset.kind.toLowerCase());
+        }) as Asset<T>[];
+    }, [assetResults.data, kinds.join(':')]);
+
+    useEffect(() => {
+        const handler = async (evt: AssetChangedEvent) => {
+            if (!evt?.asset) {
+                return;
+            }
+            if (
+                kinds.length > 0 &&
+                !kinds.includes(evt.definition.kind.toLowerCase())
+            ) {
+                return;
+            }
+            try {
+                await assetResults.mutate();
+            } catch (e) {
+                console.warn('Failed to reload assets', e);
+            }
+        };
+        SocketService.on(ASSET_CHANGED_EVENT, handler);
+        return () => {
+            SocketService.off(ASSET_CHANGED_EVENT, handler);
+        };
+    }, [assetResults]);
+
+    useEffect(() => {
+        if (assetResults.isLoading) {
+            return;
+        }
+        // We only want to show loading on initial load
+        // Otherwise we do a replace
+        setLoading(false);
+        setAssets((prev) => {
+            return data.map((asset) => {
+                const assetUri = parseKapetaUri(asset.ref);
+                const identical = prev.find((a) => {
+                    return (
+                        parseKapetaUri(a.ref).equals(assetUri) &&
+                        _.isEqual(a, asset)
+                    );
+                });
+
+                if (identical) {
+                    return identical;
+                }
+
+                return asset;
+            });
+        });
+    }, [assetResults.isLoading, data]);
+    return {
+        data: assets,
+        loading,
+    };
+};
+
+export const usePlans = () => {
+    return useAssets<Plan>('core/plan');
+};
+
+export const useBlocks = () => {
+    const all = useAssets<BlockDefinition>();
+    const data = useMemo(() => {
+        return all.data.filter((asset) => {
+            return BlockTypeProvider.exists(asset.kind);
+        });
+    }, [all.data]);
+
+    return {
+        data,
+        loading: all.loading,
+    };
+};
+
+export const useAsset = <T = SchemaKind>(
+    ref: string,
+    ensure?: boolean
+): AssetResult<T> => {
+    const [loading, setLoading] = useState(true);
+    const [asset, setAsset] = useState<Asset<T>>();
+    if (ensure === undefined) {
+        ensure = false;
+    }
+    const assetResult = useSWRImmutable(`local-assets-${ref}`, async () => {
+        try {
+            return (await AssetService.get(ref, ensure)) as Asset<T>;
+        } catch (e: any) {
+            console.warn('Failed to load assets', e);
+        }
+    });
+
+    useEffect(() => {
+        const uri = parseKapetaUri(ref);
+        const handler = async (evt: AssetChangedEvent) => {
+            if (!evt?.asset) {
+                return;
+            }
+            try {
+                if (
+                    evt.asset.name === uri.name &&
+                    evt.asset.handle === uri.handle &&
+                    evt.asset.version === uri.version
+                ) {
+                    await assetResult.mutate();
+                }
+            } catch (e) {
+                console.warn(`Failed to reload asset: ${ref}`, e, evt);
+            }
+        };
+        SocketService.on(ASSET_CHANGED_EVENT, handler);
+        return () => {
+            SocketService.off(ASSET_CHANGED_EVENT, handler);
+        };
+    }, [assetResult, ref]);
+
+    useEffect(() => {
+        if (assetResult.isLoading) {
+            return;
+        }
+
+        if (loading) {
+            // We only want to show loading on initial load
+            setLoading(false);
+        }
+
+        if (!_.isEqual(asset, assetResult.data)) {
+            // Only update asset if it has changed
+            setAsset(assetResult.data);
+            console.log('updated asset', asset, assetResult.data);
+        }
+    }, [assetResult.data]);
+
+    return {
+        data: asset,
+        loading,
+        setData: useCallback(
+            (data: T) => {
+                setAsset((prev) => {
+                    let assetInfo = prev ?? assetResult.data;
+                    if (!assetInfo) {
+                        return assetInfo;
+                    }
+
+                    return {
+                        ...assetInfo,
+                        data,
+                    };
+                });
+            },
+            [assetResult]
+        ),
+    };
+};

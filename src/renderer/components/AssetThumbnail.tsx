@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import React, { forwardRef, PropsWithChildren } from 'react';
 import { Box, Stack, Typography } from '@mui/material';
 import { Asset, SchemaKind } from '@kapeta/ui-web-types';
 import {
@@ -20,6 +20,7 @@ import { useLoadedPlanContext } from '../utils/planContextLoader';
 import { Plan } from '@kapeta/schemas';
 
 const CONTAINER_CLASS = 'asset-thumbnail';
+
 interface InnerProps {
     asset: Asset<SchemaKind>;
     width: number;
@@ -27,12 +28,16 @@ interface InnerProps {
     onClick?: (asset: Asset<SchemaKind>) => void;
 }
 
-export const AssetThumbnailContainer = (props: InnerProps & PropsWithChildren) => {
+export const AssetThumbnailContainer = forwardRef<
+    HTMLDivElement,
+    InnerProps & PropsWithChildren
+>((props, ref) => {
     const title =
         props.asset.data.metadata.title ?? props.asset.data.metadata.name;
 
     return (
         <Stack
+            ref={ref}
             className={CONTAINER_CLASS}
             onClick={() => props.onClick?.(props.asset)}
             direction={'column'}
@@ -91,7 +96,7 @@ export const AssetThumbnailContainer = (props: InnerProps & PropsWithChildren) =
             </Stack>
         </Stack>
     );
-};
+});
 
 const InnerPreview = (props: InnerProps) => {
     const kind = props.asset.data.kind;
@@ -165,20 +170,26 @@ interface Props extends InnerProps {
     hideMetadata?: boolean;
 }
 
-
-
-export const AssetThumbnail = (props: Props) => {
-    if (props.hideMetadata) {
-        return <Box className={CONTAINER_CLASS} sx={{
-            position: 'relative',
-            textAlign: 'center'
-        }} >
-            <InnerPreview {...props} height={props.height} />
-        </Box>
+export const AssetThumbnail = forwardRef<HTMLDivElement, Props>(
+    (props, ref) => {
+        if (props.hideMetadata) {
+            return (
+                <Box
+                    ref={ref}
+                    className={CONTAINER_CLASS}
+                    sx={{
+                        position: 'relative',
+                        textAlign: 'center',
+                    }}
+                >
+                    <InnerPreview {...props} height={props.height} />
+                </Box>
+            );
+        }
+        return (
+            <AssetThumbnailContainer ref={ref} {...props}>
+                <InnerPreview {...props} height={props.height - 88} />
+            </AssetThumbnailContainer>
+        );
     }
-    return (
-        <AssetThumbnailContainer {...props}>
-            <InnerPreview {...props} height={props.height - 88} />
-        </AssetThumbnailContainer>
-    );
-};
+);

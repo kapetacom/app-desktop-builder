@@ -8,27 +8,31 @@
     width: 100%;
     overflow: hidden;
 
-    main {
-        flex: 1;
+    & > section {
         height: 100%;
         width: 100%;
-        position: relative;
-        z-index: 0;
+        display: flex;
+        flex-direction: column;
+        & > main {
+            flex: 1;
+            position: relative;
+            z-index: 0;
+            height: ~'calc(100% - 52px)';
+            .section-frame {
+                // Fix for border sizing in storybook mode
+                box-sizing: border-box;
+                width: 100%;
+                height: 100%;
+                border: 0;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                display: none;
 
-        .section-frame {
-            // Fix for border sizing in storybook mode
-            box-sizing: border-box;
-            width: 100%;
-            height: 100%;
-            border: 0;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            display: none;
-
-            &.current {
-                display: block;
+                &.current {
+                    display: block;
+                }
             }
         }
     }
