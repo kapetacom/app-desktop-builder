@@ -30,11 +30,6 @@ export function Shell() {
 
     const contexts = useKapetaContext();
 
-    toClass({
-        'main-container': true,
-        error: !!error,
-    });
-
     if (error) {
         return <div className="error-details">{error}</div>;
     }

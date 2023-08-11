@@ -27,7 +27,9 @@ interface InnerProps {
     onClick?: (asset: Asset<SchemaKind>) => void;
 }
 
-export const AssetThumbnailContainer = (props: InnerProps & PropsWithChildren) => {
+export const AssetThumbnailContainer = (
+    props: InnerProps & PropsWithChildren
+) => {
     const title =
         props.asset.data.metadata.title ?? props.asset.data.metadata.name;
 
@@ -165,16 +167,19 @@ interface Props extends InnerProps {
     hideMetadata?: boolean;
 }
 
-
-
 export const AssetThumbnail = (props: Props) => {
     if (props.hideMetadata) {
-        return <Box className={CONTAINER_CLASS} sx={{
-            position: 'relative',
-            textAlign: 'center'
-        }} >
-            <InnerPreview {...props} height={props.height} />
-        </Box>
+        return (
+            <Box
+                className={CONTAINER_CLASS}
+                sx={{
+                    position: 'relative',
+                    textAlign: 'center',
+                }}
+            >
+                <InnerPreview {...props} height={props.height} />
+            </Box>
+        );
     }
     return (
         <AssetThumbnailContainer {...props}>

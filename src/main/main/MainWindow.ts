@@ -54,6 +54,7 @@ export class MainWindow {
         this._window = new BrowserWindow({
             show: false,
             icon: getAssetPath('icon.png'),
+            title: 'Kapeta',
             webPreferences: {
                 preload: getPreloadScript(),
                 nodeIntegration: true,
