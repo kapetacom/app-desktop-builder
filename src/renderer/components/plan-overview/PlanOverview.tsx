@@ -59,12 +59,12 @@ export const PlanOverview = (props: Props) => {
             sx={{
                 width: '100%',
                 height: '100%',
-                pt: '50px',
                 boxSizing: 'border-box',
                 overflow: 'auto',
                 bgcolor: 'white',
             }}
         >
+            <Box sx={{ pt: '50px' }}></Box>
             <Stack
                 direction={'column'}
                 sx={{
@@ -112,6 +112,7 @@ export const PlanOverview = (props: Props) => {
                     })}
                 />
             )}
+            <Box sx={{ pb: 4 }}></Box>
         </Box>
     );
 };

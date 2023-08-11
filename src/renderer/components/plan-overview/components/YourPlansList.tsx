@@ -1,11 +1,21 @@
 import React from 'react';
-import { Box, Button, Stack, Typography } from '@mui/material';
+import {
+    Box,
+    Button,
+    Collapse,
+    Fade,
+    Grow,
+    Slide,
+    Stack,
+    Typography,
+} from '@mui/material';
 import { Asset } from '@kapeta/ui-web-types';
 import { Plan } from '@kapeta/schemas';
 import { Image } from '@mui/icons-material';
 import { toClass } from '@kapeta/ui-web-utils';
 import { AssetThumbnail } from '../../AssetThumbnail';
 import { useKapetaContext } from '../../../hooks/contextHook';
+import { TransitionGroup } from 'react-transition-group';
 
 interface Props {
     plans: Asset<Plan>[];
@@ -113,17 +123,31 @@ const YourPlansListInner = (props: Props) => {
             alignContent={'flex-start'}
             gap={3}
         >
-            {props.plans.map((plan, index) => {
-                return (
-                    <AssetThumbnail
-                        key={`plan_${index}`}
-                        width={368}
-                        height={264}
-                        asset={plan}
-                        onClick={props.onPlanOpen}
-                    />
-                );
-            })}
+            <TransitionGroup
+                component={null}
+                enter={true}
+                exit={true}
+                appear={true}
+            >
+                {props.plans.map((plan, index) => {
+                    return (
+                        <Slide
+                            key={`plan_${plan.ref}`}
+                            direction={'right'}
+                            unmountOnExit={true}
+                            mountOnEnter={true}
+                        >
+                            <AssetThumbnail
+                                key={`plan_${plan.ref}`}
+                                width={368}
+                                height={264}
+                                asset={plan}
+                                onClick={props.onPlanOpen}
+                            />
+                        </Slide>
+                    );
+                })}
+            </TransitionGroup>
         </Stack>
     );
 };

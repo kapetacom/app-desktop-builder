@@ -9,6 +9,7 @@ import { KapetaTab, KapetaTabs, KapetaTabsType } from './components/KapetaTabs';
 import { CustomIcon } from './components/CustomIcon';
 import { navigate } from '@storybook/addon-links';
 import { Person } from '@mui/icons-material';
+import { usePlans } from '../../hooks/assetHooks';
 const DEFAULT_URL = '/edit';
 const useEditorTabs = () => {
     const location = useLocation();
@@ -68,7 +69,7 @@ const useEditorTabs = () => {
 export const EditorTabs = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const planAssets = useAsyncRetry(() => PlannerService.list(), []);
+    const planAssets = usePlans();
 
     const { tabs, createTab, closeTab } = useEditorTabs();
 
@@ -94,7 +95,7 @@ export const EditorTabs = () => {
                         const ref = decodeURIComponent(
                             /\/edit\/(.+)/.exec(url)?.[1] ?? ''
                         );
-                        const plan = planAssets.value?.find(
+                        const plan = planAssets.data?.find(
                             (a) => a.ref === ref
                         );
                         if (!plan) {

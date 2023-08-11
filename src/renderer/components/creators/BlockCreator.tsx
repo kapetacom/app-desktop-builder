@@ -21,7 +21,7 @@ interface Props {
     createNewKind?: () => BlockDefinition;
 }
 
-export const createNewBlock = () => {
+export const createNewBlock = (): BlockDefinition => {
     return {
         kind: BlockTypeProvider.getDefaultKind(),
         metadata: {
@@ -32,6 +32,9 @@ export const createNewBlock = () => {
             target: {
                 kind: '',
             },
+            consumers: [],
+            providers: [],
+            entities: [],
         },
     };
 };

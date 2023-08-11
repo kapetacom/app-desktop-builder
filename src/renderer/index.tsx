@@ -16,6 +16,8 @@ import { PlanView } from './views/PlanView';
 import { PlanOverview } from './components/plan-overview/PlanOverview';
 import { useAuthToken } from './utils/tokenHelper';
 import { KapetaContextProvider, useKapetaContext } from './hooks/contextHook';
+import { usePlans } from './hooks/assetHooks';
+import { SimpleLoader } from '@kapeta/ui-web-components';
 
 const router = createMemoryRouter([
     {
@@ -33,40 +35,29 @@ const router = createMemoryRouter([
                         index: true,
                         Component: () => {
                             const navigateTo = useNavigate();
-                            let [planAssets, reloadPlans] =
-                                useAsyncFn(async () => {
-                                    console.log('Loading plans');
-                                    try {
-                                        return await PlannerService.list();
-                                    } catch (e: any) {
-                                        console.log('Failed to load plans', e);
-                                        throw e;
-                                    }
-                                }, []);
-
-                            useEffect(() => {
-                                reloadPlans();
-                            }, [reloadPlans]);
+                            const plans = usePlans();
 
                             return (
-                                <PlanOverview
-                                    assetService={AssetService}
-                                    onPlanAdded={(plan) => {
-                                        navigateTo(
-                                            `/edit/${encodeURIComponent(
-                                                plan.ref
-                                            )}`
-                                        );
-                                    }}
-                                    onPlanSelected={(plan) => {
-                                        navigateTo(
-                                            `/edit/${encodeURIComponent(
-                                                plan.ref
-                                            )}`
-                                        );
-                                    }}
-                                    plans={planAssets.value || []}
-                                />
+                                <SimpleLoader loading={plans.loading}>
+                                    <PlanOverview
+                                        assetService={AssetService}
+                                        onPlanAdded={(plan) => {
+                                            navigateTo(
+                                                `/edit/${encodeURIComponent(
+                                                    plan.ref
+                                                )}`
+                                            );
+                                        }}
+                                        onPlanSelected={(plan) => {
+                                            navigateTo(
+                                                `/edit/${encodeURIComponent(
+                                                    plan.ref
+                                                )}`
+                                            );
+                                        }}
+                                        plans={plans.data || []}
+                                    />
+                                </SimpleLoader>
                             );
                         },
                     },
