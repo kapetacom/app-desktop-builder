@@ -1,3 +1,10 @@
+## [0.21.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.21.1...v0.21.2) (2023-08-12)
+
+
+### Bug Fixes
+
+* Sync issues when creating plans ([cf7c319](https://github.com/kapetacom/app-desktop-builder/commit/cf7c319b2cbc87f1b4addb7b67c62fd8affc441f))
+
 ## [0.21.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.21.0...v0.21.1) (2023-08-11)
 
 
