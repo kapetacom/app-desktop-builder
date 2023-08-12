@@ -6,9 +6,7 @@ import {
     createMemoryRouter,
     useNavigate,
 } from 'react-router-dom';
-import { useEffect } from 'react';
 import { AssetService, PlannerService } from '@kapeta/ui-web-context';
-import { useAsyncFn } from 'react-use';
 import { Root } from './Root';
 import { kapetaDark } from './Theme';
 import { initialise } from './context';

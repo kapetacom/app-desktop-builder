@@ -168,10 +168,10 @@ export const useLoadedPlanContext = (plan: Plan | undefined) => {
 
     const assetResult = useAssets();
     const blocks = useMemo(() => {
-        return toBlocks(assetResult.data ?? []);
+        return assetResult.data ? toBlocks(assetResult.data) : undefined;
     }, [assetResult.data]);
 
-    const missingData = (!plan || !assetResult.data);
+    const missingData = (!plan || !assetResult.data || !blocks);
 
     const results = useAsync(async () => {
         if (missingData) {

@@ -111,7 +111,7 @@ export const AssetCreator = (props: Props) => {
                 props.onAssetCreateStart(content);
             }
 
-            const assets: Asset[] = await AssetService.create(
+            const assets: Asset[] = await props.assetService.create(
                 Path.join(filePath, '/kapeta.yml'),
                 content
             );

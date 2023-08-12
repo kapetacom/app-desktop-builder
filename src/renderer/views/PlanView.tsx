@@ -11,7 +11,6 @@ import {
 
 import './PlanView.less';
 import { Plan } from '@kapeta/schemas';
-import { Asset } from '@kapeta/ui-web-types';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import { SimpleLoader } from '@kapeta/ui-web-components';
 import { PlanEditor } from '../components/plan-editor/PlanEditor';
@@ -78,6 +77,7 @@ export const PlanView = (props: PlanViewProps) => {
         }
     }
 
+
     return (
         <SimpleLoader loading={planData.loading || loading} text={loadingText}>
             {!planData.loading &&
@@ -94,7 +94,6 @@ export const PlanView = (props: PlanViewProps) => {
                         mode={plannerMode}
                         systemId={normalizeKapetaUri(props.systemId)}
                         onChange={async (plan) => {
-                            planData.setData(plan);
                             try {
                                 await AssetService.update(
                                     normalizeKapetaUri(props.systemId),

@@ -10,6 +10,8 @@ import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import _ from 'lodash';
 
 import useSWRImmutable from 'swr/immutable';
+import useSWR from "swr";
+import {useAsync, useAsyncRetry} from "react-use";
 
 interface AssetChangedEvent {
     type: string;
@@ -32,7 +34,7 @@ export interface AssetListResult<T = SchemaKind> {
 export interface AssetResult<T = SchemaKind> {
     loading: boolean;
     data?: Asset<T>;
-    setData: (data: T) => void;
+    invalidate: () => void;
 }
 
 export const useAssets = <T = SchemaKind>(
@@ -137,18 +139,16 @@ export const useAsset = <T = SchemaKind>(
     ref: string,
     ensure?: boolean
 ): AssetResult<T> => {
-    const [loading, setLoading] = useState(true);
-    const [asset, setAsset] = useState<Asset<T>>();
     if (ensure === undefined) {
         ensure = false;
     }
-    const assetResult = useSWRImmutable(`local-assets-${ref}`, async () => {
+    const assetResult = useAsyncRetry( async () => {
         try {
             return (await AssetService.get(ref, ensure)) as Asset<T>;
         } catch (e: any) {
             console.warn('Failed to load assets', e);
         }
-    });
+    }, [ref, ensure]);
 
     useEffect(() => {
         const uri = parseKapetaUri(ref);
@@ -167,7 +167,7 @@ export const useAsset = <T = SchemaKind>(
                     evt.asset.handle === uri.handle &&
                     evt.asset.version === uri.version
                 ) {
-                    await assetResult.mutate();
+                    await assetResult.retry();
                 }
             } catch (e) {
                 console.warn(`Failed to reload asset: ${ref}`, e, evt);
@@ -179,38 +179,12 @@ export const useAsset = <T = SchemaKind>(
         };
     }, [assetResult, ref]);
 
-    useEffect(() => {
-        if (assetResult.isLoading) {
-            return;
-        }
-
-        if (loading) {
-            // We only want to show loading on initial load
-            setLoading(false);
-        }
-
-        if (!_.isEqual(asset, assetResult.data)) {
-            // Only update asset if it has changed
-            setAsset(assetResult.data);
-        }
-    }, [assetResult.data]);
-
     return {
-        data: asset,
-        loading,
-        setData: useCallback(
-            (data: T) => {
-                setAsset((prev) => {
-                    let assetInfo = prev ?? assetResult.data;
-                    if (!assetInfo) {
-                        return assetInfo;
-                    }
-
-                    return {
-                        ...assetInfo,
-                        data,
-                    };
-                });
+        data: assetResult.value,
+        loading: assetResult.loading,
+        invalidate: useCallback(
+            () => {
+                assetResult.retry();
             },
             [assetResult]
         ),
