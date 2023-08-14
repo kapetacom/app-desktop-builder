@@ -1,3 +1,10 @@
+## [0.21.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.21.2...v0.21.3) (2023-08-14)
+
+
+### Bug Fixes
+
+* Fix button color on overview ([de12a74](https://github.com/kapetacom/app-desktop-builder/commit/de12a74dd5b4497b46438feb0e569975d9800cca))
+
 ## [0.21.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.21.1...v0.21.2) (2023-08-12)
 
 
