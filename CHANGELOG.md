@@ -1,3 +1,10 @@
+# [0.22.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.21.5...v0.22.0) (2023-08-14)
+
+
+### Features
+
+* Add start/stop button on single instance ([aa0c7a3](https://github.com/kapetacom/app-desktop-builder/commit/aa0c7a35865a9c76631256e52fc54ddf978f22f6))
+
 ## [0.21.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.21.4...v0.21.5) (2023-08-14)
 
 
