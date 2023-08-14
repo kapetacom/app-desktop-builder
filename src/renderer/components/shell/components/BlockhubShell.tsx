@@ -8,7 +8,7 @@ import {
     BlockhubCategory,
     BlockhubModal,
 } from '@kapeta/ui-web-components';
-import { useAsync } from 'react-use';
+import { useAsync, useAsyncRetry } from 'react-use';
 import { AssetService } from '@kapeta/ui-web-context';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import { useKapetaContext } from '../../../hooks/contextHook';
@@ -16,6 +16,7 @@ import { versionIsBigger } from '../../../utils/versionHelpers';
 import { Asset } from '@kapeta/ui-web-types';
 import { AssetThumbnail } from '../../AssetThumbnail';
 import { normalizeKapetaUri } from '../../../utils/planContextLoader';
+import { useAssetsChanged } from '../../../hooks/assetHooks';
 
 interface Props {
     handle?: string;
@@ -28,7 +29,7 @@ export const BlockhubShell = (props: Props) => {
         BlockhubCategory.INSTALLED
     );
 
-    const assets = useAsync(async () => {
+    const assets = useAsyncRetry(async () => {
         switch (currentCategory) {
             case BlockhubCategory.INSTALLED:
                 const all = await api.registry().list();
@@ -92,6 +93,19 @@ export const BlockhubShell = (props: Props) => {
                 return await api.registry().list();
         }
     }, [currentCategory, props.handle]);
+
+    useAssetsChanged(
+        (evt) => {
+            if (
+                evt.sourceOfChange === 'user' ||
+                currentCategory !== BlockhubCategory.INSTALLED
+            ) {
+                return;
+            }
+            assets.retry();
+        },
+        [assets, currentCategory]
+    );
 
     useEffect(() => {
         if (kapetaContext.blockHub.visible) {

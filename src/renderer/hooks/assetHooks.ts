@@ -44,6 +44,17 @@ export const onAssetChanged = (callback: (evt: AssetChangedEvent) => void) => {
     };
 };
 
+export const useAssetsChanged = (
+    handler: (evt: AssetChangedEvent) => void,
+    dependencies: any[]
+) => {
+    const callback = useCallback(handler, dependencies);
+
+    useEffect(() => {
+        return onAssetChanged(callback);
+    }, [callback]);
+};
+
 export const useAssets = <T = SchemaKind>(
     ...kinds: string[]
 ): AssetListResult<T> => {
