@@ -1,3 +1,10 @@
+## [0.21.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.21.3...v0.21.4) (2023-08-14)
+
+
+### Bug Fixes
+
+* Ensure install buttons are updated when installed assets change ([#57](https://github.com/kapetacom/app-desktop-builder/issues/57)) ([4cb55d3](https://github.com/kapetacom/app-desktop-builder/commit/4cb55d3bd2bce14cc3a946ce5699aad69724220c))
+
 ## [0.21.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.21.2...v0.21.3) (2023-08-14)
 
 
