@@ -37,6 +37,13 @@ export interface AssetResult<T = SchemaKind> {
     invalidate: () => void;
 }
 
+export const onAssetChanged = (callback: (evt: AssetChangedEvent) => void) => {
+    SocketService.on(ASSET_CHANGED_EVENT, callback);
+    return () => {
+        SocketService.off(ASSET_CHANGED_EVENT, callback);
+    };
+}
+
 export const useAssets = <T = SchemaKind>(
     ...kinds: string[]
 ): AssetListResult<T> => {
@@ -63,28 +70,28 @@ export const useAssets = <T = SchemaKind>(
         }) as Asset<T>[];
     }, [assetResults.data, kinds.join(':')]);
 
+    const callback = useCallback(async (evt: AssetChangedEvent) => {
+        if (!evt?.asset) {
+            return;
+        }
+        if (
+            kinds.length > 0 &&
+            !kinds.includes(evt.definition.kind.toLowerCase())
+        ) {
+            return;
+        }
+        try {
+            await assetResults.mutate();
+        } catch (e) {
+            console.warn('Failed to reload assets', e);
+        }
+    }, [
+        assetResults,
+    ]);
+
     useEffect(() => {
-        const handler = async (evt: AssetChangedEvent) => {
-            if (!evt?.asset) {
-                return;
-            }
-            if (
-                kinds.length > 0 &&
-                !kinds.includes(evt.definition.kind.toLowerCase())
-            ) {
-                return;
-            }
-            try {
-                await assetResults.mutate();
-            } catch (e) {
-                console.warn('Failed to reload assets', e);
-            }
-        };
-        SocketService.on(ASSET_CHANGED_EVENT, handler);
-        return () => {
-            SocketService.off(ASSET_CHANGED_EVENT, handler);
-        };
-    }, [assetResults]);
+        return onAssetChanged(callback);
+    }, [callback]);
 
     useEffect(() => {
         if (assetResults.isLoading) {
