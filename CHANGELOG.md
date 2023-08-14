@@ -1,3 +1,10 @@
+## [0.21.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.21.4...v0.21.5) (2023-08-14)
+
+
+### Bug Fixes
+
+* Reload when installed assets change ([#58](https://github.com/kapetacom/app-desktop-builder/issues/58)) ([2e128a9](https://github.com/kapetacom/app-desktop-builder/commit/2e128a9d73ff2a8f2aff9d0d2b5842d92cf45138))
+
 ## [0.21.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.21.3...v0.21.4) (2023-08-14)
 
 
