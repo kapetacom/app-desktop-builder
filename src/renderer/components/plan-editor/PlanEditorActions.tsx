@@ -7,7 +7,11 @@ import { ButtonStyle, showDelete } from '@kapeta/ui-web-components';
 import { IResourceTypeConverter, ResourceRole } from '@kapeta/ui-web-types';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import { useEffect, useMemo } from 'react';
-import { InstanceStatus, ResourceTypeProvider } from '@kapeta/ui-web-context';
+import {
+    InstanceService,
+    InstanceStatus,
+    ResourceTypeProvider,
+} from '@kapeta/ui-web-context';
 import { Connection } from '@kapeta/schemas';
 import { ActionHandlers, DataEntityType, InstanceInfo } from './types';
 
@@ -175,6 +179,79 @@ export const usePlanEditorActions = (
                     label: 'Configure',
                 },
                 {
+                    enabled(): boolean {
+                        return true; // we can always stop/start an instance
+                    },
+                    onClick(context, { blockInstance }) {
+                        const info = instanceInfos.find(
+                            (ix) => ix.instanceId === blockInstance?.id
+                        );
+                        if (!info?.systemId || !info?.instanceId) {
+                            return;
+                        }
+
+                        switch (info.status) {
+                            case InstanceStatus.STARTING:
+                            case InstanceStatus.READY:
+                            case InstanceStatus.UNHEALTHY:
+                                InstanceService.stopInstance(
+                                    info.systemId,
+                                    info.instanceId
+                                );
+                                break;
+                            case InstanceStatus.EXITED:
+                            case InstanceStatus.STOPPED:
+                                InstanceService.startInstance(
+                                    info.systemId,
+                                    info.instanceId
+                                );
+                                break;
+                            default: {
+                                const _exhaustiveCheck: never = info.status;
+                                console.warn(
+                                    `Unhandled instance status ${_exhaustiveCheck}`
+                                );
+                            }
+                        }
+                    },
+                    buttonStyle(context, { blockInstance }): ButtonStyle {
+                        const info = instanceInfos.find(
+                            (ix) => ix.instanceId === blockInstance?.id
+                        );
+                        switch (info?.status) {
+                            case InstanceStatus.EXITED:
+                            case InstanceStatus.STOPPED:
+                                return ButtonStyle.PRIMARY;
+                            default:
+                                return ButtonStyle.DANGER;
+                        }
+                    },
+                    icon(context, { blockInstance }): string {
+                        const info = instanceInfos.find(
+                            (ix) => ix.instanceId === blockInstance?.id
+                        );
+                        switch (info?.status) {
+                            case InstanceStatus.EXITED:
+                            case InstanceStatus.STOPPED:
+                                return 'fa fa-play';
+                            default:
+                                return 'fa fa-stop';
+                        }
+                    },
+                    label(context, { blockInstance }): string {
+                        const info = instanceInfos.find(
+                            (ix) => ix.instanceId === blockInstance?.id
+                        );
+                        switch (info?.status) {
+                            case InstanceStatus.EXITED:
+                            case InstanceStatus.STOPPED:
+                                return 'Start';
+                            default:
+                                return 'Stop';
+                        }
+                    },
+                },
+                {
                     enabled(context, { blockInstance }): boolean {
                         const info = instanceInfos.find(
                             (ix) => ix.instanceId === blockInstance?.id
@@ -338,6 +415,6 @@ export const usePlanEditorActions = (
                     label: 'Inspect',
                 },
             ],
-        };
+        } satisfies PlannerActionConfig;
     }, [planner, handlers, instanceInfos]);
 };
