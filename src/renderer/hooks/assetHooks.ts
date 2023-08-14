@@ -10,8 +10,8 @@ import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import _ from 'lodash';
 
 import useSWRImmutable from 'swr/immutable';
-import useSWR from "swr";
-import {useAsync, useAsyncRetry} from "react-use";
+import useSWR from 'swr';
+import { useAsync, useAsyncRetry } from 'react-use';
 
 interface AssetChangedEvent {
     type: string;
@@ -42,7 +42,7 @@ export const onAssetChanged = (callback: (evt: AssetChangedEvent) => void) => {
     return () => {
         SocketService.off(ASSET_CHANGED_EVENT, callback);
     };
-}
+};
 
 export const useAssets = <T = SchemaKind>(
     ...kinds: string[]
@@ -70,24 +70,25 @@ export const useAssets = <T = SchemaKind>(
         }) as Asset<T>[];
     }, [assetResults.data, kinds.join(':')]);
 
-    const callback = useCallback(async (evt: AssetChangedEvent) => {
-        if (!evt?.asset) {
-            return;
-        }
-        if (
-            kinds.length > 0 &&
-            !kinds.includes(evt.definition.kind.toLowerCase())
-        ) {
-            return;
-        }
-        try {
-            await assetResults.mutate();
-        } catch (e) {
-            console.warn('Failed to reload assets', e);
-        }
-    }, [
-        assetResults,
-    ]);
+    const callback = useCallback(
+        async (evt: AssetChangedEvent) => {
+            if (!evt?.asset) {
+                return;
+            }
+            if (
+                kinds.length > 0 &&
+                !kinds.includes(evt.definition.kind.toLowerCase())
+            ) {
+                return;
+            }
+            try {
+                await assetResults.mutate();
+            } catch (e) {
+                console.warn('Failed to reload assets', e);
+            }
+        },
+        [assetResults]
+    );
 
     useEffect(() => {
         return onAssetChanged(callback);
@@ -149,7 +150,7 @@ export const useAsset = <T = SchemaKind>(
     if (ensure === undefined) {
         ensure = false;
     }
-    const assetResult = useAsyncRetry( async () => {
+    const assetResult = useAsyncRetry(async () => {
         try {
             return (await AssetService.get(ref, ensure)) as Asset<T>;
         } catch (e: any) {
@@ -189,11 +190,8 @@ export const useAsset = <T = SchemaKind>(
     return {
         data: assetResult.value,
         loading: assetResult.loading,
-        invalidate: useCallback(
-            () => {
-                assetResult.retry();
-            },
-            [assetResult]
-        ),
+        invalidate: useCallback(() => {
+            assetResult.retry();
+        }, [assetResult]),
     };
 };
