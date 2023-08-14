@@ -171,7 +171,7 @@ export const useLoadedPlanContext = (plan: Plan | undefined) => {
         return assetResult.data ? toBlocks(assetResult.data) : undefined;
     }, [assetResult.data]);
 
-    const missingData = (!plan || !assetResult.data || !blocks);
+    const missingData = !plan || !assetResult.data || !blocks;
 
     const results = useAsync(async () => {
         if (missingData) {
@@ -256,11 +256,7 @@ export const useLoadedPlanContext = (plan: Plan | undefined) => {
             blocks,
             providers: ResourceTypeProvider.list(),
         };
-    }, [
-        dependencyHash,
-        blocks,
-        missingData
-    ]);
+    }, [dependencyHash, blocks, missingData]);
 
     useEffect(() => {
         if (results.loading) {

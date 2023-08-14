@@ -107,7 +107,8 @@ export const BlockhubShell = (props: Props) => {
                 plan={kapetaContext.blockHub.opener?.source}
                 fetcher={assetFetcher}
                 assets={assets}
-                onFilterChange={(category: BlockhubCategory) => {
+                category={currentCategory}
+                onCategoryChange={(category: BlockhubCategory) => {
                     setCurrentCategory(category);
                 }}
                 onSelect={(selection: AssetDisplay[]) => {

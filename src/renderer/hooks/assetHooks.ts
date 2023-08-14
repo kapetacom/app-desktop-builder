@@ -10,8 +10,8 @@ import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import _ from 'lodash';
 
 import useSWRImmutable from 'swr/immutable';
-import useSWR from "swr";
-import {useAsync, useAsyncRetry} from "react-use";
+import useSWR from 'swr';
+import { useAsync, useAsyncRetry } from 'react-use';
 
 interface AssetChangedEvent {
     type: string;
@@ -36,6 +36,13 @@ export interface AssetResult<T = SchemaKind> {
     data?: Asset<T>;
     invalidate: () => void;
 }
+
+export const onAssetChanged = (callback: (evt: AssetChangedEvent) => void) => {
+    SocketService.on(ASSET_CHANGED_EVENT, callback);
+    return () => {
+        SocketService.off(ASSET_CHANGED_EVENT, callback);
+    };
+};
 
 export const useAssets = <T = SchemaKind>(
     ...kinds: string[]
@@ -63,8 +70,8 @@ export const useAssets = <T = SchemaKind>(
         }) as Asset<T>[];
     }, [assetResults.data, kinds.join(':')]);
 
-    useEffect(() => {
-        const handler = async (evt: AssetChangedEvent) => {
+    const callback = useCallback(
+        async (evt: AssetChangedEvent) => {
             if (!evt?.asset) {
                 return;
             }
@@ -79,12 +86,13 @@ export const useAssets = <T = SchemaKind>(
             } catch (e) {
                 console.warn('Failed to reload assets', e);
             }
-        };
-        SocketService.on(ASSET_CHANGED_EVENT, handler);
-        return () => {
-            SocketService.off(ASSET_CHANGED_EVENT, handler);
-        };
-    }, [assetResults]);
+        },
+        [assetResults]
+    );
+
+    useEffect(() => {
+        return onAssetChanged(callback);
+    }, [callback]);
 
     useEffect(() => {
         if (assetResults.isLoading) {
@@ -142,7 +150,7 @@ export const useAsset = <T = SchemaKind>(
     if (ensure === undefined) {
         ensure = false;
     }
-    const assetResult = useAsyncRetry( async () => {
+    const assetResult = useAsyncRetry(async () => {
         try {
             return (await AssetService.get(ref, ensure)) as Asset<T>;
         } catch (e: any) {
@@ -182,11 +190,8 @@ export const useAsset = <T = SchemaKind>(
     return {
         data: assetResult.value,
         loading: assetResult.loading,
-        invalidate: useCallback(
-            () => {
-                assetResult.retry();
-            },
-            [assetResult]
-        ),
+        invalidate: useCallback(() => {
+            assetResult.retry();
+        }, [assetResult]),
     };
 };

@@ -77,7 +77,6 @@ export const PlanView = (props: PlanViewProps) => {
         }
     }
 
-
     return (
         <SimpleLoader loading={planData.loading || loading} text={loadingText}>
             {!planData.loading &&
