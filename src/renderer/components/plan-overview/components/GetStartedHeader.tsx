@@ -22,11 +22,13 @@ const XLButton = (props: XLButtonProps) => {
     switch (props.variant) {
         case 'blockhub':
             icon = <BlockHubIcon />;
+            color = 'white';
             bgColor = '#455A64';
             bgColorHover = '#263238';
             break;
         case 'edit':
             icon = <AddIcon />;
+            color = 'white';
             bgColor = 'primary.main';
             bgColorHover = 'primary.dark';
             break;
@@ -61,7 +63,7 @@ const XLButton = (props: XLButtonProps) => {
             }}
         >
             {icon}
-            <Typography>{props.label}</Typography>
+            <Typography color={'inherit'}>{props.label}</Typography>
         </Button>
     );
 };

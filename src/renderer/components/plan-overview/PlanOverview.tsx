@@ -62,6 +62,8 @@ export const PlanOverview = (props: Props) => {
                 boxSizing: 'border-box',
                 overflow: 'auto',
                 bgcolor: 'white',
+                pl: 2,
+                pr: 2,
             }}
         >
             <Box sx={{ pt: '50px' }}></Box>
