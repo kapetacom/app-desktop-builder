@@ -6,7 +6,7 @@ import {
     createMemoryRouter,
     useNavigate,
 } from 'react-router-dom';
-import { AssetService, PlannerService } from '@kapeta/ui-web-context';
+import { AssetService } from '@kapeta/ui-web-context';
 import { Root } from './Root';
 import { kapetaDark } from './Theme';
 import { initialise } from './context';
@@ -15,7 +15,9 @@ import { PlanOverview } from './components/plan-overview/PlanOverview';
 import { useAuthToken } from './utils/tokenHelper';
 import { KapetaContextProvider, useKapetaContext } from './hooks/contextHook';
 import { usePlans } from './hooks/assetHooks';
-import { SimpleLoader } from '@kapeta/ui-web-components';
+import {
+    SimpleLoader,
+} from '@kapeta/ui-web-components';
 
 const router = createMemoryRouter([
     {

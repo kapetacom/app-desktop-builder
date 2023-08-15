@@ -1,10 +1,11 @@
-import React, { forwardRef, PropsWithChildren } from 'react';
-import { Box, Stack, Typography } from '@mui/material';
+import React, { forwardRef, PropsWithChildren, useState } from 'react';
+import { Box, Chip, CircularProgress, Stack, Typography } from '@mui/material';
 import { Asset, SchemaKind } from '@kapeta/ui-web-types';
 import {
     AssetKindIcon,
     CoreTypes,
     SimpleLoader,
+    useConfirm,
 } from '@kapeta/ui-web-components';
 import {
     BlockPreview,
@@ -18,6 +19,8 @@ import {
 } from '@kapeta/ui-web-context';
 import { useLoadedPlanContext } from '../utils/planContextLoader';
 import { Plan } from '@kapeta/schemas';
+import { installerService } from '../api/installerService';
+import { Delete } from '@mui/icons-material';
 
 const CONTAINER_CLASS = 'asset-thumbnail';
 
@@ -34,6 +37,9 @@ export const AssetThumbnailContainer = forwardRef<
 >((props, ref) => {
     const title =
         props.asset.data.metadata.title ?? props.asset.data.metadata.name;
+
+    const [deleting, setDeleting] = useState(false);
+    const confirm = useConfirm();
 
     return (
         <Stack
@@ -57,9 +63,67 @@ export const AssetThumbnailContainer = forwardRef<
                 '&:hover': {
                     boxShadow: 3,
                 },
+                '& > .preview': {
+                    position: 'relative',
+                },
             }}
         >
             <Box className={'preview'} flex={1}>
+                {installerService.uninstall && (
+                    <Chip
+                        label={
+                            deleting ? (
+                                <CircularProgress size={24} />
+                            ) : (
+                                <Delete />
+                            )
+                        }
+                        variant={'filled'}
+                        color={'default'}
+                        onClick={async (evt) => {
+                            evt.preventDefault();
+                            evt.stopPropagation();
+                            if (!installerService.uninstall) {
+                                return;
+                            }
+                            try {
+                                await confirm({
+                                    title: 'Uninstall asset',
+                                    content: `
+                                    Are you sure you want to uninstall ${title}?
+                                    This will not delete anything from your disk.
+                                    `,
+                                    confirmationText: 'Uninstall',
+                                });
+
+                                setDeleting(true);
+                                await installerService.uninstall(
+                                    props.asset.ref
+                                );
+                            } catch (e) {
+                                // Ignore
+                            } finally {
+                                setDeleting(false);
+                            }
+                        }}
+                        sx={{
+                            position: 'absolute',
+                            top: '8px',
+                            right: '8px',
+                            zIndex: 1,
+                            border: '1px solid #263238',
+                            color: '#263238',
+                            '& > .MuiChip-label': {
+                                p: '0 4px',
+                            },
+                            '&:hover': {
+                                boxShadow: 2,
+                                color: 'error.contrastText',
+                                bgcolor: 'error.main',
+                            },
+                        }}
+                    />
+                )}
                 {props.children}
             </Box>
             <Stack

@@ -11,6 +11,9 @@ export const installerService: InstallerService = {
     async install(assetRef: string): Promise<void> {
         await AssetService.install(assetRef);
     },
+    async uninstall(assetRef: string): Promise<void> {
+        await AssetService.remove(assetRef);
+    },
     onChange(assetRef, callback: () => void | Promise<void>) {
         const uri = parseKapetaUri(assetRef);
 
