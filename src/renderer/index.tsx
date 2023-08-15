@@ -15,9 +15,7 @@ import { PlanOverview } from './components/plan-overview/PlanOverview';
 import { useAuthToken } from './utils/tokenHelper';
 import { KapetaContextProvider, useKapetaContext } from './hooks/contextHook';
 import { usePlans } from './hooks/assetHooks';
-import {
-    SimpleLoader,
-} from '@kapeta/ui-web-components';
+import { SimpleLoader } from '@kapeta/ui-web-components';
 
 const router = createMemoryRouter([
     {

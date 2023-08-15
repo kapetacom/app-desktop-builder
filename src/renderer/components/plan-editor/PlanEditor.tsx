@@ -13,10 +13,11 @@ import React, {
     forwardRef,
     useContext,
     useEffect,
+    useMemo,
     useState,
 } from 'react';
 import { Asset, IResourceTypeProvider } from '@kapeta/ui-web-types';
-import { useAsyncFn } from 'react-use';
+import { useAsyncFn, useAsyncRetry } from 'react-use';
 import { PlanEditorTopMenu } from './PlanEditorTopMenu';
 import { usePlanEditorActions } from './PlanEditorActions';
 import { BlockConfigurationPanel } from './panels/block-configuration/BlockConfigurationPanel';
@@ -38,6 +39,7 @@ import { kapetaLight } from '../../Theme';
 import { BlockCreatorPanel } from './panels/BlockCreatorPanel';
 import { BlockDefinition } from '@kapeta/schemas';
 import { normalizeKapetaUri } from '../../utils/planContextLoader';
+import { BlockTypeProvider } from '@kapeta/ui-web-context';
 
 interface Props {
     systemId: string;
@@ -76,9 +78,62 @@ export const PlanEditor = withPlannerContext(
             }
         );
 
-        const [configurations, reloadConfiguration] = useAsyncFn(async () => {
-            return getInstanceConfigs(props.systemId);
+        const configFromInstances = useAsyncRetry(async () => {
+            return await getInstanceConfigs(props.systemId);
         }, [props.systemId]);
+
+        const configurations = useMemo(() => {
+            if (
+                !planner.plan ||
+                !planner.blockAssets ||
+                planner.blockAssets.length === 0 ||
+                configFromInstances.loading
+            ) {
+                return {};
+            }
+            const config = configFromInstances.value ?? {};
+            planner.plan.spec?.blocks?.forEach((instance) => {
+                if (!config[instance.id]) {
+                    config[instance.id] = {};
+                }
+                const currentConfig = config[instance.id];
+                try {
+                    const ref = normalizeKapetaUri(instance.block.ref);
+                    const block = planner.getBlockByRef(ref);
+                    if (!block) {
+                        console.log('Block not found', ref);
+                        return;
+                    }
+
+                    const kind = normalizeKapetaUri(block.kind);
+
+                    const typeProvider = BlockTypeProvider.get(kind);
+                    if (!typeProvider.createDefaultConfig) {
+                        return;
+                    }
+
+                    console.log('Got default for block', kind);
+
+                    config[instance.id] = {
+                        ...typeProvider.createDefaultConfig(block, instance),
+                        ...currentConfig,
+                    };
+                } catch (e) {
+                    console.warn(
+                        'Failed to create default config for block',
+                        e
+                    );
+                }
+            });
+
+            console.log('recreated config', config);
+            return config;
+        }, [
+            configFromInstances.value,
+            configFromInstances.loading,
+            planner.plan,
+            planner.blockAssets,
+        ]);
 
         const readonly = planner.mode !== PlannerMode.EDIT;
 
@@ -106,7 +161,7 @@ export const PlanEditor = withPlannerContext(
                         open={!!configInfo}
                         onClosed={async () => {
                             setConfigInfo(null);
-                            await reloadConfiguration();
+                            configFromInstances.retry();
                         }}
                     />
 
@@ -172,7 +227,7 @@ export const PlanEditor = withPlannerContext(
                     <Planner
                         actions={actions}
                         systemId={props.systemId}
-                        configurations={configurations.value}
+                        configurations={configurations}
                         onCreateBlock={(block, instance) => {
                             const asset: Asset<BlockDefinition> = {
                                 ref: normalizeKapetaUri(
