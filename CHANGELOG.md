@@ -1,3 +1,10 @@
+## [0.22.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.22.0...v0.22.1) (2023-08-15)
+
+
+### Bug Fixes
+
+* Adds delete buttons to asset thumbnails ([#60](https://github.com/kapetacom/app-desktop-builder/issues/60)) ([13acf55](https://github.com/kapetacom/app-desktop-builder/commit/13acf5558370ad396757d04badf2270eee4b4eb5))
+
 # [0.22.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.21.5...v0.22.0) (2023-08-14)
 
 
