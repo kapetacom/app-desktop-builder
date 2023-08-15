@@ -84,7 +84,7 @@ export const BlockConfigurationPanel = (props: Props) => {
     const data: BlockConfigurationData = useMemo<BlockConfigurationData>(() => {
         let defaultConfig = {};
         if (block && typeProvider?.createDefaultConfig) {
-            defaultConfig = typeProvider.createDefaultConfig!(
+            defaultConfig = typeProvider.createDefaultConfig(
                 block,
                 props.instance!
             );
@@ -159,7 +159,7 @@ export const BlockConfigurationPanel = (props: Props) => {
         props.onClosed();
     };
 
-    const readOnly = planner.mode !== PlannerMode.EDIT;
+    const readOnly = planner.mode === PlannerMode.VIEW;
     const hasConfigComponent = !!(typeProvider && typeProvider.configComponent);
 
     return (
