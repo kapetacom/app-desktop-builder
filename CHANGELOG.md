@@ -1,3 +1,10 @@
+## [0.22.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.22.1...v0.22.2) (2023-08-15)
+
+
+### Bug Fixes
+
+* Get default config and validate correctly ([#61](https://github.com/kapetacom/app-desktop-builder/issues/61)) ([9378211](https://github.com/kapetacom/app-desktop-builder/commit/9378211997d6a884b871d6864da21665d004a2b0))
+
 ## [0.22.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.22.0...v0.22.1) (2023-08-15)
 
 
