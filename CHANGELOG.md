@@ -1,3 +1,10 @@
+## [0.24.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.24.1...v0.24.2) (2023-08-16)
+
+
+### Bug Fixes
+
+* Change mac build target to "default" ([283b9ad](https://github.com/kapetacom/app-desktop-builder/commit/283b9adf83a871b356edd3a911e1d233811e7b76))
+
 ## [0.24.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.24.0...v0.24.1) (2023-08-16)
 
 
