@@ -1,3 +1,10 @@
+## [0.24.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.24.2...v0.24.3) (2023-08-16)
+
+
+### Bug Fixes
+
+* Bumped dependencies and migrated use of Asset to AssetInfo ([#69](https://github.com/kapetacom/app-desktop-builder/issues/69)) ([88ebad8](https://github.com/kapetacom/app-desktop-builder/commit/88ebad8c9471fb3c6642ebf9aa0bde625d016fbb))
+
 ## [0.24.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.24.1...v0.24.2) (2023-08-16)
 
 
