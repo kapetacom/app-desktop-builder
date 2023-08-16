@@ -1,3 +1,10 @@
+## [0.24.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.24.0...v0.24.1) (2023-08-16)
+
+
+### Bug Fixes
+
+* Trigger new version for testing purpose ([c0681cd](https://github.com/kapetacom/app-desktop-builder/commit/c0681cdd28f785ff494e791db2d8bd324ee6fd06))
+
 # [0.24.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.23.3...v0.24.0) (2023-08-16)
 
 
