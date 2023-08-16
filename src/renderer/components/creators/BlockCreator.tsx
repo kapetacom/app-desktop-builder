@@ -1,11 +1,12 @@
 import React from 'react';
 
-import { Asset, FileInfo, SchemaKind } from '@kapeta/ui-web-types';
+import { FileInfo, SchemaKind } from '@kapeta/ui-web-types';
 import { BlockTypeProvider, AssetStore } from '@kapeta/ui-web-context';
 
 import { AssetCreator, AssetCreatorState } from './AssetCreator';
 import { BlockForm } from '../forms/BlockForm';
 import { BlockDefinition } from '@kapeta/schemas';
+import {AssetInfo} from "@kapeta/ui-web-plan-editor";
 
 interface Props {
     state: AssetCreatorState;
@@ -16,8 +17,8 @@ interface Props {
     files: string[];
     onCancel?: () => void;
     onError?: (e: any) => void;
-    onDone?: (asset?: Asset) => void;
-    onAssetAdded?: (asset: Asset) => void;
+    onDone?: (asset?: AssetInfo<SchemaKind>) => void;
+    onAssetAdded?: (asset: AssetInfo<SchemaKind>) => void;
     createNewKind?: () => BlockDefinition;
 }
 

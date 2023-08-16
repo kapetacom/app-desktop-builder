@@ -2,24 +2,22 @@ import React from 'react';
 import {
     Box,
     Button,
-    Collapse,
-    Fade,
-    Grow,
     Slide,
     Stack,
     Typography,
 } from '@mui/material';
-import { Asset } from '@kapeta/ui-web-types';
 import { Plan } from '@kapeta/schemas';
 import { Image } from '@mui/icons-material';
 import { toClass } from '@kapeta/ui-web-utils';
-import { AssetThumbnail } from '../../AssetThumbnail';
+
 import { useKapetaContext } from '../../../hooks/contextHook';
 import { TransitionGroup } from 'react-transition-group';
+import {AssetInfo, AssetThumbnail} from "@kapeta/ui-web-plan-editor";
+import {useLoadedPlanContext} from "../../../utils/planContextLoader";
 
 interface Props {
-    plans: Asset<Plan>[];
-    onPlanOpen?: (plan: Asset<Plan>) => void;
+    plans: AssetInfo<Plan>[];
+    onPlanOpen?: (plan: AssetInfo<Plan>) => void;
     onPlanCreate?: () => void;
     onPlanImport?: () => void;
 }
@@ -139,10 +137,13 @@ const YourPlansListInner = (props: Props) => {
                         >
                             <AssetThumbnail
                                 key={`plan_${plan.ref}`}
-                                width={368}
-                                height={264}
+                                width={366}
+                                height={262}
                                 asset={plan}
                                 onClick={props.onPlanOpen}
+                                loadPlanContext={(plan) => {
+                                    return useLoadedPlanContext(plan.content)
+                                }}
                             />
                         </Slide>
                     );

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 
 import { AssetService, AssetStore } from '@kapeta/ui-web-context';
 import { showDelete, showToasty, ToastType } from '@kapeta/ui-web-components';
-import { Asset } from '@kapeta/ui-web-types';
 import { Plan } from '@kapeta/schemas';
 import { getAssetTitle } from '../plan-editor/helpers';
 import { GetStartedHeader } from './components/GetStartedHeader';
@@ -11,14 +10,15 @@ import { Box, Stack } from '@mui/material';
 import { YourPlansList } from './components/YourPlansList';
 import { PlanCreator } from '../creators/PlanCreator';
 import { AssetCreatorState } from '../creators/AssetCreator';
+import {AssetInfo} from "@kapeta/ui-web-plan-editor";
 
 interface Props {
-    plans: Asset<Plan>[];
-    sample?: Asset<Plan>;
+    plans: AssetInfo<Plan>[];
+    sample?: AssetInfo<Plan>;
     assetService?: AssetStore;
-    onPlanAdded?: (plan: Asset<Plan>) => void;
-    onPlanRemoved?: (plan: Asset<Plan>) => void;
-    onPlanSelected?: (plan: Asset<Plan>) => void;
+    onPlanAdded?: (plan: AssetInfo<Plan>) => void;
+    onPlanRemoved?: (plan: AssetInfo<Plan>) => void;
+    onPlanSelected?: (plan: AssetInfo<Plan>) => void;
 }
 
 export const PlanOverview = (props: Props) => {
@@ -26,7 +26,7 @@ export const PlanOverview = (props: Props) => {
         AssetCreatorState.CLOSED
     );
 
-    const onPlanRemove = async (plan: Asset<Plan>) => {
+    const onPlanRemove = async (plan: AssetInfo<Plan>) => {
         try {
             const confirm = await showDelete(
                 'Delete plan',
@@ -49,7 +49,7 @@ export const PlanOverview = (props: Props) => {
         return true;
     };
 
-    const onPlanCreated = (asset: Asset) => {
+    const onPlanCreated = (asset: AssetInfo<Plan>) => {
         props.onPlanAdded && props.onPlanAdded(asset);
         props.onPlanSelected && props.onPlanSelected(asset);
     };

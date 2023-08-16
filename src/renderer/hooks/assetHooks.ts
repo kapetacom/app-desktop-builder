@@ -1,17 +1,17 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import {useCallback, useEffect, useMemo, useState} from 'react';
 import {
     AssetService,
     BlockTypeProvider,
     SocketService,
 } from '@kapeta/ui-web-context';
-import { BlockDefinition, Plan } from '@kapeta/schemas';
-import { Asset, SchemaKind } from '@kapeta/ui-web-types';
-import { parseKapetaUri } from '@kapeta/nodejs-utils';
+import {BlockDefinition, Plan} from '@kapeta/schemas';
+import {Asset, SchemaKind} from '@kapeta/ui-web-types';
+import {parseKapetaUri} from '@kapeta/nodejs-utils';
 import _ from 'lodash';
 
 import useSWRImmutable from 'swr/immutable';
-import useSWR from 'swr';
-import { useAsync, useAsyncRetry } from 'react-use';
+import {useAsyncRetry} from 'react-use';
+import {AssetInfo, fromAsset} from '@kapeta/ui-web-plan-editor';
 
 interface AssetChangedEvent {
     type: string;
@@ -28,12 +28,12 @@ const ASSET_CHANGED_EVENT = 'asset-change';
 
 export interface AssetListResult<T = SchemaKind> {
     loading: boolean;
-    data: Asset<T>[];
+    data: AssetInfo<T>[];
 }
 
 export interface AssetResult<T = SchemaKind> {
     loading: boolean;
-    data?: Asset<T>;
+    data?: AssetInfo<T>;
     invalidate: () => void;
 }
 
@@ -58,7 +58,7 @@ export const useAssetsChanged = (
 export const useAssets = <T = SchemaKind>(
     ...kinds: string[]
 ): AssetListResult<T> => {
-    const [assets, setAssets] = useState<Asset<T>[]>([]);
+    const [assets, setAssets] = useState<AssetInfo<T>[]>([]);
     const [loading, setLoading] = useState(true);
     const assetResults = useSWRImmutable('local-assets', async () => {
         try {
@@ -74,11 +74,11 @@ export const useAssets = <T = SchemaKind>(
         }
 
         if (!kinds || kinds.length === 0) {
-            return assetResults.data as Asset<T>[];
+            return assetResults.data.map(fromAsset);
         }
-        return assetResults.data.filter((asset) => {
-            return kinds.includes(asset.kind.toLowerCase());
-        }) as Asset<T>[];
+        return assetResults.data.map(fromAsset).filter((asset) => {
+            return kinds.includes(asset.content.kind.toLowerCase());
+        }) as AssetInfo<T>[];
     }, [assetResults.data, kinds.join(':')]);
 
     const callback = useCallback(
@@ -144,7 +144,7 @@ export const useBlocks = () => {
     const all = useAssets<BlockDefinition>();
     const data = useMemo(() => {
         return all.data.filter((asset) => {
-            return BlockTypeProvider.exists(asset.kind);
+            return BlockTypeProvider.exists(asset.content.kind);
         });
     }, [all.data]);
 
@@ -163,7 +163,7 @@ export const useAsset = <T = SchemaKind>(
     }
     const assetResult = useAsyncRetry(async () => {
         try {
-            return (await AssetService.get(ref, ensure)) as Asset<T>;
+            return fromAsset(await AssetService.get(ref, ensure) as Asset<T>);
         } catch (e: any) {
             console.warn('Failed to load assets', e);
         }

@@ -1,4 +1,4 @@
-import { Asset, IResourceTypeProvider } from '@kapeta/ui-web-types';
+import { IResourceTypeProvider } from '@kapeta/ui-web-types';
 
 import {
     BlockDefinition,
@@ -7,7 +7,7 @@ import {
     Resource,
 } from '@kapeta/schemas';
 
-import { PlannerContextData } from '@kapeta/ui-web-plan-editor';
+import {AssetInfo, PlannerContextData} from '@kapeta/ui-web-plan-editor';
 import { InstanceStatus } from '@kapeta/ui-web-context';
 
 export interface InstanceInfo {
@@ -28,7 +28,7 @@ export interface DraggableResourceProps {
 
 export interface DraggableBlockProps {
     name: string;
-    block: Asset<BlockDefinition>;
+    block: AssetInfo<BlockDefinition>;
     planner: PlannerContextData;
 }
 
@@ -66,7 +66,7 @@ export interface CreateBlockInfo {
     type: DataEntityType.BLOCK;
     item: {
         instance: BlockInstance;
-        asset: Asset<BlockDefinition>;
+        asset: AssetInfo<BlockDefinition>;
     };
     creating: true;
 }

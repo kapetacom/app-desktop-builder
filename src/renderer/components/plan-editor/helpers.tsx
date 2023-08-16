@@ -1,4 +1,5 @@
-import { Asset, SchemaKind } from '@kapeta/ui-web-types';
+import { SchemaKind } from '@kapeta/ui-web-types';
+import {AssetInfo} from "@kapeta/ui-web-plan-editor";
 
 export function ProviderHeaderIcon() {
     return (
@@ -77,8 +78,8 @@ export function ConsumerHeaderIcon() {
     );
 }
 
-export function getAssetTitle(asset: Asset<any>): string {
-    return getSchemaTitle(asset.data);
+export function getAssetTitle(asset: AssetInfo<SchemaKind>): string {
+    return getSchemaTitle(asset.content);
 }
 
 export function getSchemaTitle(asset: SchemaKind): string {

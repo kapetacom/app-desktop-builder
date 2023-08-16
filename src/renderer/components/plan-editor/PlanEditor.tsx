@@ -6,18 +6,17 @@ import {
     PlannerMode,
     PlannerResourceDrawer,
     withPlannerContext,
-    randomUUID,
+    randomUUID, AssetInfo,
 } from '@kapeta/ui-web-plan-editor';
 import React, {
     ForwardedRef,
     forwardRef,
     useContext,
-    useEffect,
     useMemo,
     useState,
 } from 'react';
-import { Asset, IResourceTypeProvider } from '@kapeta/ui-web-types';
-import { useAsyncFn, useAsyncRetry } from 'react-use';
+import { IResourceTypeProvider } from '@kapeta/ui-web-types';
+import { useAsyncRetry } from 'react-use';
 import { PlanEditorTopMenu } from './PlanEditorTopMenu';
 import { usePlanEditorActions } from './PlanEditorActions';
 import { BlockConfigurationPanel } from './panels/block-configuration/BlockConfigurationPanel';
@@ -229,17 +228,14 @@ export const PlanEditor = withPlannerContext(
                         systemId={props.systemId}
                         configurations={configurations}
                         onCreateBlock={(block, instance) => {
-                            const asset: Asset<BlockDefinition> = {
+                            const asset: AssetInfo<BlockDefinition> = {
                                 ref: normalizeKapetaUri(
                                     getLocalRefForBlockDefinition(block)
                                 ),
-                                data: block,
+                                content: block,
                                 version: 'local',
                                 editable: true,
-                                path: '',
-                                ymlPath: '',
-                                exists: false,
-                                kind: block.kind,
+                                exists: false
                             };
 
                             // We need to add both to show the block in the editor
