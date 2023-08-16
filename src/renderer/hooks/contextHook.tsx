@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import {
-    Asset,
     Identity,
     MemberIdentity,
     SchemaKind,
@@ -9,11 +8,12 @@ import { useAsyncRetry, useClickAway } from 'react-use';
 import { AssetDisplay } from '@kapeta/ui-web-components';
 import { Plan } from '@kapeta/schemas';
 import { IdentityService } from '@kapeta/ui-web-context';
+import {AssetInfo} from "@kapeta/ui-web-plan-editor";
 
 export type BlockHubSelectionCallback = (selection: AssetDisplay[]) => void;
 
 interface BlockHubOpener {
-    source?: Asset<Plan>;
+    source?: AssetInfo<Plan>;
     callback?: BlockHubSelectionCallback;
 }
 
@@ -37,7 +37,7 @@ interface KapetaContextData {
         opener?: BlockHubOpener;
         close: () => void;
         open: (
-            source?: Asset,
+            source?: AssetInfo<SchemaKind>,
             callback?: (selection: AssetDisplay[]) => void
         ) => void;
     };
@@ -118,7 +118,7 @@ const createKapetaContext = (): KapetaContextData => {
                 setBlockHubVisible(false);
             },
             open(
-                source?: Asset<Plan>,
+                source?: AssetInfo<Plan>,
                 callback?: (selection: AssetDisplay[]) => void
             ) {
                 setBlockHubOpener({ source, callback });

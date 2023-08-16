@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import { useAsync, useAsyncRetry } from 'react-use';
+import { useAsyncRetry } from 'react-use';
 import { PlannerMode } from '@kapeta/ui-web-plan-editor';
 
 import {
@@ -66,7 +66,7 @@ export const PlanView = (props: PlanViewProps) => {
     );
 
     const { resourceAssets, blocks, loading, currentlyLoading } =
-        useLoadedPlanContext(planData.data?.data);
+        useLoadedPlanContext(planData.data?.content);
 
     let loadingText = 'Loading plan...';
 
@@ -85,7 +85,7 @@ export const PlanView = (props: PlanViewProps) => {
                 resourceAssets &&
                 blocks && (
                     <PlanEditor
-                        plan={planData.data.data}
+                        plan={planData.data.content}
                         asset={planData.data}
                         resourceAssets={resourceAssets}
                         instanceInfos={instanceInfos.value}
@@ -109,7 +109,7 @@ export const PlanView = (props: PlanViewProps) => {
                             try {
                                 await AssetService.update(
                                     normalizeKapetaUri(asset.ref),
-                                    asset.data
+                                    asset.content
                                 );
                             } catch (e) {
                                 console.error('Failed to update asset', e);

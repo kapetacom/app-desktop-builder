@@ -10,7 +10,6 @@ import {
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import _ from 'lodash';
 import {
-    Asset,
     IBlockTypeProvider,
     ILanguageTargetProvider,
     IResourceTypeProvider,
@@ -22,6 +21,7 @@ import { BlockDefinition, Plan, Resource } from '@kapeta/schemas';
 import Kapeta from '../kapeta';
 import { AsyncState } from 'react-use/lib/useAsyncFn';
 import { AssetListResult, useAssets } from '../hooks/assetHooks';
+import {AssetInfo, fromAsset} from "@kapeta/ui-web-plan-editor";
 
 type PromiseCache = { [key: string]: Promise<void> };
 const PROVIDER_CACHE: PromiseCache = {};
@@ -137,7 +137,7 @@ export const useBlockKinds = (): Set<string> => {
                         [
                             'core/block-type',
                             'core/block-type-operator',
-                        ].includes(asset.kind)
+                        ].includes(asset.content.kind)
                     );
                 })
                 .map((asset) => {
@@ -147,11 +147,11 @@ export const useBlockKinds = (): Set<string> => {
     }, [assets.data]);
 };
 
-function toBlocks(assets: Asset<any>[]): Asset<BlockDefinition>[] {
+function toBlocks(assets: AssetInfo<SchemaKind>[]): AssetInfo<BlockDefinition>[] {
     return assets.filter((asset) => {
         // Only blocks do not have a core kind
-        return asset.exists && !asset.kind.startsWith('core/');
-    }) as Asset<BlockDefinition>[];
+        return asset.exists && !asset.content.kind.startsWith('core/');
+    }) as AssetInfo<BlockDefinition>[];
 }
 
 export const useLoadedPlanContext = (plan: Plan | undefined) => {
@@ -212,7 +212,7 @@ export const useLoadedPlanContext = (plan: Plan | undefined) => {
 
                         if (!block) {
                             // Will also cause installation if not already installed
-                            block = await BlockService.get(blockRef);
+                            block = fromAsset(await BlockService.get(blockRef));
                             setCurrentlyLoading(blockRef);
                         }
 
@@ -220,14 +220,14 @@ export const useLoadedPlanContext = (plan: Plan | undefined) => {
                             return;
                         }
 
-                        providerRefs.add(block.data.kind);
+                        providerRefs.add(block.content.kind);
                         const eachResource = (resource: Resource) => {
                             providerRefs.add(resource.kind);
                         };
-                        block.data.spec?.providers?.forEach(eachResource);
-                        block.data.spec?.consumers?.forEach(eachResource);
-                        if (block.data.spec?.target?.kind) {
-                            providerRefs.add(block.data.spec.target.kind);
+                        block.content.spec?.providers?.forEach(eachResource);
+                        block.content.spec?.consumers?.forEach(eachResource);
+                        if (block.content.spec?.target?.kind) {
+                            providerRefs.add(block.content.spec.target.kind);
                         }
                     } catch (e) {
                         console.warn('Failed to load block', blockRef, e);

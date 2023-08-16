@@ -1,7 +1,7 @@
 import Path from 'path';
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { Asset, FileInfo, SchemaKind } from '@kapeta/ui-web-types';
+import { FileInfo, SchemaKind } from '@kapeta/ui-web-types';
 
 import {
     AssetService,
@@ -26,6 +26,7 @@ import { FileBrowserDialog } from '../file-browser/FileBrowserDialog';
 import './AssetCreator.less';
 import { ProjectHomeFolderInput } from '../fields/ProjectHomeFolderInput';
 import { replaceBase64IconWithUrl } from '../../utils/iconHelpers';
+import {AssetInfo, fromAsset} from "@kapeta/ui-web-plan-editor";
 
 export interface CreatingFormProps {
     creating?: boolean;
@@ -42,14 +43,14 @@ interface Props {
     assetService: AssetStore;
     onAssetCreateStart?: (data: SchemaKind) => void;
     onAssetCreateEnd?: (errorMessage?: string) => void;
-    onDone?: (asset?: Asset) => void;
+    onDone?: (asset?: AssetInfo<SchemaKind>) => void;
     skipFiles: string[]; // A collection of files to prevent importing as they are already loaded
     title: string;
     fileName: string;
     createNewKind: () => SchemaKind;
     formRenderer: React.ComponentType<CreatingFormProps>;
     fileSelectableHandler: (file: FileInfo) => boolean;
-    onAssetAdded?: (asset: Asset) => void;
+    onAssetAdded?: (asset: AssetInfo<SchemaKind>) => void;
     state: AssetCreatorState;
     onCancel?: () => void;
     onError?: (e: any) => void;
@@ -111,10 +112,10 @@ export const AssetCreator = (props: Props) => {
                 props.onAssetCreateStart(content);
             }
 
-            const assets: Asset[] = await props.assetService.create(
+            const assets: AssetInfo<SchemaKind>[] = (await props.assetService.create(
                 Path.join(filePath, '/kapeta.yml'),
                 content
-            );
+            )).map(fromAsset);
 
             setNewEntity(props.createNewKind());
 
