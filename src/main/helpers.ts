@@ -52,7 +52,7 @@ export const appVersion = () => {
 };
 
 export const ensureUserAgent = () => {
-    const userAgent = 'KapetaDesktop/' + appVersion();
+    const userAgent = `KapetaDesktop/${appVersion()}`;
     session.defaultSession.setUserAgent(userAgent);
     session.defaultSession.webRequest.onBeforeSendHeaders(
         (details, callback) => {
