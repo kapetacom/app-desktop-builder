@@ -1,9 +1,17 @@
 /* eslint import/prefer-default-export: off */
 import { URL } from 'url';
 import path from 'path';
-import { session, app, BrowserWindow, ipcMain, shell, dialog } from 'electron';
+import {
+    session,
+    app,
+    BrowserWindow,
+    ipcMain,
+    shell,
+    dialog,
+    nativeImage,
+} from 'electron';
 import log from 'electron-log';
-import { UpdateCheckResult, autoUpdater } from 'electron-updater';
+import { autoUpdater } from 'electron-updater';
 import packageJson from '../../package.json';
 
 import MessageBoxOptions = Electron.MessageBoxOptions;
@@ -80,27 +88,46 @@ export const getPreloadScript = () => {
         : path.join(__dirname, '../../.erb/dll/preload.js');
 };
 
+let hasUserChosenToUpdateLater = false;
+
 export const checkForUpdates = async (initiatedByUser = false) => {
     try {
-        log.info('Checking for updates ...');
+        const updateCheckResult = await autoUpdater.checkForUpdates();
 
-        let updateCheckResult: UpdateCheckResult | null = null;
-        if (initiatedByUser) {
-            updateCheckResult = await autoUpdater.checkForUpdates();
-            if (updateCheckResult?.updateInfo.version === app.getVersion()) {
-                dialog.showMessageBox({
-                    title: 'No Updates',
-                    message: 'Your version is up to date.',
-                });
+        const currentVersion = app.getVersion();
+        const nextVersion = updateCheckResult?.updateInfo.version;
+        const icon = nativeImage.createFromPath(getAssetPath('icon.png'));
+
+        if (nextVersion && nextVersion !== currentVersion) {
+            // New update is available
+
+            if (!hasUserChosenToUpdateLater || initiatedByUser) {
+                const dialogOpts: MessageBoxOptions = {
+                    icon,
+                    buttons: ['Later', 'Quit and Install Now'],
+                    defaultId: 1,
+                    title: 'Update Available',
+                    message: `Version ${nextVersion} is available. You are running version ${currentVersion}.`,
+                    detail: 'Do you want to update now or later?',
+                };
+
+                const returnValue = showMessage(dialogOpts);
+
+                if (returnValue === 1) {
+                    autoUpdater.quitAndInstall();
+                } else {
+                    hasUserChosenToUpdateLater = true;
+                }
             }
+        } else if (initiatedByUser) {
+            // No updates
+
+            showMessage({
+                icon,
+                message: 'No Updates',
+                detail: `You are running the latest version ${currentVersion}.`,
+            });
         }
-
-        updateCheckResult = await autoUpdater.checkForUpdatesAndNotify();
-
-        log.info(
-            'Check for updates finished with this result: ',
-            updateCheckResult
-        );
     } catch (e) {
         log.warn('Failed to check for updates', e);
     }
@@ -176,8 +203,7 @@ export function showMessage(opts: MessageBoxOptions) {
     const wins = BrowserWindow.getAllWindows();
     const win = wins.length > 0 ? wins[0] : null;
     if (win) {
-        dialog.showMessageBoxSync(win, opts);
-    } else {
-        dialog.showMessageBoxSync(opts);
+        return dialog.showMessageBoxSync(win, opts);
     }
+    return dialog.showMessageBoxSync(opts);
 }
