@@ -80,17 +80,20 @@ export const getPreloadScript = () => {
         : path.join(__dirname, '../../.erb/dll/preload.js');
 };
 
-export const initAutoUpdater = async () => {
+const checkForUpdates = async () => {
     try {
         log.transports.file.level = 'info';
         autoUpdater.logger = log;
-        setInterval(async () => {
-            try {
-                await autoUpdater.checkForUpdatesAndNotify();
-            } catch (e) {
-                console.log('Failed to check for updates', e);
-            }
-        }, AUTO_UPDATE_INTERVAL_MS);
+        await autoUpdater.checkForUpdatesAndNotify();
+    } catch (e) {
+        console.log('Failed to check for updates', e);
+    }
+};
+
+export const initAutoUpdater = async () => {
+    try {
+        checkForUpdates();
+        setInterval(checkForUpdates, AUTO_UPDATE_INTERVAL_MS);
     } catch (e) {
         console.log('Failed to initialize auto updater', e);
     }
