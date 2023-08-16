@@ -285,12 +285,20 @@
         "extraResources": [
             "./assets/**"
         ],
-        "publish": {
-            "provider": "github",
-            "owner": "kapetacom",
-            "repo": "app-desktop-builder",
-            "releaseType": "release"
-        },
+        "publish": [
+            {
+                "provider": "github",
+                "owner": "kapetacom",
+                "repo": "kapeta-desktop",
+                "releaseType": "release"
+            },
+            {
+                "provider": "github",
+                "owner": "kapetacom",
+                "repo": "app-desktop-builder",
+                "releaseType": "release"
+            }
+        ],
         "protocols": [
             {
                 "name": "kapeta",
