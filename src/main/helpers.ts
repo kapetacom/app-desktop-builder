@@ -8,7 +8,8 @@ import packageJson from '../../package.json';
 
 import MessageBoxOptions = Electron.MessageBoxOptions;
 
-const ENABLE_EXTENSIONS = false; //Disabled because Electron doesn't support react extension currently
+const ENABLE_EXTENSIONS = false; // Disabled because Electron doesn't support react extension currently
+const AUTO_UPDATE_INTERVAL_MS = 10 * 60 * 1000; // 10 minutes in milliseconds
 
 export const RESOURCES_PATH = app.isPackaged
     ? path.join(process.resourcesPath, 'assets')
@@ -83,7 +84,13 @@ export const initAutoUpdater = async () => {
     try {
         log.transports.file.level = 'info';
         autoUpdater.logger = log;
-        await autoUpdater.checkForUpdatesAndNotify();
+        setInterval(async () => {
+            try {
+                await autoUpdater.checkForUpdatesAndNotify();
+            } catch (e) {
+                console.log('Failed to check for updates', e);
+            }
+        }, AUTO_UPDATE_INTERVAL_MS);
     } catch (e) {
         console.log('Failed to initialize auto updater', e);
     }
@@ -131,7 +138,7 @@ export function createFuture() {
 export function showError(message: string) {
     const opts: MessageBoxOptions = {
         type: 'error',
-        message: message,
+        message,
     };
     return showMessage(opts);
 }
@@ -139,7 +146,7 @@ export function showError(message: string) {
 export function showInfo(message: string) {
     const opts: MessageBoxOptions = {
         type: 'info',
-        message: message,
+        message,
     };
     return showMessage(opts);
 }
