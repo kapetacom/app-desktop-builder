@@ -1,3 +1,11 @@
+# [0.23.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.22.2...v0.23.0) (2023-08-16)
+
+
+### Features
+
+* Check for updates every 10 min ([092fe5f](https://github.com/kapetacom/app-desktop-builder/commit/092fe5fbfd7ac5b7dfe790f87ac10a431a2f05ec))
+* Publish releases to public repo kapeta-desktop ([0e26e88](https://github.com/kapetacom/app-desktop-builder/commit/0e26e889219f00a7bd42667179005f19920669d4))
+
 ## [0.22.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.22.1...v0.22.2) (2023-08-15)
 
 
