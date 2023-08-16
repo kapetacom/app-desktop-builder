@@ -1,3 +1,10 @@
+# [0.25.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.24.3...v0.25.0) (2023-08-16)
+
+
+### Features
+
+* Use dialog instead of notification in autoupdate ([567b6bd](https://github.com/kapetacom/app-desktop-builder/commit/567b6bd4ea061020d884813dea94d9dc1472108a))
+
 ## [0.24.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.24.2...v0.24.3) (2023-08-16)
 
 
