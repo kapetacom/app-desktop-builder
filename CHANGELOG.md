@@ -1,3 +1,10 @@
+# [0.24.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.23.3...v0.24.0) (2023-08-16)
+
+
+### Features
+
+* Add check for updates menu ([060afd5](https://github.com/kapetacom/app-desktop-builder/commit/060afd5e7f6fa820e12e05fad51457c235ba1a0d))
+
 ## [0.23.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.23.2...v0.23.3) (2023-08-16)
 
 
