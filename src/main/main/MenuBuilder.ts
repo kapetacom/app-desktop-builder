@@ -5,6 +5,7 @@ import {
     BrowserWindow,
     MenuItemConstructorOptions,
 } from 'electron';
+import { checkForUpdates } from '../helpers';
 
 interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
     selector?: string;
@@ -54,6 +55,12 @@ export class MenuBuilder {
                 {
                     label: 'About Kapeta',
                     selector: 'orderFrontStandardAboutPanel:',
+                },
+                {
+                    label: 'Check for Updates...',
+                    click: () => {
+                        checkForUpdates(true);
+                    },
                 },
                 { type: 'separator' },
                 { label: 'Services', submenu: [] },

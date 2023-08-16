@@ -3,13 +3,13 @@ import { URL } from 'url';
 import path from 'path';
 import { session, app, BrowserWindow, ipcMain, shell, dialog } from 'electron';
 import log from 'electron-log';
-import { autoUpdater } from 'electron-updater';
+import { UpdateCheckResult, autoUpdater } from 'electron-updater';
 import packageJson from '../../package.json';
 
 import MessageBoxOptions = Electron.MessageBoxOptions;
 
 const ENABLE_EXTENSIONS = false; // Disabled because Electron doesn't support react extension currently
-const AUTO_UPDATE_INTERVAL_MS = 10 * 60 * 1000; // 10 minutes in milliseconds
+const AUTO_UPDATE_INTERVAL_MS = 60 * 1000; // TODO: Change to 10 min
 
 export const RESOURCES_PATH = app.isPackaged
     ? path.join(process.resourcesPath, 'assets')
@@ -80,22 +80,40 @@ export const getPreloadScript = () => {
         : path.join(__dirname, '../../.erb/dll/preload.js');
 };
 
-const checkForUpdates = async () => {
+export const checkForUpdates = async (initiatedByUser = false) => {
     try {
-        log.transports.file.level = 'info';
-        autoUpdater.logger = log;
-        await autoUpdater.checkForUpdatesAndNotify();
+        log.info('Checking for updates ...');
+
+        let updateCheckResult: UpdateCheckResult | null = null;
+        if (initiatedByUser) {
+            updateCheckResult = await autoUpdater.checkForUpdates();
+            if (updateCheckResult?.updateInfo.version === app.getVersion()) {
+                dialog.showMessageBox({
+                    title: 'No Updates',
+                    message: 'Your version is up to date.',
+                });
+            }
+        }
+
+        updateCheckResult = await autoUpdater.checkForUpdatesAndNotify();
+
+        log.info(
+            'Check for updates finished with this result: ',
+            updateCheckResult
+        );
     } catch (e) {
-        console.log('Failed to check for updates', e);
+        log.warn('Failed to check for updates', e);
     }
 };
 
 export const initAutoUpdater = async () => {
     try {
+        log.transports.file.level = 'info';
+        autoUpdater.logger = log;
         checkForUpdates();
         setInterval(checkForUpdates, AUTO_UPDATE_INTERVAL_MS);
     } catch (e) {
-        console.log('Failed to initialize auto updater', e);
+        log.warn('Failed to initialize auto updater', e);
     }
 };
 
