@@ -43,7 +43,7 @@ appInit()
         attachHandlers(main);
         await main.open();
 
-        app.on('second-instance', (event, commandLine, workingDirectory) => {
+        app.on('second-instance', () => {
             // TODO: Handle if the user tries to open a file
             // Someone tried to run a second instance, we should focus our window.
             main.show();
