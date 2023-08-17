@@ -91,45 +91,47 @@ export const getPreloadScript = () => {
 let hasUserChosenToUpdateLater = false;
 
 export const checkForUpdates = async (initiatedByUser = false) => {
+    const icon = nativeImage.createFromPath(getAssetPath('icon.png'));
+    const currentVersion = app.getVersion();
+    let nextVersion: string | undefined;
+
     try {
         const updateCheckResult = await autoUpdater.checkForUpdates();
+        nextVersion = updateCheckResult?.updateInfo.version;
+    } catch (e) {
+        // autoUpdater logs errors to electron-log automatically
+    }
 
-        const currentVersion = app.getVersion();
-        const nextVersion = updateCheckResult?.updateInfo.version;
-        const icon = nativeImage.createFromPath(getAssetPath('icon.png'));
-
-        if (nextVersion && nextVersion !== currentVersion) {
-            // New update is available
-
-            if (!hasUserChosenToUpdateLater || initiatedByUser) {
-                const dialogOpts: MessageBoxOptions = {
-                    icon,
-                    buttons: ['Later', 'Quit and Install Now'],
-                    defaultId: 1,
-                    title: 'Update Available',
-                    message: `Version ${nextVersion} is available. You are running version ${currentVersion}.`,
-                    detail: 'Do you want to update now or later?',
-                };
-
-                const returnValue = showMessage(dialogOpts);
-
-                if (returnValue === 1) {
-                    autoUpdater.quitAndInstall();
-                } else {
-                    hasUserChosenToUpdateLater = true;
-                }
-            }
-        } else if (initiatedByUser) {
-            // No updates
-
+    // No updates
+    if (!nextVersion || nextVersion === currentVersion) {
+        if (initiatedByUser) {
             showMessage({
                 icon,
                 message: 'No Updates',
                 detail: `You are running the latest version ${currentVersion}.`,
             });
         }
-    } catch (e) {
-        log.warn('Failed to check for updates', e);
+        return;
+    }
+
+    // A new update is available!
+    if (!hasUserChosenToUpdateLater || initiatedByUser) {
+        const dialogOpts: MessageBoxOptions = {
+            icon,
+            buttons: ['Later', 'Quit and Install Now'],
+            defaultId: 1,
+            title: 'Update Available',
+            message: `Version ${nextVersion} is available. You are running version ${currentVersion}.`,
+            detail: 'Do you want to update now or later?',
+        };
+
+        const dialogResponse = showMessage(dialogOpts);
+
+        if (dialogResponse === 1) {
+            autoUpdater.quitAndInstall();
+        } else {
+            hasUserChosenToUpdateLater = true;
+        }
     }
 };
 
