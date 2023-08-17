@@ -1,3 +1,10 @@
+## [0.25.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.25.1...v0.25.2) (2023-08-17)
+
+
+### Bug Fixes
+
+* Handle check of updates during build on CI ([3d89c84](https://github.com/kapetacom/app-desktop-builder/commit/3d89c843e5a0c213480befcbc377593714cef55c))
+
 ## [0.25.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.25.0...v0.25.1) (2023-08-17)
 
 
