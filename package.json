@@ -1,6 +1,7 @@
 {
     "name": "@kapeta/app-desktop-builder",
     "description": "Put your software development into overdrive",
+    "productName": "Kapeta Dev",
     "version": "0.25.0",
     "private": true,
     "homepage": "https://kapeta.com",
