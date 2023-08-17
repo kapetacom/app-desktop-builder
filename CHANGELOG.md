@@ -1,3 +1,10 @@
+## [0.25.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.25.0...v0.25.1) (2023-08-17)
+
+
+### Bug Fixes
+
+* Specify productName ([948d228](https://github.com/kapetacom/app-desktop-builder/commit/948d228ff5fff77b67c1869213f077d0c91a04b4))
+
 # [0.25.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.24.3...v0.25.0) (2023-08-16)
 
 
