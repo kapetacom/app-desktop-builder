@@ -292,7 +292,7 @@ export const EditorPanels: React.FC<Props> = (props) => {
                 planner.updateConnectionMapping(data as Connection);
                 break;
             case DataEntityType.INSTANCE:
-            case DataEntityType.BLOCK:
+            case DataEntityType.BLOCK: {
                 const blockData = data as BlockDefinition;
 
                 await replaceBase64IconWithUrl(blockData);
@@ -302,6 +302,7 @@ export const EditorPanels: React.FC<Props> = (props) => {
                     blockData
                 );
                 break;
+            }
             case DataEntityType.RESOURCE: {
                 const resource = props.info.item.resource as Resource;
                 const role = props.info.item.block?.spec?.consumers?.includes(
@@ -359,13 +360,46 @@ export const EditorPanels: React.FC<Props> = (props) => {
             case DataEntityType.INSTANCE:
                 return cloneDeep(props.info.item.block);
             case DataEntityType.BLOCK:
-                return cloneDeep(props.info.item.asset.data);
+                return cloneDeep(props.info.item.asset.content);
             case DataEntityType.RESOURCE:
                 return cloneDeep(props.info.item.resource);
         }
 
         return {};
     }, [props.info]);
+
+    const existingNames = useMemo(() => {
+        if (props.info && props.info.type === DataEntityType.RESOURCE) {
+            const propResource = props.info.item.resource;
+            const resources =
+                ResourceTypeProvider.get(propResource.kind).role ===
+                ResourceRole.PROVIDES
+                    ? props.info.item.block.spec.providers
+                    : props.info.item.block.spec.consumers;
+            // Remove one instance of current name, not all in order to allow correcting existing duplicate entries
+            const index = resources?.findIndex(
+                (resource) =>
+                    resource.metadata.name === propResource.metadata.name
+            );
+            return (
+                resources
+                    ?.filter((_x, i) => i !== index)
+                    .map((resource) => resource.metadata.name) || []
+            );
+        }
+        return [];
+    }, [props.info]);
+
+    const globalValidators = useMemo(
+        () => [
+            (name, value) => {
+                if (name === 'metadata.name' && existingNames.includes(value)) {
+                    throw new Error('Resource name already exists');
+                }
+            },
+        ],
+        [existingNames]
+    );
 
     const panelHeader = () => {
         if (!props.info) {
@@ -384,6 +418,7 @@ export const EditorPanels: React.FC<Props> = (props) => {
             {props.info && (
                 <div className="item-editor-panel">
                     <FormContainer
+                        validators={globalValidators}
                         initialValue={initialValue}
                         onSubmitData={(data) => saveAndClose(data)}
                     >

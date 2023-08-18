@@ -36,8 +36,8 @@ export const BlockCreatorPanel = (props: Props) => {
                     return createNewBlock();
                 }
 
-                return props.info.item.asset.data
-                    ? { ...props.info?.item.asset.data }
+                return props.info.item.asset.content
+                    ? { ...props.info?.item.asset.content }
                     : createNewBlock();
             }}
             onDone={() => {
@@ -66,8 +66,8 @@ export const BlockCreatorPanel = (props: Props) => {
                     props.info.item.instance.id,
                     (instance) => {
                         const blockTitle =
-                            block.data.metadata.title ??
-                            parseKapetaUri(block.data.metadata.name).name;
+                            block.content.metadata.title ??
+                            parseKapetaUri(block.content.metadata.name).name;
 
                         return {
                             ...instance,

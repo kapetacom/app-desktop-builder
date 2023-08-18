@@ -31,8 +31,10 @@ type TrayMenuItem = MenuItemConstructorOptions | MenuItem;
 nativeTheme.themeSource = 'system';
 
 const getTrayIcon = () => {
-    // All trays seem to be dark?
-    return getAssetPath('icons/tray_icon_light.png');
+    if (nativeTheme.shouldUseDarkColors) {
+        return getAssetPath('icons/tray_icon_light.png');
+    }
+    return getAssetPath('icons/tray_icon_dark.png');
 };
 
 export class TrayWrapper {

@@ -6,6 +6,7 @@ import { kapetaLight } from '../src/renderer/Theme';
 import { PlanOverview } from '../src/renderer/components/plan-overview/PlanOverview';
 import { Asset } from '@kapeta/ui-web-types';
 import { Plan } from '@kapeta/schemas';
+import { AssetInfo } from '@kapeta/ui-web-plan-editor';
 
 const defaultInfo = {
     ymlPath: '',
@@ -24,11 +25,11 @@ const defaultData = {
     },
 };
 
-const SAMPLE_PLAN: Asset<Plan> = {
+const SAMPLE_PLAN: AssetInfo<Plan> = {
     ...defaultInfo,
     version: '1.0.0',
     ref: 'kapeta/sample-plan',
-    data: {
+    content: {
         ...defaultData,
         metadata: {
             name: 'kapeta/sample-plan',
@@ -103,7 +104,7 @@ export const FilledState = () => {
                             ...defaultInfo,
                             version: '1.0.0',
                             ref: 'kapeta/test:1.0.0',
-                            data: {
+                            content: {
                                 ...defaultData,
                                 metadata: {
                                     name: 'kapeta/test',
@@ -115,7 +116,7 @@ export const FilledState = () => {
                             ...defaultInfo,
                             version: '1.0.0',
                             ref: 'kapeta/todo:1.0.0',
-                            data: {
+                            content: {
                                 ...defaultData,
                                 metadata: {
                                     name: 'kapeta/todo',
@@ -127,7 +128,7 @@ export const FilledState = () => {
                             ...defaultInfo,
                             version: '1.0.0',
                             ref: 'kapeta/projects:1.0.0',
-                            data: {
+                            content: {
                                 ...defaultData,
                                 metadata: {
                                     name: 'kapeta/projects',
@@ -139,7 +140,7 @@ export const FilledState = () => {
                             ...defaultInfo,
                             version: '1.0.0',
                             ref: 'kapeta/payments:1.0.0',
-                            data: {
+                            content: {
                                 ...defaultData,
                                 metadata: {
                                     name: 'kapeta/payments',
