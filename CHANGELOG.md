@@ -1,3 +1,15 @@
+# [0.26.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.25.2...v0.26.0) (2023-08-18)
+
+
+### Bug Fixes
+
+* use dark tray icon in light mode ([a943293](https://github.com/kapetacom/app-desktop-builder/commit/a94329368562f2c6896c2d87e06f0514124e6c40))
+
+
+### Features
+
+* prevent duplicate resource names in editor [KAP-712] ([a8e6c54](https://github.com/kapetacom/app-desktop-builder/commit/a8e6c547171c5efe786cceda2177fd98d220c47f))
+
 ## [0.25.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.25.1...v0.25.2) (2023-08-17)
 
 
