@@ -360,7 +360,7 @@ export const EditorPanels: React.FC<Props> = (props) => {
             case DataEntityType.INSTANCE:
                 return cloneDeep(props.info.item.block);
             case DataEntityType.BLOCK:
-                return cloneDeep(props.info.item.asset.data);
+                return cloneDeep(props.info.item.asset.content);
             case DataEntityType.RESOURCE:
                 return cloneDeep(props.info.item.resource);
         }
