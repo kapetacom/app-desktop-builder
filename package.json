@@ -113,7 +113,7 @@
         "@kapeta/nodejs-api-client": "<2",
         "@kapeta/nodejs-process": "<2",
         "@kapeta/schemas": "<2",
-        "@kapeta/style": "^0.77.0",
+        "@kapeta/style": "^0.90.0",
         "@kapeta/ui-web-components": "<2",
         "@kapeta/ui-web-context": "<2",
         "@kapeta/ui-web-plan-editor": "<2",
