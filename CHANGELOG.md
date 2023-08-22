@@ -1,3 +1,10 @@
+## [0.27.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.27.2...v0.27.3) (2023-08-22)
+
+
+### Bug Fixes
+
+* Removed debug ([698a50c](https://github.com/kapetacom/app-desktop-builder/commit/698a50c260a68ee27c761f6bd7b0a879bdb9811f))
+
 ## [0.27.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.27.1...v0.27.2) (2023-08-22)
 
 
