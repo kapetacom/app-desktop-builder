@@ -1,3 +1,10 @@
+## [0.27.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.27.1...v0.27.2) (2023-08-22)
+
+
+### Bug Fixes
+
+* Handle form submit more gracefully ([#76](https://github.com/kapetacom/app-desktop-builder/issues/76)) ([171c2fa](https://github.com/kapetacom/app-desktop-builder/commit/171c2fae29efa26d61d2ce0d370c81ff0a62cfe0))
+
 ## [0.27.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.27.0...v0.27.1) (2023-08-22)
 
 
