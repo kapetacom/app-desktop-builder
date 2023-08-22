@@ -232,12 +232,6 @@ export const useLoadedPlanContext = (plan: Plan | undefined) => {
         setLoading(false);
     }, [results.loading, missingData]);
 
-    console.log('Loaded plan context', {
-        missingData,
-        loading,
-        blocks: results.value?.blocks,
-    });
-
     return {
         missingData,
         resourceAssets: results.value?.providers ?? [],

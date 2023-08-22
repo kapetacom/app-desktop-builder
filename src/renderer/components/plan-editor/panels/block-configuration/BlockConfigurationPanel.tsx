@@ -35,9 +35,7 @@ interface Props {
 }
 
 export const BlockConfigurationPanel = (props: Props) => {
-    console.log('BlockConfigurationPanel.tsx: BlockConfigurationPanel()');
     const planner = useContext(PlannerContext);
-    console.log('BlockConfigurationPanel.tsx: BlockConfigurationPanel() planner:', planner);
 
     const panelHeader = () => {
         if (!props.instance) {
@@ -126,7 +124,6 @@ export const BlockConfigurationPanel = (props: Props) => {
             return;
         }
 
-        console.log('Saving block configuration', blockData);
         planner.updateBlockInstance(props.instance.id, (instance) => {
             const uri = parseKapetaUri(instance.block.ref);
             uri.version = blockData.version;

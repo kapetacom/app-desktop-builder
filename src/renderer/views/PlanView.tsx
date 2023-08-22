@@ -66,8 +66,6 @@ export const PlanView = (props: PlanViewProps) => {
         }
     }
 
-    console.log('blocks', loading, blocks);
-
     return (
         <SimpleLoader loading={planData.loading || loading} text={loadingText}>
             {!planData.loading && !loading && planData.data && resourceAssets && blocks && (

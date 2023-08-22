@@ -85,7 +85,6 @@ const createKapetaContext = (): KapetaContextData => {
         logOut: async () => {
             const logOutPromise = window.electron.ipcRenderer.invoke('log-out') as Promise<boolean>;
             if (await logOutPromise) {
-                console.log('logged out', logOutPromise);
                 setActiveContext(undefined);
                 setProfile(undefined);
                 profileData.retry();

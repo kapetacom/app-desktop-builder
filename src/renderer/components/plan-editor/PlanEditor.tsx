@@ -92,8 +92,6 @@ export const PlanEditor = withPlannerContext(
                         return;
                     }
 
-                    console.log('Got default for block', kind);
-
                     config[instance.id] = {
                         ...typeProvider.createDefaultConfig(block, instance),
                         ...currentConfig,
@@ -103,7 +101,6 @@ export const PlanEditor = withPlannerContext(
                 }
             });
 
-            console.log('recreated config', config);
             return config;
         }, [configFromInstances.value, configFromInstances.loading, planner.plan, planner.blockAssets]);
 
