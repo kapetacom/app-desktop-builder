@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo } from 'react';
-import { Modal, ModalSize } from '@kapeta/ui-web-components';
+
 import {
     TrafficService,
     TrafficEventType,
@@ -17,6 +17,7 @@ import {
     PlannerContext,
     PlannerContextData,
 } from '@kapeta/ui-web-plan-editor';
+import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 
 interface ModalProps {
     connection: Connection;
@@ -113,19 +114,17 @@ export const ConnectionInspectorPanel = (props: Props) => {
     }, [connectionId, trafficLines, trafficLinesHandler]);
 
     return (
-        <Modal
-            open={props.open}
-            title="Connection Traffic Inspector"
-            onClose={props.onClosed}
-            size={ModalSize.large}
-        >
-            {props.connection && (
-                <ModalContent
-                    planner={planner}
-                    connection={props.connection}
-                    trafficLines={trafficLines}
-                />
-            )}
-        </Modal>
+        <Dialog open={props.open} onClose={props.onClosed}>
+            <DialogTitle>Connection Traffic Inspector</DialogTitle>
+            <DialogContent>
+                {props.connection && (
+                    <ModalContent
+                        planner={planner}
+                        connection={props.connection}
+                        trafficLines={trafficLines}
+                    />
+                )}
+            </DialogContent>
+        </Dialog>
     );
 };

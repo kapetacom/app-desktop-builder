@@ -3,30 +3,25 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import { FileInfo, SchemaKind } from '@kapeta/ui-web-types';
 
+import { AssetStore } from '@kapeta/ui-web-context';
 import {
-    AssetService,
-    AssetStore,
-    FileSystemService,
-} from '@kapeta/ui-web-context';
-import {
-    Button,
-    ButtonStyle,
-    ButtonType,
     FormButtons,
     FormContainer,
-    PanelAlignment,
-    PanelSize,
     showToasty,
-    SidePanel,
     ToastType,
 } from '@kapeta/ui-web-components';
-
-import { FileBrowserDialog } from '../file-browser/FileBrowserDialog';
 
 import './AssetCreator.less';
 import { ProjectHomeFolderInput } from '../fields/ProjectHomeFolderInput';
 import { replaceBase64IconWithUrl } from '../../utils/iconHelpers';
-import {AssetInfo, fromAsset} from "@kapeta/ui-web-plan-editor";
+import {
+    AssetInfo,
+    fromAsset,
+    PlannerSidebar,
+} from '@kapeta/ui-web-plan-editor';
+import { kapetaLight } from '../../Theme';
+import { Button, ThemeProvider } from '@mui/material';
+import { showFilePickerOne } from '../../utils/showFilePicker';
 
 export interface CreatingFormProps {
     creating?: boolean;
@@ -61,32 +56,6 @@ export const AssetCreator = (props: Props) => {
     const [useProjectHome, setUseProjectHome] = useState<boolean>();
     const [projectHome, setProjectHome] = useState<string>();
 
-    const [processing, setProcessing] = useState<{
-        promise?: Promise<string>;
-        resolve?: (string) => void;
-        reject?: (any) => void;
-    }>({});
-
-    const closeFilePicker = useCallback(() => {
-        processing.resolve?.call(null);
-    }, [processing]);
-
-    // promise based file picker callbacks
-    const waitForFilePicker = useCallback(() => {
-        const newP: typeof processing = {};
-        newP.promise = new Promise((resolve, reject) => {
-            newP.resolve = resolve;
-            newP.reject = reject;
-        });
-        // unset itself when settled
-        setProcessing(newP);
-        // eslint-disable-next-line promise/catch-or-return
-        newP.promise!.finally(() => {
-            setProcessing({});
-        });
-        return newP.promise;
-    }, []);
-
     const onSubmit = async (data: SchemaKind) => {
         if (useProjectHome && projectHome) {
             const path = Path.join(projectHome, data.metadata.name);
@@ -96,7 +65,10 @@ export const AssetCreator = (props: Props) => {
 
         setNewEntity(data);
 
-        const filePath = await waitForFilePicker();
+        const filePath = await showFilePickerOne({
+            title: 'Choose a folder',
+            selectDirectory: true,
+        });
         if (filePath) {
             await createAsset(filePath, data);
         }
@@ -112,10 +84,12 @@ export const AssetCreator = (props: Props) => {
                 props.onAssetCreateStart(content);
             }
 
-            const assets: AssetInfo<SchemaKind>[] = (await props.assetService.create(
-                Path.join(filePath, '/kapeta.yml'),
-                content
-            )).map(fromAsset);
+            const assets: AssetInfo<SchemaKind>[] = (
+                await props.assetService.create(
+                    Path.join(filePath, '/kapeta.yml'),
+                    content
+                )
+            ).map(fromAsset);
 
             setNewEntity(props.createNewKind());
 
@@ -147,18 +121,6 @@ export const AssetCreator = (props: Props) => {
         }
     };
 
-    const selectableHandler = useCallback(
-        (file: FileInfo) => {
-            if (props.state === AssetCreatorState.IMPORTING) {
-                // Filter the selectable files / folders in the import
-                return props.fileSelectableHandler.call(null, file);
-            }
-            // When creating we want only folders
-            return !!file.folder;
-        },
-        [props.state]
-    );
-
     // Initialization handler, depending on import or create
     useEffect(() => {
         if (props.state === AssetCreatorState.CREATING) {
@@ -167,7 +129,15 @@ export const AssetCreator = (props: Props) => {
         }
         if (props.state === AssetCreatorState.IMPORTING) {
             (async () => {
-                const path = await waitForFilePicker();
+                const path = await showFilePickerOne({
+                    title: 'Choose kapeta asset to import',
+                    filters: [
+                        {
+                            name: 'Kapeta Asset',
+                            extensions: ['yml'],
+                        },
+                    ],
+                });
                 if (path) {
                     try {
                         const assets = props.assetService.import(
@@ -186,15 +156,13 @@ export const AssetCreator = (props: Props) => {
                 }
             })();
         }
-    }, [props.state, props.assetService, waitForFilePicker]);
+    }, [props.state, props.assetService]);
 
     const InnerFormRenderer = props.formRenderer;
     return (
-        <>
-            <SidePanel
+        <ThemeProvider theme={kapetaLight}>
+            <PlannerSidebar
                 open={props.state === AssetCreatorState.CREATING}
-                size={PanelSize.medium}
-                side={PanelAlignment.right}
                 onClose={() => {
                     if (props.onCancel) {
                         props.onCancel();
@@ -218,37 +186,27 @@ export const AssetCreator = (props: Props) => {
 
                         <FormButtons>
                             <Button
-                                type={ButtonType.BUTTON}
-                                style={ButtonStyle.DANGER}
+                                color={'error'}
+                                variant={'contained'}
                                 onClick={() => {
                                     if (props.onCancel) {
                                         props.onCancel();
                                     }
                                 }}
-                                width={100}
-                                text="Cancel"
-                            />
+                            >
+                                Cancel
+                            </Button>
                             <Button
-                                type={ButtonType.SUBMIT}
-                                style={ButtonStyle.PRIMARY}
-                                width={100}
-                                text="Create"
-                            />
+                                color={'primary'}
+                                type={'submit'}
+                                variant={'contained'}
+                            >
+                                Create
+                            </Button>
                         </FormButtons>
                     </FormContainer>
                 </div>
-            </SidePanel>
-
-            <FileBrowserDialog
-                open={!!processing.promise}
-                skipFiles={props.skipFiles}
-                service={FileSystemService}
-                onSelect={(file: FileInfo) => {
-                    processing.resolve?.call(null, file.path);
-                }}
-                onClose={() => closeFilePicker()}
-                selectable={selectableHandler}
-            />
-        </>
+            </PlannerSidebar>
+        </ThemeProvider>
     );
 };

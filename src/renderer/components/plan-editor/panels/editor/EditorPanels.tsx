@@ -1,15 +1,10 @@
 import React, { useCallback, useContext, useMemo } from 'react';
 import {
     AssetNameInput,
-    Button,
-    ButtonStyle,
-    ButtonType,
     FormButtons,
     FormContainer,
     FormField,
     FormFieldType,
-    PanelSize,
-    SidePanel,
     SimpleLoader,
     useFormContextField,
 } from '@kapeta/ui-web-components';
@@ -35,12 +30,17 @@ import {
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import { useAsync } from 'react-use';
 import { cloneDeep } from 'lodash';
-import { PlannerContext, PlannerContextData } from '@kapeta/ui-web-plan-editor';
+import {
+    PlannerContext,
+    PlannerContextData,
+    PlannerSidebar,
+} from '@kapeta/ui-web-plan-editor';
 import { BlockInfo, DataEntityType, EditItemInfo } from '../../types';
 
 import './ItemEditorPanel.less';
 import { uploadAttachment } from '../../../../api/AttachmentService';
 import { replaceBase64IconWithUrl } from '../../../../utils/iconHelpers';
+import { Button } from '@mui/material';
 
 function getVersions(dataKindUri) {
     const versions: { [key: string]: string } = {};
@@ -409,9 +409,8 @@ export const EditorPanels: React.FC<Props> = (props) => {
     };
 
     return (
-        <SidePanel
+        <PlannerSidebar
             title={panelHeader()}
-            size={PanelSize.large}
             open={props.open}
             onClose={onPanelCancel}
         >
@@ -427,23 +426,24 @@ export const EditorPanels: React.FC<Props> = (props) => {
                         </div>
                         <FormButtons>
                             <Button
-                                width={70}
-                                type={ButtonType.BUTTON}
-                                style={ButtonStyle.DANGER}
-                                onClick={onPanelCancel}
-                                text="Cancel"
-                            />
+                                variant={'contained'}
+                                color={'error'}
+                                onClick={props.onClosed}
+                            >
+                                Cancel
+                            </Button>
                             <Button
-                                width={70}
-                                type={ButtonType.SUBMIT}
-                                style={ButtonStyle.PRIMARY}
-                                text="Save"
-                            />
+                                variant={'contained'}
+                                color={'primary'}
+                                type="submit"
+                            >
+                                Save
+                            </Button>
                         </FormButtons>
                     </FormContainer>
                 </div>
             )}
             {!props.info && <div>No item selected</div>}
-        </SidePanel>
+        </PlannerSidebar>
     );
 };

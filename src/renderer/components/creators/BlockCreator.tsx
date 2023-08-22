@@ -6,7 +6,7 @@ import { BlockTypeProvider, AssetStore } from '@kapeta/ui-web-context';
 import { AssetCreator, AssetCreatorState } from './AssetCreator';
 import { BlockForm } from '../forms/BlockForm';
 import { BlockDefinition } from '@kapeta/schemas';
-import {AssetInfo} from "@kapeta/ui-web-plan-editor";
+import { AssetInfo } from '@kapeta/ui-web-plan-editor';
 
 interface Props {
     state: AssetCreatorState;

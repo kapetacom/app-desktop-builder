@@ -1,8 +1,8 @@
 import { Box, Button, Stack, Typography } from '@mui/material';
 import React from 'react';
 import { Plan } from '@kapeta/schemas';
-import {AssetInfo, AssetThumbnail} from "@kapeta/ui-web-plan-editor";
-import {useLoadedPlanContext} from "../../../utils/planContextLoader";
+import { AssetInfo, AssetThumbnail } from '@kapeta/ui-web-plan-editor';
+import { useLoadedPlanContext } from '../../../utils/planContextLoader';
 
 interface Props {
     onOpenSample?: (plan: AssetInfo<Plan>) => void;
@@ -11,7 +11,8 @@ interface Props {
 
 export const SamplePlanSection = (props: Props) => {
     const title =
-        props.sample.content.metadata.title ?? props.sample.content.metadata.name;
+        props.sample.content.metadata.title ??
+        props.sample.content.metadata.name;
     return (
         <Box className={'sample-plan-section'}>
             <Typography variant={'h6'} pb={2} pt={2}>
@@ -33,7 +34,7 @@ export const SamplePlanSection = (props: Props) => {
                         width={761}
                         height={408}
                         loadPlanContext={(plan) => {
-                            return useLoadedPlanContext(plan.content)
+                            return useLoadedPlanContext(plan.content);
                         }}
                     />
                 </Box>

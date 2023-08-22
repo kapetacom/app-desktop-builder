@@ -1,9 +1,12 @@
-import { FormRow, SimpleLoader } from '@kapeta/ui-web-components';
+import {
+    SimpleLoader,
+    useFormFieldController,
+} from '@kapeta/ui-web-components';
 import React, { useEffect, useState } from 'react';
 import { useAsync } from 'react-use';
 import { FileSystemService } from '@kapeta/ui-web-context';
-import { FileBrowserDialog } from '../file-browser/FileBrowserDialog';
-
+import { Checkbox, FormControl, Input, InputLabel, Stack } from '@mui/material';
+import { showFilePickerOne } from '../../utils/showFilePicker';
 import './ProjectHomeFolderInput.less';
 
 export interface ProjectHomeFolderInputProps {
@@ -11,10 +14,19 @@ export interface ProjectHomeFolderInputProps {
 }
 
 export const ProjectHomeFolderInput = (props: ProjectHomeFolderInputProps) => {
-    const [showFileBrowser, setShowFileBrowser] = useState(false);
-
     const [projectHome, setProjectHome] = useState<string>('');
     const [isEnabled, setEnabled] = useState<boolean>(false);
+
+    const controller = useFormFieldController({
+        name: 'project_home',
+        value: projectHome,
+        label: 'Project folder',
+        help: isEnabled
+            ? 'Choose project home to create this asset in'
+            : 'Check this to save asset in project home',
+
+        validation: isEnabled ? ['required'] : [],
+    });
 
     const { value: storedProjectHome, loading: loadingStored } = useAsync(
         () => FileSystemService.getProjectFolder(),
@@ -37,28 +49,31 @@ export const ProjectHomeFolderInput = (props: ProjectHomeFolderInputProps) => {
 
     return (
         <SimpleLoader loading={loadingStored}>
-            <FormRow
-                name="project_home"
-                value={projectHome}
-                label="Project folder"
-                help={
-                    isEnabled
-                        ? 'Choose project home to create this asset in'
-                        : 'Check this to save asset in project home'
-                }
-                focused
-                validation={isEnabled ? ['required'] : []}
-                type="folder"
+            <FormControl
+                disabled={controller.disabled}
+                required={controller.required}
+                error={controller.showError}
+                autoFocus={controller.autoFocus}
+                variant={'standard'}
+                sx={{
+                    display: 'block',
+                    mt: 1,
+                    mb: 1,
+                    '.MuiFormHelperText-root': {
+                        ml: 0,
+                    },
+                }}
             >
-                <div
-                    data-name="project_home"
-                    data-value={projectHome}
-                    className="project-home-folder-input"
+                <InputLabel shrink={true} required={controller.required}>
+                    {controller.label}
+                </InputLabel>
+                <Stack
+                    gap={1}
+                    justifyContent={'stretch'}
+                    direction={'row'}
+                    pt={2}
                 >
-                    <input
-                        type="checkbox"
-                        data-name="use_project_home"
-                        data-value={isEnabled}
+                    <Checkbox
                         checked={isEnabled}
                         onChange={(evt) => {
                             props.onChange &&
@@ -70,8 +85,11 @@ export const ProjectHomeFolderInput = (props: ProjectHomeFolderInputProps) => {
                             setEnabled(evt.target.checked);
                         }}
                     />
-                    <input
+                    <Input
                         type="text"
+                        sx={{
+                            flex: 1,
+                        }}
                         readOnly
                         disabled={!isEnabled}
                         value={projectHome}
@@ -80,32 +98,20 @@ export const ProjectHomeFolderInput = (props: ProjectHomeFolderInputProps) => {
                                 return;
                             }
 
-                            setShowFileBrowser(true);
+                            const newHome = await showFilePickerOne({
+                                title: 'Choose project home',
+                                selectDirectory: true,
+                            });
+
+                            if (newHome) {
+                                setProjectHome(newHome);
+                                props.onChange &&
+                                    props.onChange(isEnabled, newHome ?? '');
+                            }
                         }}
                     />
-                </div>
-            </FormRow>
-            <FileBrowserDialog
-                open={showFileBrowser}
-                service={FileSystemService}
-                skipFiles={[]}
-                onSelect={async (file) => {
-                    props.onChange &&
-                        props.onChange(isEnabled ?? false, file.path);
-
-                    if (file.path) {
-                        await FileSystemService.setProjectFolder(file.path);
-                        setProjectHome(file.path);
-                    }
-                    setShowFileBrowser(false);
-                }}
-                onClose={() => {
-                    setShowFileBrowser(false);
-                }}
-                selectable={(file) => {
-                    return !!file.folder;
-                }}
-            />
+                </Stack>
+            </FormControl>
         </SimpleLoader>
     );
 };

@@ -1,5 +1,5 @@
 import { SchemaKind } from '@kapeta/ui-web-types';
-import {AssetInfo} from "@kapeta/ui-web-plan-editor";
+import { AssetInfo } from '@kapeta/ui-web-plan-editor';
 
 export function ProviderHeaderIcon() {
     return (

@@ -6,7 +6,6 @@ import React, {
     useState,
 } from 'react';
 
-import { toClass } from '@kapeta/ui-web-utils';
 import {
     InstanceEventType,
     InstanceService,
@@ -22,11 +21,7 @@ import {
     EntityEditor,
     FormButtons,
     FormContainer,
-    Modal,
-    ModalSize,
     showToasty,
-    TabContainer,
-    TabPage,
     ToastType,
     useFormContextField,
 } from '@kapeta/ui-web-components';
@@ -35,8 +30,23 @@ import { PlannerContext } from '@kapeta/ui-web-plan-editor';
 import { useAsync, useAsyncFn } from 'react-use';
 import { PlanForm } from '../forms/PlanForm';
 import { getPlanConfig, setPlanConfig } from '../../api/LocalConfigService';
-import { Button, CircularProgress, Paper, Stack } from '@mui/material';
+import {
+    Box,
+    Button,
+    CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    Paper,
+    Stack,
+    Tab,
+    Tabs,
+    ThemeProvider,
+} from '@mui/material';
 import { grey } from '@mui/material/colors';
+import { TabList } from 'react-tabs';
+import { kapetaLight } from '../../Theme';
 
 const ConfigSchemaEditor = () => {
     const configurationField = useFormContextField('spec.configuration');
@@ -106,6 +116,7 @@ export const PlanEditorTopMenu = (props: Props) => {
     const [starting, setStarting] = useState(false);
     const [stopping, setStopping] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
+    const [settingsTab, setSettingsTab] = useState('general');
 
     const startPlanJobId = `plan:start:${props.systemId}`;
     const stopPlanJobId = `plan:stop:${props.systemId}`;
@@ -212,6 +223,11 @@ export const PlanEditorTopMenu = (props: Props) => {
         }
     }, [props.systemId, planner.plan, showSettings, reloadConfig]);
 
+    const hasConfig = !!(
+        planner.plan?.spec?.configuration?.types &&
+        planner.plan?.spec?.configuration?.types.length > 0
+    );
+
     return (
         <Paper
             className={'planner-top-menu'}
@@ -317,74 +333,112 @@ export const PlanEditorTopMenu = (props: Props) => {
                     Settings
                 </Button>
             </Stack>
-            <Modal
-                title="Settings"
-                size={ModalSize.large}
-                open={showSettings}
-                className="modal-plan-settings"
-                onClose={() => setShowSettings(false)}
-            >
-                <FormContainer
-                    initialValue={formData}
-                    onSubmitData={async (data) => {
-                        planner.updatePlanMetadata(
-                            data.metadata,
-                            data.spec.configuration
-                        );
-                        await setPlanConfig(props.systemId, data.configuration);
-                        setShowSettings(false);
-                    }}
+            <ThemeProvider theme={kapetaLight}>
+                <Dialog
+                    open={showSettings}
+                    className="modal-plan-settings"
+                    onClose={() => setShowSettings(false)}
                 >
-                    <TabContainer defaultTab="general">
-                        <TabPage id="general" title="General">
-                            <PlanForm />
-                        </TabPage>
-                        {planner.plan?.spec?.configuration?.types &&
-                            planner.plan?.spec?.configuration?.types?.length >
-                                0 && (
-                                <TabPage
-                                    id="configuration"
-                                    title="Configuration"
-                                >
-                                    <div className="configuration-editor">
-                                        <p className="info">
-                                            Define configuration locally for
-                                            this plan
-                                        </p>
-                                        <ConfigValueEditor
-                                            systemId={props.systemId}
-                                        />
-                                    </div>
-                                </TabPage>
-                            )}
-                        {!props.readonly && (
-                            <TabPage
-                                id="config-schema"
-                                title="Configuration Schema"
-                            >
-                                <div className="configuration-schema-editor">
-                                    <p className="info">
-                                        Define configuration data types for this
-                                        plan
-                                    </p>
-                                    <ConfigSchemaEditor />
-                                </div>
-                            </TabPage>
-                        )}
-                    </TabContainer>
-                    <FormButtons>
-                        <Button
-                            type={ButtonType.BUTTON}
-                            onClick={() => {
+                    <DialogTitle>Settings</DialogTitle>
+                    <DialogContent
+                        sx={{
+                            height: '420px',
+                        }}
+                    >
+                        <FormContainer
+                            initialValue={formData}
+                            onSubmitData={async (data) => {
+                                planner.updatePlanMetadata(
+                                    data.metadata,
+                                    data.spec.configuration
+                                );
+                                await setPlanConfig(
+                                    props.systemId,
+                                    data.configuration
+                                );
                                 setShowSettings(false);
                             }}
                         >
-                            Cancel
-                        </Button>
-                        <Button type={ButtonType.SUBMIT}>Save</Button>
-                    </FormButtons>
-                </FormContainer>
-            </Modal>
+                            <Stack direction={'column'}>
+                                <Box
+                                    sx={{
+                                        borderBottom: 1,
+                                        borderColor: 'divider',
+                                    }}
+                                >
+                                    <Tabs
+                                        orientation={'horizontal'}
+                                        variant={'fullWidth'}
+                                        value={settingsTab}
+                                        onChange={(evt, tabId) =>
+                                            setSettingsTab(tabId)
+                                        }
+                                    >
+                                        <Tab value="general" label="General" />
+                                        {hasConfig && (
+                                            <Tab
+                                                value="configuration"
+                                                label="Configuration"
+                                            />
+                                        )}
+                                        {!props.readonly && (
+                                            <Tab
+                                                value="config-schema"
+                                                label="Configuration Schema"
+                                            />
+                                        )}
+                                    </Tabs>
+                                </Box>
+                                <Box
+                                    flex={1}
+                                    minHeight={'300px'}
+                                    minWidth={'500px'}
+                                >
+                                    {settingsTab === 'general' && <PlanForm />}
+                                    {settingsTab === 'configuration' && (
+                                        <div className="configuration-editor">
+                                            <p className="info">
+                                                Define configuration locally for
+                                                this plan
+                                            </p>
+                                            <ConfigValueEditor
+                                                systemId={props.systemId}
+                                            />
+                                        </div>
+                                    )}
+                                    {settingsTab === 'config-schema' && (
+                                        <div className="configuration-schema-editor">
+                                            <p className="info">
+                                                Define configuration data types
+                                                for this plan
+                                            </p>
+                                            <ConfigSchemaEditor />
+                                        </div>
+                                    )}
+                                </Box>
+                            </Stack>
+                            <FormButtons>
+                                <Button
+                                    variant={'outlined'}
+                                    color={'error'}
+                                    onClick={() => {
+                                        setShowSettings(false);
+                                    }}
+                                >
+                                    Cancel
+                                </Button>
+                                <Button
+                                    variant={'contained'}
+                                    color={'primary'}
+                                    type={'submit'}
+                                >
+                                    Save
+                                </Button>
+                            </FormButtons>
+                        </FormContainer>
+                    </DialogContent>
+                </Dialog>
+            </ThemeProvider>
         </Paper>
     );
 };

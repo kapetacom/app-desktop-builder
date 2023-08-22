@@ -21,7 +21,7 @@ import { BlockDefinition, Plan, Resource } from '@kapeta/schemas';
 import Kapeta from '../kapeta';
 import { AsyncState } from 'react-use/lib/useAsyncFn';
 import { AssetListResult, useAssets } from '../hooks/assetHooks';
-import {AssetInfo, fromAsset} from "@kapeta/ui-web-plan-editor";
+import { AssetInfo, fromAsset } from '@kapeta/ui-web-plan-editor';
 
 type PromiseCache = { [key: string]: Promise<void> };
 const PROVIDER_CACHE: PromiseCache = {};
@@ -147,7 +147,9 @@ export const useBlockKinds = (): Set<string> => {
     }, [assets.data]);
 };
 
-function toBlocks(assets: AssetInfo<SchemaKind>[]): AssetInfo<BlockDefinition>[] {
+function toBlocks(
+    assets: AssetInfo<SchemaKind>[]
+): AssetInfo<BlockDefinition>[] {
     return assets.filter((asset) => {
         // Only blocks do not have a core kind
         return asset.exists && !asset.content.kind.startsWith('core/');
