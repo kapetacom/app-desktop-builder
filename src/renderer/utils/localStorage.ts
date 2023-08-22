@@ -1,9 +1,6 @@
 import React, { SetStateAction, useState } from 'react';
 
-export function useLocalStorage<T>(
-    name: string,
-    initialValue: T
-): [T, React.Dispatch<React.SetStateAction<T>>] {
+export function useLocalStorage<T>(name: string, initialValue: T): [T, React.Dispatch<React.SetStateAction<T>>] {
     function save(value: T) {
         window.localStorage.setItem(name, JSON.stringify(value));
     }

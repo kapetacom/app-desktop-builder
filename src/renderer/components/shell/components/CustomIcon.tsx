@@ -23,11 +23,5 @@ interface CustomIconProps {
 
 export const CustomIcon = (props: CustomIconProps) => {
     const Icon = customIcons[props.icon];
-    return (
-        <SvgIcon
-            className={props.className}
-            component={Icon}
-            viewBox="0 0 24 24"
-        />
-    );
+    return <SvgIcon className={props.className} component={Icon} viewBox="0 0 24 24" />;
 };

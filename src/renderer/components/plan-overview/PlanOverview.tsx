@@ -23,9 +23,7 @@ interface Props {
 }
 
 export const PlanOverview = (props: Props) => {
-    const [creatorState, setCreatorState] = useState<AssetCreatorState>(
-        AssetCreatorState.CLOSED
-    );
+    const [creatorState, setCreatorState] = useState<AssetCreatorState>(AssetCreatorState.CLOSED);
 
     const assetImporter = useAssetImporter({
         assetService: props.assetService,
@@ -72,10 +70,7 @@ export const PlanOverview = (props: Props) => {
                     onPlanImport={onPlanImport}
                 />
                 {props.plans.length < 1 && props.sample && (
-                    <SamplePlanSection
-                        sample={props.sample}
-                        onOpenSample={props.onPlanSelected}
-                    />
+                    <SamplePlanSection sample={props.sample} onOpenSample={props.onPlanSelected} />
                 )}
                 <YourPlansList
                     onPlanOpen={props.onPlanSelected}

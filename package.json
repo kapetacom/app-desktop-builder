@@ -45,21 +45,7 @@
             "prettier --ignore-path .eslintignore --single-quote --write"
         ]
     },
-    "prettier": {
-        "tabWidth": 4,
-        "singleQuote": true,
-        "overrides": [
-            {
-                "files": [
-                    ".prettierrc",
-                    ".eslintrc"
-                ],
-                "options": {
-                    "parser": "json"
-                }
-            }
-        ]
-    },
+    "prettier": "@kapeta/prettier-config",
     "jest": {
         "moduleDirectories": [
             "node_modules",
@@ -112,6 +98,7 @@
         "@emotion/styled": "^11.11.0",
         "@kapeta/nodejs-api-client": "<2",
         "@kapeta/nodejs-process": "<2",
+        "@kapeta/prettier-config": "^0.6.1",
         "@kapeta/schemas": "<2",
         "@kapeta/style": "^0.90.0",
         "@kapeta/ui-web-components": "<2",

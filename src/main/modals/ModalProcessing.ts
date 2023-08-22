@@ -1,9 +1,5 @@
 import { BrowserWindow } from 'electron';
-import {
-    getPreloadScript,
-    resolveHtmlPath,
-    WindowOpenHandler,
-} from '../helpers';
+import { getPreloadScript, resolveHtmlPath, WindowOpenHandler } from '../helpers';
 import { EventEmitter } from 'node:events';
 
 interface Props {

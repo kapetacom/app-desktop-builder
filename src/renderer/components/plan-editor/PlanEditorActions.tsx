@@ -1,24 +1,13 @@
-import {
-    PlannerActionConfig,
-    PlannerContextData,
-    PlannerMode,
-} from '@kapeta/ui-web-plan-editor';
+import { PlannerActionConfig, PlannerContextData, PlannerMode } from '@kapeta/ui-web-plan-editor';
 import { ButtonStyle, useConfirmDelete } from '@kapeta/ui-web-components';
 import { IResourceTypeConverter, ResourceRole } from '@kapeta/ui-web-types';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import { useEffect, useMemo } from 'react';
-import {
-    InstanceService,
-    InstanceStatus,
-    ResourceTypeProvider,
-} from '@kapeta/ui-web-context';
+import { InstanceService, InstanceStatus, ResourceTypeProvider } from '@kapeta/ui-web-context';
 import { Connection } from '@kapeta/schemas';
 import { ActionHandlers, DataEntityType, InstanceInfo } from './types';
 
-function getConverter(
-    planner: PlannerContextData,
-    connection: Connection
-): IResourceTypeConverter | null {
+function getConverter(planner: PlannerContextData, connection: Connection): IResourceTypeConverter | null {
     try {
         const providerResource = planner.getResourceByBlockIdAndName(
             connection.provider.blockId,
@@ -34,22 +23,14 @@ function getConverter(
         if (!providerResource || !consumerResource) {
             return null;
         }
-        return (
-            ResourceTypeProvider.getConverterFor(
-                providerResource.kind,
-                consumerResource.kind
-            ) ?? null
-        );
+        return ResourceTypeProvider.getConverterFor(providerResource.kind, consumerResource.kind) ?? null;
     } catch (e) {
         console.warn('Failed to get converter for connection', e);
         return null;
     }
 }
 
-function hasMapping(
-    planner: PlannerContextData,
-    connection: Connection
-): boolean {
+function hasMapping(planner: PlannerContextData, connection: Connection): boolean {
     if (!connection) {
         return false;
     }
@@ -117,17 +98,12 @@ export const usePlanEditorActions = (
                 },
                 {
                     enabled(context): boolean {
-                        return (
-                            context.mode === PlannerMode.EDIT &&
-                            context.uri?.version === 'local'
-                        );
+                        return context.mode === PlannerMode.EDIT && context.uri?.version === 'local';
                     },
                     async onClick(context, { blockInstance }) {
                         const confirm = await showDelete(
                             `Delete Block Instance`,
-                            `Are you sure you want to delete ${
-                                blockInstance?.name || 'this block'
-                            }?`
+                            `Are you sure you want to delete ${blockInstance?.name || 'this block'}?`
                         );
                         if (confirm) {
                             planner.removeBlockInstance(blockInstance!.id);
@@ -142,8 +118,7 @@ export const usePlanEditorActions = (
                         return (
                             planner.mode === PlannerMode.EDIT &&
                             !!blockInstance &&
-                            parseKapetaUri(blockInstance.block.ref).version ===
-                                'local'
+                            parseKapetaUri(blockInstance.block.ref).version === 'local'
                         );
                     },
                     onClick(context, { blockInstance, block }) {
@@ -162,10 +137,7 @@ export const usePlanEditorActions = (
                 },
                 {
                     enabled(context): boolean {
-                        return (
-                            context.mode === PlannerMode.CONFIGURATION ||
-                            context.mode === PlannerMode.EDIT
-                        );
+                        return context.mode === PlannerMode.CONFIGURATION || context.mode === PlannerMode.EDIT;
                     },
                     onClick(context, { blockInstance, block }) {
                         handlers.configure({
@@ -185,9 +157,7 @@ export const usePlanEditorActions = (
                         return true; // we can always stop/start an instance
                     },
                     onClick(context, { blockInstance }) {
-                        const info = instanceInfos.find(
-                            (ix) => ix.instanceId === blockInstance?.id
-                        );
+                        const info = instanceInfos.find((ix) => ix.instanceId === blockInstance?.id);
                         if (!info?.systemId || !info?.instanceId) {
                             return;
                         }
@@ -196,30 +166,20 @@ export const usePlanEditorActions = (
                             case InstanceStatus.STARTING:
                             case InstanceStatus.READY:
                             case InstanceStatus.UNHEALTHY:
-                                InstanceService.stopInstance(
-                                    info.systemId,
-                                    info.instanceId
-                                );
+                                InstanceService.stopInstance(info.systemId, info.instanceId);
                                 break;
                             case InstanceStatus.EXITED:
                             case InstanceStatus.STOPPED:
-                                InstanceService.startInstance(
-                                    info.systemId,
-                                    info.instanceId
-                                );
+                                InstanceService.startInstance(info.systemId, info.instanceId);
                                 break;
                             default: {
                                 const _exhaustiveCheck: never = info.status;
-                                console.warn(
-                                    `Unhandled instance status ${_exhaustiveCheck}`
-                                );
+                                console.warn(`Unhandled instance status ${_exhaustiveCheck}`);
                             }
                         }
                     },
                     buttonStyle(context, { blockInstance }): ButtonStyle {
-                        const info = instanceInfos.find(
-                            (ix) => ix.instanceId === blockInstance?.id
-                        );
+                        const info = instanceInfos.find((ix) => ix.instanceId === blockInstance?.id);
                         switch (info?.status) {
                             case InstanceStatus.EXITED:
                             case InstanceStatus.STOPPED:
@@ -229,9 +189,7 @@ export const usePlanEditorActions = (
                         }
                     },
                     icon(context, { blockInstance }): string {
-                        const info = instanceInfos.find(
-                            (ix) => ix.instanceId === blockInstance?.id
-                        );
+                        const info = instanceInfos.find((ix) => ix.instanceId === blockInstance?.id);
                         switch (info?.status) {
                             case InstanceStatus.EXITED:
                             case InstanceStatus.STOPPED:
@@ -241,9 +199,7 @@ export const usePlanEditorActions = (
                         }
                     },
                     label(context, { blockInstance }): string {
-                        const info = instanceInfos.find(
-                            (ix) => ix.instanceId === blockInstance?.id
-                        );
+                        const info = instanceInfos.find((ix) => ix.instanceId === blockInstance?.id);
                         switch (info?.status) {
                             case InstanceStatus.EXITED:
                             case InstanceStatus.STOPPED:
@@ -255,9 +211,7 @@ export const usePlanEditorActions = (
                 },
                 {
                     enabled(context, { blockInstance }): boolean {
-                        const info = instanceInfos.find(
-                            (ix) => ix.instanceId === blockInstance?.id
-                        );
+                        const info = instanceInfos.find((ix) => ix.instanceId === blockInstance?.id);
                         if (!info?.address) {
                             return false;
                         }
@@ -265,9 +219,7 @@ export const usePlanEditorActions = (
                         return info.status === InstanceStatus.READY;
                     },
                     onClick(context, { blockInstance }) {
-                        const info = instanceInfos.find(
-                            (ix) => ix.instanceId === blockInstance?.id
-                        );
+                        const info = instanceInfos.find((ix) => ix.instanceId === blockInstance?.id);
                         if (!info?.address) {
                             return;
                         }
@@ -284,8 +236,7 @@ export const usePlanEditorActions = (
                         return (
                             planner.mode !== PlannerMode.VIEW &&
                             !!blockInstance &&
-                            parseKapetaUri(blockInstance.block.ref).version ===
-                                'local'
+                            parseKapetaUri(blockInstance.block.ref).version === 'local'
                         );
                     },
                     onClick(p, { resource, block, blockInstance }) {
@@ -308,26 +259,16 @@ export const usePlanEditorActions = (
                         return (
                             planner.mode !== PlannerMode.VIEW &&
                             !!blockInstance &&
-                            parseKapetaUri(blockInstance.block.ref).version ===
-                                'local'
+                            parseKapetaUri(blockInstance.block.ref).version === 'local'
                         );
                     },
-                    async onClick(
-                        context,
-                        { blockInstance, resource, resourceRole }
-                    ) {
+                    async onClick(context, { blockInstance, resource, resourceRole }) {
                         const confirm = await showDelete(
                             `Delete Resource`,
-                            `Are you sure you want to delete ${
-                                resource?.metadata.name || 'this resource'
-                            }?`
+                            `Are you sure you want to delete ${resource?.metadata.name || 'this resource'}?`
                         );
                         if (confirm) {
-                            context.removeResource(
-                                blockInstance!.block.ref,
-                                resource!.metadata.name,
-                                resourceRole!
-                            );
+                            context.removeResource(blockInstance!.block.ref, resource!.metadata.name, resourceRole!);
                         }
                     },
                     buttonStyle: ButtonStyle.DANGER,

@@ -1,12 +1,6 @@
 import React, { useState } from 'react';
 
-import {
-    ListItemIcon,
-    ListItemText,
-    styled,
-    Divider,
-    IconButton,
-} from '@mui/material';
+import { ListItemIcon, ListItemText, styled, Divider, IconButton } from '@mui/material';
 import { useMatches } from 'react-router-dom';
 import './MainLayout.less';
 import { MenuSection } from './types/shell';
@@ -14,11 +8,7 @@ import { MiniDrawer } from './components/MiniDrawer';
 import { ContextPicker } from './components/ContextPicker';
 import { KapetaIcon } from './components/KapetaIcon';
 import { Logo } from './components/KapetaLogo';
-import {
-    SidebarList,
-    SidebarListItem,
-    SidebarListItemButton,
-} from './components/SidebarMenu';
+import { SidebarList, SidebarListItem, SidebarListItemButton } from './components/SidebarMenu';
 import { CustomIcon } from './components/CustomIcon';
 import { MemberIdentity } from '@kapeta/ui-web-types';
 import { BlockhubShell } from './components/BlockhubShell';
@@ -71,11 +61,7 @@ export const MainLayout = (props: Props) => {
                             }}
                             onClick={toggleDrawer}
                         >
-                            {drawerIsOpen ? (
-                                <Logo height={28} width={122} />
-                            ) : (
-                                <KapetaIcon />
-                            )}
+                            {drawerIsOpen ? <Logo height={28} width={122} /> : <KapetaIcon />}
                         </IconButton>
                     </DrawerHeader>
                     <SidebarList>
@@ -84,26 +70,17 @@ export const MainLayout = (props: Props) => {
                             .map((item) => {
                                 const linkPath = item.path;
 
-                                const current = !!matches.find(
-                                    (m) => m.pathname === linkPath
-                                );
+                                const current = !!matches.find((m) => m.pathname === linkPath);
                                 let icon = item.error ? (
                                     <i className="fa fa-exclamation-triangle" />
                                 ) : (
                                     item.icon || <CustomIcon icon="Block" />
                                 );
-                                icon = item.loading ? (
-                                    <i className="fa fa-circle-notch fa-spin" />
-                                ) : (
-                                    icon
-                                );
+                                icon = item.loading ? <i className="fa fa-circle-notch fa-spin" /> : icon;
 
                                 return (
                                     <SidebarListItem key={`${linkPath}-item`}>
-                                        <SidebarListItemButton
-                                            href={item.path}
-                                            selected={current}
-                                        >
+                                        <SidebarListItemButton href={item.path} selected={current}>
                                             <ListItemIcon>{icon}</ListItemIcon>
                                             <ListItemText primary={item.name} />
                                         </SidebarListItemButton>
@@ -113,9 +90,7 @@ export const MainLayout = (props: Props) => {
 
                         <Divider />
                         <SidebarListItem>
-                            <SidebarListItemButton
-                                onClick={() => kapetaContext.blockHub.open()}
-                            >
+                            <SidebarListItemButton onClick={() => kapetaContext.blockHub.open()}>
                                 <ListItemIcon>
                                     <CustomIcon icon="Block" />
                                 </ListItemIcon>
@@ -127,9 +102,7 @@ export const MainLayout = (props: Props) => {
                         isOpen={drawerIsOpen}
                         contexts={props.context?.contexts}
                         handle={props.context?.activeContext}
-                        onChangeContext={(ctx) =>
-                            props.context?.setActiveContext(ctx)
-                        }
+                        onChangeContext={(ctx) => props.context?.setActiveContext(ctx)}
                     />
                 </MiniDrawer>
 
@@ -139,9 +112,7 @@ export const MainLayout = (props: Props) => {
                 </section>
             </section>
 
-            <BlockhubShell
-                handle={props.context?.activeContext?.identity.handle}
-            />
+            <BlockhubShell handle={props.context?.activeContext?.identity.handle} />
         </>
     );
 };

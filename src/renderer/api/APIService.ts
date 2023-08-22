@@ -27,9 +27,7 @@ class RegistryAPI extends RESTService {
     async getAsset(name: string, version: string): Promise<AssetDisplay> {
         const [handle, assetName] = name.split('/');
         return this.get(
-            `/v1/registry/${encodeURIComponent(handle)}/${encodeURIComponent(
-                assetName
-            )}/${encodeURIComponent(version)}`
+            `/v1/registry/${encodeURIComponent(handle)}/${encodeURIComponent(assetName)}/${encodeURIComponent(version)}`
         );
     }
 
@@ -39,11 +37,7 @@ class RegistryAPI extends RESTService {
 
     async getAssetVersions(name: string): Promise<AssetDisplay[]> {
         const [handle, assetName] = name.split('/');
-        return this.get(
-            `/v1/registry/${encodeURIComponent(handle)}/${encodeURIComponent(
-                assetName
-            )}`
-        );
+        return this.get(`/v1/registry/${encodeURIComponent(handle)}/${encodeURIComponent(assetName)}`);
     }
 }
 
@@ -61,5 +55,4 @@ export class APIService {
 
 export const api = new APIService();
 
-export const assetFetcher = (name: string, version: string) =>
-    api.registry().getAsset(name, version);
+export const assetFetcher = (name: string, version: string) => api.registry().getAsset(name, version);

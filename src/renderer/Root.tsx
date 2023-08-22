@@ -21,14 +21,7 @@ export const Root = () => {
     return (
         <DefaultContext>
             <Provider>
-                <React.Suspense
-                    fallback={
-                        <SimpleLoader
-                            text="Initialising application..."
-                            loading
-                        />
-                    }
-                >
+                <React.Suspense fallback={<SimpleLoader text="Initialising application..." loading />}>
                     <Await resolve={data} errorElement={<ErrorContainer />}>
                         <Shell key="main" />
                     </Await>

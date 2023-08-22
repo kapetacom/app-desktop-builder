@@ -3,10 +3,7 @@ import { userInfo } from 'os';
 import { spawnSync } from 'child_process';
 import { dialog } from 'electron';
 
-const args = [
-    '-ilc',
-    'echo -n "_SHELL_ENV_DELIMITER_"; env; echo -n "_SHELL_ENV_DELIMITER_"; exit',
-];
+const args = ['-ilc', 'echo -n "_SHELL_ENV_DELIMITER_"; env; echo -n "_SHELL_ENV_DELIMITER_"; exit'];
 
 const env = {
     // Disables Oh My Zsh auto-update thing that can block the process.
@@ -82,12 +79,7 @@ export function fixPath() {
 
     process.env.PATH =
         shellPathSync() ||
-        [
-            './node_modules/.bin',
-            '/.nodebrew/current/bin',
-            '/usr/local/bin',
-            process.env.PATH,
-        ].join(':');
+        ['./node_modules/.bin', '/.nodebrew/current/bin', '/usr/local/bin', process.env.PATH].join(':');
 }
 
 fixPath();

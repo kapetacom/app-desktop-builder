@@ -1,13 +1,7 @@
 import React from 'react';
 
 export const Logo = (props: { width: number; height: number }) => (
-    <svg
-        width="119"
-        height="28"
-        viewBox="0 0 102 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg width="119" height="28" viewBox="0 0 102 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
             fillRule="evenodd"
             clipRule="evenodd"

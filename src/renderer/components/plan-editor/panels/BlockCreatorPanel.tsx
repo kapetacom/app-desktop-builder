@@ -19,9 +19,7 @@ export const BlockCreatorPanel = (props: Props) => {
     const [creatorState, setCreatorState] = useState(AssetCreatorState.CLOSED);
 
     useEffect(() => {
-        setCreatorState(
-            props.open ? AssetCreatorState.CREATING : AssetCreatorState.CLOSED
-        );
+        setCreatorState(props.open ? AssetCreatorState.CREATING : AssetCreatorState.CLOSED);
     }, [props.open]);
 
     const blocks = useBlocks();
@@ -36,9 +34,7 @@ export const BlockCreatorPanel = (props: Props) => {
                     return createNewBlock();
                 }
 
-                return props.info.item.asset.content
-                    ? { ...props.info?.item.asset.content }
-                    : createNewBlock();
+                return props.info.item.asset.content ? { ...props.info?.item.asset.content } : createNewBlock();
             }}
             onDone={() => {
                 props.onClosed();
@@ -62,23 +58,18 @@ export const BlockCreatorPanel = (props: Props) => {
                 }
 
                 planner.addBlockDefinition(block); // Will replace the ref if it already exists
-                planner.updateBlockInstance(
-                    props.info.item.instance.id,
-                    (instance) => {
-                        const blockTitle =
-                            block.content.metadata.title ??
-                            parseKapetaUri(block.content.metadata.name).name;
+                planner.updateBlockInstance(props.info.item.instance.id, (instance) => {
+                    const blockTitle = block.content.metadata.title ?? parseKapetaUri(block.content.metadata.name).name;
 
-                        return {
-                            ...instance,
-                            name: instance.name || blockTitle,
-                            block: {
-                                ...instance.block,
-                                ref: block.ref,
-                            },
-                        };
-                    }
-                );
+                    return {
+                        ...instance,
+                        name: instance.name || blockTitle,
+                        block: {
+                            ...instance.block,
+                            ref: block.ref,
+                        },
+                    };
+                });
             }}
             files={blocks.data.map((item) => {
                 return item.ref;

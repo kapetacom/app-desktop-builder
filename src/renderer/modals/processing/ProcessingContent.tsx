@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-    Box,
-    Button,
-    CircularProgress,
-    Paper,
-    Stack,
-    Typography,
-} from '@mui/material';
+import { Box, Button, CircularProgress, Paper, Stack, Typography } from '@mui/material';
 
 interface Props {
     title?: string | null;
@@ -61,9 +54,7 @@ export const ProcessingContent = (props: Props) => {
                 <Box sx={{ mr: 2 }}>
                     <CircularProgress size={64} />
                 </Box>
-                {props.text && (
-                    <Typography variant={'body2'}>{props.text}</Typography>
-                )}
+                {props.text && <Typography variant={'body2'}>{props.text}</Typography>}
             </Stack>
 
             <div

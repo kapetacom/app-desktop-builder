@@ -25,6 +25,4 @@ export const SidebarListItem = styled(ListItem)(({ theme }) => ({
     padding: 0,
 }));
 
-export const SidebarListItemButton = styled(ListItemButton)<{ href?: string }>(
-    {}
-);
+export const SidebarListItemButton = styled(ListItemButton)<{ href?: string }>({});

@@ -48,9 +48,7 @@ export const useAssetImporter = (opts: Options): AssetImporter => {
                 showToasty({
                     type: ToastType.ALERT,
                     title: 'Unexpected asset type',
-                    message: `The selected asset have one of the following kinds: ${opts.allowedKinds.join(
-                        ', '
-                    )}`,
+                    message: `The selected asset have one of the following kinds: ${opts.allowedKinds.join(', ')}`,
                 });
                 setLoading(false);
                 return null;

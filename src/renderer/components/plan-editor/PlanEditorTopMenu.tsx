@@ -1,17 +1,6 @@
-import React, {
-    useCallback,
-    useContext,
-    useEffect,
-    useMemo,
-    useState,
-} from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
-import {
-    InstanceEventType,
-    InstanceService,
-    TaskService,
-    TaskStatus,
-} from '@kapeta/ui-web-context';
+import { InstanceEventType, InstanceService, TaskService, TaskStatus } from '@kapeta/ui-web-context';
 import {
     ButtonType,
     ConfigurationEditor,
@@ -53,9 +42,7 @@ const ConfigSchemaEditor = () => {
     const configuration = configurationField.get();
     const result = {
         code: configuration?.source?.value || '',
-        entities: configuration?.types?.map
-            ? configuration?.types?.map(DSLConverters.fromSchemaEntity)
-            : [],
+        entities: configuration?.types?.map ? configuration?.types?.map(DSLConverters.fromSchemaEntity) : [],
     };
 
     const setConfiguration = (code: string, results: DSLEntity[]) => {
@@ -74,8 +61,7 @@ const ConfigSchemaEditor = () => {
         <ConfigurationEditor
             value={result}
             onChange={(newResult) => {
-                newResult.entities &&
-                    setConfiguration(newResult.code, newResult.entities);
+                newResult.entities && setConfiguration(newResult.code, newResult.entities);
             }}
         />
     );
@@ -123,9 +109,7 @@ export const PlanEditorTopMenu = (props: Props) => {
 
     const processTask = useCallback(
         (task) => {
-            const active = [TaskStatus.RUNNING, TaskStatus.PENDING].includes(
-                task.status
-            );
+            const active = [TaskStatus.RUNNING, TaskStatus.PENDING].includes(task.status);
             if (task.id === startPlanJobId) {
                 if (processing !== active) {
                     setProcessing(active);
@@ -159,11 +143,7 @@ export const PlanEditorTopMenu = (props: Props) => {
         tasks.forEach(processTask);
     }, [startPlanJobId, stopPlanJobId, processTask]);
 
-    const doProcess = async (
-        handler: () => Promise<void | { error: string }>,
-        message: string,
-        errorMsg: string
-    ) => {
+    const doProcess = async (handler: () => Promise<void | { error: string }>, message: string, errorMsg: string) => {
         try {
             const result = await handler();
             if (result && result.error) {
@@ -180,27 +160,15 @@ export const PlanEditorTopMenu = (props: Props) => {
 
     useEffect(() => {
         const updateState = async () => {
-            const status = await InstanceService.getInstanceStatusForPlan(
-                props.systemId
-            );
-            setAllPlaying(
-                status.length > 0 &&
-                    status.filter((s) => s.status === 'stopped').length === 0
-            );
-            setAnyPlaying(
-                status.length > 0 &&
-                    status.filter((s) => s.status !== 'stopped').length > 0
-            );
+            const status = await InstanceService.getInstanceStatusForPlan(props.systemId);
+            setAllPlaying(status.length > 0 && status.filter((s) => s.status === 'stopped').length === 0);
+            setAnyPlaying(status.length > 0 && status.filter((s) => s.status !== 'stopped').length > 0);
         };
         updateState().catch(() => {
             // ignore initial error
         });
 
-        return InstanceService.subscribe(
-            props.systemId,
-            InstanceEventType.EVENT_INSTANCE_CHANGED,
-            updateState
-        );
+        return InstanceService.subscribe(props.systemId, InstanceEventType.EVENT_INSTANCE_CHANGED, updateState);
     }, [props.systemId]);
 
     const [planConfig, reloadConfig] = useAsyncFn(async () => {
@@ -224,8 +192,7 @@ export const PlanEditorTopMenu = (props: Props) => {
     }, [props.systemId, planner.plan, showSettings, reloadConfig]);
 
     const hasConfig = !!(
-        planner.plan?.spec?.configuration?.types &&
-        planner.plan?.spec?.configuration?.types.length > 0
+        planner.plan?.spec?.configuration?.types && planner.plan?.spec?.configuration?.types.length > 0
     );
 
     return (
@@ -257,9 +224,7 @@ export const PlanEditorTopMenu = (props: Props) => {
                             async () => {
                                 setStarting(true);
                                 try {
-                                    await InstanceService.startInstances(
-                                        props.systemId
-                                    );
+                                    await InstanceService.startInstances(props.systemId);
                                     setAllPlaying(true);
                                 } finally {
                                     setStarting(false);
@@ -294,9 +259,7 @@ export const PlanEditorTopMenu = (props: Props) => {
                             async () => {
                                 setStopping(true);
                                 try {
-                                    await InstanceService.stopInstances(
-                                        props.systemId
-                                    );
+                                    await InstanceService.stopInstances(props.systemId);
                                     setAllPlaying(false);
                                 } finally {
                                     setStopping(false);
@@ -334,11 +297,7 @@ export const PlanEditorTopMenu = (props: Props) => {
                 </Button>
             </Stack>
             <ThemeProvider theme={kapetaLight}>
-                <Dialog
-                    open={showSettings}
-                    className="modal-plan-settings"
-                    onClose={() => setShowSettings(false)}
-                >
+                <Dialog open={showSettings} className="modal-plan-settings" onClose={() => setShowSettings(false)}>
                     <DialogTitle>Settings</DialogTitle>
                     <DialogContent
                         sx={{
@@ -348,14 +307,8 @@ export const PlanEditorTopMenu = (props: Props) => {
                         <FormContainer
                             initialValue={formData}
                             onSubmitData={async (data) => {
-                                planner.updatePlanMetadata(
-                                    data.metadata,
-                                    data.spec.configuration
-                                );
-                                await setPlanConfig(
-                                    props.systemId,
-                                    data.configuration
-                                );
+                                planner.updatePlanMetadata(data.metadata, data.spec.configuration);
+                                await setPlanConfig(props.systemId, data.configuration);
                                 setShowSettings(false);
                             }}
                         >
@@ -370,48 +323,24 @@ export const PlanEditorTopMenu = (props: Props) => {
                                         orientation={'horizontal'}
                                         variant={'fullWidth'}
                                         value={settingsTab}
-                                        onChange={(evt, tabId) =>
-                                            setSettingsTab(tabId)
-                                        }
+                                        onChange={(evt, tabId) => setSettingsTab(tabId)}
                                     >
                                         <Tab value="general" label="General" />
-                                        {hasConfig && (
-                                            <Tab
-                                                value="configuration"
-                                                label="Configuration"
-                                            />
-                                        )}
-                                        {!props.readonly && (
-                                            <Tab
-                                                value="config-schema"
-                                                label="Configuration Schema"
-                                            />
-                                        )}
+                                        {hasConfig && <Tab value="configuration" label="Configuration" />}
+                                        {!props.readonly && <Tab value="config-schema" label="Configuration Schema" />}
                                     </Tabs>
                                 </Box>
-                                <Box
-                                    flex={1}
-                                    minHeight={'300px'}
-                                    minWidth={'500px'}
-                                >
+                                <Box flex={1} minHeight={'300px'} minWidth={'500px'}>
                                     {settingsTab === 'general' && <PlanForm />}
                                     {settingsTab === 'configuration' && (
                                         <div className="configuration-editor">
-                                            <p className="info">
-                                                Define configuration locally for
-                                                this plan
-                                            </p>
-                                            <ConfigValueEditor
-                                                systemId={props.systemId}
-                                            />
+                                            <p className="info">Define configuration locally for this plan</p>
+                                            <ConfigValueEditor systemId={props.systemId} />
                                         </div>
                                     )}
                                     {settingsTab === 'config-schema' && (
                                         <div className="configuration-schema-editor">
-                                            <p className="info">
-                                                Define configuration data types
-                                                for this plan
-                                            </p>
+                                            <p className="info">Define configuration data types for this plan</p>
                                             <ConfigSchemaEditor />
                                         </div>
                                     )}
@@ -427,11 +356,7 @@ export const PlanEditorTopMenu = (props: Props) => {
                                 >
                                     Cancel
                                 </Button>
-                                <Button
-                                    variant={'contained'}
-                                    color={'primary'}
-                                    type={'submit'}
-                                >
+                                <Button variant={'contained'} color={'primary'} type={'submit'}>
                                     Save
                                 </Button>
                             </FormButtons>

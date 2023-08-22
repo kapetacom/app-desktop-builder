@@ -1,33 +1,33 @@
 name: Publish storybook to Chromatic
 on:
-    push:
-        branches:
-            - master
-    pull_request:
+  push:
+    branches:
+      - master
+  pull_request:
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v3
-              with:
-                  fetch-depth: 0
-            - uses: actions/setup-node@v3
-              with:
-                  node-version: 18
-                  registry-url: https://registry.npmjs.org/
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          registry-url: https://registry.npmjs.org/
 
-            - id: 'auth'
-              uses: 'google-github-actions/auth@v1'
-              with:
-                  credentials_json: '${{ secrets.GCP_ARTIFACTORY_SERVICE_ACCOUNT }}'
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          credentials_json: '${{ secrets.GCP_ARTIFACTORY_SERVICE_ACCOUNT }}'
 
-            - name: 'Set up Cloud SDK'
-              uses: 'google-github-actions/setup-gcloud@v1'
-              with:
-                  project_id: ${{ secrets.GCP_PROJECT_ID }}
-            - run: npm ci
-            - name: Publish to Chromatic
-              uses: chromaui/action@v1
-              with:
-                  projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v1'
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+      - run: npm ci
+      - name: Publish to Chromatic
+        uses: chromaui/action@v1
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}

@@ -5,9 +5,7 @@ const HEADER_SYSTEM = 'X-Kapeta-System';
 
 export type ConfigData = { [key: string]: any };
 
-export const getInstanceConfigs = async (
-    systemId: string
-): Promise<ConfigData> => {
+export const getInstanceConfigs = async (systemId: string): Promise<ConfigData> => {
     const url = clusterPath(`/config/instance`);
 
     return simpleFetch(url, {
@@ -18,10 +16,7 @@ export const getInstanceConfigs = async (
     });
 };
 
-export const getInstanceConfig = async (
-    systemId: string,
-    instanceId: string
-): Promise<ConfigData> => {
+export const getInstanceConfig = async (systemId: string, instanceId: string): Promise<ConfigData> => {
     const url = clusterPath(`/config/instance`);
 
     return simpleFetch(url, {
@@ -33,11 +28,7 @@ export const getInstanceConfig = async (
     });
 };
 
-export const setInstanceConfig = async (
-    systemId: string,
-    instanceId: string,
-    data: ConfigData
-) => {
+export const setInstanceConfig = async (systemId: string, instanceId: string, data: ConfigData) => {
     const url = clusterPath(`/config/instance`);
 
     return simpleFetch(url, {

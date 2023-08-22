@@ -45,9 +45,7 @@ export class ClusterService extends EventEmitter {
                 }
 
                 if (res.statusCode !== 200) {
-                    reject(
-                        new Error(`Unexpected status code: ${res.statusCode}`)
-                    );
+                    reject(new Error(`Unexpected status code: ${res.statusCode}`));
                     return;
                 }
 
@@ -55,9 +53,7 @@ export class ClusterService extends EventEmitter {
 
                 resolve({
                     host: ClusterConfiguration.getClusterServiceHost(),
-                    port: parseInt(
-                        ClusterConfiguration.getClusterServicePort()
-                    ),
+                    port: parseInt(ClusterConfiguration.getClusterServicePort()),
                     dockerStatus: status.dockerStatus,
                 });
             });
@@ -75,11 +71,7 @@ export class ClusterService extends EventEmitter {
             this.running = true;
             this.info = clusterStatus;
             this.emit('started', this.info);
-            console.log(
-                'Cluster service already listening on %s:%s ',
-                clusterStatus.host,
-                clusterStatus.port
-            );
+            console.log('Cluster service already listening on %s:%s ', clusterStatus.host, clusterStatus.port);
             return this.info;
         } catch (err) {
             console.debug('Cluster service was not already running...');
@@ -93,11 +85,7 @@ export class ClusterService extends EventEmitter {
                 this.running = true;
                 this.info = msg;
                 this.emit('started', msg);
-                console.log(
-                    'Cluster service listening on %s:%s ',
-                    msg.host,
-                    msg.port
-                );
+                console.log('Cluster service listening on %s:%s ', msg.host, msg.port);
                 resolve(msg);
             });
             child.on('error', (err) => {
@@ -107,9 +95,7 @@ export class ClusterService extends EventEmitter {
             child.on('exit', (exitCode: number) => {
                 console.log('Cluster service exited with code: %s', exitCode);
                 if (exitCode !== null && exitCode !== 0) {
-                    reject(
-                        new Error(`Process exited with exitCode: ${exitCode}.`)
-                    );
+                    reject(new Error(`Process exited with exitCode: ${exitCode}.`));
                 }
                 this.stopProcess();
                 if (!this.stoppedIntentionally) {

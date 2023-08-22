@@ -5,10 +5,7 @@ import AddIcon from '../../shell/components/icons/large/AddIcon.svg';
 import ImportIcon from '../../shell/components/icons/large/ImportIcon.svg';
 import BlockHubIcon from '../../shell/components/icons/large/BlockHubIcon.svg';
 import { useKapetaContext } from '../../../hooks/contextHook';
-import {
-    AssetImporter,
-    useAssetImporter,
-} from '../../../utils/useAssetImporter';
+import { AssetImporter, useAssetImporter } from '../../../utils/useAssetImporter';
 import { CoreTypes } from '@kapeta/ui-web-components';
 import { AssetStore } from '@kapeta/ui-web-context';
 interface XLButtonProps {
@@ -108,16 +105,8 @@ export const GetStartedHeader = (props: Props) => {
                     gap: 3,
                 }}
             >
-                <XLButton
-                    variant={'edit'}
-                    label={'New Plan'}
-                    onClick={props.onPlanCreate}
-                />
-                <XLButton
-                    variant={'blockhub'}
-                    label={'Block Hub'}
-                    onClick={() => kapetaContext.blockHub.open()}
-                />
+                <XLButton variant={'edit'} label={'New Plan'} onClick={props.onPlanCreate} />
+                <XLButton variant={'blockhub'} label={'Block Hub'} onClick={() => kapetaContext.blockHub.open()} />
                 <XLButton
                     variant={'import'}
                     label={'Import'}

@@ -1,15 +1,7 @@
 /* eslint import/prefer-default-export: off */
 import { URL } from 'url';
 import path from 'path';
-import {
-    session,
-    app,
-    BrowserWindow,
-    ipcMain,
-    shell,
-    dialog,
-    nativeImage,
-} from 'electron';
+import { session, app, BrowserWindow, ipcMain, shell, dialog, nativeImage } from 'electron';
 import log from 'electron-log';
 import { autoUpdater } from 'electron-updater';
 import packageJson from '../../package.json';
@@ -24,10 +16,7 @@ export const RESOURCES_PATH = app.isPackaged
     : path.join(__dirname, '../../assets');
 
 export const isDebug = (): boolean => {
-    return !!(
-        process.env.NODE_ENV === 'development' ||
-        process.env.DEBUG_PROD === 'true'
-    );
+    return !!(process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true');
 };
 
 export const getAssetPath = (...paths: string[]): string => {
@@ -62,13 +51,11 @@ export const appVersion = () => {
 export const ensureUserAgent = () => {
     const userAgent = `KapetaDesktop/${appVersion()}`;
     session.defaultSession.setUserAgent(userAgent);
-    session.defaultSession.webRequest.onBeforeSendHeaders(
-        (details, callback) => {
-            details.requestHeaders['user-agent'] = userAgent;
-            details.requestHeaders['x-kapeta'] = 'true';
-            callback({ cancel: false, requestHeaders: details.requestHeaders });
-        }
-    );
+    session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
+        details.requestHeaders['user-agent'] = userAgent;
+        details.requestHeaders['x-kapeta'] = 'true';
+        callback({ cancel: false, requestHeaders: details.requestHeaders });
+    });
 };
 
 export const attachIPCListener = (
@@ -83,9 +70,7 @@ export const attachIPCListener = (
 };
 
 export const getPreloadScript = () => {
-    return app.isPackaged
-        ? path.join(__dirname, 'preload.js')
-        : path.join(__dirname, '../../.erb/dll/preload.js');
+    return app.isPackaged ? path.join(__dirname, 'preload.js') : path.join(__dirname, '../../.erb/dll/preload.js');
 };
 
 let hasUserChosenToUpdateLater = false;
@@ -159,9 +144,7 @@ export const installExtensions = async () => {
         .catch(console.log);
 };
 
-export const WindowOpenHandler = (
-    edata: Electron.HandlerDetails
-): { action: 'deny' } => {
+export const WindowOpenHandler = (edata: Electron.HandlerDetails): { action: 'deny' } => {
     shell.openExternal(edata.url);
     return { action: 'deny' };
 };

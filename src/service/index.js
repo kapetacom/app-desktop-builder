@@ -1,6 +1,4 @@
-const {
-    default: LocalClusterService,
-} = require('@kapeta/local-cluster-service');
+const { default: LocalClusterService } = require('@kapeta/local-cluster-service');
 
 (async () => {
     const result = await LocalClusterService.start();

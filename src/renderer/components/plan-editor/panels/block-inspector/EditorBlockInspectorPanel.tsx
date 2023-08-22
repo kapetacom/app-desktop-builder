@@ -43,18 +43,10 @@ export const EditorBlockInspectorPanel = (props: Props) => {
             });
         };
 
-        InstanceService.subscribe(
-            blockRef,
-            InstanceEventType.EVENT_INSTANCE_LOG,
-            onInstanceLog
-        );
+        InstanceService.subscribe(blockRef, InstanceEventType.EVENT_INSTANCE_LOG, onInstanceLog);
 
         return () => {
-            InstanceService.unsubscribe(
-                blockRef,
-                InstanceEventType.EVENT_INSTANCE_LOG,
-                onInstanceLog
-            );
+            InstanceService.unsubscribe(blockRef, InstanceEventType.EVENT_INSTANCE_LOG, onInstanceLog);
         };
     }, [blockRef, emitter]);
 
@@ -69,10 +61,7 @@ export const EditorBlockInspectorPanel = (props: Props) => {
         if (!instance?.id || !props.open) {
             return [];
         }
-        const result = await InstanceService.getInstanceLogs(
-            props.systemId,
-            instance?.id
-        );
+        const result = await InstanceService.getInstanceLogs(props.systemId, instance?.id);
         return result.ok === false ? [] : result.logs;
     }, [instance?.id, props.open]);
 

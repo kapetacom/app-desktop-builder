@@ -1,11 +1,6 @@
 import { createRoot } from 'react-dom/client';
 import { ThemeProvider } from '@mui/material';
-import {
-    RouterProvider,
-    useParams,
-    createMemoryRouter,
-    useNavigate,
-} from 'react-router-dom';
+import { RouterProvider, useParams, createMemoryRouter, useNavigate } from 'react-router-dom';
 import { AssetService } from '@kapeta/ui-web-context';
 import { Root } from './Root';
 import { kapetaDark } from './Theme';
@@ -43,18 +38,10 @@ const router = createMemoryRouter([
                                             await plans.refresh();
                                         }}
                                         onPlanAdded={(plan) => {
-                                            navigateTo(
-                                                `/edit/${encodeURIComponent(
-                                                    plan.ref
-                                                )}`
-                                            );
+                                            navigateTo(`/edit/${encodeURIComponent(plan.ref)}`);
                                         }}
                                         onPlanSelected={(plan) => {
-                                            navigateTo(
-                                                `/edit/${encodeURIComponent(
-                                                    plan.ref
-                                                )}`
-                                            );
+                                            navigateTo(`/edit/${encodeURIComponent(plan.ref)}`);
                                         }}
                                         plans={plans.data || []}
                                     />

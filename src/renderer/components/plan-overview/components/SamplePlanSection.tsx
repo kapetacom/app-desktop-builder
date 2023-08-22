@@ -10,9 +10,7 @@ interface Props {
 }
 
 export const SamplePlanSection = (props: Props) => {
-    const title =
-        props.sample.content.metadata.title ??
-        props.sample.content.metadata.name;
+    const title = props.sample.content.metadata.title ?? props.sample.content.metadata.name;
     return (
         <Box className={'sample-plan-section'}>
             <Typography variant={'h6'} pb={2} pt={2}>
@@ -47,18 +45,14 @@ export const SamplePlanSection = (props: Props) => {
                         {title}
                     </Typography>
                     <Typography mb={3}>
-                        Try this sample plan to get a quick introduction to the
-                        Kapeta platform and what it can do to change the way you
-                        design, build and deploy software.
+                        Try this sample plan to get a quick introduction to the Kapeta platform and what it can do to
+                        change the way you design, build and deploy software.
                     </Typography>
                     <Button
                         variant={'outlined'}
                         size={'large'}
                         color={'inherit'}
-                        onClick={() =>
-                            props.onOpenSample &&
-                            props.onOpenSample(props.sample)
-                        }
+                        onClick={() => props.onOpenSample && props.onOpenSample(props.sample)}
                     >
                         Open Sample
                     </Button>

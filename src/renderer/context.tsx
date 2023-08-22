@@ -3,9 +3,7 @@ import Kapeta from './kapeta';
 
 export async function initialise() {
     if (!window.Kapeta.config.cluster_service) {
-        throw new Error(
-            'Local cluster not configured. Make sure docker is running and try again.'
-        );
+        throw new Error('Local cluster not configured. Make sure docker is running and try again.');
     }
     const start = Date.now();
     console.log('Loading %s plugins...', Kapeta.paths.length);

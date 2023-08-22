@@ -30,9 +30,7 @@ function createNotification(task: Task): KapetaNotification {
     };
 }
 
-export const useBackgroundTasks = (
-    notificationsHandler: ListActions<KapetaNotification>
-) => {
+export const useBackgroundTasks = (notificationsHandler: ListActions<KapetaNotification>) => {
     const tasks = useAsync(async () => {
         return TaskService.list();
     }, []);

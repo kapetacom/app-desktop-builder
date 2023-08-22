@@ -9,12 +9,7 @@ import {
 } from '@kapeta/ui-web-context';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import _ from 'lodash';
-import {
-    IBlockTypeProvider,
-    ILanguageTargetProvider,
-    IResourceTypeProvider,
-    SchemaKind,
-} from '@kapeta/ui-web-types';
+import { IBlockTypeProvider, ILanguageTargetProvider, IResourceTypeProvider, SchemaKind } from '@kapeta/ui-web-types';
 import { useEffect, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { BlockDefinition, Plan, Resource } from '@kapeta/schemas';
@@ -50,11 +45,7 @@ const registerMissing = () => {
         if (!provider.version) {
             provider.version = getVersion(id);
         }
-        console.log(
-            'Registering resource type with version %s',
-            provider.version,
-            provider
-        );
+        console.log('Registering resource type with version %s', provider.version, provider);
         ResourceTypeProvider.register(provider);
         loaded++;
     });
@@ -66,33 +57,22 @@ const registerMissing = () => {
         if (!provider.version) {
             provider.version = getVersion(id);
         }
-        console.log(
-            'Registering block type with version %s',
-            provider.version,
-            provider
-        );
+        console.log('Registering block type with version %s', provider.version, provider);
         BlockTypeProvider.register(provider);
         loaded++;
     });
 
-    _.forEach(
-        Kapeta.languageTargets,
-        (provider: ILanguageTargetProvider, id) => {
-            if (BlockTargetProvider.exists(id)) {
-                return;
-            }
-            if (!provider.version) {
-                provider.version = getVersion(id);
-            }
-            console.log(
-                'Registering language target with version %s',
-                provider.version,
-                provider
-            );
-            BlockTargetProvider.register(provider);
-            loaded++;
+    _.forEach(Kapeta.languageTargets, (provider: ILanguageTargetProvider, id) => {
+        if (BlockTargetProvider.exists(id)) {
+            return;
         }
-    );
+        if (!provider.version) {
+            provider.version = getVersion(id);
+        }
+        console.log('Registering language target with version %s', provider.version, provider);
+        BlockTargetProvider.register(provider);
+        loaded++;
+    });
 
     return loaded;
 };
@@ -132,13 +112,7 @@ export const useBlockKinds = (): Set<string> => {
             assets.data
                 .filter((asset) => {
                     // Only blocks do not have a core kind
-                    return (
-                        asset.exists &&
-                        [
-                            'core/block-type',
-                            'core/block-type-operator',
-                        ].includes(asset.content.kind)
-                    );
+                    return asset.exists && ['core/block-type', 'core/block-type-operator'].includes(asset.content.kind);
                 })
                 .map((asset) => {
                     return parseKapetaUri(asset.ref).fullName;
@@ -147,9 +121,7 @@ export const useBlockKinds = (): Set<string> => {
     }, [assets.data]);
 };
 
-function toBlocks(
-    assets: AssetInfo<SchemaKind>[]
-): AssetInfo<BlockDefinition>[] {
+function toBlocks(assets: AssetInfo<SchemaKind>[]): AssetInfo<BlockDefinition>[] {
     return assets.filter((asset) => {
         // Only blocks do not have a core kind
         return asset.exists && !asset.content.kind.startsWith('core/');
@@ -170,11 +142,10 @@ export const useLoadedPlanContext = (plan: Plan | undefined) => {
 
     const assetResult = useAssets();
     const blocks = useMemo(() => {
-        return assetResult.data ? toBlocks(assetResult.data) : undefined;
-    }, [assetResult.data]);
+        return !assetResult.loading && assetResult.data ? toBlocks(assetResult.data) : undefined;
+    }, [assetResult.loading, assetResult.data]);
 
     const missingData = !plan || !assetResult.data || !blocks;
-
     const results = useAsync(async () => {
         if (missingData) {
             return;
@@ -183,9 +154,7 @@ export const useLoadedPlanContext = (plan: Plan | undefined) => {
         const blockDefinitionRefs = new Set<string>();
         const providers = await fetchLocalProviders();
         providers.forEach((provider) => {
-            providerRefs.add(
-                `${provider.definition.metadata.name}:${provider.version}`
-            );
+            providerRefs.add(`${provider.definition.metadata.name}:${provider.version}`);
         });
 
         if (plan) {
@@ -198,47 +167,43 @@ export const useLoadedPlanContext = (plan: Plan | undefined) => {
             blockDefinitionRefs.add(asset.ref);
         });
 
-        const blockDefinitionPromises = Array.from(blockDefinitionRefs).map(
-            async (blockRef) => {
-                blockRef = normalizeKapetaUri(blockRef);
-                if (blockRef in BLOCK_CACHE) {
-                    return BLOCK_CACHE[blockRef];
-                }
-
-                return (BLOCK_CACHE[blockRef] = new Promise(async (resolve) => {
-                    try {
-                        const blockUri = parseKapetaUri(blockRef);
-                        let block = blocks?.find((asset) =>
-                            parseKapetaUri(asset.ref).equals(blockUri)
-                        );
-
-                        if (!block) {
-                            // Will also cause installation if not already installed
-                            block = fromAsset(await BlockService.get(blockRef));
-                            setCurrentlyLoading(blockRef);
-                        }
-
-                        if (!block) {
-                            return;
-                        }
-
-                        providerRefs.add(block.content.kind);
-                        const eachResource = (resource: Resource) => {
-                            providerRefs.add(resource.kind);
-                        };
-                        block.content.spec?.providers?.forEach(eachResource);
-                        block.content.spec?.consumers?.forEach(eachResource);
-                        if (block.content.spec?.target?.kind) {
-                            providerRefs.add(block.content.spec.target.kind);
-                        }
-                    } catch (e) {
-                        console.warn('Failed to load block', blockRef, e);
-                    } finally {
-                        resolve();
-                    }
-                }));
+        const blockDefinitionPromises = Array.from(blockDefinitionRefs).map(async (blockRef) => {
+            blockRef = normalizeKapetaUri(blockRef);
+            if (blockRef in BLOCK_CACHE) {
+                return BLOCK_CACHE[blockRef];
             }
-        );
+
+            return (BLOCK_CACHE[blockRef] = new Promise(async (resolve) => {
+                try {
+                    const blockUri = parseKapetaUri(blockRef);
+                    let block = blocks?.find((asset) => parseKapetaUri(asset.ref).equals(blockUri));
+
+                    if (!block) {
+                        // Will also cause installation if not already installed
+                        block = fromAsset(await BlockService.get(blockRef));
+                        setCurrentlyLoading(blockRef);
+                    }
+
+                    if (!block) {
+                        return;
+                    }
+
+                    providerRefs.add(block.content.kind);
+                    const eachResource = (resource: Resource) => {
+                        providerRefs.add(resource.kind);
+                    };
+                    block.content.spec?.providers?.forEach(eachResource);
+                    block.content.spec?.consumers?.forEach(eachResource);
+                    if (block.content.spec?.target?.kind) {
+                        providerRefs.add(block.content.spec.target.kind);
+                    }
+                } catch (e) {
+                    console.warn('Failed to load block', blockRef, e);
+                } finally {
+                    resolve();
+                }
+            }));
+        });
 
         await Promise.allSettled(blockDefinitionPromises);
 
@@ -261,18 +226,25 @@ export const useLoadedPlanContext = (plan: Plan | undefined) => {
     }, [dependencyHash, blocks, missingData]);
 
     useEffect(() => {
-        if (results.loading) {
+        if (results.loading && !missingData) {
             return;
         }
         setLoading(false);
-    }, [results.loading]);
+    }, [results.loading, missingData]);
+
+    console.log('Loaded plan context', {
+        missingData,
+        loading,
+        blocks: results.value?.blocks,
+    });
 
     return {
         missingData,
         resourceAssets: results.value?.providers ?? [],
+
         currentlyLoading,
         blocks: results.value?.blocks ?? [],
-        loading: loading || missingData,
+        loading: loading || missingData || !results.value?.blocks,
         error: results.error,
     };
 };

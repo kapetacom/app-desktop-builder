@@ -33,22 +33,8 @@ const MenuItems = (props: MenuWrapperProps) => {
                         key={menuItem.text}
                         style={{ transform: `translateY(${-42 * index}px)` }}
                     >
-                        <path
-                            d={createHexagonPath(
-                                180,
-                                38,
-                                3,
-                                Orientation.HORIZONTAL,
-                                12
-                            )}
-                        />
-                        <SVGText
-                            className="menu-item-text"
-                            maxWidth={140}
-                            x={75}
-                            y={24}
-                            value={menuItem.text}
-                        />
+                        <path d={createHexagonPath(180, 38, 3, Orientation.HORIZONTAL, 12)} />
+                        <SVGText className="menu-item-text" maxWidth={140} x={75} y={24} value={menuItem.text} />
                     </g>
                 );
             })}

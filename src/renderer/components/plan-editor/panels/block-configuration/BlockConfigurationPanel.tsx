@@ -12,18 +12,11 @@ import { BlockTypeProvider } from '@kapeta/ui-web-context';
 
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import { BlockInstance } from '@kapeta/schemas';
-import {
-    PlannerContext,
-    PlannerMode,
-    PlannerSidebar,
-} from '@kapeta/ui-web-plan-editor';
+import { PlannerContext, PlannerMode, PlannerSidebar } from '@kapeta/ui-web-plan-editor';
 
 import './BlockConfigurationPanel.less';
 import { useAsyncFn } from 'react-use';
-import {
-    getInstanceConfig,
-    setInstanceConfig,
-} from '../../../../api/LocalConfigService';
+import { getInstanceConfig, setInstanceConfig } from '../../../../api/LocalConfigService';
 import { Box, Button, Tab, Tabs } from '@mui/material';
 
 type Options = { [key: string]: string };
@@ -42,7 +35,9 @@ interface Props {
 }
 
 export const BlockConfigurationPanel = (props: Props) => {
+    console.log('BlockConfigurationPanel.tsx: BlockConfigurationPanel()');
     const planner = useContext(PlannerContext);
+    console.log('BlockConfigurationPanel.tsx: BlockConfigurationPanel() planner:', planner);
 
     const panelHeader = () => {
         if (!props.instance) {
@@ -69,7 +64,7 @@ export const BlockConfigurationPanel = (props: Props) => {
         if (!props.instance?.block.ref) {
             return undefined;
         }
-        return planner.getBlockByRef.call(null, props.instance.block.ref);
+        return planner.getBlockByRef(props.instance.block.ref);
     }, [props.instance?.block.ref, planner.getBlockByRef]);
 
     const typeProvider = useMemo(() => {
@@ -82,10 +77,7 @@ export const BlockConfigurationPanel = (props: Props) => {
     const data: BlockConfigurationData = useMemo<BlockConfigurationData>(() => {
         let defaultConfig = {};
         if (block && typeProvider?.createDefaultConfig) {
-            defaultConfig = typeProvider.createDefaultConfig(
-                block,
-                props.instance!
-            );
+            defaultConfig = typeProvider.createDefaultConfig(block, props.instance!);
         }
 
         if (!props.instance) {
@@ -134,6 +126,7 @@ export const BlockConfigurationPanel = (props: Props) => {
             return;
         }
 
+        console.log('Saving block configuration', blockData);
         planner.updateBlockInstance(props.instance.id, (instance) => {
             const uri = parseKapetaUri(instance.block.ref);
             uri.version = blockData.version;
@@ -147,11 +140,7 @@ export const BlockConfigurationPanel = (props: Props) => {
             };
         });
 
-        await setInstanceConfig(
-            props.systemId,
-            props.instance.id,
-            blockData.configuration!
-        );
+        await setInstanceConfig(props.systemId, props.instance.id, blockData.configuration!);
         await reloadConfig();
 
         props.onClosed();
@@ -163,19 +152,11 @@ export const BlockConfigurationPanel = (props: Props) => {
     const [currentTab, setCurrentTab] = React.useState('general');
 
     const showConfigTab =
-        !!(
-            typeProvider &&
-            typeProvider.configComponent &&
-            block &&
-            props.instance
-        ) || block?.spec.configuration?.types?.length > 0;
+        !!(typeProvider && typeProvider.configComponent && block && props.instance) ||
+        !!(block?.spec?.configuration?.types?.length && block?.spec?.configuration?.types?.length > 0);
 
     return (
-        <PlannerSidebar
-            title={panelHeader()}
-            open={props.open}
-            onClose={props.onClosed}
-        >
+        <PlannerSidebar title={panelHeader()} open={props.open} onClose={props.onClosed}>
             <SimpleLoader
                 loading={!blockAssets || instanceConfig.loading}
                 key={props.instance?.block.ref ?? 'unknown-block'}
@@ -186,17 +167,10 @@ export const BlockConfigurationPanel = (props: Props) => {
                         <Tabs
                             orientation="horizontal"
                             value={currentTab}
-                            onChange={(evt, newTabId) =>
-                                setCurrentTab(newTabId)
-                            }
+                            onChange={(evt, newTabId) => setCurrentTab(newTabId)}
                         >
                             <Tab value={'general'} label="General" />
-                            {showConfigTab && (
-                                <Tab
-                                    value={'configuration'}
-                                    label="Configuration"
-                                />
-                            )}
+                            {showConfigTab && <Tab value={'configuration'} label="Configuration" />}
                         </Tabs>
                         {currentTab === 'general' && (
                             <Box>
@@ -222,6 +196,7 @@ export const BlockConfigurationPanel = (props: Props) => {
                         {}
 
                         {currentTab === 'configuration' &&
+                            block &&
                             (typeProvider?.configComponent && props.instance ? (
                                 <typeProvider.configComponent
                                     block={block}
@@ -230,52 +205,30 @@ export const BlockConfigurationPanel = (props: Props) => {
                                 />
                             ) : (
                                 <EntityEditorForm
-                                    instances={planner.plan?.spec.blocks?.map(
-                                        (blockInstance) => {
-                                            const blockDef =
-                                                planner.getBlockById(
-                                                    blockInstance.id
-                                                );
-                                            return {
-                                                name: blockInstance.name,
-                                                id: blockInstance.id,
-                                                providers:
-                                                    blockDef?.spec.providers?.map(
-                                                        (provider) => {
-                                                            return {
-                                                                name: provider
-                                                                    .metadata
-                                                                    .name,
-                                                                portType:
-                                                                    provider
-                                                                        .spec
-                                                                        ?.port
-                                                                        ?.type,
-                                                            };
-                                                        }
-                                                    ) ?? [],
-                                            };
-                                        }
-                                    )}
-                                    entities={block!.spec.configuration!.types!}
+                                    instances={planner.plan?.spec.blocks?.map((blockInstance) => {
+                                        const blockDef = planner.getBlockById(blockInstance.id);
+                                        return {
+                                            name: blockInstance.name,
+                                            id: blockInstance.id,
+                                            providers:
+                                                blockDef?.spec.providers?.map((provider) => {
+                                                    return {
+                                                        name: provider.metadata.name,
+                                                        portType: provider?.spec?.port?.type,
+                                                    };
+                                                }) ?? [],
+                                        };
+                                    })}
+                                    entities={block.spec?.configuration?.types ?? []}
                                     name="configuration"
                                 />
                             ))}
 
                         <FormButtons>
-                            <Button
-                                variant={'contained'}
-                                color={'error'}
-                                onClick={props.onClosed}
-                            >
+                            <Button variant={'contained'} color={'error'} onClick={props.onClosed}>
                                 Cancel
                             </Button>
-                            <Button
-                                variant={'contained'}
-                                disabled={readOnly}
-                                color={'primary'}
-                                type="submit"
-                            >
+                            <Button variant={'contained'} disabled={readOnly} color={'primary'} type="submit">
                                 Save
                             </Button>
                         </FormButtons>

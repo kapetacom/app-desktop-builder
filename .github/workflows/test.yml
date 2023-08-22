@@ -3,37 +3,37 @@ name: Test
 on: [push]
 
 jobs:
-    test:
-        runs-on: ${{ matrix.os }}
+  test:
+    runs-on: ${{ matrix.os }}
 
-        strategy:
-            fail-fast: false
-            matrix:
-                os: [ubuntu-latest]
-                # os: [macos-latest, windows-latest, ubuntu-latest]
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        # os: [macos-latest, windows-latest, ubuntu-latest]
 
-        steps:
-            - name: Check out Git repository
-              uses: actions/checkout@v3
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v3
 
-            - name: Install Node.js and NPM
-              uses: actions/setup-node@v3
-              id: node
-              with:
-                  node-version: 18
-                  cache: npm
+      - name: Install Node.js and NPM
+        uses: actions/setup-node@v3
+        id: node
+        with:
+          node-version: 18
+          cache: npm
 
-            - name: npm install
-              if: ${{ steps.node.outputs.cache-hit != true }}
-              run: |
-                  npm ci
+      - name: npm install
+        if: ${{ steps.node.outputs.cache-hit != true }}
+        run: |
+          npm ci
 
-            - name: Build
-              env:
-                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              run: |
-                  npm run package
-                  npm exec tsc --noEmit
-            - name: Test
-              run: |
-                  npm test
+      - name: Build
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npm run package
+          npm exec tsc --noEmit
+      - name: Test
+        run: |
+          npm test

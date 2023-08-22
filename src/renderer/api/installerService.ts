@@ -18,11 +18,7 @@ export const installerService: InstallerService = {
         const uri = parseKapetaUri(assetRef);
 
         return onAssetChanged(async (evt) => {
-            if (
-                evt.asset.handle === uri.handle ||
-                evt.asset.name === uri.name ||
-                evt.asset.version === uri.version
-            ) {
+            if (evt.asset.handle === uri.handle || evt.asset.name === uri.name || evt.asset.version === uri.version) {
                 await callback();
             }
         });

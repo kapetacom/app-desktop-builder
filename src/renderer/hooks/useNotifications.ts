@@ -7,21 +7,13 @@ import { ListActions } from 'react-use/lib/useList';
 const NOTIFICATION_TTL = 60000;
 const globalEmitter = new EventEmitter();
 
-export const useNotifications = (): [
-    KapetaNotification[],
-    ListActions<KapetaNotification>
-] => {
-    const [notifications, notificationsHandler] = useList<KapetaNotification>(
-        []
-    );
+export const useNotifications = (): [KapetaNotification[], ListActions<KapetaNotification>] => {
+    const [notifications, notificationsHandler] = useList<KapetaNotification>([]);
 
     useInterval(() => {
         let anyRemoved = false;
         const newNotifications = notifications.filter((notification) => {
-            if (
-                notification.type === 'progress' &&
-                notification.progress !== 100
-            ) {
+            if (notification.type === 'progress' && notification.progress !== 100) {
                 // Don't remove active progress notifications
                 return true;
             }
@@ -54,9 +46,7 @@ export const useNotificationEmitter = () => {
     }, []);
 };
 
-export const useNotificationListener = (
-    listener: (notification: KapetaNotification) => void
-) => {
+export const useNotificationListener = (listener: (notification: KapetaNotification) => void) => {
     useEffect(() => {
         globalEmitter.on('notification', listener);
         return () => {

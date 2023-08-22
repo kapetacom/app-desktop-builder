@@ -9,25 +9,13 @@ import {
     randomUUID,
     AssetInfo,
 } from '@kapeta/ui-web-plan-editor';
-import React, {
-    ForwardedRef,
-    forwardRef,
-    useContext,
-    useMemo,
-    useState,
-} from 'react';
+import React, { ForwardedRef, forwardRef, useContext, useMemo, useState } from 'react';
 import { IResourceTypeProvider } from '@kapeta/ui-web-types';
 import { useAsyncRetry } from 'react-use';
 import { PlanEditorTopMenu } from './PlanEditorTopMenu';
 import { usePlanEditorActions } from './PlanEditorActions';
 import { BlockConfigurationPanel } from './panels/block-configuration/BlockConfigurationPanel';
-import {
-    ConfigureItemInfo,
-    DataEntityType,
-    EditItemInfo,
-    InspectItemInfo,
-    InstanceInfo,
-} from './types';
+import { ConfigureItemInfo, DataEntityType, EditItemInfo, InspectItemInfo, InstanceInfo } from './types';
 import { EditorPanels } from './panels/editor/EditorPanels';
 import { InspectorPanels } from './panels/InspectorPanels';
 import './PlanEditor.less';
@@ -54,29 +42,21 @@ export const PlanEditor = withPlannerContext(
         const planner = useContext(PlannerContext);
         const kapetaContext = useKapetaContext();
 
-        const [configInfo, setConfigInfo] = useState<ConfigureItemInfo | null>(
-            null
-        );
-        const [inspectInfo, setInspectInfo] = useState<InspectItemInfo | null>(
-            null
-        );
+        const [configInfo, setConfigInfo] = useState<ConfigureItemInfo | null>(null);
+        const [inspectInfo, setInspectInfo] = useState<InspectItemInfo | null>(null);
         const [editInfo, setEditInfo] = useState<EditItemInfo | null>(null);
 
-        const actions = usePlanEditorActions(
-            planner,
-            props.instanceInfos ?? [],
-            {
-                inspect: (info) => {
-                    setInspectInfo(info);
-                },
-                configure: (info) => {
-                    setConfigInfo(info);
-                },
-                edit: (info) => {
-                    setEditInfo(info);
-                },
-            }
-        );
+        const actions = usePlanEditorActions(planner, props.instanceInfos ?? [], {
+            inspect: (info) => {
+                setInspectInfo(info);
+            },
+            configure: (info) => {
+                setConfigInfo(info);
+            },
+            edit: (info) => {
+                setEditInfo(info);
+            },
+        });
 
         const configFromInstances = useAsyncRetry(async () => {
             return await getInstanceConfigs(props.systemId);
@@ -119,21 +99,13 @@ export const PlanEditor = withPlannerContext(
                         ...currentConfig,
                     };
                 } catch (e) {
-                    console.warn(
-                        'Failed to create default config for block',
-                        e
-                    );
+                    console.warn('Failed to create default config for block', e);
                 }
             });
 
             console.log('recreated config', config);
             return config;
-        }, [
-            configFromInstances.value,
-            configFromInstances.loading,
-            planner.plan,
-            planner.blockAssets,
-        ]);
+        }, [configFromInstances.value, configFromInstances.loading, planner.plan, planner.blockAssets]);
 
         const readonly = planner.mode !== PlannerMode.EDIT;
 
@@ -142,18 +114,12 @@ export const PlanEditor = withPlannerContext(
             readonly: readonly,
         });
 
-        const creatingNewBlock = !!(
-            editInfo?.creating && editInfo.type === DataEntityType.BLOCK
-        );
+        const creatingNewBlock = !!(editInfo?.creating && editInfo.type === DataEntityType.BLOCK);
 
         return (
             <ThemeProvider theme={kapetaLight}>
                 <div className={containerClass} ref={ref}>
-                    <PlanEditorTopMenu
-                        readonly={readonly}
-                        version={uri.version}
-                        systemId={props.systemId}
-                    />
+                    <PlanEditorTopMenu readonly={readonly} version={uri.version} systemId={props.systemId} />
 
                     <BlockConfigurationPanel
                         systemId={props.systemId}
@@ -192,34 +158,26 @@ export const PlanEditor = withPlannerContext(
                     {!readonly && (
                         <PlannerResourceDrawer
                             onShowMoreAssets={() => {
-                                kapetaContext.blockHub.open(
-                                    planner.asset!,
-                                    (selection) => {
-                                        selection.forEach((asset, i) => {
-                                            const ref = normalizeKapetaUri(
-                                                asset.content.metadata.name +
-                                                    ':' +
-                                                    asset.version
-                                            );
-                                            planner.addBlockInstance({
-                                                name:
-                                                    asset.content.metadata
-                                                        .title ??
-                                                    parseKapetaUri(ref).name,
-                                                id: randomUUID(),
-                                                block: {
-                                                    ref,
-                                                },
-                                                dimensions: {
-                                                    top: 50 + i * 150,
-                                                    left: 50,
-                                                    width: 0,
-                                                    height: 0,
-                                                },
-                                            });
+                                kapetaContext.blockHub.open(planner.asset!, (selection) => {
+                                    selection.forEach((asset, i) => {
+                                        const ref = normalizeKapetaUri(
+                                            asset.content.metadata.name + ':' + asset.version
+                                        );
+                                        planner.addBlockInstance({
+                                            name: asset.content.metadata.title ?? parseKapetaUri(ref).name,
+                                            id: randomUUID(),
+                                            block: {
+                                                ref,
+                                            },
+                                            dimensions: {
+                                                top: 50 + i * 150,
+                                                left: 50,
+                                                width: 0,
+                                                height: 0,
+                                            },
                                         });
-                                    }
-                                );
+                                    });
+                                });
                             }}
                         />
                     )}
@@ -230,9 +188,7 @@ export const PlanEditor = withPlannerContext(
                         configurations={configurations}
                         onCreateBlock={(block, instance) => {
                             const asset: AssetInfo<BlockDefinition> = {
-                                ref: normalizeKapetaUri(
-                                    getLocalRefForBlockDefinition(block)
-                                ),
+                                ref: normalizeKapetaUri(getLocalRefForBlockDefinition(block)),
                                 content: block,
                                 version: 'local',
                                 editable: true,

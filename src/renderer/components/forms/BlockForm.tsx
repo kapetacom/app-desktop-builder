@@ -1,10 +1,6 @@
 import React, { ComponentType, useMemo } from 'react';
 
-import {
-    FormField,
-    FormFieldType,
-    useFormContextField,
-} from '@kapeta/ui-web-components';
+import { FormField, FormFieldType, useFormContextField } from '@kapeta/ui-web-components';
 
 import { BlockTypeProvider } from '@kapeta/ui-web-context';
 
@@ -44,10 +40,7 @@ const InnerBlockType = (props: InnerBlockTypeProps) => {
     }
 
     return (
-        <ErrorBoundary
-            resetKeys={[props.kind]}
-            fallback={<div>Failed to render block type: {props.kind}</div>}
-        >
+        <ErrorBoundary resetKeys={[props.kind]} fallback={<div>Failed to render block type: {props.kind}</div>}>
             <BlockTypeComponent block={props.block} creating={props.creating} />
         </ErrorBoundary>
     );
@@ -61,9 +54,7 @@ export const BlockForm = (props: Props) => {
         try {
             BlockTypeProvider.listAll().forEach((blockTypeConfig) => {
                 const id = `${blockTypeConfig.kind}:${blockTypeConfig.version}`;
-                const name = blockTypeConfig.title
-                    ? blockTypeConfig.title
-                    : blockTypeConfig.kind;
+                const name = blockTypeConfig.title ? blockTypeConfig.title : blockTypeConfig.kind;
                 options[id] = `${name} [${id}]`;
             });
         } catch (e) {
@@ -88,9 +79,7 @@ export const BlockForm = (props: Props) => {
             <AutoLoadAssetNameInput
                 name="metadata.name"
                 label="Name"
-                help={
-                    'Give your block a system name prefixed with your handle - e.g. "myhandle/my-block"'
-                }
+                help={'Give your block a system name prefixed with your handle - e.g. "myhandle/my-block"'}
             />
 
             <FormField
@@ -100,11 +89,7 @@ export const BlockForm = (props: Props) => {
                 help="Give your block a human-friendly title"
             />
 
-            <InnerBlockType
-                block={props.asset}
-                kind={kindField.get()}
-                creating={props.creating ?? false}
-            />
+            <InnerBlockType block={props.asset} kind={kindField.get()} creating={props.creating ?? false} />
         </div>
     );
 };

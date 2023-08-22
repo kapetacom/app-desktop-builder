@@ -1,11 +1,7 @@
 import React from 'react';
 import { Avatar, ListItemIcon, ListItemText, useTheme } from '@mui/material';
 import { MemberIdentity } from '@kapeta/ui-web-types';
-import {
-    SidebarList,
-    SidebarListItem,
-    SidebarListItemButton,
-} from './SidebarMenu';
+import { SidebarList, SidebarListItem, SidebarListItemButton } from './SidebarMenu';
 
 interface ContextPickerProps {
     contexts?: MemberIdentity[];
@@ -47,30 +43,24 @@ export const ContextPicker = (props: ContextPickerProps) => {
         >
             {props.contexts?.map((context) => (
                 <SidebarListItem key={context.identity.handle}>
-                    <SidebarListItemButton
-                        onClick={() => props.onChangeContext(context)}
-                    >
+                    <SidebarListItemButton onClick={() => props.onChangeContext(context)}>
                         <ListItemIcon>
                             <Avatar
                                 variant="rounded"
                                 sx={
                                     context === props.handle
                                         ? {
-                                              backgroundColor:
-                                                  theme.palette.info.light,
+                                              backgroundColor: theme.palette.info.light,
                                               color: theme.palette.text.primary,
                                           }
                                         : {
-                                              backgroundColor:
-                                                  theme.palette.grey.A400,
-                                              color: theme.palette.text
-                                                  .secondary,
+                                              backgroundColor: theme.palette.grey.A400,
+                                              color: theme.palette.text.secondary,
                                           }
                                 }
                             >
                                 {/* @ts-ignore */}
-                                {context.avatar ||
-                                    toInitials(context.identity.name)}
+                                {context.avatar || toInitials(context.identity.name)}
                             </Avatar>
                         </ListItemIcon>
                         <ListItemText>{context.identity.name}</ListItemText>
