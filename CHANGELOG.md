@@ -1,3 +1,10 @@
+# [0.27.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.26.0...v0.27.0) (2023-08-22)
+
+
+### Features
+
+* Integrated MUI form elements and native file picker ([#74](https://github.com/kapetacom/app-desktop-builder/issues/74)) ([2b3e255](https://github.com/kapetacom/app-desktop-builder/commit/2b3e2550377b48eb3c2002838b00d5de2375fdfc))
+
 # [0.26.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.25.2...v0.26.0) (2023-08-18)
 
 
