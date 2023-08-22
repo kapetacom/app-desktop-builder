@@ -1,3 +1,10 @@
+## [0.27.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.27.3...v0.27.4) (2023-08-22)
+
+
+### Bug Fixes
+
+* Make main bg white ([b259416](https://github.com/kapetacom/app-desktop-builder/commit/b259416356d6c855fff217c48cf44c3553f39b07))
+
 ## [0.27.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.27.2...v0.27.3) (2023-08-22)
 
 
