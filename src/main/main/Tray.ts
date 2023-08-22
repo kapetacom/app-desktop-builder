@@ -1,23 +1,6 @@
-import {
-    app,
-    Menu,
-    MenuItemConstructorOptions,
-    shell,
-    Tray,
-    nativeTheme,
-} from 'electron';
-import {
-    ExtendedIdentity,
-    KapetaAPI,
-    Membership,
-} from '@kapeta/nodejs-api-client';
-import {
-    createFuture,
-    getAssetPath,
-    showError,
-    showInfo,
-    appVersion,
-} from '../helpers';
+import { app, Menu, MenuItemConstructorOptions, shell, Tray, nativeTheme } from 'electron';
+import { ExtendedIdentity, KapetaAPI, Membership } from '@kapeta/nodejs-api-client';
+import { createFuture, getAssetPath, showError, showInfo, appVersion } from '../helpers';
 import { ClusterService } from '../services/ClusterService';
 import { MainWindow } from './MainWindow';
 import { ModalProcessing } from '../modals/ModalProcessing';
@@ -140,23 +123,16 @@ export class TrayWrapper {
         }
     }
 
-    private createMembershipMenu(
-        context: MemberIdentity | null,
-        memberships: Membership[]
-    ) {
+    private createMembershipMenu(context: MemberIdentity | null, memberships: Membership[]) {
         const contextMenus: MenuItemConstructorOptions[] = [];
         const membershipMenu: TrayMenuItem = {
             type: 'submenu',
-            label: context
-                ? context.identity.name || context.identity.handle
-                : '<no context>',
+            label: context ? context.identity.name || context.identity.handle : '<no context>',
             submenu: contextMenus,
         };
 
         memberships.forEach((membership) => {
-            const isCurrent = !!(
-                context && context.identity.id === membership.identity.id
-            );
+            const isCurrent = !!(context && context.identity.id === membership.identity.id);
             if (isCurrent) {
                 return;
             }
@@ -227,9 +203,7 @@ export class TrayWrapper {
             await this.update();
             const identity = await api.getCurrentIdentity();
             this.processingModal.close();
-            showInfo(
-                `You were signed in as ${identity.name || identity.handle}!`
-            );
+            showInfo(`You were signed in as ${identity.name || identity.handle}!`);
 
             this.emitAuthEvent('signed-in');
         } catch (err: any) {

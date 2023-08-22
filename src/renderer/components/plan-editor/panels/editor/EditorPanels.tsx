@@ -9,32 +9,18 @@ import {
     useFormContextField,
 } from '@kapeta/ui-web-components';
 
-import {
-    BlockTypeProvider,
-    IdentityService,
-    ResourceTypeProvider,
-} from '@kapeta/ui-web-context';
+import { BlockTypeProvider, IdentityService, ResourceTypeProvider } from '@kapeta/ui-web-context';
 
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 
 import type { IResourceTypeProvider, SchemaKind } from '@kapeta/ui-web-types';
 import { ResourceRole } from '@kapeta/ui-web-types';
-import {
-    BlockDefinition,
-    Resource,
-    Connection,
-    Entity,
-    IconType,
-} from '@kapeta/schemas';
+import { BlockDefinition, Resource, Connection, Entity, IconType } from '@kapeta/schemas';
 
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import { useAsync } from 'react-use';
 import { cloneDeep } from 'lodash';
-import {
-    PlannerContext,
-    PlannerContextData,
-    PlannerSidebar,
-} from '@kapeta/ui-web-plan-editor';
+import { PlannerContext, PlannerContextData, PlannerSidebar } from '@kapeta/ui-web-plan-editor';
 import { BlockInfo, DataEntityType, EditItemInfo } from '../../types';
 
 import './ItemEditorPanel.less';
@@ -44,18 +30,12 @@ import { Button } from '@mui/material';
 
 function getVersions(dataKindUri) {
     const versions: { [key: string]: string } = {};
-    const versionAlternatives = ResourceTypeProvider.getVersionsFor(
-        dataKindUri.fullName
-    );
+    const versionAlternatives = ResourceTypeProvider.getVersionsFor(dataKindUri.fullName);
     versionAlternatives.forEach((version) => {
         const versionName = version === 'local' ? 'Local Disk' : version;
-        const altResourceType = ResourceTypeProvider.get(
-            `${dataKindUri.fullName}:${version}`
-        );
+        const altResourceType = ResourceTypeProvider.get(`${dataKindUri.fullName}:${version}`);
         versions[`${dataKindUri.fullName}:${version}`] =
-            altResourceType && altResourceType.title
-                ? `${altResourceType.title} [${versionName}]`
-                : versionName;
+            altResourceType && altResourceType.title ? `${altResourceType.title} [${versionName}]` : versionName;
     });
 
     return versions;
@@ -66,13 +46,8 @@ const withNamespaces = (ChildComponent) => {
     return (props) => {
         const { value: namespaces, loading } = useAsync(async () => {
             const identity = await IdentityService.getCurrent();
-            const memberships = await IdentityService.getMemberships(
-                identity.id
-            );
-            return [
-                identity.handle,
-                ...memberships.map((membership) => membership.identity.handle),
-            ];
+            const memberships = await IdentityService.getMemberships(identity.id);
+            return [identity.handle, ...memberships.map((membership) => membership.identity.handle)];
         });
         return (
             <SimpleLoader loading={loading}>
@@ -120,11 +95,7 @@ const BlockFields = ({ data }: BlockFieldsProps) => {
                 help={'The name of this block - e.g. "myhandle/my-block"'}
             />
 
-            <FormField
-                name="metadata.title"
-                label="Title"
-                help="This blocks human-friendly title"
-            />
+            <FormField name="metadata.title" label="Title" help="This blocks human-friendly title" />
         </>
     );
 };
@@ -166,17 +137,10 @@ const InnerForm = ({ planner, info }: InnerFormProps) => {
         );
 
         if (!source || !target) {
-            throw new Error(
-                `Could not find resource for connection: ${JSON.stringify(
-                    connection
-                )}`
-            );
+            throw new Error(`Could not find resource for connection: ${JSON.stringify(connection)}`);
         }
 
-        const ConverterType = ResourceTypeProvider.getConverterFor(
-            source.kind,
-            target.kind
-        );
+        const ConverterType = ResourceTypeProvider.getConverterFor(source.kind, target.kind);
         if (!ConverterType) {
             return null;
         }
@@ -194,12 +158,8 @@ const InnerForm = ({ planner, info }: InnerFormProps) => {
                 title="mapping-editor"
                 source={source}
                 target={target}
-                sourceEntities={
-                    fromBlock?.spec.entities?.types ?? ([] as Entity[])
-                }
-                targetEntities={
-                    toBlock?.spec.entities?.types ?? ([] as Entity[])
-                }
+                sourceEntities={fromBlock?.spec.entities?.types ?? ([] as Entity[])}
+                targetEntities={toBlock?.spec.entities?.types ?? ([] as Entity[])}
                 value={mappingField.get(connection.mapping)}
                 onDataChanged={(change) => {
                     mappingField.set(change.data);
@@ -226,10 +186,7 @@ const InnerForm = ({ planner, info }: InnerFormProps) => {
             <div key={kind}>
                 <BlockFields data={data.block} />
                 <ErrorBoundary fallbackRender={getErrorFallback(kind)}>
-                    <EditorComponent
-                        block={data.block}
-                        creating={info.creating}
-                    />
+                    <EditorComponent block={data.block} creating={info.creating} />
                 </ErrorBoundary>
             </div>
         );
@@ -259,15 +216,8 @@ const InnerForm = ({ planner, info }: InnerFormProps) => {
                     name="kind"
                 />
                 {resourceType?.editorComponent && (
-                    <ErrorBoundary
-                        resetKeys={[kind, info.item]}
-                        fallbackRender={getErrorFallback(kind)}
-                    >
-                        <resourceType.editorComponent
-                            key={kind}
-                            block={info.item.block}
-                            creating={info.creating}
-                        />
+                    <ErrorBoundary resetKeys={[kind, info.item]} fallbackRender={getErrorFallback(kind)}>
+                        <resourceType.editorComponent key={kind} block={info.item.block} creating={info.creating} />
                     </ErrorBoundary>
                 )}
             </>
@@ -297,25 +247,15 @@ export const EditorPanels: React.FC<Props> = (props) => {
 
                 await replaceBase64IconWithUrl(blockData);
 
-                planner.updateBlockDefinition(
-                    props.info.item.instance.block.ref,
-                    blockData
-                );
+                planner.updateBlockDefinition(props.info.item.instance.block.ref, blockData);
                 break;
             }
             case DataEntityType.RESOURCE: {
                 const resource = props.info.item.resource as Resource;
-                const role = props.info.item.block?.spec?.consumers?.includes(
-                    resource
-                )
+                const role = props.info.item.block?.spec?.consumers?.includes(resource)
                     ? ResourceRole.CONSUMES
                     : ResourceRole.PROVIDES;
-                planner.updateResource(
-                    props.info.item.ref,
-                    resource.metadata.name,
-                    role,
-                    data as Resource
-                );
+                planner.updateResource(props.info.item.ref, resource.metadata.name, role, data as Resource);
                 break;
             }
         }
@@ -338,14 +278,8 @@ export const EditorPanels: React.FC<Props> = (props) => {
                     break;
                 case DataEntityType.RESOURCE: {
                     const resource = props.info.item.resource;
-                    const resourceType = ResourceTypeProvider.get(
-                        resource.kind
-                    );
-                    planner.removeResource(
-                        props.info.item.ref,
-                        resource.metadata.name,
-                        resourceType.role
-                    );
+                    const resourceType = ResourceTypeProvider.get(resource.kind);
+                    planner.removeResource(props.info.item.ref, resource.metadata.name, resourceType.role);
                     break;
                 }
             }
@@ -372,20 +306,12 @@ export const EditorPanels: React.FC<Props> = (props) => {
         if (props.info && props.info.type === DataEntityType.RESOURCE) {
             const propResource = props.info.item.resource;
             const resources =
-                ResourceTypeProvider.get(propResource.kind).role ===
-                ResourceRole.PROVIDES
+                ResourceTypeProvider.get(propResource.kind).role === ResourceRole.PROVIDES
                     ? props.info.item.block.spec.providers
                     : props.info.item.block.spec.consumers;
             // Remove one instance of current name, not all in order to allow correcting existing duplicate entries
-            const index = resources?.findIndex(
-                (resource) =>
-                    resource.metadata.name === propResource.metadata.name
-            );
-            return (
-                resources
-                    ?.filter((_x, i) => i !== index)
-                    .map((resource) => resource.metadata.name) || []
-            );
+            const index = resources?.findIndex((resource) => resource.metadata.name === propResource.metadata.name);
+            return resources?.filter((_x, i) => i !== index).map((resource) => resource.metadata.name) || [];
         }
         return [];
     }, [props.info]);
@@ -409,11 +335,7 @@ export const EditorPanels: React.FC<Props> = (props) => {
     };
 
     return (
-        <PlannerSidebar
-            title={panelHeader()}
-            open={props.open}
-            onClose={onPanelCancel}
-        >
+        <PlannerSidebar title={panelHeader()} open={props.open} onClose={onPanelCancel}>
             {props.info && (
                 <div className="item-editor-panel">
                     <FormContainer
@@ -425,18 +347,10 @@ export const EditorPanels: React.FC<Props> = (props) => {
                             <InnerForm planner={planner} info={props.info} />
                         </div>
                         <FormButtons>
-                            <Button
-                                variant={'contained'}
-                                color={'error'}
-                                onClick={props.onClosed}
-                            >
+                            <Button variant={'contained'} color={'error'} onClick={props.onClosed}>
                                 Cancel
                             </Button>
-                            <Button
-                                variant={'contained'}
-                                color={'primary'}
-                                type="submit"
-                            >
+                            <Button variant={'contained'} color={'primary'} type="submit">
                                 Save
                             </Button>
                         </FormButtons>

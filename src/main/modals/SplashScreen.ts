@@ -1,9 +1,5 @@
 import { BrowserWindow } from 'electron';
-import {
-    attachIPCListener,
-    getPreloadScript,
-    resolveHtmlPath,
-} from '../helpers';
+import { attachIPCListener, getPreloadScript, resolveHtmlPath } from '../helpers';
 import { ClusterService } from '../services/ClusterService';
 import { hasApp } from '@kapeta/nodejs-process';
 

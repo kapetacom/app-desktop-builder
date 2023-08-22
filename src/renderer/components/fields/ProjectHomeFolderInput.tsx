@@ -1,7 +1,4 @@
-import {
-    SimpleLoader,
-    useFormFieldController,
-} from '@kapeta/ui-web-components';
+import { SimpleLoader, useFormFieldController } from '@kapeta/ui-web-components';
 import React, { useEffect, useState } from 'react';
 import { useAsync } from 'react-use';
 import { FileSystemService } from '@kapeta/ui-web-context';
@@ -21,9 +18,7 @@ export const ProjectHomeFolderInput = (props: ProjectHomeFolderInputProps) => {
         name: 'project_home',
         value: projectHome,
         label: 'Project folder',
-        help: isEnabled
-            ? 'Choose project home to create this asset in'
-            : 'Check this to save asset in project home',
+        help: isEnabled ? 'Choose project home to create this asset in' : 'Check this to save asset in project home',
 
         validation: isEnabled ? ['required'] : [],
     });
@@ -67,20 +62,11 @@ export const ProjectHomeFolderInput = (props: ProjectHomeFolderInputProps) => {
                 <InputLabel shrink={true} required={controller.required}>
                     {controller.label}
                 </InputLabel>
-                <Stack
-                    gap={1}
-                    justifyContent={'stretch'}
-                    direction={'row'}
-                    pt={2}
-                >
+                <Stack gap={1} justifyContent={'stretch'} direction={'row'} pt={2}>
                     <Checkbox
                         checked={isEnabled}
                         onChange={(evt) => {
-                            props.onChange &&
-                                props.onChange(
-                                    evt.target.checked,
-                                    projectHome ?? ''
-                                );
+                            props.onChange && props.onChange(evt.target.checked, projectHome ?? '');
 
                             setEnabled(evt.target.checked);
                         }}
@@ -105,8 +91,7 @@ export const ProjectHomeFolderInput = (props: ProjectHomeFolderInputProps) => {
 
                             if (result?.path) {
                                 setProjectHome(result.path);
-                                props.onChange &&
-                                    props.onChange(isEnabled, result.path);
+                                props.onChange && props.onChange(isEnabled, result.path);
                             }
                         }}
                     />

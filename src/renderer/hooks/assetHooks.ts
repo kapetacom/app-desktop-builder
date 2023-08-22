@@ -1,9 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import {
-    AssetService,
-    BlockTypeProvider,
-    SocketService,
-} from '@kapeta/ui-web-context';
+import { AssetService, BlockTypeProvider, SocketService } from '@kapeta/ui-web-context';
 import { BlockDefinition, Plan } from '@kapeta/schemas';
 import { Asset, SchemaKind } from '@kapeta/ui-web-types';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
@@ -45,10 +41,7 @@ export const onAssetChanged = (callback: (evt: AssetChangedEvent) => void) => {
     };
 };
 
-export const useAssetsChanged = (
-    handler: (evt: AssetChangedEvent) => void,
-    dependencies: any[]
-) => {
+export const useAssetsChanged = (handler: (evt: AssetChangedEvent) => void, dependencies: any[]) => {
     const callback = useCallback(handler, dependencies);
 
     useEffect(() => {
@@ -56,9 +49,7 @@ export const useAssetsChanged = (
     }, [callback]);
 };
 
-export const useAssets = <T = SchemaKind>(
-    ...kinds: string[]
-): AssetListResult<T> => {
+export const useAssets = <T = SchemaKind>(...kinds: string[]): AssetListResult<T> => {
     const [assets, setAssets] = useState<AssetInfo<T>[]>([]);
     const [loading, setLoading] = useState(true);
     const assetResults = useSWRImmutable('local-assets', async () => {
@@ -87,10 +78,7 @@ export const useAssets = <T = SchemaKind>(
             if (!evt?.asset) {
                 return;
             }
-            if (
-                kinds.length > 0 &&
-                !kinds.includes(evt.definition.kind.toLowerCase())
-            ) {
+            if (kinds.length > 0 && !kinds.includes(evt.definition.kind.toLowerCase())) {
                 return;
             }
             try {
@@ -117,10 +105,7 @@ export const useAssets = <T = SchemaKind>(
             return data.map((asset) => {
                 const assetUri = parseKapetaUri(asset.ref);
                 const identical = prev.find((a) => {
-                    return (
-                        parseKapetaUri(a.ref).equals(assetUri) &&
-                        _.isEqual(a, asset)
-                    );
+                    return parseKapetaUri(a.ref).equals(assetUri) && _.isEqual(a, asset);
                 });
 
                 if (identical) {
@@ -158,10 +143,7 @@ export const useBlocks = () => {
     };
 };
 
-export const useAsset = <T = SchemaKind>(
-    ref: string,
-    ensure?: boolean
-): AssetResult<T> => {
+export const useAsset = <T = SchemaKind>(ref: string, ensure?: boolean): AssetResult<T> => {
     if (ensure === undefined) {
         ensure = false;
     }

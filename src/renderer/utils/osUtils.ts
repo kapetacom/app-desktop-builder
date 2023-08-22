@@ -1,8 +1,7 @@
 const platform = () => {
     return (
         // @ts-ignore
-        window.navigator.userAgentData?.platform?.toLowerCase() ??
-        window.navigator.platform?.toLowerCase()
+        window.navigator.userAgentData?.platform?.toLowerCase() ?? window.navigator.platform?.toLowerCase()
     );
 };
 export const isWindows = () => {

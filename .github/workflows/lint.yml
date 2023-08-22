@@ -3,24 +3,24 @@ name: Lint
 on: [push]
 
 jobs:
-    lint:
-        runs-on: ubuntu-latest
+  lint:
+    runs-on: ubuntu-latest
 
-        steps:
-            - name: Check out Git repository
-              uses: actions/checkout@v3
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v3
 
-            - name: Install Node.js and NPM
-              uses: actions/setup-node@v3
-              id: node
-              with:
-                  node-version: 18
-                  cache: npm
+      - name: Install Node.js and NPM
+        uses: actions/setup-node@v3
+        id: node
+        with:
+          node-version: 18
+          cache: npm
 
-            - name: npm install
-              run: |
-                  npm ci
+      - name: npm install
+        run: |
+          npm ci
 
-            - name: Lint
-              run: |
-                  npm run lint
+      - name: Lint
+        run: |
+          npm run lint

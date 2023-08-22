@@ -17,11 +17,7 @@ export const InspectorPanels = (props: Props) => {
         <>
             <EditorBlockInspectorPanel
                 systemId={props.systemId}
-                instance={
-                    inspectInfo?.type === DataEntityType.INSTANCE
-                        ? inspectInfo?.item.instance
-                        : null
-                }
+                instance={inspectInfo?.type === DataEntityType.INSTANCE ? inspectInfo?.item.instance : null}
                 open={inspectInfo?.type === DataEntityType.INSTANCE}
                 onClosed={props.onClosed}
             />
@@ -29,11 +25,7 @@ export const InspectorPanels = (props: Props) => {
             <ConnectionInspectorPanel
                 open={inspectInfo?.type === DataEntityType.CONNECTION}
                 onClosed={props.onClosed}
-                connection={
-                    inspectInfo?.type === DataEntityType.CONNECTION
-                        ? (inspectInfo?.item as Connection)
-                        : null
-                }
+                connection={inspectInfo?.type === DataEntityType.CONNECTION ? (inspectInfo?.item as Connection) : null}
             />
         </>
     );

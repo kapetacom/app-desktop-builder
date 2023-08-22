@@ -1,11 +1,6 @@
 import { IResourceTypeProvider } from '@kapeta/ui-web-types';
 
-import {
-    BlockDefinition,
-    BlockInstance,
-    Connection,
-    Resource,
-} from '@kapeta/schemas';
+import { BlockDefinition, BlockInstance, Connection, Resource } from '@kapeta/schemas';
 
 import { AssetInfo, PlannerContextData } from '@kapeta/ui-web-plan-editor';
 import { InstanceStatus } from '@kapeta/ui-web-context';
@@ -86,11 +81,7 @@ export interface EditConnectionInfo {
     creating: boolean;
 }
 
-export type EditItemInfo =
-    | EditInstanceInfo
-    | EditResourceInfo
-    | EditConnectionInfo
-    | CreateBlockInfo;
+export type EditItemInfo = EditInstanceInfo | EditResourceInfo | EditConnectionInfo | CreateBlockInfo;
 
 export interface InspectBlockInfo {
     type: DataEntityType.INSTANCE;

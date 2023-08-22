@@ -95,14 +95,8 @@ export function attachHandlers(main: MainWindow) {
             }
 
             let content: string | null = null;
-            if (
-                !dialogResponse.canceled &&
-                dialogResponse.filePaths[0] &&
-                opts.readContent
-            ) {
-                content = (
-                    await FS.readFile(dialogResponse.filePaths[0])
-                ).toString();
+            if (!dialogResponse.canceled && dialogResponse.filePaths[0] && opts.readContent) {
+                content = (await FS.readFile(dialogResponse.filePaths[0])).toString();
             }
 
             return [dialogResponse, content];

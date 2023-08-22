@@ -10,20 +10,14 @@ export enum SplashStatusCheck {
     ERROR = 'ERROR',
 }
 
-export const SplashStatusIcon = (props: {
-    status: SplashStatusCheck | null;
-}) => {
+export const SplashStatusIcon = (props: { status: SplashStatusCheck | null }) => {
     if (!props.status) {
         return null;
     }
     return {
-        [SplashStatusCheck.LOADING]: (
-            <i className="fas fa-circle-notch fa-spin"></i>
-        ),
+        [SplashStatusCheck.LOADING]: <i className="fas fa-circle-notch fa-spin"></i>,
         [SplashStatusCheck.OK]: <i className="fas fa-check"></i>,
-        [SplashStatusCheck.ERROR]: (
-            <i className="fal fa-exclamation-circle"></i>
-        ),
+        [SplashStatusCheck.ERROR]: <i className="fal fa-exclamation-circle"></i>,
     }[props.status];
 };
 
@@ -106,11 +100,7 @@ export const SplashContent = (props: Props) => {
         }
 
         const timer = setInterval(() => {
-            setProgress((prevProgress) =>
-                prevProgress >= 100
-                    ? 100
-                    : Math.max(minProgress, prevProgress + 5)
-            );
+            setProgress((prevProgress) => (prevProgress >= 100 ? 100 : Math.max(minProgress, prevProgress + 5)));
             if (progress >= 100) {
                 clearInterval(timer);
             }
@@ -170,8 +160,7 @@ export const SplashContent = (props: Props) => {
                     '.image-left': {
                         width: 105,
                         zIndex: 2,
-                        background:
-                            'linear-gradient(91deg, #001E36 0%, rgba(0, 30, 54, 0.00) 100%)',
+                        background: 'linear-gradient(91deg, #001E36 0%, rgba(0, 30, 54, 0.00) 100%)',
                     },
                     '.image-right': {
                         width: 33,
@@ -179,8 +168,7 @@ export const SplashContent = (props: Props) => {
                         right: 0,
                         borderRadius: 10,
                         opacity: 0.2,
-                        background:
-                            'linear-gradient(-93deg, #001E36 0%, rgba(0, 30, 54, 0.00) 100%)',
+                        background: 'linear-gradient(-93deg, #001E36 0%, rgba(0, 30, 54, 0.00) 100%)',
                     },
                     '.image-main': {
                         width: 258,
@@ -252,36 +240,25 @@ export const SplashContent = (props: Props) => {
                     <div>
                         <SplashStatusIcon status={props.dockerStatus} />
                         <span>
-                            {props.dockerStatus === SplashStatusCheck.LOADING &&
-                                'Checking Docker...'}
-                            {props.dockerStatus === SplashStatusCheck.OK &&
-                                'Docker found.'}
-                            {props.dockerStatus === SplashStatusCheck.ERROR &&
-                                'Docker not found.'}
+                            {props.dockerStatus === SplashStatusCheck.LOADING && 'Checking Docker...'}
+                            {props.dockerStatus === SplashStatusCheck.OK && 'Docker found.'}
+                            {props.dockerStatus === SplashStatusCheck.ERROR && 'Docker not found.'}
                         </span>
                     </div>
                     <div>
                         <SplashStatusIcon status={props.npmStatus} />
                         <span>
-                            {props.npmStatus === SplashStatusCheck.LOADING &&
-                                'Checking NPM...'}
-                            {props.npmStatus === SplashStatusCheck.OK &&
-                                'NPM found.'}
-                            {props.npmStatus === SplashStatusCheck.ERROR &&
-                                'NPM not found.'}
+                            {props.npmStatus === SplashStatusCheck.LOADING && 'Checking NPM...'}
+                            {props.npmStatus === SplashStatusCheck.OK && 'NPM found.'}
+                            {props.npmStatus === SplashStatusCheck.ERROR && 'NPM not found.'}
                         </span>
                     </div>
                     <div>
                         <SplashStatusIcon status={props.localClusterStatus} />
                         <span>
-                            {props.localClusterStatus ===
-                                SplashStatusCheck.LOADING &&
-                                'Starting local cluster...'}
-                            {props.localClusterStatus ===
-                                SplashStatusCheck.OK && 'Local cluster ready.'}
-                            {props.localClusterStatus ===
-                                SplashStatusCheck.ERROR &&
-                                'Local cluster failed.'}
+                            {props.localClusterStatus === SplashStatusCheck.LOADING && 'Starting local cluster...'}
+                            {props.localClusterStatus === SplashStatusCheck.OK && 'Local cluster ready.'}
+                            {props.localClusterStatus === SplashStatusCheck.ERROR && 'Local cluster failed.'}
                         </span>
                     </div>
                 </div>
@@ -296,8 +273,7 @@ export const SplashContent = (props: Props) => {
                                 lineHeight: '18px',
                             }}
                         >
-                            {props.localClusterStatus ===
-                                SplashStatusCheck.ERROR && (
+                            {props.localClusterStatus === SplashStatusCheck.ERROR && (
                                 <div className={'error-message'}>
                                     <i className="fas fa-circle"></i>
                                     <span>Local cluster failed to start.</span>
@@ -306,10 +282,7 @@ export const SplashContent = (props: Props) => {
                             {props.dockerStatus === SplashStatusCheck.ERROR && (
                                 <div className={'error-message'}>
                                     <i className="fas fa-circle"></i>
-                                    <span>
-                                        Make sure docker is installed and
-                                        running
-                                    </span>
+                                    <span>Make sure docker is installed and running</span>
                                 </div>
                             )}
                             {props.npmStatus === SplashStatusCheck.ERROR && (

@@ -1,22 +1,10 @@
 import React, { useContext, useEffect, useMemo } from 'react';
 
-import {
-    TrafficService,
-    TrafficEventType,
-    ResourceTypeProvider,
-} from '@kapeta/ui-web-context';
-import {
-    ConnectionMethodsMapping,
-    ResourceRole,
-    Traffic,
-} from '@kapeta/ui-web-types';
+import { TrafficService, TrafficEventType, ResourceTypeProvider } from '@kapeta/ui-web-context';
+import { ConnectionMethodsMapping, ResourceRole, Traffic } from '@kapeta/ui-web-types';
 import { Connection } from '@kapeta/schemas';
 import { useList } from 'react-use';
-import {
-    getConnectionId,
-    PlannerContext,
-    PlannerContextData,
-} from '@kapeta/ui-web-plan-editor';
+import { getConnectionId, PlannerContext, PlannerContextData } from '@kapeta/ui-web-plan-editor';
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 
 interface ModalProps {
@@ -46,10 +34,7 @@ const ModalContent = ({ planner, connection, trafficLines }: ModalProps) => {
         return <div>Invalid connection received</div>;
     }
 
-    const converter = ResourceTypeProvider.getConverterFor(
-        providerResource.kind,
-        consumerResource.kind
-    );
+    const converter = ResourceTypeProvider.getConverterFor(providerResource.kind, consumerResource.kind);
 
     if (!converter || !converter.inspectComponentType) {
         return <div>No traffic inspector defined for connection type</div>;
@@ -96,16 +81,8 @@ export const ConnectionInspectorPanel = (props: Props) => {
         };
 
         const unsubscribes = [
-            TrafficService.subscribe(
-                connectionId,
-                TrafficEventType.TRAFFIC_START,
-                onTrafficStart
-            ),
-            TrafficService.subscribe(
-                connectionId,
-                TrafficEventType.TRAFFIC_END,
-                onTrafficEnd
-            ),
+            TrafficService.subscribe(connectionId, TrafficEventType.TRAFFIC_START, onTrafficStart),
+            TrafficService.subscribe(connectionId, TrafficEventType.TRAFFIC_END, onTrafficEnd),
         ];
 
         return () => {
@@ -118,11 +95,7 @@ export const ConnectionInspectorPanel = (props: Props) => {
             <DialogTitle>Connection Traffic Inspector</DialogTitle>
             <DialogContent>
                 {props.connection && (
-                    <ModalContent
-                        planner={planner}
-                        connection={props.connection}
-                        trafficLines={trafficLines}
-                    />
+                    <ModalContent planner={planner} connection={props.connection} trafficLines={trafficLines} />
                 )}
             </DialogContent>
         </Dialog>

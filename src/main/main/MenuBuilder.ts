@@ -1,10 +1,4 @@
-import {
-    app,
-    Menu,
-    shell,
-    BrowserWindow,
-    MenuItemConstructorOptions,
-} from 'electron';
+import { app, Menu, shell, BrowserWindow, MenuItemConstructorOptions } from 'electron';
 import { checkForUpdates } from '../helpers';
 
 interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
@@ -22,10 +16,7 @@ export class MenuBuilder {
     buildMenu(): Menu {
         this.setupContextMenu();
 
-        const template =
-            process.platform === 'darwin'
-                ? this.buildDarwinTemplate()
-                : this.buildDefaultTemplate();
+        const template = process.platform === 'darwin' ? this.buildDarwinTemplate() : this.buildDefaultTemplate();
 
         const menu = Menu.buildFromTemplate(template);
         Menu.setApplicationMenu(menu);
@@ -124,9 +115,7 @@ export class MenuBuilder {
                     label: 'Toggle Full Screen',
                     accelerator: 'Ctrl+Command+F',
                     click: () => {
-                        this.mainWindow.setFullScreen(
-                            !this.mainWindow.isFullScreen()
-                        );
+                        this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
                     },
                 },
                 {
@@ -174,13 +163,7 @@ export class MenuBuilder {
             ],
         };
 
-        return [
-            subMenuAbout,
-            subMenuEdit,
-            subMenuView,
-            subMenuWindow,
-            subMenuHelp,
-        ];
+        return [subMenuAbout, subMenuEdit, subMenuView, subMenuWindow, subMenuHelp];
     }
 
     buildDefaultTemplate() {
@@ -204,8 +187,7 @@ export class MenuBuilder {
             {
                 label: '&View',
                 submenu:
-                    process.env.NODE_ENV === 'development' ||
-                    process.env.DEBUG_PROD === 'true'
+                    process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true'
                         ? [
                               {
                                   label: '&Reload',
@@ -218,9 +200,7 @@ export class MenuBuilder {
                                   label: 'Toggle &Full Screen',
                                   accelerator: 'F11',
                                   click: () => {
-                                      this.mainWindow.setFullScreen(
-                                          !this.mainWindow.isFullScreen()
-                                      );
+                                      this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
                                   },
                               },
                               {
@@ -236,9 +216,7 @@ export class MenuBuilder {
                                   label: 'Toggle &Full Screen',
                                   accelerator: 'F11',
                                   click: () => {
-                                      this.mainWindow.setFullScreen(
-                                          !this.mainWindow.isFullScreen()
-                                      );
+                                      this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
                                   },
                               },
                           ],

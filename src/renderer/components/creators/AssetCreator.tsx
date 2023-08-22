@@ -2,19 +2,10 @@ import Path from 'path';
 import React, { useEffect, useState } from 'react';
 import { FileInfo, SchemaKind } from '@kapeta/ui-web-types';
 import { AssetStore } from '@kapeta/ui-web-context';
-import {
-    FormButtons,
-    FormContainer,
-    showToasty,
-    ToastType,
-} from '@kapeta/ui-web-components';
+import { FormButtons, FormContainer, showToasty, ToastType } from '@kapeta/ui-web-components';
 import { ProjectHomeFolderInput } from '../fields/ProjectHomeFolderInput';
 import { replaceBase64IconWithUrl } from '../../utils/iconHelpers';
-import {
-    AssetInfo,
-    fromAsset,
-    PlannerSidebar,
-} from '@kapeta/ui-web-plan-editor';
+import { AssetInfo, fromAsset, PlannerSidebar } from '@kapeta/ui-web-plan-editor';
 import { kapetaLight } from '../../Theme';
 import { Button, ThemeProvider } from '@mui/material';
 import { showFilePickerOne } from '../../utils/showFilePicker';
@@ -81,10 +72,7 @@ export const AssetCreator = (props: Props) => {
             }
 
             const assets: AssetInfo<SchemaKind>[] = (
-                await props.assetService.create(
-                    Path.join(filePath, '/kapeta.yml'),
-                    content
-                )
+                await props.assetService.create(Path.join(filePath, '/kapeta.yml'), content)
             ).map(fromAsset);
 
             setNewEntity(props.createNewKind());
@@ -138,10 +126,7 @@ export const AssetCreator = (props: Props) => {
                 title={props.title}
             >
                 <div className="asset-creator-form">
-                    <FormContainer
-                        initialValue={newEntity}
-                        onSubmitData={(data: any) => onSubmit(data)}
-                    >
+                    <FormContainer initialValue={newEntity} onSubmitData={(data: any) => onSubmit(data)}>
                         <InnerFormRenderer asset={newEntity} creating />
 
                         <ProjectHomeFolderInput
@@ -163,11 +148,7 @@ export const AssetCreator = (props: Props) => {
                             >
                                 Cancel
                             </Button>
-                            <Button
-                                color={'primary'}
-                                type={'submit'}
-                                variant={'contained'}
-                            >
+                            <Button color={'primary'} type={'submit'} variant={'contained'}>
                                 Create
                             </Button>
                         </FormButtons>

@@ -15,9 +15,7 @@ interface SingleResult {
     content: string;
 }
 
-export const showFilePickerOne = async (
-    options: Omit<Options, 'multiSelection'>
-): Promise<SingleResult | null> => {
+export const showFilePickerOne = async (options: Omit<Options, 'multiSelection'>): Promise<SingleResult | null> => {
     return (await showFilePicker({
         ...options,
         readContent: true,
@@ -42,16 +40,13 @@ export const showFilePicker = async (options: Options): Promise<any> => {
     if (options.multiSelections) {
         properties.push('multiSelections');
     }
-    const [dialogResult, content] = await window.electron.ipcRenderer.invoke(
-        'open-file-dialog',
-        {
-            title: options.title || 'Select a file',
-            defaultPath: options.defaultPath,
-            filters: options.filters,
-            properties,
-            readContent: options.readContent,
-        }
-    );
+    const [dialogResult, content] = await window.electron.ipcRenderer.invoke('open-file-dialog', {
+        title: options.title || 'Select a file',
+        defaultPath: options.defaultPath,
+        filters: options.filters,
+        properties,
+        readContent: options.readContent,
+    });
 
     if (dialogResult.canceled) {
         return null;

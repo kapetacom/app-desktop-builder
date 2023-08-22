@@ -20,11 +20,7 @@ import {
 import { UserAvatar } from '@kapeta/ui-web-components';
 
 import { Link } from 'react-router-dom';
-import {
-    UserProfile,
-    KapetaNotification,
-    StateNotificationType,
-} from './types';
+import { UserProfile, KapetaNotification, StateNotificationType } from './types';
 import { useKapetaContext } from '../../hooks/contextHook';
 
 const noHoverSX = {
@@ -74,14 +70,10 @@ interface TopBarProps {
 }
 
 export const TopBar = (props: TopBarProps) => {
-    const [profileMenuAnchorEl, setProfileMenuAchor] =
-        useState<null | HTMLElement>(null);
-    const [notificationMenuAnchor, setNotificationMenuAnchor] =
-        useState<null | HTMLElement>(null);
+    const [profileMenuAnchorEl, setProfileMenuAchor] = useState<null | HTMLElement>(null);
+    const [notificationMenuAnchor, setNotificationMenuAnchor] = useState<null | HTMLElement>(null);
 
-    const [notifications, setNotifications] = useState(
-        props.notifications ?? []
-    );
+    const [notifications, setNotifications] = useState(props.notifications ?? []);
 
     const contexts = useKapetaContext();
 
@@ -89,10 +81,7 @@ export const TopBar = (props: TopBarProps) => {
         setNotifications((prev) => {
             let newNotifications = props.notifications ?? [];
             return newNotifications.map((newNotification) => {
-                const oldNotification = prev.find(
-                    (oldNotification) =>
-                        oldNotification.id === newNotification.id
-                );
+                const oldNotification = prev.find((oldNotification) => oldNotification.id === newNotification.id);
                 return {
                     ...newNotification,
                     read: oldNotification?.read ?? false,
@@ -101,8 +90,7 @@ export const TopBar = (props: TopBarProps) => {
         });
     }, [props.notifications]);
 
-    const unreadNotifications =
-        notifications.filter((n) => !n.read).length ?? 0;
+    const unreadNotifications = notifications.filter((n) => !n.read).length ?? 0;
     const notificationProgress = notifications.some((n) => {
         return n.type === 'progress' && n.progress < 100;
     });
@@ -122,11 +110,7 @@ export const TopBar = (props: TopBarProps) => {
                 {props.children}
                 {/* flex to push buttons to the right  */}
                 <Box flexGrow={1} />
-                <Stack
-                    direction="row"
-                    divider={<Divider orientation="vertical" flexItem />}
-                    spacing={2}
-                >
+                <Stack direction="row" divider={<Divider orientation="vertical" flexItem />} spacing={2}>
                     {/* Just to trigger another divider */}
                     <span />
 
@@ -136,13 +120,8 @@ export const TopBar = (props: TopBarProps) => {
                             width: '42px',
                             height: '42px',
                             marginTop: '10px',
-                            marginRight: contexts.profile
-                                ? ''
-                                : '16px !important',
-                            color:
-                                unreadNotifications > 0
-                                    ? 'text.primary'
-                                    : 'text.secondary',
+                            marginRight: contexts.profile ? '' : '16px !important',
+                            color: unreadNotifications > 0 ? 'text.primary' : 'text.secondary',
                         }}
                         onClick={(e) => {
                             setNotificationMenuAnchor(e.currentTarget as any);
@@ -181,14 +160,9 @@ export const TopBar = (props: TopBarProps) => {
                                 height: '42px',
                                 marginRight: '16px !important',
                             }}
-                            onClick={(e) =>
-                                setProfileMenuAchor(e.currentTarget as any)
-                            }
+                            onClick={(e) => setProfileMenuAchor(e.currentTarget as any)}
                         >
-                            <UserAvatar
-                                size={32}
-                                name={contexts.profile.name}
-                            />
+                            <UserAvatar size={32} name={contexts.profile.name} />
                         </IconButton>
                     )}
                 </Stack>
@@ -213,8 +187,7 @@ export const TopBar = (props: TopBarProps) => {
                 >
                     {props.notifications?.length ? (
                         props.notifications.map((notification, ix) => {
-                            const isLast =
-                                ix === props.notifications!.length - 1;
+                            const isLast = ix === props.notifications!.length - 1;
                             const sx = {
                                 ...noHoverSX,
                                 flexDirection: 'column',
@@ -260,10 +233,7 @@ export const TopBar = (props: TopBarProps) => {
                             if (notification.type === 'progress') {
                                 if (notification.progress === 100) {
                                     return (
-                                        <MenuItem
-                                            sx={sxIconItem}
-                                            key={notification.id}
-                                        >
+                                        <MenuItem sx={sxIconItem} key={notification.id}>
                                             <ListItemIcon>
                                                 <Zoom in={true} timeout={400}>
                                                     <Box
@@ -273,35 +243,23 @@ export const TopBar = (props: TopBarProps) => {
                                                             lineHeight: '26px',
                                                             fontSize: '22px',
                                                             textAlign: 'center',
-                                                            color: getColorForType(
-                                                                'success'
-                                                            ),
+                                                            color: getColorForType('success'),
                                                         }}
                                                     >
-                                                        <i
-                                                            className={getIconForType(
-                                                                'success'
-                                                            )}
-                                                        />
+                                                        <i className={getIconForType('success')} />
                                                     </Box>
                                                 </Zoom>
                                             </ListItemIcon>
                                             <ListItemText
                                                 primary={notification.message}
-                                                secondary={new Date(
-                                                    notification.timestamp
-                                                ).toLocaleString()}
+                                                secondary={new Date(notification.timestamp).toLocaleString()}
                                             />
                                         </MenuItem>
                                     );
                                 }
                                 return (
                                     <MenuItem sx={sx} key={notification.id}>
-                                        <div className="date">
-                                            {new Date(
-                                                notification.timestamp
-                                            ).toLocaleString()}
-                                        </div>
+                                        <div className="date">{new Date(notification.timestamp).toLocaleString()}</div>
                                         <div className="message">
                                             <Typography
                                                 variant="body1"
@@ -314,11 +272,7 @@ export const TopBar = (props: TopBarProps) => {
                                         </div>
                                         <div className={'progress'}>
                                             <LinearProgress
-                                                variant={
-                                                    notification.progress > -1
-                                                        ? 'determinate'
-                                                        : 'indeterminate'
-                                                }
+                                                variant={notification.progress > -1 ? 'determinate' : 'indeterminate'}
                                                 value={notification.progress}
                                             />
                                         </div>
@@ -328,21 +282,13 @@ export const TopBar = (props: TopBarProps) => {
 
                             if (notification.type === 'comment') {
                                 return (
-                                    <MenuItem
-                                        sx={sxIconItem}
-                                        key={notification.id}
-                                    >
+                                    <MenuItem sx={sxIconItem} key={notification.id}>
                                         <ListItemIcon>
-                                            <UserAvatar
-                                                size={26}
-                                                name={notification.author.name}
-                                            />
+                                            <UserAvatar size={26} name={notification.author.name} />
                                         </ListItemIcon>
                                         <ListItemText
                                             primary={notification.message}
-                                            secondary={new Date(
-                                                notification.timestamp
-                                            ).toLocaleString()}
+                                            secondary={new Date(notification.timestamp).toLocaleString()}
                                         />
                                     </MenuItem>
                                 );
@@ -359,24 +305,16 @@ export const TopBar = (props: TopBarProps) => {
                                                     lineHeight: '26px',
                                                     fontSize: '22px',
                                                     textAlign: 'center',
-                                                    color: getColorForType(
-                                                        notification.type
-                                                    ),
+                                                    color: getColorForType(notification.type),
                                                 }}
                                             >
-                                                <i
-                                                    className={getIconForType(
-                                                        notification.type
-                                                    )}
-                                                />
+                                                <i className={getIconForType(notification.type)} />
                                             </Box>
                                         </Zoom>
                                     </ListItemIcon>
                                     <ListItemText
                                         primary={notification.message}
-                                        secondary={new Date(
-                                            notification.timestamp
-                                        ).toLocaleString()}
+                                        secondary={new Date(notification.timestamp).toLocaleString()}
                                     />
                                 </MenuItem>
                             );
@@ -403,17 +341,10 @@ export const TopBar = (props: TopBarProps) => {
                         },
                     }}
                 >
-                    <MenuItem
-                        component={Link}
-                        onClick={() => setProfileMenuAchor(null)}
-                        to={`/settings`}
-                    >
+                    <MenuItem component={Link} onClick={() => setProfileMenuAchor(null)} to={`/settings`}>
                         <ListItemText
                             primary={contexts.profile?.name}
-                            secondary={
-                                contexts.activeContext?.identity.handle ??
-                                contexts.profile?.handle
-                            }
+                            secondary={contexts.activeContext?.identity.handle ?? contexts.profile?.handle}
                         />
                     </MenuItem>
 

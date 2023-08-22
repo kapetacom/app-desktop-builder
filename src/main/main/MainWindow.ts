@@ -1,10 +1,5 @@
 import { BrowserWindow } from 'electron';
-import {
-    getAssetPath,
-    getPreloadScript,
-    resolveHtmlPath,
-    WindowOpenHandler,
-} from '../helpers';
+import { getAssetPath, getPreloadScript, resolveHtmlPath, WindowOpenHandler } from '../helpers';
 import { MenuBuilder } from './MenuBuilder';
 import { DockWrapper } from './Dock';
 import { TrayWrapper } from './Tray';
@@ -69,16 +64,10 @@ export class MainWindow {
 
         const localClusterInfo = this.clusterService.getInfo();
         const clusterServiceURL = localClusterInfo
-            ? encodeURIComponent(
-                  `http://${localClusterInfo.host}:${localClusterInfo.port}`
-              )
+            ? encodeURIComponent(`http://${localClusterInfo.host}:${localClusterInfo.port}`)
             : '';
 
-        await this._window.loadURL(
-            `${resolveHtmlPath(
-                `index.html`
-            )}?cluster_service=${clusterServiceURL}`
-        );
+        await this._window.loadURL(`${resolveHtmlPath(`index.html`)}?cluster_service=${clusterServiceURL}`);
 
         this._window.on('show', () => this.dock.show());
 
@@ -110,17 +99,11 @@ export class MainWindow {
             (details, callback) => {
                 const cookieHeader =
                     details.responseHeaders &&
-                    Object.keys(details.responseHeaders).find(
-                        (k) => k.toLowerCase() === 'set-cookie'
-                    );
+                    Object.keys(details.responseHeaders).find((k) => k.toLowerCase() === 'set-cookie');
                 if (cookieHeader) {
-                    details.responseHeaders![cookieHeader] =
-                        details.responseHeaders![cookieHeader].map((cookie) => {
-                            return `${cookie.replace(
-                                /samesite=[^;]+(;|\s*$)/gi,
-                                ''
-                            )}; SameSite=none; secure=true`;
-                        });
+                    details.responseHeaders![cookieHeader] = details.responseHeaders![cookieHeader].map((cookie) => {
+                        return `${cookie.replace(/samesite=[^;]+(;|\s*$)/gi, '')}; SameSite=none; secure=true`;
+                    });
                 }
 
                 callback({

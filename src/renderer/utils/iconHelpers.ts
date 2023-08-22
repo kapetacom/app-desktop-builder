@@ -15,9 +15,7 @@ export const replaceBase64IconWithUrl = async (blockData: SchemaKind) => {
             const dataUrl = icon.value;
             const [metadata, base64Data] = dataUrl.split(',');
             const mimeType = metadata.split(';')[0].split(':')[1];
-            const data = Uint8Array.from(atob(base64Data), (c) =>
-                c.charCodeAt(0)
-            );
+            const data = Uint8Array.from(atob(base64Data), (c) => c.charCodeAt(0));
             const [handle, name] = blockData.metadata.name.split('/');
             console.log('upload mimeType', mimeType, handle, name, data.length);
 

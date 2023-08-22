@@ -59,10 +59,7 @@ export interface StateNotification {
     timestamp: number;
     read: boolean;
 }
-export type KapetaNotification =
-    | StateNotification
-    | CommentNotification
-    | ProgressNotification;
+export type KapetaNotification = StateNotification | CommentNotification | ProgressNotification;
 
 /**
  * Proposal for a new change set format

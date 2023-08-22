@@ -14,18 +14,13 @@ export const AutoLoadAssetNameInput = (props: Props) => {
     const { value: cloudNamespaces, loading } = useAsync(async () => {
         try {
             const identity = await IdentityService.getCurrent();
-            const memberships = await IdentityService.getMemberships(
-                identity.id
-            );
+            const memberships = await IdentityService.getMemberships(identity.id);
             const namespaces = [
                 identity.handle,
                 ...memberships.map((membership) => membership.identity.handle),
                 'local',
             ];
-            localStorage.setItem(
-                'kapeta.namespaces',
-                JSON.stringify(namespaces)
-            );
+            localStorage.setItem('kapeta.namespaces', JSON.stringify(namespaces));
             return namespaces;
         } catch (e) {
             // This is only doable if we reserve the name
@@ -35,9 +30,7 @@ export const AutoLoadAssetNameInput = (props: Props) => {
 
     const cachedValue = (() => {
         try {
-            return JSON.parse(
-                localStorage.getItem('kapeta.namespaces') || '[]'
-            ) as string[];
+            return JSON.parse(localStorage.getItem('kapeta.namespaces') || '[]') as string[];
         } catch (e) {
             return [];
         }

@@ -3,28 +3,16 @@ import { installerService } from '../../../api/installerService';
 import { api, assetFetcher } from '../../../api/APIService';
 import { ThemeProvider } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import {
-    AssetDisplay,
-    BlockhubCategory,
-    BlockhubModal,
-} from '@kapeta/ui-web-components';
+import { AssetDisplay, BlockhubCategory, BlockhubModal } from '@kapeta/ui-web-components';
 import { useAsync, useAsyncRetry } from 'react-use';
 import { AssetService } from '@kapeta/ui-web-context';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import { useKapetaContext } from '../../../hooks/contextHook';
 import { versionIsBigger } from '../../../utils/versionHelpers';
 
-import {
-    normalizeKapetaUri,
-    useLoadedPlanContext,
-} from '../../../utils/planContextLoader';
+import { normalizeKapetaUri, useLoadedPlanContext } from '../../../utils/planContextLoader';
 import { useAssetsChanged } from '../../../hooks/assetHooks';
-import {
-    AssetInfo,
-    AssetThumbnail,
-    fromAsset,
-    fromAssetDisplay,
-} from '@kapeta/ui-web-plan-editor';
+import { AssetInfo, AssetThumbnail, fromAsset, fromAssetDisplay } from '@kapeta/ui-web-plan-editor';
 
 interface Props {
     handle?: string;
@@ -33,9 +21,7 @@ interface Props {
 export const BlockhubShell = (props: Props) => {
     const kapetaContext = useKapetaContext();
 
-    const [currentCategory, setCurrentCategory] = useState<BlockhubCategory>(
-        BlockhubCategory.INSTALLED
-    );
+    const [currentCategory, setCurrentCategory] = useState<BlockhubCategory>(BlockhubCategory.INSTALLED);
 
     const assets = useAsyncRetry(async () => {
         switch (currentCategory) {
@@ -47,12 +33,7 @@ export const BlockhubShell = (props: Props) => {
                 installedAssets.forEach((installedAsset) => {
                     const uri = parseKapetaUri(installedAsset.ref);
                     if (latest[uri.fullName]) {
-                        if (
-                            versionIsBigger(
-                                installedAsset.version,
-                                latest[uri.fullName].version
-                            )
-                        ) {
+                        if (versionIsBigger(installedAsset.version, latest[uri.fullName].version)) {
                             latest[uri.fullName] = fromAsset(installedAsset);
                         }
                         return;
@@ -62,34 +43,26 @@ export const BlockhubShell = (props: Props) => {
                 });
 
                 return [
-                    ...Object.values(latest).map(
-                        (installedAsset): AssetDisplay<any> => {
-                            const installedUri = parseKapetaUri(
-                                installedAsset.ref
-                            );
-                            const asset = all.find((asset) => {
-                                const assetUri = parseKapetaUri(
-                                    asset.content.metadata.name +
-                                        ':' +
-                                        asset.version
-                                );
-                                return assetUri.equals(installedUri);
-                            });
+                    ...Object.values(latest).map((installedAsset): AssetDisplay<any> => {
+                        const installedUri = parseKapetaUri(installedAsset.ref);
+                        const asset = all.find((asset) => {
+                            const assetUri = parseKapetaUri(asset.content.metadata.name + ':' + asset.version);
+                            return assetUri.equals(installedUri);
+                        });
 
-                            if (asset) {
-                                return asset;
-                            }
-
-                            return {
-                                content: installedAsset.content,
-                                version: installedAsset.version,
-                                readme: {
-                                    content: 'Local Asset',
-                                    type: 'text/markdown',
-                                },
-                            };
+                        if (asset) {
+                            return asset;
                         }
-                    ),
+
+                        return {
+                            content: installedAsset.content,
+                            version: installedAsset.version,
+                            readme: {
+                                content: 'Local Asset',
+                                type: 'text/markdown',
+                            },
+                        };
+                    }),
                 ];
             case BlockhubCategory.OWN:
                 if (!props.handle) {
@@ -104,10 +77,7 @@ export const BlockhubShell = (props: Props) => {
 
     useAssetsChanged(
         (evt) => {
-            if (
-                evt.sourceOfChange === 'user' ||
-                currentCategory !== BlockhubCategory.INSTALLED
-            ) {
+            if (evt.sourceOfChange === 'user' || currentCategory !== BlockhubCategory.INSTALLED) {
                 return;
             }
             assets.retry();
@@ -129,22 +99,14 @@ export const BlockhubShell = (props: Props) => {
                 plan={
                     kapetaContext.blockHub.opener?.source
                         ? {
-                              kind: kapetaContext.blockHub.opener?.source
-                                  .content.kind,
-                              data: kapetaContext.blockHub.opener?.source
-                                  .content,
-                              exists: !!kapetaContext.blockHub.opener?.source
-                                  .exists,
-                              editable:
-                                  !!kapetaContext.blockHub.opener?.source
-                                      .editable,
-                              version:
-                                  kapetaContext.blockHub.opener?.source.version,
+                              kind: kapetaContext.blockHub.opener?.source.content.kind,
+                              data: kapetaContext.blockHub.opener?.source.content,
+                              exists: !!kapetaContext.blockHub.opener?.source.exists,
+                              editable: !!kapetaContext.blockHub.opener?.source.editable,
+                              version: kapetaContext.blockHub.opener?.source.version,
                               path: '',
                               ymlPath: '',
-                              ref: normalizeKapetaUri(
-                                  kapetaContext.blockHub.opener?.source?.ref
-                              ),
+                              ref: normalizeKapetaUri(kapetaContext.blockHub.opener?.source?.ref),
                           }
                         : undefined
                 }
@@ -163,9 +125,7 @@ export const BlockhubShell = (props: Props) => {
                     kapetaContext.blockHub.close();
                 }}
                 previewRenderer={(asset, size) => {
-                    const assetRef = normalizeKapetaUri(
-                        `${asset.content.metadata.name}:${asset.version}`
-                    );
+                    const assetRef = normalizeKapetaUri(`${asset.content.metadata.name}:${asset.version}`);
                     return (
                         <AssetThumbnail
                             width={size.width}

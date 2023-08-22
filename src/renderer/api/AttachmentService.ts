@@ -15,9 +15,7 @@ export const uploadAttachment = async (
     name: string,
     attachment: AttachmentInfo
 ): Promise<UploadResult> => {
-    const url = clusterPath(
-        `/attachments/${encodeURIComponent(handle)}/${encodeURIComponent(name)}`
-    );
+    const url = clusterPath(`/attachments/${encodeURIComponent(handle)}/${encodeURIComponent(name)}`);
 
     return simpleFetch(url, {
         method: 'PUT',

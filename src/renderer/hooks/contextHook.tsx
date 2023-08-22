@@ -32,10 +32,7 @@ interface KapetaContextData {
         visible: boolean;
         opener?: BlockHubOpener;
         close: () => void;
-        open: (
-            source?: AssetInfo<SchemaKind>,
-            callback?: (selection: AssetDisplay[]) => void
-        ) => void;
+        open: (source?: AssetInfo<SchemaKind>, callback?: (selection: AssetDisplay[]) => void) => void;
     };
 }
 
@@ -65,9 +62,7 @@ const createKapetaContext = (): KapetaContextData => {
 
     useEffect(() => {
         if (contextData.value) {
-            const active = contextData.value.memberships.find(
-                (m) => m.identity.handle === contextData.value!.current
-            );
+            const active = contextData.value.memberships.find((m) => m.identity.handle === contextData.value!.current);
             setActiveContext(active);
         }
     }, [contextData.value]);
@@ -83,17 +78,12 @@ const createKapetaContext = (): KapetaContextData => {
         setProfile,
         activeContext,
         setActiveContext: (context?: MemberIdentity | undefined) => {
-            const handle =
-                !context || context.identity.type === 'user'
-                    ? undefined
-                    : context.identity.handle;
+            const handle = !context || context.identity.type === 'user' ? undefined : context.identity.handle;
             setActiveContext(context);
             window.electron.ipcRenderer.invoke('set-context', handle);
         },
         logOut: async () => {
-            const logOutPromise = window.electron.ipcRenderer.invoke(
-                'log-out'
-            ) as Promise<boolean>;
+            const logOutPromise = window.electron.ipcRenderer.invoke('log-out') as Promise<boolean>;
             if (await logOutPromise) {
                 console.log('logged out', logOutPromise);
                 setActiveContext(undefined);
@@ -113,10 +103,7 @@ const createKapetaContext = (): KapetaContextData => {
                 setBlockHubOpener(undefined);
                 setBlockHubVisible(false);
             },
-            open(
-                source?: AssetInfo<Plan>,
-                callback?: (selection: AssetDisplay[]) => void
-            ) {
+            open(source?: AssetInfo<Plan>, callback?: (selection: AssetDisplay[]) => void) {
                 setBlockHubOpener({ source, callback });
                 setBlockHubVisible(true);
             },
@@ -141,14 +128,8 @@ export const KapetaContext = createContext<KapetaContextData>({
     },
 });
 
-export const KapetaContextProvider: React.FC<React.PropsWithChildren> = ({
-    children,
-}) => {
+export const KapetaContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
     const context = createKapetaContext();
 
-    return (
-        <KapetaContext.Provider value={context}>
-            {children}
-        </KapetaContext.Provider>
-    );
+    return <KapetaContext.Provider value={context}>{children}</KapetaContext.Provider>;
 };

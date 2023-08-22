@@ -16,9 +16,7 @@ const useEditorTabs = () => {
     const navigate = useNavigate();
 
     const [tabs, setTabs] = useState<string[]>(
-        localStorage.getItem('editor-tabs')
-            ? JSON.parse(localStorage.getItem('editor-tabs') || '')
-            : [DEFAULT_URL]
+        localStorage.getItem('editor-tabs') ? JSON.parse(localStorage.getItem('editor-tabs') || '') : [DEFAULT_URL]
     );
     useEffect(() => {
         // save to local storage
@@ -44,8 +42,7 @@ const useEditorTabs = () => {
             if (location.pathname === tabUrl) {
                 // Closing current tab
                 const i = tabState.findIndex((tab) => tab === tabUrl) ?? -1;
-                const nextTab =
-                    i > -1 ? tabState[i - 1] || tabState[i + 1] : tabState[0];
+                const nextTab = i > -1 ? tabState[i - 1] || tabState[i + 1] : tabState[0];
                 if (nextTab) {
                     navigate(nextTab);
                 } else {
@@ -92,12 +89,8 @@ export const EditorTabs = () => {
                     // If it is an editor tab:
                     if (/\/edit\/(.+)/.test(url)) {
                         // Open plan
-                        const ref = decodeURIComponent(
-                            /\/edit\/(.+)/.exec(url)?.[1] ?? ''
-                        );
-                        const plan = planAssets.data?.find(
-                            (a) => a.ref === ref
-                        );
+                        const ref = decodeURIComponent(/\/edit\/(.+)/.exec(url)?.[1] ?? '');
+                        const plan = planAssets.data?.find((a) => a.ref === ref);
                         if (!plan) {
                             console.warn('Plan not found', ref);
                             return null;

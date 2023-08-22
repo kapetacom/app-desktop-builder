@@ -18,17 +18,13 @@ function render(state: State) {
         <ThemeProvider theme={kapetaLight}>
             <SplashContent
                 onDone={() => {
-                    window.electron.ipcRenderer.sendMessage('splash', [
-                        'close',
-                    ]);
+                    window.electron.ipcRenderer.sendMessage('splash', ['close']);
                 }}
                 onQuit={() => {
                     window.electron.ipcRenderer.sendMessage('splash', ['quit']);
                 }}
                 onRetry={() => {
-                    window.electron.ipcRenderer.sendMessage('splash', [
-                        'retry',
-                    ]);
+                    window.electron.ipcRenderer.sendMessage('splash', ['retry']);
                 }}
                 localClusterStatus={state.localClusterStatus}
                 dockerStatus={state.dockerStatus}

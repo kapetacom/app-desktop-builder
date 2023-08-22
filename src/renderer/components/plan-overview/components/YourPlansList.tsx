@@ -62,10 +62,7 @@ const YourPlansListInner = (props: Props) => {
                                 <span>You don’t have any Plans, yet.</span>
                             </p>
                             <p>
-                                <a
-                                    style={{ marginLeft: 0 }}
-                                    onClick={props.onPlanCreate}
-                                >
+                                <a style={{ marginLeft: 0 }} onClick={props.onPlanCreate}>
                                     Create
                                 </a>
                                 <span>,</span>
@@ -81,11 +78,7 @@ const YourPlansListInner = (props: Props) => {
                                 <span>a new Plan to see it here.</span>
                             </p>
                         </Typography>
-                        <Button
-                            variant={'outlined'}
-                            color={'inherit'}
-                            size={'large'}
-                        >
+                        <Button variant={'outlined'} color={'inherit'} size={'large'}>
                             Create new Plan
                         </Button>
                     </Box>
@@ -93,8 +86,7 @@ const YourPlansListInner = (props: Props) => {
                 <Box
                     sx={{
                         flex: 1,
-                        background:
-                            'linear-gradient(242deg, rgba(244, 238, 238, 0.05) 0%, #F4EEEE 100%)',
+                        background: 'linear-gradient(242deg, rgba(244, 238, 238, 0.05) 0%, #F4EEEE 100%)',
                         justifyContent: 'center',
                         alignItems: 'center',
                         display: 'flex',
@@ -109,27 +101,11 @@ const YourPlansListInner = (props: Props) => {
     }
 
     return (
-        <Stack
-            direction={'row'}
-            flexWrap={'wrap'}
-            alignItems={'flex-start'}
-            alignContent={'flex-start'}
-            gap={3}
-        >
-            <TransitionGroup
-                component={null}
-                enter={true}
-                exit={true}
-                appear={true}
-            >
+        <Stack direction={'row'} flexWrap={'wrap'} alignItems={'flex-start'} alignContent={'flex-start'} gap={3}>
+            <TransitionGroup component={null} enter={true} exit={true} appear={true}>
                 {props.plans.map((plan, index) => {
                     return (
-                        <Slide
-                            key={`plan_${plan.ref}`}
-                            direction={'right'}
-                            unmountOnExit={true}
-                            mountOnEnter={true}
-                        >
+                        <Slide key={`plan_${plan.ref}`} direction={'right'} unmountOnExit={true} mountOnEnter={true}>
                             <AssetThumbnail
                                 key={`plan_${plan.ref}`}
                                 width={366}
