@@ -7,23 +7,32 @@ interface Options {
     filters?: FileFilter[];
     defaultPath?: string;
     selectDirectory?: boolean;
+    readContent?: boolean;
+}
+
+interface SingleResult {
+    path: string;
+    content: string;
 }
 
 export const showFilePickerOne = async (
     options: Omit<Options, 'multiSelection'>
-): Promise<string | null> => {
-    return (await showFilePicker(options)) as string | null;
+): Promise<SingleResult | null> => {
+    return (await showFilePicker({
+        ...options,
+        readContent: true,
+    })) as SingleResult | null;
 };
 
 export const showFilePickerMulti = async (
-    options: Omit<Options, 'multiSelection'>
+    options: Omit<Options, 'multiSelection' | 'readContent'>
 ): Promise<string[] | null> => {
     return (await showFilePicker({
         ...options,
         multiSelections: true,
     })) as string[] | null;
 };
-export const showFilePicker = async (options: Options) => {
+export const showFilePicker = async (options: Options): Promise<any> => {
     const properties: OpenDialogOptions['properties'] = ['createDirectory'];
     if (options.selectDirectory) {
         properties.push('openDirectory');
@@ -33,23 +42,27 @@ export const showFilePicker = async (options: Options) => {
     if (options.multiSelections) {
         properties.push('multiSelections');
     }
-    const result = await window.electron.ipcRenderer.invoke(
+    const [dialogResult, content] = await window.electron.ipcRenderer.invoke(
         'open-file-dialog',
         {
             title: options.title || 'Select a file',
             defaultPath: options.defaultPath,
             filters: options.filters,
             properties,
+            readContent: options.readContent,
         }
     );
 
-    if (result.canceled) {
+    if (dialogResult.canceled) {
         return null;
     }
 
     if (options.multiSelections) {
-        return result.filePaths;
+        return dialogResult.filePaths;
     }
 
-    return result.filePaths[0];
+    return {
+        path: dialogResult.filePaths[0],
+        content,
+    };
 };
