@@ -1,4 +1,4 @@
-import { ipcMain } from 'electron';
+import { ipcMain, dialog } from 'electron';
 import { KapetaAPI } from '@kapeta/nodejs-api-client';
 import { MainWindow } from '../main/MainWindow';
 
@@ -79,6 +79,14 @@ export function attachHandlers(main: MainWindow) {
             await main.update();
         } catch (err) {
             console.error('Failed to refresh context', err);
+        }
+    });
+
+    ipcMain.handle('open-file-dialog', async (evt, ...args: any[]) => {
+        try {
+            return dialog.showOpenDialog(args[0]);
+        } catch (err) {
+            console.error('Failed to set context', args, err);
         }
     });
 }

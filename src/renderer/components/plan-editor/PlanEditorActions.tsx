@@ -3,7 +3,7 @@ import {
     PlannerContextData,
     PlannerMode,
 } from '@kapeta/ui-web-plan-editor';
-import { ButtonStyle, showDelete } from '@kapeta/ui-web-components';
+import { ButtonStyle, useConfirmDelete } from '@kapeta/ui-web-components';
 import { IResourceTypeConverter, ResourceRole } from '@kapeta/ui-web-types';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import { useEffect, useMemo } from 'react';
@@ -92,6 +92,8 @@ export const usePlanEditorActions = (
 
         return () => unsubscribers.forEach((unsubscribe) => unsubscribe());
     }, [planner, handlers]);
+
+    const showDelete = useConfirmDelete();
 
     return useMemo(() => {
         return {

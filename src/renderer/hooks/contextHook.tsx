@@ -1,14 +1,10 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import {
-    Identity,
-    MemberIdentity,
-    SchemaKind,
-} from '@kapeta/ui-web-types';
+import { Identity, MemberIdentity, SchemaKind } from '@kapeta/ui-web-types';
 import { useAsyncRetry, useClickAway } from 'react-use';
 import { AssetDisplay } from '@kapeta/ui-web-components';
 import { Plan } from '@kapeta/schemas';
 import { IdentityService } from '@kapeta/ui-web-context';
-import {AssetInfo} from "@kapeta/ui-web-plan-editor";
+import { AssetInfo } from '@kapeta/ui-web-plan-editor';
 
 export type BlockHubSelectionCallback = (selection: AssetDisplay[]) => void;
 

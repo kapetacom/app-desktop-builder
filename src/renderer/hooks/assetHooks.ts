@@ -1,17 +1,17 @@
-import {useCallback, useEffect, useMemo, useState} from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
     AssetService,
     BlockTypeProvider,
     SocketService,
 } from '@kapeta/ui-web-context';
-import {BlockDefinition, Plan} from '@kapeta/schemas';
-import {Asset, SchemaKind} from '@kapeta/ui-web-types';
-import {parseKapetaUri} from '@kapeta/nodejs-utils';
+import { BlockDefinition, Plan } from '@kapeta/schemas';
+import { Asset, SchemaKind } from '@kapeta/ui-web-types';
+import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import _ from 'lodash';
 
 import useSWRImmutable from 'swr/immutable';
-import {useAsyncRetry} from 'react-use';
-import {AssetInfo, fromAsset} from '@kapeta/ui-web-plan-editor';
+import { useAsyncRetry } from 'react-use';
+import { AssetInfo, fromAsset } from '@kapeta/ui-web-plan-editor';
 
 interface AssetChangedEvent {
     type: string;
@@ -163,7 +163,7 @@ export const useAsset = <T = SchemaKind>(
     }
     const assetResult = useAsyncRetry(async () => {
         try {
-            return fromAsset(await AssetService.get(ref, ensure) as Asset<T>);
+            return fromAsset((await AssetService.get(ref, ensure)) as Asset<T>);
         } catch (e: any) {
             console.warn('Failed to load assets', e);
         }

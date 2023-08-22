@@ -8,7 +8,8 @@ export type Procedures =
     | 'get-contexts'
     | 'log-out'
     | 'refresh-context'
-    | 'set-context';
+    | 'set-context'
+    | 'open-file-dialog';
 
 const electronHandler = {
     ipcRenderer: {

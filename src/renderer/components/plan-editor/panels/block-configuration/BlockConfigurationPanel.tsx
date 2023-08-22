@@ -1,17 +1,10 @@
 import React, { useContext, useEffect, useMemo } from 'react';
 import {
-    Button,
-    ButtonStyle,
-    ButtonType,
     FormButtons,
     FormContainer,
     FormField,
     FormFieldType,
-    PanelSize,
-    SidePanel,
     SimpleLoader,
-    TabContainer,
-    TabPage,
     EntityEditorForm,
 } from '@kapeta/ui-web-components';
 
@@ -19,7 +12,11 @@ import { BlockTypeProvider } from '@kapeta/ui-web-context';
 
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import { BlockInstance } from '@kapeta/schemas';
-import { PlannerContext, PlannerMode } from '@kapeta/ui-web-plan-editor';
+import {
+    PlannerContext,
+    PlannerMode,
+    PlannerSidebar,
+} from '@kapeta/ui-web-plan-editor';
 
 import './BlockConfigurationPanel.less';
 import { useAsyncFn } from 'react-use';
@@ -27,6 +24,7 @@ import {
     getInstanceConfig,
     setInstanceConfig,
 } from '../../../../api/LocalConfigService';
+import { Box, Button, Tab, Tabs } from '@mui/material';
 
 type Options = { [key: string]: string };
 
@@ -162,10 +160,19 @@ export const BlockConfigurationPanel = (props: Props) => {
     const readOnly = planner.mode === PlannerMode.VIEW;
     const hasConfigComponent = !!(typeProvider && typeProvider.configComponent);
 
+    const [currentTab, setCurrentTab] = React.useState('general');
+
+    const showConfigTab =
+        !!(
+            typeProvider &&
+            typeProvider.configComponent &&
+            block &&
+            props.instance
+        ) || block?.spec.configuration?.types?.length > 0;
+
     return (
-        <SidePanel
+        <PlannerSidebar
             title={panelHeader()}
-            size={PanelSize.large}
             open={props.open}
             onClose={props.onClosed}
         >
@@ -176,8 +183,23 @@ export const BlockConfigurationPanel = (props: Props) => {
             >
                 <div className="block-configuration-panel">
                     <FormContainer initialValue={data} onSubmitData={onSave}>
-                        <TabContainer>
-                            <TabPage id="general" title="General">
+                        <Tabs
+                            orientation="horizontal"
+                            value={currentTab}
+                            onChange={(evt, newTabId) =>
+                                setCurrentTab(newTabId)
+                            }
+                        >
+                            <Tab value={'general'} label="General" />
+                            {showConfigTab && (
+                                <Tab
+                                    value={'configuration'}
+                                    label="Configuration"
+                                />
+                            )}
+                        </Tabs>
+                        {currentTab === 'general' && (
+                            <Box>
                                 <FormField
                                     name="name"
                                     label="Instance name"
@@ -194,88 +216,72 @@ export const BlockConfigurationPanel = (props: Props) => {
                                     readOnly={readOnly}
                                     type={FormFieldType.ENUM}
                                 />
-                            </TabPage>
+                            </Box>
+                        )}
 
-                            {typeProvider &&
-                                typeProvider.configComponent &&
-                                block &&
-                                props.instance && (
-                                    <TabPage
-                                        id="configuration"
-                                        title="Configuration"
-                                    >
-                                        <typeProvider.configComponent
-                                            block={block}
-                                            instance={props.instance}
-                                            readOnly={readOnly}
-                                        />
-                                    </TabPage>
-                                )}
+                        {}
 
-                            {!hasConfigComponent &&
-                                (block?.spec.configuration?.types?.length ||
-                                    0) > 0 && (
-                                    <TabPage
-                                        id="configuration"
-                                        title="Configuration"
-                                    >
-                                        <EntityEditorForm
-                                            instances={planner.plan?.spec.blocks?.map(
-                                                (blockInstance) => {
-                                                    const blockDef =
-                                                        planner.getBlockById(
-                                                            blockInstance.id
-                                                        );
-                                                    return {
-                                                        name: blockInstance.name,
-                                                        id: blockInstance.id,
-                                                        providers:
-                                                            blockDef?.spec.providers?.map(
-                                                                (provider) => {
-                                                                    return {
-                                                                        name: provider
-                                                                            .metadata
-                                                                            .name,
-                                                                        portType:
-                                                                            provider
-                                                                                .spec
-                                                                                ?.port
-                                                                                ?.type,
-                                                                    };
-                                                                }
-                                                            ) ?? [],
-                                                    };
-                                                }
-                                            )}
-                                            entities={
-                                                block!.spec.configuration!
-                                                    .types!
-                                            }
-                                            name="configuration"
-                                        />
-                                    </TabPage>
-                                )}
-                        </TabContainer>
+                        {currentTab === 'configuration' &&
+                            (typeProvider?.configComponent && props.instance ? (
+                                <typeProvider.configComponent
+                                    block={block}
+                                    instance={props.instance}
+                                    readOnly={readOnly}
+                                />
+                            ) : (
+                                <EntityEditorForm
+                                    instances={planner.plan?.spec.blocks?.map(
+                                        (blockInstance) => {
+                                            const blockDef =
+                                                planner.getBlockById(
+                                                    blockInstance.id
+                                                );
+                                            return {
+                                                name: blockInstance.name,
+                                                id: blockInstance.id,
+                                                providers:
+                                                    blockDef?.spec.providers?.map(
+                                                        (provider) => {
+                                                            return {
+                                                                name: provider
+                                                                    .metadata
+                                                                    .name,
+                                                                portType:
+                                                                    provider
+                                                                        .spec
+                                                                        ?.port
+                                                                        ?.type,
+                                                            };
+                                                        }
+                                                    ) ?? [],
+                                            };
+                                        }
+                                    )}
+                                    entities={block!.spec.configuration!.types!}
+                                    name="configuration"
+                                />
+                            ))}
 
                         <FormButtons>
                             <Button
-                                width={70}
-                                type={ButtonType.BUTTON}
-                                style={ButtonStyle.DANGER}
+                                variant={'contained'}
+                                color={'error'}
                                 onClick={props.onClosed}
-                                text="Cancel"
-                            />
+                            >
+                                Cancel
+                            </Button>
                             <Button
-                                width={70}
+                                variant={'contained'}
                                 disabled={readOnly}
-                                type={ButtonType.SUBMIT}
-                                style={ButtonStyle.PRIMARY}
-                                text="Save"
-                            />
+                                color={'primary'}
+                                type="submit"
+                            >
+                                Save
+                            </Button>
                         </FormButtons>
                     </FormContainer>
                 </div>
             </SimpleLoader>
-        </SidePanel>
+        </PlannerSidebar>
     );
 };

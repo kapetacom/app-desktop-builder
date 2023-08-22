@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 
 import { AssetService, AssetStore } from '@kapeta/ui-web-context';
-import { showDelete, showToasty, ToastType } from '@kapeta/ui-web-components';
+import {
+    showToasty,
+    ToastType,
+    useConfirmDelete,
+} from '@kapeta/ui-web-components';
 import { Plan } from '@kapeta/schemas';
 import { getAssetTitle } from '../plan-editor/helpers';
 import { GetStartedHeader } from './components/GetStartedHeader';
@@ -10,7 +14,7 @@ import { Box, Stack } from '@mui/material';
 import { YourPlansList } from './components/YourPlansList';
 import { PlanCreator } from '../creators/PlanCreator';
 import { AssetCreatorState } from '../creators/AssetCreator';
-import {AssetInfo} from "@kapeta/ui-web-plan-editor";
+import { AssetInfo } from '@kapeta/ui-web-plan-editor';
 
 interface Props {
     plans: AssetInfo<Plan>[];
@@ -25,6 +29,8 @@ export const PlanOverview = (props: Props) => {
     const [creatorState, setCreatorState] = useState<AssetCreatorState>(
         AssetCreatorState.CLOSED
     );
+
+    const showDelete = useConfirmDelete();
 
     const onPlanRemove = async (plan: AssetInfo<Plan>) => {
         try {

@@ -7,7 +7,7 @@ import {
     Resource,
 } from '@kapeta/schemas';
 
-import {AssetInfo, PlannerContextData} from '@kapeta/ui-web-plan-editor';
+import { AssetInfo, PlannerContextData } from '@kapeta/ui-web-plan-editor';
 import { InstanceStatus } from '@kapeta/ui-web-context';
 
 export interface InstanceInfo {

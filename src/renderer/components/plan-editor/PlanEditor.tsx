@@ -6,7 +6,8 @@ import {
     PlannerMode,
     PlannerResourceDrawer,
     withPlannerContext,
-    randomUUID, AssetInfo,
+    randomUUID,
+    AssetInfo,
 } from '@kapeta/ui-web-plan-editor';
 import React, {
     ForwardedRef,
@@ -235,7 +236,7 @@ export const PlanEditor = withPlannerContext(
                                 content: block,
                                 version: 'local',
                                 editable: true,
-                                exists: false
+                                exists: false,
                             };
 
                             // We need to add both to show the block in the editor

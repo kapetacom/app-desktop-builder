@@ -14,9 +14,17 @@ import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import { useKapetaContext } from '../../../hooks/contextHook';
 import { versionIsBigger } from '../../../utils/versionHelpers';
 
-import {normalizeKapetaUri, useLoadedPlanContext} from '../../../utils/planContextLoader';
+import {
+    normalizeKapetaUri,
+    useLoadedPlanContext,
+} from '../../../utils/planContextLoader';
 import { useAssetsChanged } from '../../../hooks/assetHooks';
-import {AssetInfo, AssetThumbnail, fromAsset, fromAssetDisplay} from "@kapeta/ui-web-plan-editor";
+import {
+    AssetInfo,
+    AssetThumbnail,
+    fromAsset,
+    fromAssetDisplay,
+} from '@kapeta/ui-web-plan-editor';
 
 interface Props {
     handle?: string;
@@ -118,16 +126,28 @@ export const BlockhubShell = (props: Props) => {
             <BlockhubModal
                 open={kapetaContext.blockHub.visible}
                 installerService={installerService}
-                plan={kapetaContext.blockHub.opener?.source ? {
-                    kind: kapetaContext.blockHub.opener?.source.content.kind,
-                    data: kapetaContext.blockHub.opener?.source.content,
-                    exists: !!(kapetaContext.blockHub.opener?.source.exists),
-                    editable: !!(kapetaContext.blockHub.opener?.source.editable),
-                    version: kapetaContext.blockHub.opener?.source.version,
-                    path: '',
-                    ymlPath: '',
-                    ref: normalizeKapetaUri(kapetaContext.blockHub.opener?.source?.ref)
-                } : undefined}
+                plan={
+                    kapetaContext.blockHub.opener?.source
+                        ? {
+                              kind: kapetaContext.blockHub.opener?.source
+                                  .content.kind,
+                              data: kapetaContext.blockHub.opener?.source
+                                  .content,
+                              exists: !!kapetaContext.blockHub.opener?.source
+                                  .exists,
+                              editable:
+                                  !!kapetaContext.blockHub.opener?.source
+                                      .editable,
+                              version:
+                                  kapetaContext.blockHub.opener?.source.version,
+                              path: '',
+                              ymlPath: '',
+                              ref: normalizeKapetaUri(
+                                  kapetaContext.blockHub.opener?.source?.ref
+                              ),
+                          }
+                        : undefined
+                }
                 fetcher={assetFetcher}
                 assets={assets}
                 category={currentCategory}
@@ -152,7 +172,7 @@ export const BlockhubShell = (props: Props) => {
                             height={size.height}
                             hideMetadata={true}
                             loadPlanContext={(plan) => {
-                                return useLoadedPlanContext(plan.content)
+                                return useLoadedPlanContext(plan.content);
                             }}
                             asset={fromAssetDisplay(asset)}
                         />
