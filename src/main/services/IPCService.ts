@@ -1,6 +1,8 @@
 import { ipcMain, dialog } from 'electron';
 import { KapetaAPI } from '@kapeta/nodejs-api-client';
 import { MainWindow } from '../main/MainWindow';
+import FS from 'fs-extra';
+import OpenDialogOptions = Electron.OpenDialogOptions;
 
 export function attachHandlers(main: MainWindow) {
     ipcMain.handle('get-token', async () => {
@@ -84,7 +86,26 @@ export function attachHandlers(main: MainWindow) {
 
     ipcMain.handle('open-file-dialog', async (evt, ...args: any[]) => {
         try {
-            return dialog.showOpenDialog(args[0]);
+            const opts = args[0] as OpenDialogOptions & {
+                readContent?: boolean;
+            };
+            const dialogResponse = await dialog.showOpenDialog(opts);
+            if (opts.properties?.includes('multiSelections')) {
+                return [dialogResponse];
+            }
+
+            let content: string | null = null;
+            if (
+                !dialogResponse.canceled &&
+                dialogResponse.filePaths[0] &&
+                opts.readContent
+            ) {
+                content = (
+                    await FS.readFile(dialogResponse.filePaths[0])
+                ).toString();
+            }
+
+            return [dialogResponse, content];
         } catch (err) {
             console.error('Failed to set context', args, err);
         }

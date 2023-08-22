@@ -1,13 +1,20 @@
 import React from 'react';
-import { Button, Stack, Typography } from '@mui/material';
+import { Button, CircularProgress, Stack, Typography } from '@mui/material';
 import { CustomIcon } from '../../shell/components/CustomIcon';
 import AddIcon from '../../shell/components/icons/large/AddIcon.svg';
 import ImportIcon from '../../shell/components/icons/large/ImportIcon.svg';
 import BlockHubIcon from '../../shell/components/icons/large/BlockHubIcon.svg';
 import { useKapetaContext } from '../../../hooks/contextHook';
+import {
+    AssetImporter,
+    useAssetImporter,
+} from '../../../utils/useAssetImporter';
+import { CoreTypes } from '@kapeta/ui-web-components';
+import { AssetStore } from '@kapeta/ui-web-context';
 interface XLButtonProps {
     variant: 'edit' | 'blockhub' | 'import';
     label: string;
+    processing?: boolean;
     onClick?: () => void;
 }
 
@@ -38,6 +45,10 @@ const XLButton = (props: XLButtonProps) => {
             border = '1px dashed #455A64';
             borderHover = '1px dashed primary.main';
             break;
+    }
+
+    if (props.processing) {
+        icon = <CircularProgress size={36} />;
     }
 
     return (
@@ -71,6 +82,7 @@ const XLButton = (props: XLButtonProps) => {
 interface Props {
     onPlanCreate?: () => void;
     onPlanImport?: () => void;
+    assetImporter: AssetImporter;
 }
 
 export const GetStartedHeader = (props: Props) => {
@@ -109,6 +121,7 @@ export const GetStartedHeader = (props: Props) => {
                 <XLButton
                     variant={'import'}
                     label={'Import'}
+                    processing={props.assetImporter.loading}
                     onClick={props.onPlanImport}
                 />
             </Stack>

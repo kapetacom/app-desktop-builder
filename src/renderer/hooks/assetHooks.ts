@@ -28,6 +28,7 @@ const ASSET_CHANGED_EVENT = 'asset-change';
 
 export interface AssetListResult<T = SchemaKind> {
     loading: boolean;
+    refresh: () => Promise<void>;
     data: AssetInfo<T>[];
 }
 
@@ -133,6 +134,9 @@ export const useAssets = <T = SchemaKind>(
     return {
         data: assets,
         loading,
+        refresh: async () => {
+            await assetResults.mutate();
+        },
     };
 };
 

@@ -8,6 +8,7 @@ import { useKapetaContext } from '../../../hooks/contextHook';
 import { TransitionGroup } from 'react-transition-group';
 import { AssetInfo, AssetThumbnail } from '@kapeta/ui-web-plan-editor';
 import { useLoadedPlanContext } from '../../../utils/planContextLoader';
+import { installerService } from '../../../api/installerService';
 
 interface Props {
     plans: AssetInfo<Plan>[];
@@ -134,6 +135,7 @@ const YourPlansListInner = (props: Props) => {
                                 width={366}
                                 height={262}
                                 asset={plan}
+                                installerService={installerService}
                                 onClick={props.onPlanOpen}
                                 loadPlanContext={(plan) => {
                                     return useLoadedPlanContext(plan.content);

@@ -39,6 +39,9 @@ const router = createMemoryRouter([
                                 <SimpleLoader loading={plans.loading}>
                                     <PlanOverview
                                         assetService={AssetService}
+                                        onPlanImported={async () => {
+                                            await plans.refresh();
+                                        }}
                                         onPlanAdded={(plan) => {
                                             navigateTo(
                                                 `/edit/${encodeURIComponent(

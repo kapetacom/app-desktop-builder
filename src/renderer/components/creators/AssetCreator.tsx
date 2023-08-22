@@ -1,8 +1,6 @@
 import Path from 'path';
-import React, { useCallback, useEffect, useState } from 'react';
-
+import React, { useEffect, useState } from 'react';
 import { FileInfo, SchemaKind } from '@kapeta/ui-web-types';
-
 import { AssetStore } from '@kapeta/ui-web-context';
 import {
     FormButtons,
@@ -10,8 +8,6 @@ import {
     showToasty,
     ToastType,
 } from '@kapeta/ui-web-components';
-
-import './AssetCreator.less';
 import { ProjectHomeFolderInput } from '../fields/ProjectHomeFolderInput';
 import { replaceBase64IconWithUrl } from '../../utils/iconHelpers';
 import {
@@ -22,6 +18,7 @@ import {
 import { kapetaLight } from '../../Theme';
 import { Button, ThemeProvider } from '@mui/material';
 import { showFilePickerOne } from '../../utils/showFilePicker';
+import './AssetCreator.less';
 
 export interface CreatingFormProps {
     creating?: boolean;
@@ -30,7 +27,6 @@ export interface CreatingFormProps {
 
 export enum AssetCreatorState {
     CLOSED,
-    IMPORTING,
     CREATING,
 }
 
@@ -65,12 +61,12 @@ export const AssetCreator = (props: Props) => {
 
         setNewEntity(data);
 
-        const filePath = await showFilePickerOne({
+        const result = await showFilePickerOne({
             title: 'Choose a folder',
             selectDirectory: true,
         });
-        if (filePath) {
-            await createAsset(filePath, data);
+        if (result?.path) {
+            await createAsset(result.path, data);
         }
     };
 
@@ -126,35 +122,6 @@ export const AssetCreator = (props: Props) => {
         if (props.state === AssetCreatorState.CREATING) {
             // When changed to creating - set new entity
             setNewEntity(props.createNewKind());
-        }
-        if (props.state === AssetCreatorState.IMPORTING) {
-            (async () => {
-                const path = await showFilePickerOne({
-                    title: 'Choose kapeta asset to import',
-                    filters: [
-                        {
-                            name: 'Kapeta Asset',
-                            extensions: ['yml'],
-                        },
-                    ],
-                });
-                if (path) {
-                    try {
-                        const assets = props.assetService.import(
-                            `file://${path}`
-                        );
-                        props.onDone?.call(null, assets[0]);
-                    } catch (err) {
-                        showToasty({
-                            type: ToastType.ALERT,
-                            title: 'Failed to import asset',
-                            message: err.message,
-                        });
-                    }
-                } else {
-                    props.onCancel && props.onCancel();
-                }
-            })();
         }
     }, [props.state, props.assetService]);
 

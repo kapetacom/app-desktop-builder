@@ -1,25 +1,22 @@
 import React, { useState } from 'react';
 
-import { AssetService, AssetStore } from '@kapeta/ui-web-context';
-import {
-    showToasty,
-    ToastType,
-    useConfirmDelete,
-} from '@kapeta/ui-web-components';
+import { AssetStore } from '@kapeta/ui-web-context';
+import { CoreTypes } from '@kapeta/ui-web-components';
 import { Plan } from '@kapeta/schemas';
-import { getAssetTitle } from '../plan-editor/helpers';
 import { GetStartedHeader } from './components/GetStartedHeader';
 import { SamplePlanSection } from './components/SamplePlanSection';
 import { Box, Stack } from '@mui/material';
 import { YourPlansList } from './components/YourPlansList';
 import { PlanCreator } from '../creators/PlanCreator';
 import { AssetCreatorState } from '../creators/AssetCreator';
-import { AssetInfo } from '@kapeta/ui-web-plan-editor';
+import { AssetInfo, fromAsset } from '@kapeta/ui-web-plan-editor';
+import { useAssetImporter } from '../../utils/useAssetImporter';
 
 interface Props {
     plans: AssetInfo<Plan>[];
     sample?: AssetInfo<Plan>;
     assetService?: AssetStore;
+    onPlanImported?: (plan: AssetInfo<Plan>) => void;
     onPlanAdded?: (plan: AssetInfo<Plan>) => void;
     onPlanRemoved?: (plan: AssetInfo<Plan>) => void;
     onPlanSelected?: (plan: AssetInfo<Plan>) => void;
@@ -30,34 +27,21 @@ export const PlanOverview = (props: Props) => {
         AssetCreatorState.CLOSED
     );
 
-    const showDelete = useConfirmDelete();
-
-    const onPlanRemove = async (plan: AssetInfo<Plan>) => {
-        try {
-            const confirm = await showDelete(
-                'Delete plan',
-                'Are you sure you want to delete plan?'
-            );
-
-            if (!confirm) {
-                return false;
-            }
-            await AssetService.remove(plan.ref);
-            props.onPlanRemoved && props.onPlanRemoved(plan);
-            showToasty({
-                title: 'Plan Deleted!',
-                message: `Deleted ${getAssetTitle(plan)} from your plan list`,
-                type: ToastType.ALERT,
-            });
-        } catch (e) {
-            return false;
-        }
-        return true;
-    };
+    const assetImporter = useAssetImporter({
+        assetService: props.assetService,
+        allowedKinds: [CoreTypes.PLAN],
+    });
 
     const onPlanCreated = (asset: AssetInfo<Plan>) => {
         props.onPlanAdded && props.onPlanAdded(asset);
         props.onPlanSelected && props.onPlanSelected(asset);
+    };
+
+    const onPlanImport = async () => {
+        const assets = await assetImporter.importAsset();
+        if (assets && assets.length > 0) {
+            props.onPlanImported && props.onPlanImported(fromAsset(assets[0]));
+        }
     };
 
     return (
@@ -81,12 +65,11 @@ export const PlanOverview = (props: Props) => {
                 }}
             >
                 <GetStartedHeader
+                    assetImporter={assetImporter}
                     onPlanCreate={() => {
                         setCreatorState(AssetCreatorState.CREATING);
                     }}
-                    onPlanImport={() => {
-                        setCreatorState(AssetCreatorState.IMPORTING);
-                    }}
+                    onPlanImport={onPlanImport}
                 />
                 {props.plans.length < 1 && props.sample && (
                     <SamplePlanSection
@@ -99,9 +82,7 @@ export const PlanOverview = (props: Props) => {
                     onPlanCreate={() => {
                         setCreatorState(AssetCreatorState.CREATING);
                     }}
-                    onPlanImport={() => {
-                        setCreatorState(AssetCreatorState.IMPORTING);
-                    }}
+                    onPlanImport={onPlanImport}
                     plans={props.plans}
                 />
             </Stack>

@@ -98,15 +98,15 @@ export const ProjectHomeFolderInput = (props: ProjectHomeFolderInputProps) => {
                                 return;
                             }
 
-                            const newHome = await showFilePickerOne({
+                            const result = await showFilePickerOne({
                                 title: 'Choose project home',
                                 selectDirectory: true,
                             });
 
-                            if (newHome) {
-                                setProjectHome(newHome);
+                            if (result?.path) {
+                                setProjectHome(result.path);
                                 props.onChange &&
-                                    props.onChange(isEnabled, newHome ?? '');
+                                    props.onChange(isEnabled, result.path);
                             }
                         }}
                     />
