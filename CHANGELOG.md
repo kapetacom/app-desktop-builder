@@ -1,3 +1,10 @@
+## [0.27.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.27.0...v0.27.1) (2023-08-22)
+
+
+### Bug Fixes
+
+* Improve import plan process and add more visual feedback ([#75](https://github.com/kapetacom/app-desktop-builder/issues/75)) ([8248803](https://github.com/kapetacom/app-desktop-builder/commit/82488030f9e8a4ee0c5b5c2035a741a3e82533e4))
+
 # [0.27.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.26.0...v0.27.0) (2023-08-22)
 
 
