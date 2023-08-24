@@ -14,10 +14,13 @@ type TrayMenuItem = MenuItemConstructorOptions | MenuItem;
 nativeTheme.themeSource = 'system';
 
 const getTrayIcon = () => {
-    if (nativeTheme.shouldUseDarkColors) {
+    if (process.platform !== 'darwin' && nativeTheme.shouldUseDarkColors) {
         return getAssetPath('icons/tray_icon_light.png');
     }
-    return getAssetPath('icons/tray_icon_dark.png');
+
+    // macOS tray icon supports "Template" image:
+    // https://github.com/electron/electron/blob/main/docs/api/native-image.md#template-image
+    return getAssetPath('icons/TrayIconTemplate.png');
 };
 
 export class TrayWrapper {
@@ -107,9 +110,7 @@ export class TrayWrapper {
 
     private showAccountSettings(identity: ExtendedIdentity) {
         const api = new KapetaAPI();
-        return () => {
-            shell.openExternal(`${api.getBaseUrl()}/${identity.handle}/iam`);
-        };
+        shell.openExternal(`${api.getBaseUrl()}/${identity.handle}/iam`);
     }
 
     private async signOut() {
