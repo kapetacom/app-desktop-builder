@@ -1,3 +1,10 @@
+# [0.28.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.27.6...v0.28.0) (2023-08-24)
+
+
+### Features
+
+* Download default providers tarball if no providers are available ([#79](https://github.com/kapetacom/app-desktop-builder/issues/79)) ([ee89e9a](https://github.com/kapetacom/app-desktop-builder/commit/ee89e9ae5d6e54316b6925759b801db041b8e8df))
+
 ## [0.27.6](https://github.com/kapetacom/app-desktop-builder/compare/v0.27.5...v0.27.6) (2023-08-24)
 
 
