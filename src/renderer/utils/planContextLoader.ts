@@ -167,27 +167,28 @@ export const useLoadedPlanContext = (plan: Plan | undefined) => {
             blockDefinitionRefs.add(asset.ref);
         });
 
-        const blocks = [...localBlocks];
-
         const blockDefinitionPromises = Array.from(blockDefinitionRefs).map(async (blockRef) => {
+            const blockUri = parseKapetaUri(blockRef);
             blockRef = normalizeKapetaUri(blockRef);
+
+            let localBlock = localBlocks?.find((asset) => parseKapetaUri(asset.ref).equals(blockUri));
+
+            if (localBlock) {
+                return localBlock;
+            }
+
             if (blockRef in BLOCK_CACHE) {
                 return BLOCK_CACHE[blockRef];
             }
 
             return (BLOCK_CACHE[blockRef] = new Promise<AssetInfo<BlockDefinition> | null>(async (resolve) => {
                 try {
-                    const blockUri = parseKapetaUri(blockRef);
-                    let block = localBlocks?.find((asset) => parseKapetaUri(asset.ref).equals(blockUri));
-
-                    if (!block) {
-                        block =
-                            blockUri.version === 'local'
-                                ? fromAsset(await BlockService.get(blockRef))
-                                : fromAssetDisplay(await assetFetcher(blockUri.fullName, blockUri.version));
-                        console.log('Loaded block', blockRef, block);
-                        setCurrentlyLoading(blockRef);
-                    }
+                    const block =
+                        blockUri.version === 'local'
+                            ? fromAsset(await BlockService.get(blockRef))
+                            : fromAssetDisplay(await assetFetcher(blockUri.fullName, blockUri.version));
+                    console.log('Loaded block', blockRef, block);
+                    setCurrentlyLoading(blockRef);
 
                     if (!block) {
                         resolve(null);
