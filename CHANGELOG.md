@@ -1,3 +1,10 @@
+## [0.27.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.27.4...v0.27.5) (2023-08-24)
+
+
+### Bug Fixes
+
+* Load blocks from registry API if not available locally ([#77](https://github.com/kapetacom/app-desktop-builder/issues/77)) ([83465a5](https://github.com/kapetacom/app-desktop-builder/commit/83465a51c2a1e59448a6ebdf29d94d810444783f))
+
 ## [0.27.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.27.3...v0.27.4) (2023-08-22)
 
 
