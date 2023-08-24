@@ -76,6 +76,16 @@ export const usePlanEditorActions = (
 
     const showDelete = useConfirmDelete();
 
+    function isRunning(state?: InstanceStatus): boolean {
+        switch (state) {
+            case InstanceStatus.STARTING:
+            case InstanceStatus.READY:
+            case InstanceStatus.UNHEALTHY:
+                return true;
+        }
+        return false;
+    }
+
     return useMemo(() => {
         return {
             block: [
@@ -156,57 +166,37 @@ export const usePlanEditorActions = (
                     enabled(): boolean {
                         return true; // we can always stop/start an instance
                     },
-                    onClick(context, { blockInstance }) {
-                        const info = instanceInfos.find((ix) => ix.instanceId === blockInstance?.id);
-                        if (!info?.systemId || !info?.instanceId) {
+                    async onClick(context, { blockInstance }) {
+                        if (!context.uri?.id || !blockInstance?.id) {
                             return;
                         }
-
-                        switch (info.status) {
-                            case InstanceStatus.STARTING:
-                            case InstanceStatus.READY:
-                            case InstanceStatus.UNHEALTHY:
-                                InstanceService.stopInstance(info.systemId, info.instanceId);
-                                break;
-                            case InstanceStatus.EXITED:
-                            case InstanceStatus.STOPPED:
-                                InstanceService.startInstance(info.systemId, info.instanceId);
-                                break;
-                            default: {
-                                const _exhaustiveCheck: never = info.status;
-                                console.warn(`Unhandled instance status ${_exhaustiveCheck}`);
-                            }
+                        const info = instanceInfos.find((ix) => ix.instanceId === blockInstance?.id);
+                        if (isRunning(info?.status)) {
+                            await InstanceService.stopInstance(context.uri?.id, blockInstance.id);
+                        } else {
+                            await InstanceService.startInstance(context.uri?.id, blockInstance.id);
                         }
                     },
                     buttonStyle(context, { blockInstance }): ButtonStyle {
                         const info = instanceInfos.find((ix) => ix.instanceId === blockInstance?.id);
-                        switch (info?.status) {
-                            case InstanceStatus.EXITED:
-                            case InstanceStatus.STOPPED:
-                                return ButtonStyle.PRIMARY;
-                            default:
-                                return ButtonStyle.DANGER;
+                        if (isRunning(info?.status)) {
+                            return ButtonStyle.DANGER;
                         }
+                        return ButtonStyle.PRIMARY;
                     },
                     icon(context, { blockInstance }): string {
                         const info = instanceInfos.find((ix) => ix.instanceId === blockInstance?.id);
-                        switch (info?.status) {
-                            case InstanceStatus.EXITED:
-                            case InstanceStatus.STOPPED:
-                                return 'fa fa-play';
-                            default:
-                                return 'fa fa-stop';
+                        if (isRunning(info?.status)) {
+                            return 'fa fa-stop';
                         }
+                        return 'fa fa-play';
                     },
                     label(context, { blockInstance }): string {
                         const info = instanceInfos.find((ix) => ix.instanceId === blockInstance?.id);
-                        switch (info?.status) {
-                            case InstanceStatus.EXITED:
-                            case InstanceStatus.STOPPED:
-                                return 'Start';
-                            default:
-                                return 'Stop';
+                        if (isRunning(info?.status)) {
+                            return 'Stop';
                         }
+                        return 'Start';
                     },
                 },
                 {
@@ -216,7 +206,7 @@ export const usePlanEditorActions = (
                             return false;
                         }
 
-                        return info.status === InstanceStatus.READY;
+                        return isRunning(info.status);
                     },
                     onClick(context, { blockInstance }) {
                         const info = instanceInfos.find((ix) => ix.instanceId === blockInstance?.id);

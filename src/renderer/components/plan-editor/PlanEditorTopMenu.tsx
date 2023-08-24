@@ -10,8 +10,11 @@ import {
     EntityEditor,
     FormButtons,
     FormContainer,
+    KapDialog,
+    KapFormDialog,
     showToasty,
     ToastType,
+    Tooltip,
     useFormContextField,
 } from '@kapeta/ui-web-components';
 import './PlanEditorTopMenu.less';
@@ -160,8 +163,13 @@ export const PlanEditorTopMenu = (props: Props) => {
 
     useEffect(() => {
         const updateState = async () => {
+            const totalBlocks = planner.plan?.spec?.blocks?.length || 0;
             const status = await InstanceService.getInstanceStatusForPlan(props.systemId);
-            setAllPlaying(status.length > 0 && status.filter((s) => s.status === 'stopped').length === 0);
+            setAllPlaying(
+                totalBlocks === status.length &&
+                    status.length > 0 &&
+                    status.filter((s) => s.status === 'stopped').length === 0
+            );
             setAnyPlaying(status.length > 0 && status.filter((s) => s.status !== 'stopped').length > 0);
         };
         updateState().catch(() => {
@@ -214,76 +222,80 @@ export const PlanEditorTopMenu = (props: Props) => {
             }}
         >
             <Stack spacing={2} direction="row">
-                <Button
-                    disabled={allPlaying || processing}
-                    variant={'contained'}
-                    color={'primary'}
-                    startIcon={<i className="fa fa-play" />}
-                    onClick={async () => {
-                        await doProcess(
-                            async () => {
-                                setStarting(true);
-                                try {
-                                    await InstanceService.startInstances(props.systemId);
-                                    setAllPlaying(true);
-                                } finally {
-                                    setStarting(false);
-                                }
-                            },
-                            `Starting plan: ${props.systemId}`,
-                            'Failed to start plan'
-                        );
-                    }}
-                >
-                    Start
-                    {starting && (
-                        <CircularProgress
-                            size={24}
-                            sx={{
-                                position: 'absolute',
-                                top: '50%',
-                                left: '50%',
-                                marginTop: '-12px',
-                                marginLeft: '-12px',
-                            }}
-                        />
-                    )}
-                </Button>
-                <Button
-                    disabled={!anyPlaying || processing}
-                    variant="outlined"
-                    color={'warning'}
-                    startIcon={<i className="fa fa-stop" />}
-                    onClick={async () => {
-                        await doProcess(
-                            async () => {
-                                setStopping(true);
-                                try {
-                                    await InstanceService.stopInstances(props.systemId);
-                                    setAllPlaying(false);
-                                } finally {
-                                    setStopping(false);
-                                }
-                            },
-                            `Stopping plan: ${props.systemId}`,
-                            'Failed to stop plan'
-                        );
-                    }}
-                >
-                    Stop
-                    {stopping && (
-                        <CircularProgress
-                            size={24}
-                            sx={{
-                                position: 'absolute',
-                                top: '50%',
-                                left: '50%',
-                                marginTop: '-12px',
-                                marginLeft: '-12px',
-                            }}
-                        />
-                    )}
-                </Button>
+                <Tooltip title={'Start all blocks'}>
+                    <Button
+                        disabled={allPlaying || processing}
+                        variant={'contained'}
+                        color={'primary'}
+                        startIcon={<i className="fa fa-play" />}
+                        onClick={async () => {
+                            await doProcess(
+                                async () => {
+                                    setStarting(true);
+                                    try {
+                                        await InstanceService.startInstances(props.systemId);
+                                        setAllPlaying(true);
+                                    } finally {
+                                        setStarting(false);
+                                    }
+                                },
+                                `Starting plan: ${props.systemId}`,
+                                'Failed to start plan'
+                            );
+                        }}
+                    >
+                        Start
+                        {starting && (
+                            <CircularProgress
+                                size={24}
+                                sx={{
+                                    position: 'absolute',
+                                    top: '50%',
+                                    left: '50%',
+                                    marginTop: '-12px',
+                                    marginLeft: '-12px',
+                                }}
+                            />
+                        )}
+                    </Button>
+                </Tooltip>
+                <Tooltip title={'Stop all blocks'}>
+                    <Button
+                        disabled={!anyPlaying || processing}
+                        variant="outlined"
+                        color={'warning'}
+                        startIcon={<i className="fa fa-stop" />}
+                        onClick={async () => {
+                            await doProcess(
+                                async () => {
+                                    setStopping(true);
+                                    try {
+                                        await InstanceService.stopInstances(props.systemId);
+                                        setAllPlaying(false);
+                                    } finally {
+                                        setStopping(false);
+                                    }
+                                },
+                                `Stopping plan: ${props.systemId}`,
+                                'Failed to stop plan'
+                            );
+                        }}
+                    >
+                        Stop
+                        {stopping && (
+                            <CircularProgress
+                                size={24}
+                                sx={{
+                                    position: 'absolute',
+                                    top: '50%',
+                                    left: '50%',
+                                    marginTop: '-12px',
+                                    marginLeft: '-12px',
+                                }}
+                            />
+                        )}
+                    </Button>
+                </Tooltip>
 
                 <Button
                     startIcon={<i className="fa fa-gear" />}
@@ -297,9 +309,9 @@ export const PlanEditorTopMenu = (props: Props) => {
                 </Button>
             </Stack>
             <ThemeProvider theme={kapetaLight}>
-                <Dialog open={showSettings} className="modal-plan-settings" onClose={() => setShowSettings(false)}>
-                    <DialogTitle>Settings</DialogTitle>
-                    <DialogContent
+                <KapDialog open={showSettings} className="modal-plan-settings" onClose={() => setShowSettings(false)}>
+                    <KapDialog.Title>Settings</KapDialog.Title>
+                    <KapDialog.Content
                         sx={{
                             height: '420px',
                         }}
@@ -321,7 +333,6 @@ export const PlanEditorTopMenu = (props: Props) => {
                                 >
                                     <Tabs
                                         orientation={'horizontal'}
-                                        variant={'fullWidth'}
                                         value={settingsTab}
                                         onChange={(evt, tabId) => setSettingsTab(tabId)}
                                     >
@@ -361,8 +372,8 @@ export const PlanEditorTopMenu = (props: Props) => {
                                 </Button>
                             </FormButtons>
                         </FormContainer>
-                    </DialogContent>
-                </Dialog>
+                    </KapDialog.Content>
+                </KapDialog>
             </ThemeProvider>
         </Paper>
     );
