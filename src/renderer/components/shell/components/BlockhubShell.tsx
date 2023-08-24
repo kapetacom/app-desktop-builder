@@ -125,7 +125,6 @@ export const BlockhubShell = (props: Props) => {
                     kapetaContext.blockHub.close();
                 }}
                 previewRenderer={(asset, size) => {
-                    const assetRef = normalizeKapetaUri(`${asset.content.metadata.name}:${asset.version}`);
                     return (
                         <AssetThumbnail
                             width={size.width}

@@ -1,5 +1,4 @@
 import {
-    AssetService,
     BlockService,
     BlockTargetProvider,
     BlockTypeProvider,
@@ -15,12 +14,13 @@ import { useAsync } from 'react-use';
 import { BlockDefinition, Plan, Resource } from '@kapeta/schemas';
 import Kapeta from '../kapeta';
 import { AsyncState } from 'react-use/lib/useAsyncFn';
-import { AssetListResult, useAssets } from '../hooks/assetHooks';
-import { AssetInfo, fromAsset } from '@kapeta/ui-web-plan-editor';
+import { AssetListResult, useLocalAssets } from '../hooks/assetHooks';
+import { AssetInfo, fromAsset, fromAssetDisplay } from '@kapeta/ui-web-plan-editor';
+import { assetFetcher } from '../api/APIService';
 
-type PromiseCache = { [key: string]: Promise<void> };
+type PromiseCache<T = void> = { [key: string]: Promise<T> };
 const PROVIDER_CACHE: PromiseCache = {};
-const BLOCK_CACHE: PromiseCache = {};
+const BLOCK_CACHE: PromiseCache<AssetInfo<BlockDefinition> | null> = {};
 
 export function normalizeKapetaUri(uri: string) {
     if (!uri) {
@@ -105,7 +105,7 @@ const fetchLocalProviders = () => {
 };
 
 export const useBlockKinds = (): Set<string> => {
-    const assets = useAssets();
+    const assets = useLocalAssets();
 
     return useMemo(() => {
         return new Set<string>(
@@ -140,12 +140,12 @@ export const useLoadedPlanContext = (plan: Plan | undefined) => {
         return `${plan.metadata.name}:${deps.join(',')}`;
     }, [plan]);
 
-    const assetResult = useAssets();
-    const blocks = useMemo(() => {
-        return !assetResult.loading && assetResult.data ? toBlocks(assetResult.data) : undefined;
-    }, [assetResult.loading, assetResult.data]);
+    const localAssetsResult = useLocalAssets();
+    const localBlocks = useMemo(() => {
+        return !localAssetsResult.loading && localAssetsResult.data ? toBlocks(localAssetsResult.data) : undefined;
+    }, [localAssetsResult.loading, localAssetsResult.data]);
 
-    const missingData = !plan || !assetResult.data || !blocks;
+    const missingData = !plan || !localAssetsResult.data || !localBlocks;
     const results = useAsync(async () => {
         if (missingData) {
             return;
@@ -163,9 +163,11 @@ export const useLoadedPlanContext = (plan: Plan | undefined) => {
             });
         }
 
-        blocks.forEach((asset) => {
+        localBlocks.forEach((asset) => {
             blockDefinitionRefs.add(asset.ref);
         });
+
+        const blocks = [...localBlocks];
 
         const blockDefinitionPromises = Array.from(blockDefinitionRefs).map(async (blockRef) => {
             blockRef = normalizeKapetaUri(blockRef);
@@ -173,18 +175,22 @@ export const useLoadedPlanContext = (plan: Plan | undefined) => {
                 return BLOCK_CACHE[blockRef];
             }
 
-            return (BLOCK_CACHE[blockRef] = new Promise(async (resolve) => {
+            return (BLOCK_CACHE[blockRef] = new Promise<AssetInfo<BlockDefinition> | null>(async (resolve) => {
                 try {
                     const blockUri = parseKapetaUri(blockRef);
-                    let block = blocks?.find((asset) => parseKapetaUri(asset.ref).equals(blockUri));
+                    let block = localBlocks?.find((asset) => parseKapetaUri(asset.ref).equals(blockUri));
 
                     if (!block) {
-                        // Will also cause installation if not already installed
-                        block = fromAsset(await BlockService.get(blockRef));
+                        block =
+                            blockUri.version === 'local'
+                                ? fromAsset(await BlockService.get(blockRef))
+                                : fromAssetDisplay(await assetFetcher(blockUri.fullName, blockUri.version));
+                        console.log('Loaded block', blockRef, block);
                         setCurrentlyLoading(blockRef);
                     }
 
                     if (!block) {
+                        resolve(null);
                         return;
                     }
 
@@ -197,15 +203,15 @@ export const useLoadedPlanContext = (plan: Plan | undefined) => {
                     if (block.content.spec?.target?.kind) {
                         providerRefs.add(block.content.spec.target.kind);
                     }
+                    resolve(block);
                 } catch (e) {
+                    resolve(null);
                     console.warn('Failed to load block', blockRef, e);
-                } finally {
-                    resolve();
                 }
             }));
         });
 
-        await Promise.allSettled(blockDefinitionPromises);
+        const allBlocks = await Promise.all(blockDefinitionPromises);
 
         const providerPromises = Array.from(providerRefs).map(async (ref) => {
             ref = normalizeKapetaUri(ref);
@@ -220,10 +226,10 @@ export const useLoadedPlanContext = (plan: Plan | undefined) => {
         await Promise.allSettled(providerPromises);
 
         return {
-            blocks,
+            blocks: allBlocks.filter((block) => block !== null) as AssetInfo<BlockDefinition>[],
             providers: ResourceTypeProvider.list(),
         };
-    }, [dependencyHash, blocks, missingData]);
+    }, [dependencyHash, localBlocks, missingData]);
 
     useEffect(() => {
         if (results.loading && !missingData) {

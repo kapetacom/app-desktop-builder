@@ -49,7 +49,7 @@ export const useAssetsChanged = (handler: (evt: AssetChangedEvent) => void, depe
     }, [callback]);
 };
 
-export const useAssets = <T = SchemaKind>(...kinds: string[]): AssetListResult<T> => {
+export const useLocalAssets = <T = SchemaKind>(...kinds: string[]): AssetListResult<T> => {
     const [assets, setAssets] = useState<AssetInfo<T>[]>([]);
     const [loading, setLoading] = useState(true);
     const assetResults = useSWRImmutable('local-assets', async () => {
@@ -126,11 +126,11 @@ export const useAssets = <T = SchemaKind>(...kinds: string[]): AssetListResult<T
 };
 
 export const usePlans = () => {
-    return useAssets<Plan>('core/plan');
+    return useLocalAssets<Plan>('core/plan');
 };
 
 export const useBlocks = () => {
-    const all = useAssets<BlockDefinition>();
+    const all = useLocalAssets<BlockDefinition>();
     const data = useMemo(() => {
         return all.data.filter((asset) => {
             return BlockTypeProvider.exists(asset.content.kind);
