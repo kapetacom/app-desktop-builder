@@ -66,11 +66,14 @@ export const useLocalAssets = <T = SchemaKind>(...kinds: string[]): AssetListRes
         }
 
         if (!kinds || kinds.length === 0) {
-            return assetResults.data.map(fromAsset);
+            return assetResults.data.filter((a) => !!a).map(fromAsset);
         }
-        return assetResults.data.map(fromAsset).filter((asset) => {
-            return kinds.includes(asset.content.kind.toLowerCase());
-        }) as AssetInfo<T>[];
+        return assetResults.data
+            .filter((a) => !!a)
+            .map(fromAsset)
+            .filter((asset) => {
+                return kinds.includes(asset.content.kind.toLowerCase());
+            }) as AssetInfo<T>[];
     }, [assetResults.data, kinds.join(':')]);
 
     const callback = useCallback(
@@ -149,7 +152,11 @@ export const useAsset = <T = SchemaKind>(ref: string, ensure?: boolean): AssetRe
     }
     const assetResult = useAsyncRetry(async () => {
         try {
-            return fromAsset((await AssetService.get(ref, ensure)) as Asset<T>);
+            const asset = await AssetService.get(ref, ensure);
+            if (!asset) {
+                return undefined;
+            }
+            return fromAsset(asset as Asset<T>);
         } catch (e: any) {
             console.warn('Failed to load assets', e);
         }

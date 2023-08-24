@@ -1,26 +1,50 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { PlannerService } from '@kapeta/ui-web-context';
 import { Button, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useAsyncRetry } from 'react-use';
 import { getAssetTitle } from '../plan-editor/helpers';
 import { KapetaTab, KapetaTabs, KapetaTabsType } from './components/KapetaTabs';
 import { CustomIcon } from './components/CustomIcon';
-import { navigate } from '@storybook/addon-links';
 import { Person } from '@mui/icons-material';
 import { usePlans } from '../../hooks/assetHooks';
 const DEFAULT_URL = '/edit';
 const useEditorTabs = () => {
     const location = useLocation();
     const navigate = useNavigate();
+    const planAssets = usePlans();
+
+    const tabFilter = (url) => {
+        if (url.startsWith('/edit')) {
+            // If it is an editor tab:
+            if (/\/edit\/(.+)/.test(url)) {
+                // Open plan
+                const ref = decodeURIComponent(/\/edit\/(.+)/.exec(url)?.[1] ?? '');
+                const plan = planAssets.data?.find((a) => a.ref === ref);
+                if (!plan) {
+                    return false;
+                }
+                return true;
+            }
+            return true;
+        }
+
+        if (url.startsWith('/deployments')) {
+            return true;
+        }
+
+        if (url.startsWith('/settings')) {
+            return true;
+        }
+
+        return false;
+    };
 
     const [tabs, setTabs] = useState<string[]>(
         localStorage.getItem('editor-tabs') ? JSON.parse(localStorage.getItem('editor-tabs') || '') : [DEFAULT_URL]
     );
     useEffect(() => {
         // save to local storage
-        localStorage.setItem('editor-tabs', JSON.stringify(tabs));
+        localStorage.setItem('editor-tabs', JSON.stringify(tabs.filter(tabFilter)));
     }, [tabs]);
 
     const createTab = useCallback(
@@ -57,18 +81,18 @@ const useEditorTabs = () => {
     };
 
     return {
-        tabs,
+        tabs: tabs.filter(tabFilter),
         createTab,
         closeTab,
+        planAssets,
     };
 };
 
 export const EditorTabs = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const planAssets = usePlans();
 
-    const { tabs, createTab, closeTab } = useEditorTabs();
+    const { tabs, createTab, closeTab, planAssets } = useEditorTabs();
 
     useEffect(() => {
         if (!location.pathname || location.pathname === '/') {
