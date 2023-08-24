@@ -1,3 +1,10 @@
+## [0.28.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.28.0...v0.28.1) (2023-08-24)
+
+
+### Bug Fixes
+
+* Adjust how play and stop buttons behave to match whats happening ([#81](https://github.com/kapetacom/app-desktop-builder/issues/81)) ([28cdcb5](https://github.com/kapetacom/app-desktop-builder/commit/28cdcb50399d1a23c8ad29e8effdf824667dcdf9))
+
 # [0.28.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.27.6...v0.28.0) (2023-08-24)
 
 
