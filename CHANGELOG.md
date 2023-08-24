@@ -1,3 +1,10 @@
+## [0.27.6](https://github.com/kapetacom/app-desktop-builder/compare/v0.27.5...v0.27.6) (2023-08-24)
+
+
+### Bug Fixes
+
+* Open external settings ([#78](https://github.com/kapetacom/app-desktop-builder/issues/78)) ([2ef96ef](https://github.com/kapetacom/app-desktop-builder/commit/2ef96ef7b05ffb27aab5ec978662e2f09686e689))
+
 ## [0.27.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.27.4...v0.27.5) (2023-08-24)
 
 
