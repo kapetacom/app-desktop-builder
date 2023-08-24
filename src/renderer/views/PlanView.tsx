@@ -11,7 +11,7 @@ import { SimpleLoader } from '@kapeta/ui-web-components';
 import { PlanEditor } from '../components/plan-editor/PlanEditor';
 import { normalizeKapetaUri, useLoadedPlanContext } from '../utils/planContextLoader';
 import { InstanceInfo } from '../components/plan-editor/types';
-import { useAsset, useAssets } from '../hooks/assetHooks';
+import { useAsset } from '../hooks/assetHooks';
 
 interface PlanViewProps {
     systemId: string;
