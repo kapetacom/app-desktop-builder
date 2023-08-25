@@ -67,28 +67,6 @@ export const ContextPicker = (props: ContextPickerProps) => {
                     </SidebarListItemButton>
                 </SidebarListItem>
             ))}
-            <SidebarListItem>
-                <SidebarListItemButton
-                    // Add new should trigger login?
-                    href="/iam/settings/general"
-                    disabled={!props.handle}
-                >
-                    <ListItemIcon>
-                        <Avatar
-                            variant="rounded"
-                            sx={{
-                                boxSizing: 'border-box',
-                                backgroundColor: 'transparent',
-                                border: `1px solid ${theme.palette.text.primary}`,
-                                color: theme.palette.text.primary,
-                            }}
-                        >
-                            +
-                        </Avatar>
-                    </ListItemIcon>
-                    <ListItemText>Add new</ListItemText>
-                </SidebarListItemButton>
-            </SidebarListItem>
         </SidebarList>
     );
 };
