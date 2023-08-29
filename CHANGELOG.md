@@ -1,3 +1,10 @@
+## [0.28.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.28.2...v0.28.3) (2023-08-29)
+
+
+### Bug Fixes
+
+* Moved tabs to main context ([#84](https://github.com/kapetacom/app-desktop-builder/issues/84)) ([0b3cb33](https://github.com/kapetacom/app-desktop-builder/commit/0b3cb33e1490af54f4531367b28e4bf26c34522a))
+
 ## [0.28.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.28.1...v0.28.2) (2023-08-25)
 
 
