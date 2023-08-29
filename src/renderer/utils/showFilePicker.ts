@@ -34,6 +34,7 @@ export const showFilePicker = async (options: Options): Promise<any> => {
     const properties: OpenDialogOptions['properties'] = ['createDirectory'];
     if (options.selectDirectory) {
         properties.push('openDirectory');
+        options.readContent = false;
     } else {
         properties.push('openFile');
     }
