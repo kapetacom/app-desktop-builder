@@ -101,7 +101,7 @@ export function attachHandlers(main: MainWindow) {
 
             return [dialogResponse, content];
         } catch (err) {
-            console.error('Failed to set context', args, err);
+            console.error('Failed to open file picker', args, err);
         }
     });
 }

@@ -9,6 +9,7 @@ import { Await, useAsyncError, useLoaderData } from 'react-router-dom';
 
 import './index.less';
 import { Shell } from './views/Shell';
+import { KapetaContextProvider } from './hooks/contextHook';
 
 const ErrorContainer = () => {
     const error = useAsyncError() as Error;
@@ -20,13 +21,15 @@ export const Root = () => {
     // TODO: Remove this mobx provider
     return (
         <DefaultContext>
-            <Provider>
-                <React.Suspense fallback={<SimpleLoader text="Initialising application..." loading />}>
-                    <Await resolve={data} errorElement={<ErrorContainer />}>
-                        <Shell key="main" />
-                    </Await>
-                </React.Suspense>
-            </Provider>
+            <KapetaContextProvider>
+                <Provider>
+                    <React.Suspense fallback={<SimpleLoader text="Initialising application..." loading />}>
+                        <Await resolve={data} errorElement={<ErrorContainer />}>
+                            <Shell key="main" />
+                        </Await>
+                    </React.Suspense>
+                </Provider>
+            </KapetaContextProvider>
         </DefaultContext>
     );
 };

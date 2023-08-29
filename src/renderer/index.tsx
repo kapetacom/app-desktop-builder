@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client';
-import { ThemeProvider } from '@mui/material';
+import { Box, ThemeProvider } from '@mui/material';
 import { RouterProvider, useParams, createMemoryRouter, useNavigate } from 'react-router-dom';
 import { AssetService } from '@kapeta/ui-web-context';
 import { Root } from './Root';
@@ -8,9 +8,12 @@ import { initialise } from './context';
 import { PlanView } from './views/PlanView';
 import { PlanOverview } from './components/plan-overview/PlanOverview';
 import { useAuthToken } from './utils/tokenHelper';
-import { KapetaContextProvider, useKapetaContext } from './hooks/contextHook';
+import { useKapetaContext } from './hooks/contextHook';
 import { usePlans } from './hooks/assetHooks';
 import { SimpleLoader } from '@kapeta/ui-web-components';
+import { SectionFrameElement } from '@kapeta/web-microfrontend/browser';
+import { useLocation } from 'react-use';
+import { useMemo, useState } from 'react';
 
 const router = createMemoryRouter([
     {
@@ -59,22 +62,66 @@ const router = createMemoryRouter([
                 ],
             },
             {
-                path: 'deployments',
+                path: 'deployments/*',
                 Component: () => {
                     // iframe to deployments microfrontend
                     const context = useKapetaContext();
                     const token = useAuthToken();
-
-                    if (context.loading || token.loading) {
-                        return <div>Loading...</div>;
+                    const location = useLocation();
+                    const navigateTo = useNavigate();
+                    const [ready, setReady] = useState(false);
+                    let { '*': path } = useParams();
+                    while (path && path.startsWith('/')) {
+                        path = path.substr(1);
                     }
 
+                    if (!path) {
+                        path = context.activeContext?.identity.handle ?? '';
+                    }
+
+                    const initialSrc = useMemo(
+                        () => `${window.KapetaDesktop.urls.deployments}/${path}?token=${token.value}`,
+                        [token.value, context.activeContext]
+                    );
+
+                    const loading = !ready || context.loading || token.loading;
+
                     return (
-                        <iframe
-                            src={`${window.KapetaDesktop.urls.deployments}/${context.activeContext?.identity.handle}?token=${token.value}`}
-                            width="100%"
-                            height="100%"
-                        />
+                        <Box
+                            sx={{
+                                height: '100%',
+                                width: '100%',
+                                '& > iframe': {
+                                    height: '100%',
+                                    width: '100%',
+                                },
+                                '& > .simple-loader': {
+                                    height: '100%',
+                                    width: '100%',
+                                },
+                            }}
+                        >
+                            <SimpleLoader loading={loading} />
+                            <SectionFrameElement
+                                initialSrc={initialSrc}
+                                currentPath={path}
+                                onReady={() => {
+                                    setReady(true);
+                                }}
+                                onTitleChange={(data) => {
+                                    context.tabs.setTitle(`/deployments${data.path}`, data.title);
+                                }}
+                                onNavigateTop={(toPath) => {
+                                    navigateTo(toPath);
+                                }}
+                                onNavigate={(toPath) => {
+                                    const fullPath = `/deployments${toPath}`;
+                                    if (location.pathname !== fullPath) {
+                                        navigateTo(fullPath, { replace: true });
+                                    }
+                                }}
+                            />
+                        </Box>
                     );
                 },
             },
@@ -108,8 +155,6 @@ const container = document.getElementById('root')!;
 const root = createRoot(container);
 root.render(
     <ThemeProvider theme={kapetaDark}>
-        <KapetaContextProvider>
-            <RouterProvider router={router} />
-        </KapetaContextProvider>
+        <RouterProvider router={router} />
     </ThemeProvider>
 );

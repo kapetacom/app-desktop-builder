@@ -5,6 +5,8 @@ import { AssetDisplay } from '@kapeta/ui-web-components';
 import { Plan } from '@kapeta/schemas';
 import { IdentityService } from '@kapeta/ui-web-context';
 import { AssetInfo } from '@kapeta/ui-web-plan-editor';
+import { MainTabs } from './types';
+import { useMainTabs } from './mainTabs';
 
 export type BlockHubSelectionCallback = (selection: AssetDisplay[]) => void;
 
@@ -27,6 +29,7 @@ interface KapetaContextData {
         memberships: MemberIdentity[];
         current: string;
     };
+    tabs: MainTabs;
     loading: boolean;
     blockHub: {
         visible: boolean;
@@ -41,6 +44,8 @@ const createKapetaContext = (): KapetaContextData => {
     const [profile, setProfile] = useState<Identity>();
     const [blockHubVisible, setBlockHubVisible] = useState(false);
     const [blockHubOpener, setBlockHubOpener] = useState<BlockHubOpener>();
+
+    const mainTabs = useMainTabs();
 
     const contextData = useAsyncRetry(async () => {
         return window.electron.ipcRenderer.invoke('get-contexts') as Promise<{
@@ -109,6 +114,7 @@ const createKapetaContext = (): KapetaContextData => {
         },
         contexts: contextData.value,
         loading: contextData.loading,
+        tabs: mainTabs,
     };
 };
 
@@ -124,6 +130,15 @@ export const KapetaContext = createContext<KapetaContextData>({
         visible: false,
         open: () => {},
         close: () => {},
+    },
+    tabs: {
+        active: [],
+        current: {
+            path: '',
+        },
+        close: () => {},
+        open: () => {},
+        setTitle: () => {},
     },
 });
 
