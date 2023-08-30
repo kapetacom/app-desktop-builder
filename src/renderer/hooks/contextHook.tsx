@@ -45,7 +45,7 @@ const createKapetaContext = (): KapetaContextData => {
     const [blockHubVisible, setBlockHubVisible] = useState(false);
     const [blockHubOpener, setBlockHubOpener] = useState<BlockHubOpener>();
 
-    const mainTabs = useMainTabs();
+    const mainTabs = useMainTabs(activeContext);
 
     const contextData = useAsyncRetry(async () => {
         return window.electron.ipcRenderer.invoke('get-contexts') as Promise<{
@@ -139,6 +139,7 @@ export const KapetaContext = createContext<KapetaContextData>({
         close: () => {},
         open: () => {},
         setTitle: () => {},
+        setContext: () => {},
     },
 });
 

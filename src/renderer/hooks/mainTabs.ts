@@ -2,19 +2,35 @@ import { usePlans } from './assetHooks';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { MainTabs, TabInfo, TabOptions } from './types';
+import { MemberIdentity } from '@kapeta/ui-web-types';
 
 const TAB_LOCAL_STORAGE = '$main_tabs';
 export const DEFAULT_TAB_PATH = '/edit';
 export const DEFAULT_TITLE = 'My Plans';
 
 export function normalizeUrl(url: string) {
-    if (/^\/deployments\/[^\/]+\/?$/i.test(url)) {
-        // If this is the overview level - open the same tab
-        url = '/deployments';
+    if (url.startsWith('/settings')) {
+        url = '/settings';
+    }
+
+    if (url.startsWith('/organizations')) {
+        const handle = /\/organizations\/([^\/]+)/.exec(url)?.[1];
+        if (handle) {
+            url = `/organizations/${handle}`;
+        } else {
+            url = '/organizations';
+        }
     }
     return url;
 }
-export const useMainTabs = (): MainTabs => {
+
+/**
+ * Returns true if the path is context-sensitive, meaning it should be scoped to a specific contextId
+ */
+function isContextSensitive(path: string) {
+    return path.startsWith('/deployments') && path !== '/deployments';
+}
+export const useMainTabs = (context?: MemberIdentity): MainTabs => {
     const location = useLocation();
     const navigate = useNavigate();
     const planAssets = usePlans();
@@ -42,6 +58,10 @@ export const useMainTabs = (): MainTabs => {
             return true;
         }
 
+        if (tabInfo.path.startsWith('/organizations')) {
+            return true;
+        }
+
         return false;
     };
 
@@ -63,22 +83,33 @@ export const useMainTabs = (): MainTabs => {
     const openTab = useCallback(
         (path = DEFAULT_TAB_PATH, opts: TabOptions = {}) => {
             setTabs((previous) => {
+                const contextId = isContextSensitive(path) ? opts.contextId || context?.identity.id : undefined;
                 path = normalizeUrl(path);
-                return previous.some((tab) => tab.path === path)
-                    ? previous
-                    : [
-                          ...previous,
-                          {
-                              path,
-                              title: opts.title,
-                          },
-                      ];
+                const existingTabIx = previous.findIndex((tab) => tab.path === path);
+                if (existingTabIx > -1) {
+                    const existingTab = previous[existingTabIx];
+                    if (opts.contextId && existingTab.contextId !== opts.contextId) {
+                        // We only do this if we've specifically requested a contextId change
+                        const out = [...previous];
+                        out[existingTabIx] = { ...existingTab, contextId };
+                        return out;
+                    }
+                    return previous;
+                }
+                return [
+                    ...previous,
+                    {
+                        path,
+                        title: opts.title,
+                        contextId,
+                    },
+                ];
             });
             if (opts.navigate) {
                 navigate(path);
             }
         },
-        [setTabs, navigate, DEFAULT_TAB_PATH]
+        [setTabs, navigate, context, DEFAULT_TAB_PATH]
     );
 
     const closeTab = useCallback(
@@ -119,7 +150,19 @@ export const useMainTabs = (): MainTabs => {
         active: tabs.filter(tabFilter),
         open: openTab,
         close: closeTab,
+        setContext: (path: string, contextId: string | undefined) => {
+            path = normalizeUrl(path);
+            setTabs((tabState) => {
+                const i = tabState.findIndex((tab) => tab.path === path);
+                if (i > -1) {
+                    tabState[i] = { ...tabState[i], contextId };
+                    return [...tabState];
+                }
+                return tabState;
+            });
+        },
         setTitle: (path: string, title: string) => {
+            path = normalizeUrl(path);
             setTabs((tabState) => {
                 const i = tabState.findIndex((tab) => tab.path === path);
                 if (i > -1) {

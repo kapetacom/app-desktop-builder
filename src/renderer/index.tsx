@@ -1,6 +1,6 @@
 import { createRoot } from 'react-dom/client';
 import { Box, ThemeProvider } from '@mui/material';
-import { RouterProvider, useParams, createMemoryRouter, useNavigate } from 'react-router-dom';
+import { RouterProvider, useParams, createMemoryRouter, useNavigate, useLocation } from 'react-router-dom';
 import { AssetService } from '@kapeta/ui-web-context';
 import { Root } from './Root';
 import { kapetaDark } from './Theme';
@@ -12,8 +12,8 @@ import { useKapetaContext } from './hooks/contextHook';
 import { usePlans } from './hooks/assetHooks';
 import { SimpleLoader } from '@kapeta/ui-web-components';
 import { SectionFrameElement } from '@kapeta/web-microfrontend/browser';
-import { useLocation } from 'react-use';
 import { useMemo, useState } from 'react';
+import { RemoteFrame } from './components/shell/RemoteFrame';
 
 const router = createMemoryRouter([
     {
@@ -65,84 +65,31 @@ const router = createMemoryRouter([
                 path: 'deployments/*',
                 Component: () => {
                     // iframe to deployments microfrontend
-                    const context = useKapetaContext();
-                    const token = useAuthToken();
-                    const location = useLocation();
-                    const navigateTo = useNavigate();
-                    const [ready, setReady] = useState(false);
+
                     let { '*': path } = useParams();
                     while (path && path.startsWith('/')) {
                         path = path.substr(1);
                     }
+                    path = 'deployments' + (path ? '/' + path : '');
 
-                    if (!path) {
-                        path = context.activeContext?.identity.handle ?? '';
-                    }
-
-                    const initialSrc = useMemo(
-                        () => `${window.KapetaDesktop.urls.deployments}/${path}?token=${token.value}`,
-                        [token.value, context.activeContext]
-                    );
-
-                    const loading = !ready || context.loading || token.loading;
-
-                    return (
-                        <Box
-                            sx={{
-                                height: '100%',
-                                width: '100%',
-                                '& > iframe': {
-                                    height: '100%',
-                                    width: '100%',
-                                },
-                                '& > .simple-loader': {
-                                    height: '100%',
-                                    width: '100%',
-                                },
-                            }}
-                        >
-                            <SimpleLoader loading={loading} />
-                            <SectionFrameElement
-                                initialSrc={initialSrc}
-                                currentPath={path}
-                                onReady={() => {
-                                    setReady(true);
-                                }}
-                                onTitleChange={(data) => {
-                                    context.tabs.setTitle(`/deployments${data.path}`, data.title);
-                                }}
-                                onNavigateTop={(toPath) => {
-                                    navigateTo(toPath);
-                                }}
-                                onNavigate={(toPath) => {
-                                    const fullPath = `/deployments${toPath}`;
-                                    if (location.pathname !== fullPath) {
-                                        navigateTo(fullPath, { replace: true });
-                                    }
-                                }}
-                            />
-                        </Box>
-                    );
+                    return <RemoteFrame baseUrl={window.KapetaDesktop.urls.deployments} path={path} />;
                 },
             },
             {
-                path: 'settings',
+                path: 'settings/*',
                 Component: () => {
-                    // iframe to deployments microfrontend
-                    const context = useKapetaContext();
-                    const token = useAuthToken();
-
-                    if (context.loading || token.loading) {
-                        return <div>Loading...</div>;
-                    }
+                    return <RemoteFrame baseUrl={window.KapetaDesktop.urls.settings} path={'settings/general'} />;
+                },
+            },
+            {
+                path: 'organizations/:handle/*',
+                Component: () => {
+                    const { handle: handle } = useParams();
 
                     return (
-                        <iframe
-                            src={`${window.KapetaDesktop.urls.settings}/${
-                                context.activeContext?.identity.handle ?? ''
-                            }?token=${token.value}`}
-                            width="100%"
-                            height="100%"
+                        <RemoteFrame
+                            baseUrl={window.KapetaDesktop.urls.settings}
+                            path={`organizations/${handle}/settings/general`}
                         />
                     );
                 },

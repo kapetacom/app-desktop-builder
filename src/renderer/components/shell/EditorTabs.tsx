@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Button, IconButton } from '@mui/material';
+import { Box, Button, IconButton, Stack, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getAssetTitle } from '../plan-editor/helpers';
@@ -9,6 +9,8 @@ import { Person } from '@mui/icons-material';
 import { useKapetaContext } from '../../hooks/contextHook';
 import { DEFAULT_TAB_PATH, normalizeUrl } from '../../hooks/mainTabs';
 import { usePlans } from '../../hooks/assetHooks';
+import ApartmentIcon from '@mui/icons-material/Apartment';
+import { Tooltip } from '@kapeta/ui-web-components';
 
 export const EditorTabs = () => {
     const planAssets = usePlans();
@@ -63,11 +65,35 @@ export const EditorTabs = () => {
                     }
                 } else if (tabInfo.path.startsWith('/settings')) {
                     variant = 'deploy';
-                    label = tabInfo.title ?? 'Settings';
+                    label = tabInfo.title ?? 'Profile';
                     icon = <Person />;
+                } else if (tabInfo.path.startsWith('/organizations')) {
+                    const [, , handle] = tabInfo.path.split(/\//g);
+                    variant = 'deploy';
+                    label = tabInfo.title ?? handle ?? 'Organization';
+                    icon = <ApartmentIcon />;
                 } else {
                     console.warn('Unknown tab url', tabInfo);
                     return null;
+                }
+
+                let contextHandle: string | undefined = kapetaContext.activeContext?.identity.handle;
+                if (tabInfo.contextId) {
+                    if (kapetaContext.profile?.id === tabInfo.contextId) {
+                        contextHandle = kapetaContext.profile.handle;
+                    } else {
+                        const membership = kapetaContext.contexts?.memberships.find(
+                            (m) => m.identity.id === tabInfo.contextId
+                        );
+                        if (membership) {
+                            contextHandle = membership.identity.handle;
+                        }
+                    }
+                }
+
+                let tooltipTitle = label;
+                if (contextHandle) {
+                    tooltipTitle = `${label} @ ${contextHandle}`;
                 }
 
                 const value = normalizeUrl(tabInfo.path);
@@ -77,30 +103,34 @@ export const EditorTabs = () => {
                         href={value}
                         variant={variant}
                         icon={icon}
-                        iconPosition="start"
+                        iconPosition={'start'}
                         label={
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    maxWidth: 'calc(100% - 32px)',
-                                    alignItems: 'center',
-                                }}
+                            <Stack
+                                gap={'4px'}
+                                alignItems={'center'}
+                                width={'calc(100% - 32px)'}
+                                direction={'row'}
+                                justifyContent={'space-between'}
                             >
-                                <span
-                                    style={{
-                                        height: '1em',
-                                        overflow: 'hidden',
-                                        textOverflow: 'ellipsis',
-                                    }}
-                                >
-                                    {label}
-                                </span>
+                                <Box flex={1} overflow={'hidden'}>
+                                    <Tooltip title={tooltipTitle} enterDelay={1000} placement={'bottom'}>
+                                        <Typography
+                                            fontSize={'12px'}
+                                            style={{
+                                                width: '100%',
+                                                whiteSpace: 'nowrap',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                            }}
+                                        >
+                                            {label}
+                                        </Typography>
+                                    </Tooltip>
+                                </Box>
 
                                 <IconButton
                                     type="button"
-                                    sx={{
-                                        mr: '-14px',
-                                    }}
+                                    size="small"
                                     onClick={(e) => {
                                         e.preventDefault();
                                         kapetaContext.tabs.close(tabInfo.path);
@@ -108,7 +138,7 @@ export const EditorTabs = () => {
                                 >
                                     <CloseIcon />
                                 </IconButton>
-                            </div>
+                            </Stack>
                         }
                     />
                 );
