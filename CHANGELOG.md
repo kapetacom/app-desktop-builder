@@ -1,3 +1,10 @@
+## [0.28.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.28.4...v0.28.5) (2023-08-30)
+
+
+### Bug Fixes
+
+* Update to match changed interface ([5ce0716](https://github.com/kapetacom/app-desktop-builder/commit/5ce0716a3604b5982caa5f62f581087aca36e042))
+
 ## [0.28.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.28.3...v0.28.4) (2023-08-30)
 
 
