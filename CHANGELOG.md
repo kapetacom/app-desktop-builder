@@ -1,3 +1,10 @@
+## [0.28.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.28.3...v0.28.4) (2023-08-30)
+
+
+### Bug Fixes
+
+* Handle new url patterns and wrap all frames in RemoteFrame ([#85](https://github.com/kapetacom/app-desktop-builder/issues/85)) ([484779b](https://github.com/kapetacom/app-desktop-builder/commit/484779bef5f5740319780cc8e6a1ec94d4976aa1))
+
 ## [0.28.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.28.2...v0.28.3) (2023-08-29)
 
 
