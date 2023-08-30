@@ -187,7 +187,6 @@ export const useLoadedPlanContext = (plan: Plan | undefined) => {
                         blockUri.version === 'local'
                             ? fromAsset(await BlockService.get(blockRef))
                             : fromAssetDisplay(await assetFetcher(blockUri.fullName, blockUri.version));
-                    console.log('Loaded block', blockRef, block);
                     setCurrentlyLoading(blockRef);
 
                     if (!block) {

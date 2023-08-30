@@ -19,8 +19,9 @@ export const KapetaTab = styled(Tab, {
     {
         minHeight: '52px',
         maxHeight: '52px',
-        maxWidth: '214px',
+        maxWidth: '360px',
         textTransform: 'none',
+        justifyContent: 'stretch',
     },
     ({ variant, theme }: { variant?: 'deploy' | 'edit'; theme: any }) => {
         const bg =
@@ -50,6 +51,9 @@ export const KapetaTab = styled(Tab, {
 
 export const KapetaTabs = styled(Tabs)({
     '& .MuiTabs-indicator': {
+        display: 'none',
+    },
+    '& .MuiTabScrollButton-root.Mui-disabled': {
         display: 'none',
     },
 });

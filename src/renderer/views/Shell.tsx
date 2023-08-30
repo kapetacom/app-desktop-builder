@@ -1,8 +1,6 @@
 import { Outlet, useLocation } from 'react-router-dom';
 import 'react-tabs/style/react-tabs.css';
 
-import { toClass } from '@kapeta/ui-web-utils';
-
 import { TopBar } from 'renderer/components/shell/TopBar';
 import { MainLayout } from 'renderer/components/shell/MainLayout';
 import { EditorTabs } from 'renderer/components/shell/EditorTabs';
