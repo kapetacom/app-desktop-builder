@@ -1,5 +1,5 @@
 import { app, Menu, shell, BrowserWindow, MenuItemConstructorOptions } from 'electron';
-import { checkForUpdates } from '../helpers';
+import { AutoUpdateHelper } from './AutoUpdateHelper';
 
 interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
     selector?: string;
@@ -7,10 +7,12 @@ interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
 }
 
 export class MenuBuilder {
-    mainWindow: BrowserWindow;
+    private readonly mainWindow: BrowserWindow;
+    private readonly autoUpdater: AutoUpdateHelper;
 
-    constructor(mainWindow: BrowserWindow) {
+    constructor(mainWindow: BrowserWindow, autoUpdater: AutoUpdateHelper) {
         this.mainWindow = mainWindow;
+        this.autoUpdater = autoUpdater;
     }
 
     buildMenu(): Menu {
@@ -39,7 +41,11 @@ export class MenuBuilder {
         });
     }
 
-    buildDarwinTemplate(): MenuItemConstructorOptions[] {
+    private checkForUpdates() {
+        this.autoUpdater.checkForUpdates(this.mainWindow, true);
+    }
+
+    private buildDarwinTemplate(): MenuItemConstructorOptions[] {
         const subMenuAbout: DarwinMenuItemConstructorOptions = {
             label: 'Kapeta',
             submenu: [
@@ -50,7 +56,7 @@ export class MenuBuilder {
                 {
                     label: 'Check for Updates...',
                     click: () => {
-                        checkForUpdates(true);
+                        this.checkForUpdates();
                     },
                 },
                 { type: 'separator' },
@@ -234,6 +240,12 @@ export class MenuBuilder {
                         label: 'Documentation',
                         click() {
                             shell.openExternal('https://docs.kapeta.com');
+                        },
+                    },
+                    {
+                        label: 'Check for Updates...',
+                        click: () => {
+                            this.checkForUpdates();
                         },
                     },
                 ],

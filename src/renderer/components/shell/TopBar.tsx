@@ -20,8 +20,9 @@ import {
 import { UserAvatar } from '@kapeta/ui-web-components';
 
 import { Link } from 'react-router-dom';
-import { UserProfile, KapetaNotification, StateNotificationType } from './types';
+import { KapetaNotification, StateNotificationType } from './types';
 import { useKapetaContext } from '../../hooks/contextHook';
+import { useAutoUpdater } from '../../auto-updater/hooks';
 
 const noHoverSX = {
     cursor: 'default',

@@ -39,6 +39,7 @@ export interface CommentNotification {
     timestamp: number;
     read: boolean;
     author: UserProfile;
+    promote?: boolean; // Show immediately
 }
 
 export interface ProgressNotification {
@@ -48,6 +49,7 @@ export interface ProgressNotification {
     timestamp: number;
     read: boolean;
     progress: number;
+    promote?: boolean; // Show immediately
 }
 
 export type StateNotificationType = 'error' | 'warning' | 'info' | 'success';
@@ -58,6 +60,7 @@ export interface StateNotification {
     message: string;
     timestamp: number;
     read: boolean;
+    promote?: boolean; // Show immediately
 }
 export type KapetaNotification = StateNotification | CommentNotification | ProgressNotification;
 

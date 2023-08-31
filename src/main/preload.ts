@@ -2,13 +2,14 @@ import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 import ClusterConfiguration from '@kapeta/local-cluster-config';
 import { version } from '../../package.json';
 
-export type Channels = 'ipc-main' | 'splash' | 'processing' | 'auth';
+export type Channels = 'ipc-main' | 'splash' | 'processing' | 'auth' | 'auto-updater';
 export type Procedures =
     | 'get-token'
     | 'get-contexts'
     | 'log-out'
     | 'refresh-context'
     | 'set-context'
+    | 'quit-and-install'
     | 'open-file-dialog';
 
 const electronHandler = {

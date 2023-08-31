@@ -4,16 +4,19 @@ import { MenuBuilder } from './MenuBuilder';
 import { DockWrapper } from './Dock';
 import { TrayWrapper } from './Tray';
 import { ClusterService } from '../services/ClusterService';
+import { AutoUpdateHelper } from './AutoUpdateHelper';
 
 export class MainWindow {
     private _window: BrowserWindow | undefined = undefined;
     private tray: TrayWrapper;
     private dock: DockWrapper;
+    private autoUpdater: AutoUpdateHelper;
     private clusterService: ClusterService;
 
     constructor(clusterService: ClusterService) {
         this.dock = new DockWrapper();
         this.tray = new TrayWrapper(this, clusterService);
+        this.autoUpdater = new AutoUpdateHelper();
         this.clusterService = clusterService;
     }
 
@@ -25,6 +28,10 @@ export class MainWindow {
         if (this._window?.hide) {
             this._window?.hide();
         }
+    }
+
+    public quitAndInstall() {
+        this.autoUpdater.quitAndInstall();
     }
 
     public close() {
@@ -69,7 +76,9 @@ export class MainWindow {
 
         await this._window.loadURL(`${resolveHtmlPath(`index.html`)}?cluster_service=${clusterServiceURL}`);
 
-        this._window.on('show', () => this.dock.show());
+        this._window.on('show', () => {
+            this.dock.show();
+        });
 
         this._window.on('ready-to-show', async () => {
             if (!this._window) {
@@ -84,7 +93,7 @@ export class MainWindow {
             await this.tray.update();
         });
 
-        const menuBuilder = new MenuBuilder(this._window);
+        const menuBuilder = new MenuBuilder(this._window, this.autoUpdater);
         menuBuilder.buildMenu();
 
         // Open urls in the user's browser
@@ -112,6 +121,8 @@ export class MainWindow {
                 });
             }
         );
+
+        await this.autoUpdater.init(this);
     }
 
     async show() {
