@@ -1,3 +1,10 @@
+# [0.29.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.28.9...v0.29.0) (2023-08-31)
+
+
+### Features
+
+* Add segment.com tracking ([#90](https://github.com/kapetacom/app-desktop-builder/issues/90)) ([e0cac46](https://github.com/kapetacom/app-desktop-builder/commit/e0cac46ee9ba0ead341eceb2dee963be5d0944b0))
+
 ## [0.28.9](https://github.com/kapetacom/app-desktop-builder/compare/v0.28.8...v0.28.9) (2023-08-31)
 
 
