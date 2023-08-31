@@ -2,14 +2,11 @@
 import { URL } from 'url';
 import path from 'path';
 import { session, app, BrowserWindow, ipcMain, shell, dialog, nativeImage } from 'electron';
-import log from 'electron-log';
-import { autoUpdater } from 'electron-updater';
 import packageJson from '../../package.json';
 
 import MessageBoxOptions = Electron.MessageBoxOptions;
 
 const ENABLE_EXTENSIONS = false; // Disabled because Electron doesn't support react extension currently
-const AUTO_UPDATE_INTERVAL_MS = 60 * 1000; // TODO: Change to 10 min
 
 export const RESOURCES_PATH = app.isPackaged
     ? path.join(process.resourcesPath, 'assets')
@@ -24,8 +21,6 @@ export const getAssetPath = (...paths: string[]): string => {
 };
 
 export const appInit = async () => {
-    await initAutoUpdater();
-
     if (isDebug()) {
         require('electron-debug')();
     }
@@ -71,64 +66,6 @@ export const attachIPCListener = (
 
 export const getPreloadScript = () => {
     return app.isPackaged ? path.join(__dirname, 'preload.js') : path.join(__dirname, '../../.erb/dll/preload.js');
-};
-
-let hasUserChosenToUpdateLater = false;
-
-export const checkForUpdates = async (initiatedByUser = false) => {
-    const icon = nativeImage.createFromPath(getAssetPath('icon.png'));
-    const currentVersion = app.getVersion();
-    let nextVersion: string | undefined;
-
-    try {
-        const updateCheckResult = await autoUpdater.checkForUpdates();
-        nextVersion = updateCheckResult?.updateInfo.version;
-    } catch (e) {
-        // autoUpdater logs errors to electron-log automatically
-    }
-
-    // No updates
-    if (!nextVersion || nextVersion === currentVersion) {
-        if (initiatedByUser) {
-            showMessage({
-                icon,
-                message: 'No Updates',
-                detail: `You are running the latest version ${currentVersion}.`,
-            });
-        }
-        return;
-    }
-
-    // A new update is available!
-    if (!hasUserChosenToUpdateLater || initiatedByUser) {
-        const dialogOpts: MessageBoxOptions = {
-            icon,
-            buttons: ['Later', 'Quit and Install Now'],
-            defaultId: 1,
-            title: 'Update Available',
-            message: `Version ${nextVersion} is available. You are running version ${currentVersion}.`,
-            detail: 'Do you want to update now or later?',
-        };
-
-        const dialogResponse = showMessage(dialogOpts);
-
-        if (dialogResponse === 1) {
-            autoUpdater.quitAndInstall();
-        } else {
-            hasUserChosenToUpdateLater = true;
-        }
-    }
-};
-
-export const initAutoUpdater = async () => {
-    try {
-        log.transports.file.level = 'info';
-        autoUpdater.logger = log;
-        checkForUpdates();
-        setInterval(checkForUpdates, AUTO_UPDATE_INTERVAL_MS);
-    } catch (e) {
-        log.warn('Failed to initialize auto updater', e);
-    }
 };
 
 export const installExtensions = async () => {

@@ -61,6 +61,10 @@ export function attachHandlers(main: MainWindow) {
         }
     });
 
+    ipcMain.handle('quit-and-install', async () => {
+        main.quitAndInstall();
+    });
+
     ipcMain.handle('set-context', async (evt, ...args: any[]) => {
         try {
             const api = new KapetaAPI();
