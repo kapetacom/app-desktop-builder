@@ -13,6 +13,7 @@ import { useLocalStorage } from '../utils/localStorage';
 import { useKapetaContext } from 'renderer/hooks/contextHook';
 import { useBackgroundTasks } from './hooks/useBackgroundTasks';
 import { useNotifications } from '../hooks/useNotifications';
+import { useEffect } from 'react';
 
 export function Shell() {
     const [error, setError] = useLocalStorage('$main_error', '');
@@ -31,6 +32,28 @@ export function Shell() {
     if (error) {
         return <div className="error-details">{error}</div>;
     }
+
+    useEffect(() => {
+        if (identity.value) {
+            window.analytics.identify(identity.value.id, {
+                name: identity.value.name,
+                username: identity.value.handle,
+            });
+        }
+        if (identity.value?.id && contexts.activeContext && contexts.activeContext.identity.id !== identity.value.id) {
+            window.analytics.group(contexts.activeContext.identity.id, {
+                name: contexts.activeContext.identity.name,
+                handle: contexts.activeContext.identity.handle,
+            });
+        }
+    }, [identity.value?.id, contexts.activeContext?.identity.id]);
+
+    useEffect(() => {
+        window.analytics.page(location.pathname, {
+            path: location.pathname,
+            url: 'desktop://kapeta' + location.pathname,
+        });
+    }, [location.pathname]);
 
     return (
         <MainLayout
