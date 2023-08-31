@@ -1,3 +1,10 @@
+## [0.28.8](https://github.com/kapetacom/app-desktop-builder/compare/v0.28.7...v0.28.8) (2023-08-31)
+
+
+### Bug Fixes
+
+* Adjust start screen to match design ([#88](https://github.com/kapetacom/app-desktop-builder/issues/88)) ([69af3f9](https://github.com/kapetacom/app-desktop-builder/commit/69af3f99b69e6ce0b60e9664a4d1f5886e68c93c))
+
 ## [0.28.7](https://github.com/kapetacom/app-desktop-builder/compare/v0.28.6...v0.28.7) (2023-08-31)
 
 
