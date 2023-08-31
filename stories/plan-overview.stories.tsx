@@ -4,9 +4,12 @@ import './index.less';
 import { ThemeProvider } from '@mui/material';
 import { kapetaLight } from '../src/renderer/Theme';
 import { PlanOverview } from '../src/renderer/components/plan-overview/PlanOverview';
-import { Asset } from '@kapeta/ui-web-types';
 import { Plan } from '@kapeta/schemas';
 import { AssetInfo } from '@kapeta/ui-web-plan-editor';
+import { Config } from '@kapeta/nodejs-registry-utils';
+import { ConfirmProvider } from '@kapeta/ui-web-components';
+import { AssetStore } from '@kapeta/ui-web-context';
+import { Asset, SchemaKind } from '@kapeta/ui-web-types';
 
 const defaultInfo = {
     ymlPath: '',
@@ -38,119 +41,145 @@ const SAMPLE_PLAN: AssetInfo<Plan> = {
     },
 };
 
+const assetService: AssetStore = {
+    list: () => Promise.resolve([]),
+    get: (ref: string, ensure: boolean) => Promise.resolve({} as Asset),
+    import: (ref: string) => Promise.resolve([]),
+    create: (path: string, content: SchemaKind) => Promise.resolve([]),
+    remove: (ref: string) => Promise.resolve(),
+};
+
 export default {
     title: 'Plan Overview',
 };
 
 export const EmptyState = () => {
     return (
-        <ThemeProvider theme={kapetaLight}>
-            <div style={{ maxWidth: '1152px' }}>
-                <PlanOverview
-                    onPlanSelected={(plan) => {
-                        console.log('onPlanSelected', plan);
-                    }}
-                    onPlanAdded={(plan) => {
-                        console.log('onPlanAdded', plan);
-                    }}
-                    onPlanRemoved={(plan) => {
-                        console.log('onPlanRemoved', plan);
-                    }}
-                    sample={SAMPLE_PLAN}
-                    plans={[]}
-                />
-            </div>
-        </ThemeProvider>
+        <ConfirmProvider>
+            <ThemeProvider theme={kapetaLight}>
+                <div style={{ maxWidth: '1152px' }}>
+                    <PlanOverview
+                        assetService={assetService}
+                        onPlanSelected={(plan) => {
+                            console.log('onPlanSelected', plan);
+                        }}
+                        onPlanAdded={(plan) => {
+                            console.log('onPlanAdded', plan);
+                        }}
+                        onPlanRemoved={(plan) => {
+                            console.log('onPlanRemoved', plan);
+                        }}
+                        onPlanImported={(plan) => {
+                            console.log('onPlanImported', plan);
+                        }}
+                        samplePlanName={SAMPLE_PLAN.content.metadata.name}
+                        plans={[SAMPLE_PLAN]}
+                    />
+                </div>
+            </ThemeProvider>
+        </ConfirmProvider>
     );
 };
 
 export const EmptyNoSampleState = () => {
     return (
-        <ThemeProvider theme={kapetaLight}>
-            <div style={{ maxWidth: '1152px' }}>
-                <PlanOverview
-                    onPlanSelected={(plan) => {
-                        console.log('onPlanSelected', plan);
-                    }}
-                    onPlanAdded={(plan) => {
-                        console.log('onPlanAdded', plan);
-                    }}
-                    onPlanRemoved={(plan) => {
-                        console.log('onPlanRemoved', plan);
-                    }}
-                    plans={[]}
-                />
-            </div>
-        </ThemeProvider>
+        <ConfirmProvider>
+            <ThemeProvider theme={kapetaLight}>
+                <div style={{ maxWidth: '1152px' }}>
+                    <PlanOverview
+                        assetService={assetService}
+                        onPlanSelected={(plan) => {
+                            console.log('onPlanSelected', plan);
+                        }}
+                        onPlanAdded={(plan) => {
+                            console.log('onPlanAdded', plan);
+                        }}
+                        onPlanRemoved={(plan) => {
+                            console.log('onPlanRemoved', plan);
+                        }}
+                        onPlanImported={(plan) => {
+                            console.log('onPlanImported', plan);
+                        }}
+                        plans={[]}
+                    />
+                </div>
+            </ThemeProvider>
+        </ConfirmProvider>
     );
 };
 export const FilledState = () => {
     return (
-        <ThemeProvider theme={kapetaLight}>
-            <div style={{ maxWidth: '1152px' }}>
-                <PlanOverview
-                    sample={SAMPLE_PLAN}
-                    onPlanSelected={(plan) => {
-                        console.log('onPlanSelected', plan);
-                    }}
-                    onPlanAdded={(plan) => {
-                        console.log('onPlanAdded', plan);
-                    }}
-                    onPlanRemoved={(plan) => {
-                        console.log('onPlanRemoved', plan);
-                    }}
-                    plans={[
-                        {
-                            ...defaultInfo,
-                            version: '1.0.0',
-                            ref: 'kapeta/test:1.0.0',
-                            content: {
-                                ...defaultData,
-                                metadata: {
-                                    name: 'kapeta/test',
-                                    title: 'Test Plan',
+        <ConfirmProvider>
+            <ThemeProvider theme={kapetaLight}>
+                <div style={{ maxWidth: '1152px' }}>
+                    <PlanOverview
+                        assetService={assetService}
+                        samplePlanName={SAMPLE_PLAN.content.metadata.name}
+                        onPlanSelected={(plan) => {
+                            console.log('onPlanSelected', plan);
+                        }}
+                        onPlanAdded={(plan) => {
+                            console.log('onPlanAdded', plan);
+                        }}
+                        onPlanRemoved={(plan) => {
+                            console.log('onPlanRemoved', plan);
+                        }}
+                        onPlanImported={(plan) => {
+                            console.log('onPlanImported', plan);
+                        }}
+                        plans={[
+                            {
+                                ...defaultInfo,
+                                version: '1.0.0',
+                                ref: 'kapeta/test:1.0.0',
+                                content: {
+                                    ...defaultData,
+                                    metadata: {
+                                        name: 'kapeta/test',
+                                        title: 'Test Plan',
+                                    },
                                 },
                             },
-                        },
-                        {
-                            ...defaultInfo,
-                            version: '1.0.0',
-                            ref: 'kapeta/todo:1.0.0',
-                            content: {
-                                ...defaultData,
-                                metadata: {
-                                    name: 'kapeta/todo',
-                                    title: 'Todo System',
+                            {
+                                ...defaultInfo,
+                                version: '1.0.0',
+                                ref: 'kapeta/todo:1.0.0',
+                                content: {
+                                    ...defaultData,
+                                    metadata: {
+                                        name: 'kapeta/todo',
+                                        title: 'Todo System',
+                                    },
                                 },
                             },
-                        },
-                        {
-                            ...defaultInfo,
-                            version: '1.0.0',
-                            ref: 'kapeta/projects:1.0.0',
-                            content: {
-                                ...defaultData,
-                                metadata: {
-                                    name: 'kapeta/projects',
-                                    title: 'Project Management',
+                            {
+                                ...defaultInfo,
+                                version: '1.0.0',
+                                ref: 'kapeta/projects:1.0.0',
+                                content: {
+                                    ...defaultData,
+                                    metadata: {
+                                        name: 'kapeta/projects',
+                                        title: 'Project Management',
+                                    },
                                 },
                             },
-                        },
-                        {
-                            ...defaultInfo,
-                            version: '1.0.0',
-                            ref: 'kapeta/payments:1.0.0',
-                            content: {
-                                ...defaultData,
-                                metadata: {
-                                    name: 'kapeta/payments',
-                                    title: 'Payment System',
+                            {
+                                ...defaultInfo,
+                                version: '1.0.0',
+                                ref: 'kapeta/payments:1.0.0',
+                                content: {
+                                    ...defaultData,
+                                    metadata: {
+                                        name: 'kapeta/payments',
+                                        title: 'Payment System',
+                                    },
                                 },
                             },
-                        },
-                    ]}
-                />
-            </div>
-        </ThemeProvider>
+                        ]}
+                    />
+                </div>
+            </ThemeProvider>
+        </ConfirmProvider>
     );
 };

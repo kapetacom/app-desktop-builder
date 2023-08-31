@@ -9,6 +9,7 @@ import { TransitionGroup } from 'react-transition-group';
 import { AssetInfo, AssetThumbnail } from '@kapeta/ui-web-plan-editor';
 import { useLoadedPlanContext } from '../../../utils/planContextLoader';
 import { installerService } from '../../../api/installerService';
+import { grey } from '@mui/material/colors';
 
 interface Props {
     plans: AssetInfo<Plan>[];
@@ -78,7 +79,17 @@ const YourPlansListInner = (props: Props) => {
                                 <span>a new Plan to see it here.</span>
                             </p>
                         </Typography>
-                        <Button variant={'outlined'} color={'inherit'} size={'large'}>
+                        <Button
+                            variant={'outlined'}
+                            color={'inherit'}
+                            sx={{
+                                '&:hover': {
+                                    bgcolor: grey[100],
+                                },
+                            }}
+                            size={'large'}
+                            onClick={props.onPlanCreate}
+                        >
                             Create new Plan
                         </Button>
                     </Box>

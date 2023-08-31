@@ -7,12 +7,8 @@ import { kapetaDark } from './Theme';
 import { initialise } from './context';
 import { PlanView } from './views/PlanView';
 import { PlanOverview } from './components/plan-overview/PlanOverview';
-import { useAuthToken } from './utils/tokenHelper';
-import { useKapetaContext } from './hooks/contextHook';
 import { usePlans } from './hooks/assetHooks';
 import { SimpleLoader } from '@kapeta/ui-web-components';
-import { SectionFrameElement } from '@kapeta/web-microfrontend/browser';
-import { useMemo, useState } from 'react';
 import { RemoteFrame } from './components/shell/RemoteFrame';
 
 const router = createMemoryRouter([
@@ -37,6 +33,7 @@ const router = createMemoryRouter([
                                 <SimpleLoader loading={plans.loading}>
                                     <PlanOverview
                                         assetService={AssetService}
+                                        samplePlanName={'kapeta/sample-nodejs-plan'}
                                         onPlanImported={async () => {
                                             await plans.refresh();
                                         }}

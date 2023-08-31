@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { AssetStore } from '@kapeta/ui-web-context';
 import { CoreTypes } from '@kapeta/ui-web-components';
@@ -11,10 +11,11 @@ import { PlanCreator } from '../creators/PlanCreator';
 import { AssetCreatorState } from '../creators/AssetCreator';
 import { AssetInfo, fromAsset } from '@kapeta/ui-web-plan-editor';
 import { useAssetImporter } from '../../utils/useAssetImporter';
+import { parseKapetaUri } from '@kapeta/nodejs-utils';
 
 interface Props {
     plans: AssetInfo<Plan>[];
-    sample?: AssetInfo<Plan>;
+    samplePlanName?: string;
     assetService?: AssetStore;
     onPlanImported?: (plan: AssetInfo<Plan>) => void;
     onPlanAdded?: (plan: AssetInfo<Plan>) => void;
@@ -41,6 +42,17 @@ export const PlanOverview = (props: Props) => {
             props.onPlanImported && props.onPlanImported(fromAsset(assets[0]));
         }
     };
+
+    const { plans, samplePlan } = useMemo(() => {
+        const samplePlan = props.plans.find((plan) => {
+            return parseKapetaUri(plan.ref).fullName === props.samplePlanName;
+        });
+        const plans = props.plans.filter((plan) => plan !== samplePlan);
+        return {
+            samplePlan,
+            plans,
+        };
+    }, [props.plans, props.samplePlanName]);
 
     return (
         <Box
@@ -69,8 +81,8 @@ export const PlanOverview = (props: Props) => {
                     }}
                     onPlanImport={onPlanImport}
                 />
-                {props.plans.length < 1 && props.sample && (
-                    <SamplePlanSection sample={props.sample} onOpenSample={props.onPlanSelected} />
+                {plans.length < 1 && samplePlan && (
+                    <SamplePlanSection sample={samplePlan} onOpenSample={props.onPlanSelected} />
                 )}
                 <YourPlansList
                     onPlanOpen={props.onPlanSelected}
@@ -78,7 +90,7 @@ export const PlanOverview = (props: Props) => {
                         setCreatorState(AssetCreatorState.CREATING);
                     }}
                     onPlanImport={onPlanImport}
-                    plans={props.plans}
+                    plans={plans}
                 />
             </Stack>
             {props.assetService && (

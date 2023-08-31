@@ -31,6 +31,10 @@ export const showFilePickerMulti = async (
     })) as string[] | null;
 };
 export const showFilePicker = async (options: Options): Promise<any> => {
+    if (!window?.electron?.ipcRenderer) {
+        return null;
+    }
+
     const properties: OpenDialogOptions['properties'] = ['createDirectory'];
     if (options.selectDirectory) {
         properties.push('openDirectory');
