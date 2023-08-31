@@ -1,3 +1,10 @@
+## [0.28.9](https://github.com/kapetacom/app-desktop-builder/compare/v0.28.8...v0.28.9) (2023-08-31)
+
+
+### Bug Fixes
+
+* Moved auto updater UI to main React ([#89](https://github.com/kapetacom/app-desktop-builder/issues/89)) ([67c8f53](https://github.com/kapetacom/app-desktop-builder/commit/67c8f537bb51c9241035d83b719da80a092a73ec))
+
 ## [0.28.8](https://github.com/kapetacom/app-desktop-builder/compare/v0.28.7...v0.28.8) (2023-08-31)
 
 
