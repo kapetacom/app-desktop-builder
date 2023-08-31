@@ -3,7 +3,7 @@ import { installerService } from '../../../api/installerService';
 import { api, assetFetcher } from '../../../api/APIService';
 import { ThemeProvider } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { AssetDisplay, BlockhubCategory, BlockhubModal } from '@kapeta/ui-web-components';
+import { AssetDisplay, AssetType, BlockhubCategory, BlockhubModal } from '@kapeta/ui-web-components';
 import { useAsync, useAsyncRetry } from 'react-use';
 import { AssetService } from '@kapeta/ui-web-context';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
@@ -22,6 +22,7 @@ export const BlockhubShell = (props: Props) => {
     const kapetaContext = useKapetaContext();
 
     const [currentCategory, setCurrentCategory] = useState<BlockhubCategory>(BlockhubCategory.INSTALLED);
+    const [assetTypeFilter, setAssetTypeFilter] = useState<AssetType>('ALL');
 
     const assets = useAsyncRetry(async () => {
         switch (currentCategory) {
@@ -96,6 +97,8 @@ export const BlockhubShell = (props: Props) => {
             <BlockhubModal
                 open={kapetaContext.blockHub.visible}
                 installerService={installerService}
+                filter={assetTypeFilter}
+                onFilterChange={setAssetTypeFilter}
                 plan={
                     kapetaContext.blockHub.opener?.source
                         ? {
