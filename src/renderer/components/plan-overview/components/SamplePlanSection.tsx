@@ -3,6 +3,8 @@ import React from 'react';
 import { Plan } from '@kapeta/schemas';
 import { AssetInfo, AssetThumbnail } from '@kapeta/ui-web-plan-editor';
 import { useLoadedPlanContext } from '../../../utils/planContextLoader';
+import { grey } from '@mui/material/colors';
+import SampleChecklist from '../../../../../assets/images/sample-checklist.svg';
 
 interface Props {
     onOpenSample?: (plan: AssetInfo<Plan>) => void;
@@ -23,9 +25,18 @@ export const SamplePlanSection = (props: Props) => {
                         minWidth: '761px',
                         height: '408px',
                         minHeight: '408px',
+                        position: 'relative',
                         flex: 0,
+                        '& > svg': {
+                            position: 'absolute',
+                            left: '1px',
+                            bottom: '98px',
+                            zIndex: 1,
+                        },
                     }}
                 >
+                    <SampleChecklist />
+
                     <AssetThumbnail
                         asset={props.sample}
                         onClick={props.onOpenSample}
@@ -52,6 +63,11 @@ export const SamplePlanSection = (props: Props) => {
                         variant={'outlined'}
                         size={'large'}
                         color={'inherit'}
+                        sx={{
+                            '&:hover': {
+                                bgcolor: grey[100],
+                            },
+                        }}
                         onClick={() => props.onOpenSample && props.onOpenSample(props.sample)}
                     >
                         Open Sample
