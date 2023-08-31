@@ -1,3 +1,10 @@
+## [0.28.6](https://github.com/kapetacom/app-desktop-builder/compare/v0.28.5...v0.28.6) (2023-08-31)
+
+
+### Bug Fixes
+
+* Remember filters when navigating blockhub ([#86](https://github.com/kapetacom/app-desktop-builder/issues/86)) ([c44dbec](https://github.com/kapetacom/app-desktop-builder/commit/c44dbec74adb16df4e1de3ccf7868adad77f5263))
+
 ## [0.28.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.28.4...v0.28.5) (2023-08-30)
 
 
