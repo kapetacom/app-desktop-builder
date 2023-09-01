@@ -153,7 +153,12 @@ export const ContextPicker = (props: ContextPickerProps) => {
                         </ListItemButton>
                     ))}
 
-                <ListItemButton href="/settings/organizations" onClick={close}>
+                <ListItemButton
+                    onClick={() => {
+                        close();
+                        kapetaContext.tabs.open('/settings/organizations', { navigate: true });
+                    }}
+                >
                     <ListItemIcon>
                         <Avatar
                             variant="rounded"

@@ -84,8 +84,8 @@ export const useMainTabs = (context?: MemberIdentity): MainTabs => {
         (path = DEFAULT_TAB_PATH, opts: TabOptions = {}) => {
             setTabs((previous) => {
                 const contextId = isContextSensitive(path) ? opts.contextId || context?.identity.id : undefined;
-                path = normalizeUrl(path);
-                const existingTabIx = previous.findIndex((tab) => tab.path === path);
+                const normalizedPath = normalizeUrl(path);
+                const existingTabIx = previous.findIndex((tab) => tab.path === normalizedPath);
                 if (existingTabIx > -1) {
                     const existingTab = previous[existingTabIx];
                     if (opts.contextId && existingTab.contextId !== opts.contextId) {
@@ -99,7 +99,7 @@ export const useMainTabs = (context?: MemberIdentity): MainTabs => {
                 return [
                     ...previous,
                     {
-                        path,
+                        path: normalizedPath,
                         title: opts.title,
                         contextId,
                     },
