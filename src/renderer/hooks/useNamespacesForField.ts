@@ -4,7 +4,7 @@ import { useFormContextField } from '@kapeta/ui-web-components';
 
 export const LOCAL_NAMESPACE = 'local';
 
-export const useNamespaces = (fieldName: string) => {
+export const useNamespacesForField = (fieldName: string) => {
     const context = useKapetaContext();
     const formField = useFormContextField(fieldName);
     return useMemo(() => {

@@ -28,7 +28,7 @@ import { uploadAttachment } from '../../../../api/AttachmentService';
 import { replaceBase64IconWithUrl } from '../../../../utils/iconHelpers';
 import { Button } from '@mui/material';
 import { useKapetaContext } from '../../../../hooks/contextHook';
-import { useNamespaces } from '../../../../hooks/useNamespaces';
+import { useNamespacesForField } from '../../../../hooks/useNamespacesForField';
 
 function getVersions(dataKindUri) {
     const versions: { [key: string]: string } = {};
@@ -64,7 +64,7 @@ const BlockFields = ({ data }: BlockFieldsProps) => {
         return out;
     }, [kindUri.fullName]);
 
-    const namespaces = useNamespaces('metadata.name');
+    const namespaces = useNamespacesForField('metadata.name');
 
     return (
         <>
