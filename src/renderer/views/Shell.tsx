@@ -103,8 +103,6 @@ export function Shell() {
         });
     }, [location.pathname]);
 
-    console.log('contexts', contexts);
-
     return (
         <SimpleLoader text="Initialising application..." loading={contexts.loading}>
             {contexts.profile ? (

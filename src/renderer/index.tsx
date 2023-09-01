@@ -75,18 +75,24 @@ const router = createMemoryRouter([
             {
                 path: 'settings/*',
                 Component: () => {
-                    return <RemoteFrame baseUrl={window.KapetaDesktop.urls.settings} path={'settings/general'} />;
+                    let { '*': path } = useParams();
+                    return (
+                        <RemoteFrame
+                            baseUrl={window.KapetaDesktop.urls.settings}
+                            path={`settings/${path ?? 'general'}`}
+                        />
+                    );
                 },
             },
             {
                 path: 'organizations/:handle/*',
                 Component: () => {
                     const { handle: handle } = useParams();
-
+                    let { '*': path } = useParams();
                     return (
                         <RemoteFrame
                             baseUrl={window.KapetaDesktop.urls.settings}
-                            path={`organizations/${handle}/settings/general`}
+                            path={`organizations/${handle}${path ? '/' + path : '/settings/general'}`}
                         />
                     );
                 },
