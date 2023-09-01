@@ -19,6 +19,11 @@ export const useKapetaContext = () => {
     return useContext(KapetaContext);
 };
 
+interface LoginResult {
+    success: boolean;
+    error?: string;
+}
+
 interface KapetaContextData {
     refreshContexts: () => void;
     activeContext?: MemberIdentity;
@@ -26,6 +31,7 @@ interface KapetaContextData {
     setProfile: (identity: Identity) => void;
     setActiveContext: (ctx: MemberIdentity) => void;
     logOut: () => Promise<boolean>;
+    logIn: () => Promise<LoginResult>;
     contexts?: {
         memberships: MemberIdentity[];
         current: string;
@@ -100,9 +106,15 @@ const createKapetaContext = (): KapetaContextData => {
                 contextData.retry();
                 return true;
             }
-
-            console.log('Did not log out');
             return false;
+        },
+        logIn: async () => {
+            const result = (await window.electron.ipcRenderer.invoke('log-in')) as LoginResult;
+            if (result.success) {
+                profileData.retry();
+                contextData.retry();
+            }
+            return result;
         },
         blockHub: {
             visible: blockHubVisible,
@@ -130,6 +142,7 @@ export const KapetaContext = createContext<KapetaContextData>({
     setProfile: () => null,
     setActiveContext: () => null,
     logOut: () => Promise.resolve(false),
+    logIn: () => Promise.resolve({ success: false }),
     contexts: undefined,
     loading: false,
     blockHub: {

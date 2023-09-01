@@ -1,4 +1,4 @@
-import { ipcMain, dialog } from 'electron';
+import { ipcMain, dialog, shell } from 'electron';
 import { KapetaAPI } from '@kapeta/nodejs-api-client';
 import { MainWindow } from '../main/MainWindow';
 import FS from 'fs-extra';
@@ -58,6 +58,21 @@ export function attachHandlers(main: MainWindow) {
         } catch (err) {
             console.error('Failed to log out', err);
             return false;
+        }
+    });
+
+    ipcMain.handle('log-in', async () => {
+        try {
+            const api = new KapetaAPI();
+            await api.doDeviceAuthentication({
+                onVerificationCode: (url: string) => {
+                    shell.openExternal(url);
+                },
+            });
+            await main.update();
+            return { success: true };
+        } catch (err) {
+            return { success: false, error: err.message };
         }
     });
 

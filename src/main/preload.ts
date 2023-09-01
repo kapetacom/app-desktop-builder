@@ -6,6 +6,7 @@ export type Channels = 'ipc-main' | 'splash' | 'processing' | 'auth' | 'auto-upd
 export type Procedures =
     | 'get-token'
     | 'get-contexts'
+    | 'log-in'
     | 'log-out'
     | 'refresh-context'
     | 'set-context'
