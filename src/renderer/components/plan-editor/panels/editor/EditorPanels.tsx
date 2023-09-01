@@ -27,6 +27,8 @@ import './ItemEditorPanel.less';
 import { uploadAttachment } from '../../../../api/AttachmentService';
 import { replaceBase64IconWithUrl } from '../../../../utils/iconHelpers';
 import { Button } from '@mui/material';
+import { useKapetaContext } from '../../../../hooks/contextHook';
+import { useNamespaces } from '../../../../hooks/useNamespaces';
 
 function getVersions(dataKindUri) {
     const versions: { [key: string]: string } = {};
@@ -41,28 +43,12 @@ function getVersions(dataKindUri) {
     return versions;
 }
 
-// Higher-order-component to allow us to use hooks for data loading (not possible in class components)
-const withNamespaces = (ChildComponent) => {
-    return (props) => {
-        const { value: namespaces, loading } = useAsync(async () => {
-            const identity = await IdentityService.getCurrent();
-            const memberships = await IdentityService.getMemberships(identity.id);
-            return [identity.handle, ...memberships.map((membership) => membership.identity.handle)];
-        });
-        return (
-            <SimpleLoader loading={loading}>
-                <ChildComponent {...props} namespaces={namespaces || []} />
-            </SimpleLoader>
-        );
-    };
-};
-const AutoLoadAssetNameInput = withNamespaces(AssetNameInput);
-
 interface BlockFieldsProps {
     data: SchemaKind;
 }
 
 const BlockFields = ({ data }: BlockFieldsProps) => {
+    const context = useKapetaContext();
     const kindUri = parseKapetaUri(data.kind);
 
     const options = useMemo(() => {
@@ -78,6 +64,8 @@ const BlockFields = ({ data }: BlockFieldsProps) => {
         return out;
     }, [kindUri.fullName]);
 
+    const namespaces = useNamespaces('metadata.name');
+
     return (
         <>
             <FormField
@@ -89,9 +77,11 @@ const BlockFields = ({ data }: BlockFieldsProps) => {
                 options={options}
             />
 
-            <AutoLoadAssetNameInput
+            <AssetNameInput
                 name="metadata.name"
                 label="Name"
+                namespaces={namespaces}
+                defaultValue={context.activeContext?.identity?.handle ?? 'local'}
                 help={'The name of this block - e.g. "myhandle/my-block"'}
             />
 
