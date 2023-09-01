@@ -22,6 +22,12 @@ export const useNamespacesForField = (fieldName: string) => {
         }
 
         const memberships = context.contexts?.memberships ?? [];
-        return [...fromValue, identity.handle, ...memberships.map((membership) => membership.identity.handle), 'local'];
+        const out = new Set([
+            ...fromValue,
+            identity.handle,
+            ...memberships.map((membership) => membership.identity.handle),
+            'local',
+        ]);
+        return Array.from(out);
     }, [context.profile, context.contexts?.memberships, formField]);
 };
