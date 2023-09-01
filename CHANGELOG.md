@@ -1,3 +1,10 @@
+## [0.30.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.30.1...v0.30.2) (2023-09-01)
+
+
+### Bug Fixes
+
+* Could edit version and name in read only plan ([#94](https://github.com/kapetacom/app-desktop-builder/issues/94)) ([7318d59](https://github.com/kapetacom/app-desktop-builder/commit/7318d59d76d47d13920c09d79661cfa691bb0c84))
+
 ## [0.30.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.30.0...v0.30.1) (2023-09-01)
 
 
