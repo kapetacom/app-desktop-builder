@@ -1,3 +1,10 @@
+## [0.29.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.29.0...v0.29.1) (2023-09-01)
+
+
+### Bug Fixes
+
+* Simplify getting namespaces for asset name input ([#91](https://github.com/kapetacom/app-desktop-builder/issues/91)) ([7b2034f](https://github.com/kapetacom/app-desktop-builder/commit/7b2034f0cd4452a27a977b3427344de51cf3e89c))
+
 # [0.29.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.28.9...v0.29.0) (2023-08-31)
 
 
