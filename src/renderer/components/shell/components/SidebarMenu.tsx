@@ -1,4 +1,4 @@
-import { List, ListItem, ListItemButton, Theme, styled } from '@mui/material';
+import { List, ListItem, ListItemButton, styled } from '@mui/material';
 
 interface SidebarProps {
     isOpen?: boolean;

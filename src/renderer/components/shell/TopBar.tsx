@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
     AppBar,
-    Avatar,
     Box,
     Divider,
     IconButton,
@@ -19,10 +18,8 @@ import {
 
 import { UserAvatar } from '@kapeta/ui-web-components';
 
-import { Link } from 'react-router-dom';
 import { KapetaNotification, StateNotificationType } from './types';
 import { useKapetaContext } from '../../hooks/contextHook';
-import { useAutoUpdater } from '../../auto-updater/hooks';
 
 const noHoverSX = {
     cursor: 'default',
@@ -100,17 +97,23 @@ export const TopBar = (props: TopBarProps) => {
         <AppBar
             position="static"
             sx={{
-                height: '52px',
+                height: '40px',
                 '&>.MuiToolbar-root': {
-                    height: '52px',
-                    minHeight: '52px',
+                    height: '40px',
+                    minHeight: '40px',
                 },
             }}
         >
             <Toolbar disableGutters>
                 {props.children}
-                {/* flex to push buttons to the right  */}
-                <Box flexGrow={1} />
+                {/* Make the empty space in the tabbar draggable to move electron window around */}
+                <Box
+                    flexGrow={1}
+                    sx={{
+                        '-webkit-app-region': 'drag',
+                        height: '100%',
+                    }}
+                />
                 <Stack direction="row" divider={<Divider orientation="vertical" flexItem />} spacing={2}>
                     {/* Just to trigger another divider */}
                     <span />
@@ -121,7 +124,7 @@ export const TopBar = (props: TopBarProps) => {
                             width: '42px',
                             height: '42px',
                             marginTop: '10px',
-                            marginRight: contexts.profile ? '' : '16px !important',
+                            marginRight: '16px !important',
                             color: unreadNotifications > 0 ? 'text.primary' : 'text.secondary',
                         }}
                         onClick={(e) => {
@@ -152,20 +155,6 @@ export const TopBar = (props: TopBarProps) => {
                             </Box>
                         )}
                     </IconButton>
-
-                    {contexts.profile && (
-                        <IconButton
-                            size="small"
-                            sx={{
-                                width: '42px',
-                                height: '42px',
-                                marginRight: '16px !important',
-                            }}
-                            onClick={(e) => setProfileMenuAchor(e.currentTarget as any)}
-                        >
-                            <UserAvatar size={32} name={contexts.profile.name} />
-                        </IconButton>
-                    )}
                 </Stack>
             </Toolbar>
 
@@ -325,42 +314,6 @@ export const TopBar = (props: TopBarProps) => {
                             No notifications
                         </MenuItem>
                     )}
-                </Menu>
-            ) : null}
-
-            {profileMenuAnchorEl ? (
-                <Menu
-                    anchorEl={profileMenuAnchorEl}
-                    sx={popoverSX}
-                    open={Boolean(profileMenuAnchorEl)}
-                    onClose={() => setProfileMenuAchor(null)}
-                    slotProps={{
-                        paper: {
-                            style: {
-                                width: '184px',
-                            },
-                        },
-                    }}
-                >
-                    <MenuItem component={Link} onClick={() => setProfileMenuAchor(null)} to={`/settings`}>
-                        <ListItemText
-                            primary={contexts.profile?.name}
-                            secondary={contexts.activeContext?.identity.handle ?? contexts.profile?.handle}
-                        />
-                    </MenuItem>
-
-                    <MenuItem
-                        component="a"
-                        onClick={async () => {
-                            setProfileMenuAchor(null);
-                            await contexts.logOut();
-                        }}
-                    >
-                        <ListItemIcon>
-                            <i className="far fa-sign-out" />
-                        </ListItemIcon>
-                        <ListItemText primary="Log out" />
-                    </MenuItem>
                 </Menu>
             ) : null}
         </AppBar>

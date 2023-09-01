@@ -75,6 +75,8 @@ export const RemoteFrame = (props: Props) => {
                 '& > iframe': {
                     height: '100%',
                     width: '100%',
+                    // Remove the built-in border
+                    border: 0,
                 },
                 '& > .simple-loader': {
                     height: '100%',

@@ -82,8 +82,17 @@ export function Shell() {
                 },
             ]}
             context={{
-                contexts: contexts.contexts?.memberships,
-                setActiveContext: contexts.setActiveContext,
+                identity: contexts.profile,
+                contexts:
+                    contexts.contexts?.memberships.map((m) => ({
+                        ...m.identity,
+                        current: m.identity.handle === contexts.activeContext?.identity.handle,
+                    })) || ([] as any[]),
+                refreshContexts: contexts.refreshContexts,
+                setActiveContext: (ctx) => {
+                    const member = contexts.contexts?.memberships.find((m) => m.identity.handle === ctx.handle);
+                    member && contexts.setActiveContext(member);
+                },
                 activeContext: contexts.activeContext,
             }}
         >

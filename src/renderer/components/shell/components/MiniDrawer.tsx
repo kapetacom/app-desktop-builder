@@ -4,16 +4,20 @@ import { Drawer as MuiDrawer } from '@mui/material';
 const drawerWidth = 240;
 
 const openedMixin = (theme: Theme): CSSObject => ({
+    boxSizing: 'border-box',
     width: drawerWidth,
-    transition: theme.transitions.create('width', {
+    transition: theme.transitions.create('all', {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.enteringScreen,
     }),
     overflowX: 'hidden',
+    padding: theme.spacing(2),
+    paddingTop: '40px',
 });
 
 const closedMixin = (theme: Theme): CSSObject => ({
-    transition: theme.transitions.create('width', {
+    boxSizing: 'border-box',
+    transition: theme.transitions.create('all', {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
     }),
@@ -22,6 +26,8 @@ const closedMixin = (theme: Theme): CSSObject => ({
     [theme.breakpoints.up('sm')]: {
         width: `calc(${theme.spacing(8)} + 1px)`,
     },
+    padding: theme.spacing(1),
+    paddingTop: '40px',
 });
 
 /**
