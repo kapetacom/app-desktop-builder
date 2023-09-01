@@ -109,7 +109,7 @@ export const MainLayout = (props: Props) => {
                         }}
                         onClick={toggleDrawer}
                     >
-                        {drawerIsOpen ? <Logo height={28} width={122} /> : <KapetaIcon />}
+                        {drawerIsOpen ? <Logo width={122} /> : <KapetaIcon />}
                     </IconButton>
                 </MiniDrawer>
 

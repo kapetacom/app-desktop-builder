@@ -10,6 +10,7 @@ import { UserAvatar } from '@kapeta/ui-web-components';
 import { withTheme } from 'renderer/Theme';
 import { SidebarList, SidebarListItem, SidebarListItemButton } from './SidebarMenu';
 import { Context } from '../types/shell';
+import { useKapetaContext } from '../../../hooks/contextHook';
 
 interface ContextPickerProps {
     contexts: Context[];
@@ -39,6 +40,7 @@ const toInitials = (name: string) => {
 const LightMenu = withTheme(Menu, 'light');
 
 export const ContextPicker = (props: ContextPickerProps) => {
+    const kapetaContext = useKapetaContext();
     const currentContext = props.contexts?.find((context) => context.current);
     const userContext = props.contexts?.find((context) => context.handle === props.userHandle);
     const [menuAnchor, setMenuAnchor] = React.useState<HTMLElement | null>(null);
@@ -165,7 +167,12 @@ export const ContextPicker = (props: ContextPickerProps) => {
 
                 <Divider component="li" sx={{ my: 1 }} />
 
-                <ListItemButton href="/logout" onClick={close} target="_self" LinkComponent={'a'}>
+                <ListItemButton
+                    onClick={async () => {
+                        close();
+                        await kapetaContext.logOut();
+                    }}
+                >
                     <ListItemIcon>
                         <Logout />
                     </ListItemIcon>
