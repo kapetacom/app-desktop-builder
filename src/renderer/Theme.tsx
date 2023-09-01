@@ -64,7 +64,10 @@ export const kapetaLight = createTheme(
     }
 );
 
-export const withTheme = <T extends object>(Component: ComponentType<T>, theme: 'light' | 'dark'): React.FC<T> => {
+export const withTheme = <T extends object>(
+    Component: React.ComponentType<T>,
+    theme: 'light' | 'dark'
+): React.FC<T> => {
     const displayName = Component.displayName || Component.name || 'Component'; // Create a displayName for React Dev Tools.
 
     const ComponentWithTheme = (props: T) => (

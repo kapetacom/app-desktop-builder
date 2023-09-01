@@ -105,7 +105,7 @@ export const ContextPicker = (props: ContextPickerProps) => {
             >
                 <ListItemButton
                     onClick={() => {
-                        props.onContextChange && props.onContextChange(userContext);
+                        props.onContextChange && props.onContextChange(userContext!);
                         close();
                     }}
                 >
@@ -135,7 +135,7 @@ export const ContextPicker = (props: ContextPickerProps) => {
                     ?.filter((context) => context !== userContext)
                     .map((context, i) => (
                         <ListItemButton
-                            key={context.handle || context.id || i}
+                            key={context.handle || i}
                             onClick={() => {
                                 props.onContextChange && props.onContextChange(context);
                                 close();

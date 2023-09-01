@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Box, IconButton, Stack } from '@mui/material';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, Location } from 'react-router-dom';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import ArrowForward from '@mui/icons-material/ArrowForward';
 
@@ -9,7 +9,7 @@ export const NavigationButtons = (props) => {
     const navigate = useNavigate();
 
     const [locationHistory, setLocationHistory] = useState({
-        history: [],
+        history: [] as Location[],
         idx: -1,
     });
 

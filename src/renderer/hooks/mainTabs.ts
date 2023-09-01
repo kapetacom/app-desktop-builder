@@ -149,7 +149,7 @@ export const useMainTabs = (context?: MemberIdentity): MainTabs => {
     useEffect(() => {
         return window.electron.ipcRenderer.on(
             'change-tab',
-            (cmd: 'new' | 'prev' | 'next' | 'switch' | 'close' | 'reopen', i) => {
+            (cmd: 'new' | 'prev' | 'next' | 'switch' | 'close' | 'reopen', i: number) => {
                 switch (cmd) {
                     case 'prev': {
                         const currentIndex = tabs.findIndex((t) => t.path === location.pathname);
