@@ -1,3 +1,10 @@
+# [0.31.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.30.2...v0.31.0) (2023-09-01)
+
+
+### Features
+
+* Added login screen ([#95](https://github.com/kapetacom/app-desktop-builder/issues/95)) ([2ce98c1](https://github.com/kapetacom/app-desktop-builder/commit/2ce98c17fa41312d075c662a3c8437eacfbbbdb7))
+
 ## [0.30.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.30.1...v0.30.2) (2023-09-01)
 
 
