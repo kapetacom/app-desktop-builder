@@ -1,3 +1,10 @@
+# [0.30.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.29.1...v0.30.0) (2023-09-01)
+
+
+### Features
+
+* add navigation buttons to top bar ([db2da4a](https://github.com/kapetacom/app-desktop-builder/commit/db2da4ac23f1a383e5a319f69d818df066c627ac))
+
 ## [0.29.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.29.0...v0.29.1) (2023-09-01)
 
 
