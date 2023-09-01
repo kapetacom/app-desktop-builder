@@ -115,46 +115,44 @@ export const AssetCreator = (props: Props) => {
 
     const InnerFormRenderer = props.formRenderer;
     return (
-        <ThemeProvider theme={kapetaLight}>
-            <PlannerSidebar
-                open={props.state === AssetCreatorState.CREATING}
-                onClose={() => {
-                    if (props.onCancel) {
-                        props.onCancel();
-                    }
-                }}
-                title={props.title}
-            >
-                <div className="asset-creator-form">
-                    <FormContainer initialValue={newEntity} onSubmitData={(data: any) => onSubmit(data)}>
-                        <InnerFormRenderer asset={newEntity} creating />
+        <PlannerSidebar
+            open={props.state === AssetCreatorState.CREATING}
+            onClose={() => {
+                if (props.onCancel) {
+                    props.onCancel();
+                }
+            }}
+            title={props.title}
+        >
+            <div className="asset-creator-form">
+                <FormContainer initialValue={newEntity} onSubmitData={(data: any) => onSubmit(data)}>
+                    <InnerFormRenderer asset={newEntity} creating />
 
-                        <ProjectHomeFolderInput
-                            onChange={(newUseProjectHome, newProjectHome) => {
-                                setUseProjectHome(newUseProjectHome);
-                                setProjectHome(newProjectHome);
+                    <ProjectHomeFolderInput
+                        onChange={(newUseProjectHome, newProjectHome) => {
+                            setUseProjectHome(newUseProjectHome);
+                            setProjectHome(newProjectHome);
+                        }}
+                    />
+
+                    <FormButtons>
+                        <Button
+                            color={'error'}
+                            variant={'contained'}
+                            onClick={() => {
+                                if (props.onCancel) {
+                                    props.onCancel();
+                                }
                             }}
-                        />
-
-                        <FormButtons>
-                            <Button
-                                color={'error'}
-                                variant={'contained'}
-                                onClick={() => {
-                                    if (props.onCancel) {
-                                        props.onCancel();
-                                    }
-                                }}
-                            >
-                                Cancel
-                            </Button>
-                            <Button color={'primary'} type={'submit'} variant={'contained'}>
-                                Create
-                            </Button>
-                        </FormButtons>
-                    </FormContainer>
-                </div>
-            </PlannerSidebar>
-        </ThemeProvider>
+                        >
+                            Cancel
+                        </Button>
+                        <Button color={'primary'} type={'submit'} variant={'contained'}>
+                            Create
+                        </Button>
+                    </FormButtons>
+                </FormContainer>
+            </div>
+        </PlannerSidebar>
     );
 };

@@ -3,7 +3,7 @@ import { Box, ThemeProvider } from '@mui/material';
 import { RouterProvider, useParams, createMemoryRouter, useNavigate, useLocation } from 'react-router-dom';
 import { AssetService } from '@kapeta/ui-web-context';
 import { Root } from './Root';
-import { kapetaDark } from './Theme';
+import { kapetaDark, kapetaLight } from './Theme';
 import { initialise } from './context';
 import { PlanView } from './views/PlanView';
 import { PlanOverview } from './components/plan-overview/PlanOverview';
@@ -98,7 +98,7 @@ const router = createMemoryRouter([
 const container = document.getElementById('root')!;
 const root = createRoot(container);
 root.render(
-    <ThemeProvider theme={kapetaDark}>
+    <ThemeProvider theme={kapetaLight}>
         <RouterProvider router={router} />
     </ThemeProvider>
 );

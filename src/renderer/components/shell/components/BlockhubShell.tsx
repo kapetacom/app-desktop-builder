@@ -93,54 +93,52 @@ export const BlockhubShell = (props: Props) => {
     }, [kapetaContext.blockHub.visible]);
 
     return (
-        <ThemeProvider theme={kapetaLight}>
-            <BlockhubModal
-                open={kapetaContext.blockHub.visible}
-                installerService={installerService}
-                filter={assetTypeFilter}
-                onFilterChange={setAssetTypeFilter}
-                plan={
-                    kapetaContext.blockHub.opener?.source
-                        ? {
-                              kind: kapetaContext.blockHub.opener?.source.content.kind,
-                              data: kapetaContext.blockHub.opener?.source.content,
-                              exists: !!kapetaContext.blockHub.opener?.source.exists,
-                              editable: !!kapetaContext.blockHub.opener?.source.editable,
-                              version: kapetaContext.blockHub.opener?.source.version,
-                              path: '',
-                              ymlPath: '',
-                              ref: normalizeKapetaUri(kapetaContext.blockHub.opener?.source?.ref),
-                          }
-                        : undefined
+        <BlockhubModal
+            open={kapetaContext.blockHub.visible}
+            installerService={installerService}
+            filter={assetTypeFilter}
+            onFilterChange={setAssetTypeFilter}
+            plan={
+                kapetaContext.blockHub.opener?.source
+                    ? {
+                          kind: kapetaContext.blockHub.opener?.source.content.kind,
+                          data: kapetaContext.blockHub.opener?.source.content,
+                          exists: !!kapetaContext.blockHub.opener?.source.exists,
+                          editable: !!kapetaContext.blockHub.opener?.source.editable,
+                          version: kapetaContext.blockHub.opener?.source.version,
+                          path: '',
+                          ymlPath: '',
+                          ref: normalizeKapetaUri(kapetaContext.blockHub.opener?.source?.ref),
+                      }
+                    : undefined
+            }
+            fetcher={assetFetcher}
+            assets={assets}
+            category={currentCategory}
+            onCategoryChange={(category: BlockhubCategory) => {
+                setCurrentCategory(category);
+            }}
+            onSelect={(selection: AssetDisplay[]) => {
+                if (kapetaContext.blockHub.opener?.callback) {
+                    kapetaContext.blockHub.opener.callback(selection);
                 }
-                fetcher={assetFetcher}
-                assets={assets}
-                category={currentCategory}
-                onCategoryChange={(category: BlockhubCategory) => {
-                    setCurrentCategory(category);
-                }}
-                onSelect={(selection: AssetDisplay[]) => {
-                    if (kapetaContext.blockHub.opener?.callback) {
-                        kapetaContext.blockHub.opener.callback(selection);
-                    }
-                }}
-                onClose={() => {
-                    kapetaContext.blockHub.close();
-                }}
-                previewRenderer={(asset, size) => {
-                    return (
-                        <AssetThumbnail
-                            width={size.width}
-                            height={size.height}
-                            hideMetadata={true}
-                            loadPlanContext={(plan) => {
-                                return useLoadedPlanContext(plan.content);
-                            }}
-                            asset={fromAssetDisplay(asset)}
-                        />
-                    );
-                }}
-            />
-        </ThemeProvider>
+            }}
+            onClose={() => {
+                kapetaContext.blockHub.close();
+            }}
+            previewRenderer={(asset, size) => {
+                return (
+                    <AssetThumbnail
+                        width={size.width}
+                        height={size.height}
+                        hideMetadata={true}
+                        loadPlanContext={(plan) => {
+                            return useLoadedPlanContext(plan.content);
+                        }}
+                        asset={fromAssetDisplay(asset)}
+                    />
+                );
+            }}
+        />
     );
 };

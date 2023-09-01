@@ -1,15 +1,11 @@
 import React from 'react';
 import './shared-libraries';
-
 import { Provider } from 'mobx-react';
 import { DefaultContext, SimpleLoader } from '@kapeta/ui-web-components';
 import { Await, useAsyncError, useLoaderData } from 'react-router-dom';
-
-// import Application from './views/Application';
-
-import './index.less';
 import { Shell } from './views/Shell';
 import { KapetaContextProvider } from './hooks/contextHook';
+import './index.less';
 
 const ErrorContainer = () => {
     const error = useAsyncError() as Error;

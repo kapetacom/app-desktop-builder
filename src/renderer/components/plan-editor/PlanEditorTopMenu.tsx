@@ -308,73 +308,72 @@ export const PlanEditorTopMenu = (props: Props) => {
                     Settings
                 </Button>
             </Stack>
-            <ThemeProvider theme={kapetaLight}>
-                <KapDialog open={showSettings} className="modal-plan-settings" onClose={() => setShowSettings(false)}>
-                    <KapDialog.Title>Settings</KapDialog.Title>
-                    <KapDialog.Content
-                        sx={{
-                            height: '420px',
+
+            <KapDialog open={showSettings} className="modal-plan-settings" onClose={() => setShowSettings(false)}>
+                <KapDialog.Title>Settings</KapDialog.Title>
+                <KapDialog.Content
+                    sx={{
+                        height: '420px',
+                    }}
+                >
+                    <FormContainer
+                        initialValue={formData}
+                        onSubmitData={async (data) => {
+                            planner.updatePlanMetadata(data.metadata, data.spec.configuration);
+                            await setPlanConfig(props.systemId, data.configuration);
+                            setShowSettings(false);
                         }}
                     >
-                        <FormContainer
-                            initialValue={formData}
-                            onSubmitData={async (data) => {
-                                planner.updatePlanMetadata(data.metadata, data.spec.configuration);
-                                await setPlanConfig(props.systemId, data.configuration);
-                                setShowSettings(false);
-                            }}
-                        >
-                            <Stack direction={'column'}>
-                                <Box
-                                    sx={{
-                                        borderBottom: 1,
-                                        borderColor: 'divider',
-                                    }}
+                        <Stack direction={'column'}>
+                            <Box
+                                sx={{
+                                    borderBottom: 1,
+                                    borderColor: 'divider',
+                                }}
+                            >
+                                <Tabs
+                                    orientation={'horizontal'}
+                                    value={settingsTab}
+                                    onChange={(evt, tabId) => setSettingsTab(tabId)}
                                 >
-                                    <Tabs
-                                        orientation={'horizontal'}
-                                        value={settingsTab}
-                                        onChange={(evt, tabId) => setSettingsTab(tabId)}
-                                    >
-                                        <Tab value="general" label="General" />
-                                        {hasConfig && <Tab value="configuration" label="Configuration" />}
-                                        {!props.readonly && <Tab value="config-schema" label="Configuration Schema" />}
-                                    </Tabs>
-                                </Box>
-                                <Box flex={1} minHeight={'300px'} minWidth={'500px'}>
-                                    {settingsTab === 'general' && <PlanForm />}
-                                    {settingsTab === 'configuration' && (
-                                        <div className="configuration-editor">
-                                            <p className="info">Define configuration locally for this plan</p>
-                                            <ConfigValueEditor systemId={props.systemId} />
-                                        </div>
-                                    )}
-                                    {settingsTab === 'config-schema' && (
-                                        <div className="configuration-schema-editor">
-                                            <p className="info">Define configuration data types for this plan</p>
-                                            <ConfigSchemaEditor />
-                                        </div>
-                                    )}
-                                </Box>
-                            </Stack>
-                            <FormButtons>
-                                <Button
-                                    variant={'outlined'}
-                                    color={'error'}
-                                    onClick={() => {
-                                        setShowSettings(false);
-                                    }}
-                                >
-                                    Cancel
-                                </Button>
-                                <Button variant={'contained'} color={'primary'} type={'submit'}>
-                                    Save
-                                </Button>
-                            </FormButtons>
-                        </FormContainer>
-                    </KapDialog.Content>
-                </KapDialog>
-            </ThemeProvider>
+                                    <Tab value="general" label="General" />
+                                    {hasConfig && <Tab value="configuration" label="Configuration" />}
+                                    {!props.readonly && <Tab value="config-schema" label="Configuration Schema" />}
+                                </Tabs>
+                            </Box>
+                            <Box flex={1} minHeight={'300px'} minWidth={'500px'}>
+                                {settingsTab === 'general' && <PlanForm />}
+                                {settingsTab === 'configuration' && (
+                                    <div className="configuration-editor">
+                                        <p className="info">Define configuration locally for this plan</p>
+                                        <ConfigValueEditor systemId={props.systemId} />
+                                    </div>
+                                )}
+                                {settingsTab === 'config-schema' && (
+                                    <div className="configuration-schema-editor">
+                                        <p className="info">Define configuration data types for this plan</p>
+                                        <ConfigSchemaEditor />
+                                    </div>
+                                )}
+                            </Box>
+                        </Stack>
+                        <FormButtons>
+                            <Button
+                                variant={'outlined'}
+                                color={'error'}
+                                onClick={() => {
+                                    setShowSettings(false);
+                                }}
+                            >
+                                Cancel
+                            </Button>
+                            <Button variant={'contained'} color={'primary'} type={'submit'}>
+                                Save
+                            </Button>
+                        </FormButtons>
+                    </FormContainer>
+                </KapDialog.Content>
+            </KapDialog>
         </Paper>
     );
 };

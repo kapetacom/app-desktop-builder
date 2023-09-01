@@ -114,101 +114,97 @@ export const PlanEditor = withPlannerContext(
         const creatingNewBlock = !!(editInfo?.creating && editInfo.type === DataEntityType.BLOCK);
 
         return (
-            <ThemeProvider theme={kapetaLight}>
-                <div className={containerClass} ref={ref}>
-                    <PlanEditorTopMenu readonly={readonly} version={uri.version} systemId={props.systemId} />
+            <div className={containerClass} ref={ref}>
+                <PlanEditorTopMenu readonly={readonly} version={uri.version} systemId={props.systemId} />
 
-                    <BlockConfigurationPanel
-                        systemId={props.systemId}
-                        instance={configInfo?.item.instance}
-                        open={!!configInfo}
-                        onClosed={async () => {
-                            setConfigInfo(null);
-                            configFromInstances.retry();
-                        }}
-                    />
+                <BlockConfigurationPanel
+                    systemId={props.systemId}
+                    instance={configInfo?.item.instance}
+                    open={!!configInfo}
+                    onClosed={async () => {
+                        setConfigInfo(null);
+                        configFromInstances.retry();
+                    }}
+                />
 
-                    <InspectorPanels
-                        systemId={props.systemId}
-                        info={inspectInfo}
-                        onClosed={() => {
-                            setInspectInfo(null);
-                        }}
-                    />
+                <InspectorPanels
+                    systemId={props.systemId}
+                    info={inspectInfo}
+                    onClosed={() => {
+                        setInspectInfo(null);
+                    }}
+                />
 
-                    <EditorPanels
-                        info={editInfo}
-                        open={!!editInfo && !creatingNewBlock}
-                        onClosed={() => {
-                            setEditInfo(null);
-                        }}
-                    />
+                <EditorPanels
+                    info={editInfo}
+                    open={!!editInfo && !creatingNewBlock}
+                    onClosed={() => {
+                        setEditInfo(null);
+                    }}
+                />
 
-                    <BlockCreatorPanel
-                        open={creatingNewBlock}
-                        info={editInfo}
-                        onClosed={() => {
-                            setEditInfo(null);
-                        }}
-                    />
+                <BlockCreatorPanel
+                    open={creatingNewBlock}
+                    info={editInfo}
+                    onClosed={() => {
+                        setEditInfo(null);
+                    }}
+                />
 
-                    {!readonly && (
-                        <PlannerResourceDrawer
-                            onShowMoreAssets={() => {
-                                kapetaContext.blockHub.open(planner.asset!, (selection) => {
-                                    selection.forEach((asset, i) => {
-                                        const ref = normalizeKapetaUri(
-                                            asset.content.metadata.name + ':' + asset.version
-                                        );
-                                        planner.addBlockInstance({
-                                            name: asset.content.metadata.title ?? parseKapetaUri(ref).name,
-                                            id: randomUUID(),
-                                            block: {
-                                                ref,
-                                            },
-                                            dimensions: {
-                                                top: 50 + i * 150,
-                                                left: 50,
-                                                width: 0,
-                                                height: 0,
-                                            },
-                                        });
+                {!readonly && (
+                    <PlannerResourceDrawer
+                        onShowMoreAssets={() => {
+                            kapetaContext.blockHub.open(planner.asset!, (selection) => {
+                                selection.forEach((asset, i) => {
+                                    const ref = normalizeKapetaUri(asset.content.metadata.name + ':' + asset.version);
+                                    planner.addBlockInstance({
+                                        name: asset.content.metadata.title ?? parseKapetaUri(ref).name,
+                                        id: randomUUID(),
+                                        block: {
+                                            ref,
+                                        },
+                                        dimensions: {
+                                            top: 50 + i * 150,
+                                            left: 50,
+                                            width: 0,
+                                            height: 0,
+                                        },
                                     });
                                 });
-                            }}
-                        />
-                    )}
-
-                    <Planner
-                        actions={actions}
-                        systemId={props.systemId}
-                        configurations={configurations}
-                        onCreateBlock={(block, instance) => {
-                            const asset: AssetInfo<BlockDefinition> = {
-                                ref: normalizeKapetaUri(getLocalRefForBlockDefinition(block)),
-                                content: block,
-                                version: 'local',
-                                editable: true,
-                                exists: false,
-                            };
-
-                            // We need to add both to show the block in the editor
-                            // If user cancels we need to remove both
-                            planner.addBlockDefinition(asset);
-                            planner.addBlockInstance(instance);
-
-                            setEditInfo({
-                                creating: true,
-                                type: DataEntityType.BLOCK,
-                                item: {
-                                    asset,
-                                    instance,
-                                },
                             });
                         }}
                     />
-                </div>
-            </ThemeProvider>
+                )}
+
+                <Planner
+                    actions={actions}
+                    systemId={props.systemId}
+                    configurations={configurations}
+                    onCreateBlock={(block, instance) => {
+                        const asset: AssetInfo<BlockDefinition> = {
+                            ref: normalizeKapetaUri(getLocalRefForBlockDefinition(block)),
+                            content: block,
+                            version: 'local',
+                            editable: true,
+                            exists: false,
+                        };
+
+                        // We need to add both to show the block in the editor
+                        // If user cancels we need to remove both
+                        planner.addBlockDefinition(asset);
+                        planner.addBlockInstance(instance);
+
+                        setEditInfo({
+                            creating: true,
+                            type: DataEntityType.BLOCK,
+                            item: {
+                                asset,
+                                instance,
+                            },
+                        });
+                    }}
+                />
+            </div>
         );
     })
 );
