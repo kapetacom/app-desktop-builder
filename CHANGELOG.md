@@ -1,3 +1,10 @@
+## [0.31.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.31.0...v0.31.1) (2023-09-01)
+
+
+### Bug Fixes
+
+* Navigation issues when deep linking to settings ([#96](https://github.com/kapetacom/app-desktop-builder/issues/96)) ([fac47a5](https://github.com/kapetacom/app-desktop-builder/commit/fac47a582269d22ac4f9b81384719667a3f16fc3))
+
 # [0.31.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.30.2...v0.31.0) (2023-09-01)
 
 
