@@ -43,7 +43,6 @@ export const ContextPicker = (props: ContextPickerProps) => {
     const userContext = props.contexts?.find((context) => context.handle === props.userHandle);
     const [menuAnchor, setMenuAnchor] = React.useState<HTMLElement | null>(null);
     const close = useCallback(() => setMenuAnchor(null), [setMenuAnchor]);
-    console.log(props);
 
     return (
         <>

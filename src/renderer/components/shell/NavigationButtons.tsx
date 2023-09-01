@@ -33,8 +33,6 @@ export const NavigationButtons = (props) => {
         });
     }, [location]);
 
-    console.log({ location, locationHistory });
-
     return (
         <Stack
             direction={'row'}

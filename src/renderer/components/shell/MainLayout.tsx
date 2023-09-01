@@ -61,7 +61,6 @@ export const MainLayout = (props: Props) => {
                         userHandle={props.context?.identity?.handle || ''}
                         onContextChange={props.context?.setActiveContext}
                         onOpen={() => {
-                            console.log(props.context);
                             props.context?.refreshContexts();
                         }}
                     />
