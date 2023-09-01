@@ -45,6 +45,68 @@ export class MenuBuilder {
         this.autoUpdater.checkForUpdates(this.mainWindow, true);
     }
 
+    private buildTabMenu(): MenuItemConstructorOptions {
+        return {
+            label: 'Tab',
+            submenu: [
+                {
+                    label: 'New Tab',
+                    accelerator: 'CmdOrCtrl+T',
+                    click: () => {
+                        this.mainWindow?.webContents.send('change-tab', 'new');
+                    },
+                },
+                {
+                    label: 'Reopen Closed Tab',
+                    accelerator: 'CmdOrCtrl+Shift+T',
+                    click: () => {
+                        this.mainWindow?.webContents.send('change-tab', 'reopen');
+                    },
+                },
+                {
+                    label: 'Close Tab',
+                    accelerator: 'CmdOrCtrl+W',
+                    click: () => {
+                        this.mainWindow?.webContents.send('change-tab', 'close');
+                    },
+                },
+                ...['Ctrl+Tab', 'CmdOrCtrl+Option+Right', 'CmdOrCtrl+Shift+]'].map((accelerator, i) => ({
+                    label: 'Next Tab',
+                    accelerator,
+                    visible: i === 0,
+                    click: () => {
+                        this.mainWindow?.webContents.send('change-tab', 'next');
+                    },
+                })),
+                ...['Ctrl+Shift+Tab', 'CmdOrCtrl+Option+Left', 'CmdOrCtrl+Shift+['].map((accelerator, i) => ({
+                    label: 'Previous Tab',
+                    accelerator,
+                    visible: i === 0,
+                    click: () => {
+                        this.mainWindow?.webContents.send('change-tab', 'prev');
+                    },
+                })),
+                ...[
+                    'CmdOrCtrl+1',
+                    'CmdOrCtrl+2',
+                    'CmdOrCtrl+3',
+                    'CmdOrCtrl+4',
+                    'CmdOrCtrl+5',
+                    'CmdOrCtrl+6',
+                    'CmdOrCtrl+7',
+                    'CmdOrCtrl+8',
+                    'CmdOrCtrl+9',
+                ].map((accelerator, i) => ({
+                    label: `Switch to Tab ${i + 1}`,
+                    accelerator,
+                    click: () => {
+                        this.mainWindow?.webContents.send('change-tab', 'switch', i);
+                    },
+                })),
+            ],
+        };
+    }
+
     private buildDarwinTemplate(): MenuItemConstructorOptions[] {
         const subMenuAbout: DarwinMenuItemConstructorOptions = {
             label: 'Kapeta',
@@ -169,7 +231,7 @@ export class MenuBuilder {
             ],
         };
 
-        return [subMenuAbout, subMenuEdit, subMenuView, subMenuWindow, subMenuHelp];
+        return [subMenuAbout, subMenuEdit, subMenuView, subMenuWindow, this.buildTabMenu(), subMenuHelp];
     }
 
     buildDefaultTemplate() {
@@ -227,6 +289,7 @@ export class MenuBuilder {
                               },
                           ],
             },
+            this.buildTabMenu(),
             {
                 label: 'Help',
                 submenu: [

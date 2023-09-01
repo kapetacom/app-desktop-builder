@@ -2,7 +2,7 @@ import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 import ClusterConfiguration from '@kapeta/local-cluster-config';
 import { version } from '../../package.json';
 
-export type Channels = 'ipc-main' | 'splash' | 'processing' | 'auth' | 'auto-updater';
+export type Channels = 'ipc-main' | 'splash' | 'processing' | 'auth' | 'auto-updater' | 'change-tab';
 export type Procedures =
     | 'get-token'
     | 'get-contexts'
