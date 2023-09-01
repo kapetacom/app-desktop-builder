@@ -2,7 +2,6 @@ import React, { useCallback, useContext, useEffect, useMemo, useState } from 're
 
 import { InstanceEventType, InstanceService, TaskService, TaskStatus } from '@kapeta/ui-web-context';
 import {
-    ButtonType,
     ConfigurationEditor,
     DSL_LANGUAGE_ID,
     DSLConverters,
@@ -11,7 +10,6 @@ import {
     FormButtons,
     FormContainer,
     KapDialog,
-    KapFormDialog,
     showToasty,
     ToastType,
     Tooltip,
@@ -22,23 +20,8 @@ import { PlannerContext } from '@kapeta/ui-web-plan-editor';
 import { useAsync, useAsyncFn } from 'react-use';
 import { PlanForm } from '../forms/PlanForm';
 import { getPlanConfig, setPlanConfig } from '../../api/LocalConfigService';
-import {
-    Box,
-    Button,
-    CircularProgress,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    Paper,
-    Stack,
-    Tab,
-    Tabs,
-    ThemeProvider,
-} from '@mui/material';
+import { Box, Button, Chip, CircularProgress, Paper, Stack, Tab, Tabs } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import { TabList } from 'react-tabs';
-import { kapetaLight } from '../../Theme';
 
 const ConfigSchemaEditor = () => {
     const configurationField = useFormContextField('spec.configuration');
@@ -221,92 +204,110 @@ export const PlanEditorTopMenu = (props: Props) => {
                 boxSizing: 'border-box',
             }}
         >
-            <Stack spacing={2} direction="row">
-                <Tooltip title={'Start all blocks'}>
-                    <Button
-                        disabled={allPlaying || processing}
-                        variant={'contained'}
-                        color={'primary'}
-                        startIcon={<i className="fa fa-play" />}
-                        onClick={async () => {
-                            await doProcess(
-                                async () => {
-                                    setStarting(true);
-                                    try {
-                                        await InstanceService.startInstances(props.systemId);
-                                        setAllPlaying(true);
-                                    } finally {
-                                        setStarting(false);
-                                    }
-                                },
-                                `Starting plan: ${props.systemId}`,
-                                'Failed to start plan'
-                            );
-                        }}
-                    >
-                        Start
-                        {starting && (
-                            <CircularProgress
-                                size={24}
-                                sx={{
-                                    position: 'absolute',
-                                    top: '50%',
-                                    left: '50%',
-                                    marginTop: '-12px',
-                                    marginLeft: '-12px',
-                                }}
-                            />
-                        )}
-                    </Button>
-                </Tooltip>
-                <Tooltip title={'Stop all blocks'}>
-                    <Button
-                        disabled={!anyPlaying || processing}
-                        variant="outlined"
-                        color={'warning'}
-                        startIcon={<i className="fa fa-stop" />}
-                        onClick={async () => {
-                            await doProcess(
-                                async () => {
-                                    setStopping(true);
-                                    try {
-                                        await InstanceService.stopInstances(props.systemId);
-                                        setAllPlaying(false);
-                                    } finally {
-                                        setStopping(false);
-                                    }
-                                },
-                                `Stopping plan: ${props.systemId}`,
-                                'Failed to stop plan'
-                            );
-                        }}
-                    >
-                        Stop
-                        {stopping && (
-                            <CircularProgress
-                                size={24}
-                                sx={{
-                                    position: 'absolute',
-                                    top: '50%',
-                                    left: '50%',
-                                    marginTop: '-12px',
-                                    marginLeft: '-12px',
-                                }}
-                            />
-                        )}
-                    </Button>
-                </Tooltip>
+            <Stack direction="row" justifyContent={'space-between'} alignItems={'center'}>
+                <Stack spacing={2} direction="row">
+                    <Tooltip title={'Start all blocks'}>
+                        <Button
+                            disabled={allPlaying || processing}
+                            variant={'contained'}
+                            color={'primary'}
+                            startIcon={<i className="fa fa-play" />}
+                            onClick={async () => {
+                                await doProcess(
+                                    async () => {
+                                        setStarting(true);
+                                        try {
+                                            await InstanceService.startInstances(props.systemId);
+                                            setAllPlaying(true);
+                                        } finally {
+                                            setStarting(false);
+                                        }
+                                    },
+                                    `Starting plan: ${props.systemId}`,
+                                    'Failed to start plan'
+                                );
+                            }}
+                        >
+                            Start
+                            {starting && (
+                                <CircularProgress
+                                    size={24}
+                                    sx={{
+                                        position: 'absolute',
+                                        top: '50%',
+                                        left: '50%',
+                                        marginTop: '-12px',
+                                        marginLeft: '-12px',
+                                    }}
+                                />
+                            )}
+                        </Button>
+                    </Tooltip>
+                    <Tooltip title={'Stop all blocks'}>
+                        <Button
+                            disabled={!anyPlaying || processing}
+                            variant="outlined"
+                            color={'warning'}
+                            startIcon={<i className="fa fa-stop" />}
+                            onClick={async () => {
+                                await doProcess(
+                                    async () => {
+                                        setStopping(true);
+                                        try {
+                                            await InstanceService.stopInstances(props.systemId);
+                                            setAllPlaying(false);
+                                        } finally {
+                                            setStopping(false);
+                                        }
+                                    },
+                                    `Stopping plan: ${props.systemId}`,
+                                    'Failed to stop plan'
+                                );
+                            }}
+                        >
+                            Stop
+                            {stopping && (
+                                <CircularProgress
+                                    size={24}
+                                    sx={{
+                                        position: 'absolute',
+                                        top: '50%',
+                                        left: '50%',
+                                        marginTop: '-12px',
+                                        marginLeft: '-12px',
+                                    }}
+                                />
+                            )}
+                        </Button>
+                    </Tooltip>
 
-                <Button
-                    startIcon={<i className="fa fa-gear" />}
-                    variant="outlined"
-                    color={'secondary'}
-                    onClick={() => {
-                        setShowSettings(true);
-                    }}
-                >
-                    Settings
-                </Button>
+                    <Button
+                        startIcon={<i className="fa fa-gear" />}
+                        variant="outlined"
+                        color={'secondary'}
+                        onClick={() => {
+                            setShowSettings(true);
+                        }}
+                    >
+                        Settings
+                    </Button>
+                </Stack>
+                {props.readonly && (
+                    <Tooltip
+                        sx={{
+                            alignSelf: 'flex-end',
+                        }}
+                        title={`You can not edit this plan because you've opened a versioned asset.
+                    You can only edit "local" versions where the plan is located on your hard disk`}
+                    >
+                        <Chip
+                            sx={{
+                                cursor: 'help',
+                            }}
+                            label={`Read-only`}
+                        />
+                    </Tooltip>
+                )}
             </Stack>
 
             <KapDialog open={showSettings} className="modal-plan-settings" onClose={() => setShowSettings(false)}>
@@ -342,14 +343,14 @@ export const PlanEditorTopMenu = (props: Props) => {
                                 </Tabs>
                             </Box>
                             <Box flex={1} minHeight={'300px'} minWidth={'500px'}>
-                                {settingsTab === 'general' && <PlanForm />}
+                                {settingsTab === 'general' && <PlanForm readOnly={props.readonly} />}
                                 {settingsTab === 'configuration' && (
                                     <div className="configuration-editor">
                                         <p className="info">Define configuration locally for this plan</p>
                                         <ConfigValueEditor systemId={props.systemId} />
                                     </div>
                                 )}
-                                {settingsTab === 'config-schema' && (
+                                {settingsTab === 'config-schema' && !props.readonly && (
                                     <div className="configuration-schema-editor">
                                         <p className="info">Define configuration data types for this plan</p>
                                         <ConfigSchemaEditor />

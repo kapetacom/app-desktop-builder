@@ -1,6 +1,6 @@
 import React, { ComponentType, useMemo } from 'react';
 
-import { FormField, FormFieldType, useFormContextField } from '@kapeta/ui-web-components';
+import { AssetNameInput, FormField, FormFieldType, useFormContextField } from '@kapeta/ui-web-components';
 
 import { BlockTypeProvider } from '@kapeta/ui-web-context';
 
@@ -9,11 +9,13 @@ import { BlockTypeEditorProps } from '@kapeta/ui-web-types';
 import { ErrorBoundary } from 'react-error-boundary';
 import { BlockDefinition } from '@kapeta/schemas';
 import { ProjectHomeFolderInputProps } from '../fields/ProjectHomeFolderInput';
-import { AutoLoadAssetNameInput } from '../fields/AutoLoadAssetNameInput';
+import { useKapetaContext } from '../../hooks/contextHook';
+import { useNamespacesForField } from '../../hooks/useNamespacesForField';
 
 interface Props extends ProjectHomeFolderInputProps {
     creating?: boolean;
     asset: any;
+    readOnly?: boolean;
 }
 
 interface InnerBlockTypeProps {
@@ -47,6 +49,8 @@ const InnerBlockType = (props: InnerBlockTypeProps) => {
 };
 
 export const BlockForm = (props: Props) => {
+    const context = useKapetaContext();
+    const namespaces = useNamespacesForField('metadata.name');
     const kindField = useFormContextField<string>('kind');
 
     const blockTypeOptions = useMemo(() => {
@@ -74,12 +78,16 @@ export const BlockForm = (props: Props) => {
                 help="The type of block you want to create."
                 options={blockTypeOptions}
                 disabled={!props.creating}
+                readOnly={props.readOnly}
             />
 
-            <AutoLoadAssetNameInput
+            <AssetNameInput
                 name="metadata.name"
                 label="Name"
-                help={'Give your block a system name prefixed with your handle - e.g. "myhandle/my-block"'}
+                namespaces={namespaces}
+                defaultValue={context.activeContext?.identity?.handle ?? 'local'}
+                help={'The name of this block - e.g. "myhandle/my-block"'}
+                readOnly={props.readOnly}
             />
 
             <FormField
@@ -87,6 +95,7 @@ export const BlockForm = (props: Props) => {
                 type={FormFieldType.STRING}
                 label="Title"
                 help="Give your block a human-friendly title"
+                readOnly={props.readOnly}
             />
 
             <InnerBlockType block={props.asset} kind={kindField.get()} creating={props.creating ?? false} />

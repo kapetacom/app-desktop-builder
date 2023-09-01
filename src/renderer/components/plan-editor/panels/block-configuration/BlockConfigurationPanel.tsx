@@ -143,14 +143,21 @@ export const BlockConfigurationPanel = (props: Props) => {
         props.onClosed();
     };
 
-    const readOnly = planner.mode === PlannerMode.VIEW;
-    const hasConfigComponent = !!(typeProvider && typeProvider.configComponent);
+    const configReadOnly = planner.mode === PlannerMode.VIEW;
+    const planReadOnly = configReadOnly || planner.mode === PlannerMode.CONFIGURATION;
 
     const [currentTab, setCurrentTab] = React.useState('general');
 
     const showConfigTab =
         !!(typeProvider && typeProvider.configComponent && block && props.instance) ||
         !!(block?.spec?.configuration?.types?.length && block?.spec?.configuration?.types?.length > 0);
+
+    useEffect(() => {
+        if (props.open) {
+            // Reset to general tab when opening
+            setCurrentTab('general');
+        }
+    }, [props.open]);
 
     return (
         <PlannerSidebar title={panelHeader()} open={props.open} onClose={props.onClosed}>
@@ -175,7 +182,7 @@ export const BlockConfigurationPanel = (props: Props) => {
                                     name="name"
                                     label="Instance name"
                                     help="This related only to the instance of the block and not the block itself."
-                                    readOnly={readOnly}
+                                    readOnly={planReadOnly}
                                     type={FormFieldType.STRING}
                                 />
 
@@ -184,7 +191,7 @@ export const BlockConfigurationPanel = (props: Props) => {
                                     label="Version"
                                     options={versionOptions}
                                     help="The current version used by this plan"
-                                    readOnly={readOnly}
+                                    readOnly={planReadOnly}
                                     type={FormFieldType.ENUM}
                                 />
                             </Box>
@@ -198,7 +205,7 @@ export const BlockConfigurationPanel = (props: Props) => {
                                 <typeProvider.configComponent
                                     block={block}
                                     instance={props.instance}
-                                    readOnly={readOnly}
+                                    readOnly={configReadOnly}
                                 />
                             ) : (
                                 <EntityEditorForm
@@ -225,7 +232,7 @@ export const BlockConfigurationPanel = (props: Props) => {
                             <Button variant={'contained'} color={'error'} onClick={props.onClosed}>
                                 Cancel
                             </Button>
-                            <Button variant={'contained'} disabled={readOnly} color={'primary'} type="submit">
+                            <Button variant={'contained'} disabled={configReadOnly} color={'primary'} type="submit">
                                 Save
                             </Button>
                         </FormButtons>

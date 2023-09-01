@@ -46,6 +46,7 @@ interface BlockFieldsProps {
 
 const BlockFields = ({ data }: BlockFieldsProps) => {
     const context = useKapetaContext();
+    const namespaces = useNamespacesForField('metadata.name');
     const kindUri = parseKapetaUri(data.kind);
 
     const options = useMemo(() => {
@@ -60,8 +61,6 @@ const BlockFields = ({ data }: BlockFieldsProps) => {
         });
         return out;
     }, [kindUri.fullName]);
-
-    const namespaces = useNamespacesForField('metadata.name');
 
     return (
         <>
