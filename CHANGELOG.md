@@ -1,3 +1,10 @@
+## [0.30.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.30.0...v0.30.1) (2023-09-01)
+
+
+### Bug Fixes
+
+* Simplify use of themes - default to light ([#93](https://github.com/kapetacom/app-desktop-builder/issues/93)) ([aede089](https://github.com/kapetacom/app-desktop-builder/commit/aede0896038356ba0a561ee167b55e7a57d1f9fe))
+
 # [0.30.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.29.1...v0.30.0) (2023-09-01)
 
 
