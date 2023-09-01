@@ -5,11 +5,10 @@ import {
     FormContainer,
     FormField,
     FormFieldType,
-    SimpleLoader,
     useFormContextField,
 } from '@kapeta/ui-web-components';
 
-import { BlockTypeProvider, IdentityService, ResourceTypeProvider } from '@kapeta/ui-web-context';
+import { BlockTypeProvider, ResourceTypeProvider } from '@kapeta/ui-web-context';
 
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 
@@ -18,13 +17,11 @@ import { ResourceRole } from '@kapeta/ui-web-types';
 import { BlockDefinition, Resource, Connection, Entity, IconType } from '@kapeta/schemas';
 
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
-import { useAsync } from 'react-use';
 import { cloneDeep } from 'lodash';
 import { PlannerContext, PlannerContextData, PlannerSidebar } from '@kapeta/ui-web-plan-editor';
 import { BlockInfo, DataEntityType, EditItemInfo } from '../../types';
 
 import './ItemEditorPanel.less';
-import { uploadAttachment } from '../../../../api/AttachmentService';
 import { replaceBase64IconWithUrl } from '../../../../utils/iconHelpers';
 import { Button } from '@mui/material';
 import { useKapetaContext } from '../../../../hooks/contextHook';

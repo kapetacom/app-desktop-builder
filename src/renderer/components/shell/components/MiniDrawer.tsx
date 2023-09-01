@@ -1,5 +1,6 @@
 import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
 import { Drawer as MuiDrawer } from '@mui/material';
+import { withTheme } from '../../../Theme';
 
 const drawerWidth = 240;
 
@@ -36,19 +37,22 @@ const closedMixin = (theme: Theme): CSSObject => ({
  *
  * @see https://mui.com/components/drawers/#mini-variant-drawer
  */
-export const MiniDrawer = styled(MuiDrawer, {
-    shouldForwardProp: (prop) => prop !== 'open',
-})(({ theme, open }) => ({
-    width: drawerWidth,
-    flexShrink: 0,
-    whiteSpace: 'nowrap',
-    boxSizing: 'border-box',
-    ...(open && {
-        ...openedMixin(theme),
-        '& .MuiDrawer-paper': openedMixin(theme),
-    }),
-    ...(!open && {
-        ...closedMixin(theme),
-        '& .MuiDrawer-paper': closedMixin(theme),
-    }),
-}));
+export const MiniDrawer = withTheme(
+    styled(MuiDrawer, {
+        shouldForwardProp: (prop) => prop !== 'open',
+    })(({ theme, open }) => ({
+        width: drawerWidth,
+        flexShrink: 0,
+        whiteSpace: 'nowrap',
+        boxSizing: 'border-box',
+        ...(open && {
+            ...openedMixin(theme),
+            '& .MuiDrawer-paper': openedMixin(theme),
+        }),
+        ...(!open && {
+            ...closedMixin(theme),
+            '& .MuiDrawer-paper': closedMixin(theme),
+        }),
+    })),
+    'dark'
+);

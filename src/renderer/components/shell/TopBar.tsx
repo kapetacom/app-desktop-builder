@@ -20,6 +20,7 @@ import { UserAvatar } from '@kapeta/ui-web-components';
 
 import { KapetaNotification, StateNotificationType } from './types';
 import { useKapetaContext } from '../../hooks/contextHook';
+import { withTheme } from '../../Theme';
 
 const noHoverSX = {
     cursor: 'default',
@@ -67,7 +68,7 @@ interface TopBarProps {
     children?: React.ReactNode;
 }
 
-export const TopBar = (props: TopBarProps) => {
+export const TopBar = withTheme((props: TopBarProps) => {
     const [profileMenuAnchorEl, setProfileMenuAchor] = useState<null | HTMLElement>(null);
     const [notificationMenuAnchor, setNotificationMenuAnchor] = useState<null | HTMLElement>(null);
 
@@ -318,4 +319,4 @@ export const TopBar = (props: TopBarProps) => {
             ) : null}
         </AppBar>
     );
-};
+}, 'dark');
