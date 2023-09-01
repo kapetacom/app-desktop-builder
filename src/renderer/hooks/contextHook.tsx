@@ -20,6 +20,7 @@ export const useKapetaContext = () => {
 };
 
 interface KapetaContextData {
+    refreshContexts: () => void;
     activeContext?: MemberIdentity;
     profile?: Identity;
     setProfile: (identity: Identity) => void;
@@ -82,6 +83,9 @@ const createKapetaContext = (): KapetaContextData => {
         profile,
         setProfile,
         activeContext,
+        refreshContexts: () => {
+            contextData.retry();
+        },
         setActiveContext: (context?: MemberIdentity | undefined) => {
             const handle = !context || context.identity.type === 'user' ? undefined : context.identity.handle;
             setActiveContext(context);
@@ -113,12 +117,14 @@ const createKapetaContext = (): KapetaContextData => {
             },
         },
         contexts: contextData.value,
-        loading: contextData.loading,
+        // Prevent flickering when reloading
+        loading: contextData.loading && !contextData.value,
         tabs: mainTabs,
     };
 };
 
 export const KapetaContext = createContext<KapetaContextData>({
+    refreshContexts: () => null,
     activeContext: undefined,
     profile: undefined,
     setProfile: () => null,

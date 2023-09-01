@@ -57,6 +57,7 @@ export class MainWindow {
             show: false,
             icon: getAssetPath('icon.png'),
             title: 'Kapeta',
+            titleBarStyle: 'hiddenInset',
             webPreferences: {
                 preload: getPreloadScript(),
                 nodeIntegration: true,

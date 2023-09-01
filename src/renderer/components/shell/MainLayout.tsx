@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 
-import { ListItemIcon, ListItemText, styled, Divider, IconButton } from '@mui/material';
+import { ListItemIcon, ListItemText, styled, Divider, IconButton, Box, Stack, Button } from '@mui/material';
 import { useMatches } from 'react-router-dom';
 import './MainLayout.less';
-import { MenuSection } from './types/shell';
+import { Context, MenuSection } from './types/shell';
 import { MiniDrawer } from './components/MiniDrawer';
 import { ContextPicker } from './components/ContextPicker';
 import { KapetaIcon } from './components/KapetaIcon';
 import { Logo } from './components/KapetaLogo';
 import { SidebarList, SidebarListItem, SidebarListItemButton } from './components/SidebarMenu';
 import { CustomIcon } from './components/CustomIcon';
-import { MemberIdentity } from '@kapeta/ui-web-types';
+import { Identity, MemberIdentity } from '@kapeta/ui-web-types';
 import { BlockhubShell } from './components/BlockhubShell';
 import { useKapetaContext } from '../../hooks/contextHook';
+import { NavigationButtons } from './NavigationButtons';
 
 interface ConsoleLocation {
     pathname: string;
@@ -31,9 +32,11 @@ interface Props {
     menu: MenuSection[];
     location: ConsoleLocation;
     context?: {
-        contexts?: MemberIdentity[];
+        identity?: Identity;
+        contexts?: Context[];
         activeContext?: MemberIdentity;
-        setActiveContext: (ctx: MemberIdentity) => void;
+        setActiveContext: (ctx: Context) => void;
+        refreshContexts: () => void;
     };
     children?: any;
     topBar?: React.ReactNode;
@@ -51,19 +54,16 @@ export const MainLayout = (props: Props) => {
         <>
             <section className="main-layout">
                 <MiniDrawer variant="permanent" open={drawerIsOpen}>
-                    <DrawerHeader>
-                        <IconButton
-                            sx={{
-                                display: 'block',
-                                padding: 0,
-                                width: '100%',
-                                '&:hover': { backgroundColor: 'inherit' },
-                            }}
-                            onClick={toggleDrawer}
-                        >
-                            {drawerIsOpen ? <Logo height={28} width={122} /> : <KapetaIcon />}
-                        </IconButton>
-                    </DrawerHeader>
+                    <NavigationButtons />
+
+                    <ContextPicker
+                        contexts={props.context?.contexts || []}
+                        userHandle={props.context?.identity?.handle || ''}
+                        onContextChange={props.context?.setActiveContext}
+                        onOpen={() => {
+                            props.context?.refreshContexts();
+                        }}
+                    />
                     <SidebarList>
                         {props.menu
                             .filter((item) => !item.hidden)
@@ -98,12 +98,19 @@ export const MainLayout = (props: Props) => {
                             </SidebarListItemButton>
                         </SidebarListItem>
                     </SidebarList>
-                    <ContextPicker
-                        isOpen={drawerIsOpen}
-                        contexts={props.context?.contexts}
-                        handle={props.context?.activeContext}
-                        onChangeContext={(ctx) => props.context?.setActiveContext(ctx)}
-                    />
+                    <IconButton
+                        sx={{
+                            display: 'block',
+                            p: drawerIsOpen ? 4 : 2,
+                            width: '100%',
+                            '&:hover': { backgroundColor: 'inherit' },
+                            transition: 'padding',
+                            marginTop: 'auto',
+                        }}
+                        onClick={toggleDrawer}
+                    >
+                        {drawerIsOpen ? <Logo height={28} width={122} /> : <KapetaIcon />}
+                    </IconButton>
                 </MiniDrawer>
 
                 <section style={{ flexGrow: 1 }}>

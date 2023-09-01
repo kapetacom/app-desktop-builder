@@ -145,6 +145,54 @@ export const useMainTabs = (context?: MemberIdentity): MainTabs => {
         [location.pathname, tabs]
     );
 
+    // listen for tab events from main process
+    useEffect(() => {
+        return window.electron.ipcRenderer.on(
+            'change-tab',
+            (cmd: 'new' | 'prev' | 'next' | 'switch' | 'close' | 'reopen', i: number) => {
+                switch (cmd) {
+                    case 'prev': {
+                        const currentIndex = tabs.findIndex((t) => t.path === location.pathname);
+                        // previous tab w/ wrap-around
+                        const previousTab = tabs[currentIndex - 1] || tabs[tabs.length - 1];
+                        if (previousTab) {
+                            navigate(previousTab.path);
+                        }
+                        break;
+                    }
+                    case 'next': {
+                        const currentIndex = tabs.findIndex((t) => t.path === location.pathname);
+                        // next tab with wrap-around:
+                        const nextTab = tabs[currentIndex + 1] || tabs[0];
+                        if (nextTab) {
+                            navigate(nextTab.path);
+                        }
+                        break;
+                    }
+                    case 'close':
+                        closeTab(location.pathname);
+                        break;
+                    case 'switch': {
+                        const tab = tabs[i];
+                        if (tab) {
+                            navigate(tab.path);
+                        }
+                        break;
+                    }
+                    case 'new': {
+                        openTab(DEFAULT_TAB_PATH, { navigate: true });
+                        break;
+                    }
+                    case 'reopen':
+                        // TODO: implement tab reopening
+                        break;
+                    default:
+                    // do nothing
+                }
+            }
+        );
+    }, [openTab, closeTab, navigate, tabs, location.pathname]);
+
     return {
         current: tabs.find((t) => t.path === location.pathname) ?? tabs[0],
         active: tabs.filter(tabFilter),

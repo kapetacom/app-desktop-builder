@@ -2,7 +2,7 @@ import React from 'react';
 import { Link as RouterLink, LinkProps as RouterLinkProps } from 'react-router-dom';
 import { LinkProps } from '@mui/material/Link';
 import { lightTheme, darkTheme } from '@kapeta/style';
-import { createTheme } from '@mui/material';
+import { ThemeProvider, createTheme } from '@mui/material';
 
 const LinkBehavior = React.forwardRef<HTMLAnchorElement, Omit<RouterLinkProps, 'to'> & { href: RouterLinkProps['to'] }>(
     (props, ref) => {
@@ -63,3 +63,19 @@ export const kapetaLight = createTheme(
         },
     }
 );
+
+export const withTheme = <T extends object>(
+    Component: React.ComponentType<T>,
+    theme: 'light' | 'dark'
+): React.FC<T> => {
+    const displayName = Component.displayName || Component.name || 'Component'; // Create a displayName for React Dev Tools.
+
+    const ComponentWithTheme = (props: T) => (
+        <ThemeProvider theme={theme === 'light' ? kapetaLight : kapetaDark}>{<Component {...props} />}</ThemeProvider>
+    );
+
+    ComponentWithTheme.displayName =
+        theme === 'light' ? `withLightTheme(${displayName})` : `withDarkTheme(${displayName})`;
+
+    return ComponentWithTheme;
+};

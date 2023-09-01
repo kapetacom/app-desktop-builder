@@ -17,8 +17,8 @@ export const KapetaTab = styled(Tab, {
     },
 })<{ variant: KapetaTabsType; href: string }>(
     {
-        minHeight: '52px',
-        maxHeight: '52px',
+        minHeight: '40px',
+        maxHeight: '40px',
         maxWidth: '360px',
         textTransform: 'none',
         justifyContent: 'stretch',
@@ -55,5 +55,8 @@ export const KapetaTabs = styled(Tabs)({
     },
     '& .MuiTabScrollButton-root.Mui-disabled': {
         display: 'none',
+    },
+    '&.MuiTabs-root': {
+        minHeight: 'auto',
     },
 });
