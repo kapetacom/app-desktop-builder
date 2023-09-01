@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { ListItemIcon, ListItemText, styled, Divider, IconButton, Box } from '@mui/material';
+import { ListItemIcon, ListItemText, styled, Divider, IconButton, Box, Stack, Button } from '@mui/material';
 import { useMatches } from 'react-router-dom';
 import './MainLayout.less';
 import { Context, MenuSection } from './types/shell';
@@ -13,6 +13,7 @@ import { CustomIcon } from './components/CustomIcon';
 import { Identity, MemberIdentity } from '@kapeta/ui-web-types';
 import { BlockhubShell } from './components/BlockhubShell';
 import { useKapetaContext } from '../../hooks/contextHook';
+import { NavigationButtons } from './NavigationButtons';
 
 interface ConsoleLocation {
     pathname: string;
@@ -53,13 +54,8 @@ export const MainLayout = (props: Props) => {
         <>
             <section className="main-layout">
                 <MiniDrawer variant="permanent" open={drawerIsOpen}>
-                    <Box
-                        sx={{
-                            height: '40px',
-                            '-webkit-app-region': 'drag',
-                            marginTop: '-40px',
-                        }}
-                    />
+                    <NavigationButtons />
+
                     <ContextPicker
                         contexts={props.context?.contexts || []}
                         userHandle={props.context?.identity?.handle || ''}
