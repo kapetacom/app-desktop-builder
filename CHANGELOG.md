@@ -1,3 +1,10 @@
+## [0.31.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.31.1...v0.31.2) (2023-09-02)
+
+
+### Bug Fixes
+
+* Moved default installation to local cluster service ([#97](https://github.com/kapetacom/app-desktop-builder/issues/97)) ([c0b0327](https://github.com/kapetacom/app-desktop-builder/commit/c0b0327c46dd00b27da231a0b66b3833374eed20))
+
 ## [0.31.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.31.0...v0.31.1) (2023-09-01)
 
 
