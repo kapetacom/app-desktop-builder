@@ -7,7 +7,7 @@ import { KapetaTab, KapetaTabs, KapetaTabsType } from './components/KapetaTabs';
 import { CustomIcon } from './components/CustomIcon';
 import { Person } from '@mui/icons-material';
 import { useKapetaContext } from '../../hooks/contextHook';
-import { DEFAULT_TAB_PATH, normalizeUrl } from '../../hooks/mainTabs';
+import { DEFAULT_TAB_PATH, normalizeUrl, useMainTabs } from '../../hooks/mainTabs';
 import { usePlans } from '../../hooks/assetHooks';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import { Tooltip } from '@kapeta/ui-web-components';
@@ -17,18 +17,19 @@ export const EditorTabs = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const kapetaContext = useKapetaContext();
+    const mainTabs = useMainTabs();
 
     useEffect(() => {
         if (!location.pathname || location.pathname === '/') {
             navigate(DEFAULT_TAB_PATH);
             return;
         }
-        kapetaContext.tabs.open(location.pathname, { navigate: false });
-    }, [location.pathname, kapetaContext.tabs.open]);
+        mainTabs.open(location.pathname, { navigate: false });
+    }, [location.pathname, mainTabs.open]);
 
     return (
         <KapetaTabs value={normalizeUrl(location.pathname)} variant={'scrollable'}>
-            {kapetaContext.tabs.active.map((tabInfo) => {
+            {mainTabs.active.map((tabInfo) => {
                 let label: React.ReactNode = 'New tab';
                 let variant: KapetaTabsType = 'edit';
                 let icon = <CustomIcon icon="Plan" />;
@@ -133,7 +134,7 @@ export const EditorTabs = () => {
                                     size="small"
                                     onClick={(e) => {
                                         e.preventDefault();
-                                        kapetaContext.tabs.close(tabInfo.path);
+                                        mainTabs.close(tabInfo.path);
                                     }}
                                 >
                                     <CloseIcon />
@@ -143,7 +144,7 @@ export const EditorTabs = () => {
                     />
                 );
             })}
-            <Button onClick={() => kapetaContext.tabs.open(DEFAULT_TAB_PATH, { navigate: true })}>
+            <Button onClick={() => mainTabs.open(DEFAULT_TAB_PATH, { navigate: true })}>
                 <i className="fa fa-plus add-plan" />
             </Button>
         </KapetaTabs>

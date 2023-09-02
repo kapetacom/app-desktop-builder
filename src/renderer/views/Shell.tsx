@@ -14,67 +14,65 @@ import { useEffect } from 'react';
 import { KapetaNotification } from '../components/shell/types';
 import { SimpleLoader } from '@kapeta/ui-web-components';
 import { LoginScreen } from './LoginScreen';
+import { MainTabsContextProvider } from '../hooks/mainTabs';
 
-interface Props {
-    notifications: KapetaNotification[];
-}
+interface Props {}
 
 const InnerShell = (props: Props) => {
     const contexts = useKapetaContext();
+    const [notifications, notificationsHandler] = useNotifications();
+    useBackgroundTasks(notificationsHandler);
 
     return (
-        <MainLayout
-            location={location}
-            topBar={
-                <TopBar notifications={props.notifications}>
-                    <EditorTabs />
-                </TopBar>
-            }
-            menu={[
-                {
-                    id: 'edit',
-                    path: '/edit',
-                    loading: false,
-                    name: 'Edit',
-                    open: false,
-                    icon: <CustomIcon icon="Plan" />,
-                },
-                {
-                    id: 'deploy',
-                    path: '/deployments',
-                    loading: false,
-                    name: 'Deploy',
-                    open: false,
-                    icon: <CustomIcon icon="Deploy" />,
-                },
-            ]}
-            context={{
-                identity: contexts.profile,
-                contexts:
-                    contexts.contexts?.memberships.map((m) => ({
-                        ...m.identity,
-                        current: m.identity.handle === contexts.activeContext?.identity.handle,
-                    })) || ([] as any[]),
-                refreshContexts: contexts.refreshContexts,
-                setActiveContext: (ctx) => {
-                    const member = contexts.contexts?.memberships.find((m) => m.identity.handle === ctx.handle);
-                    member && contexts.setActiveContext(member);
-                },
-                activeContext: contexts.activeContext,
-            }}
-        >
-            <Outlet />
-        </MainLayout>
+        <MainTabsContextProvider>
+            <MainLayout
+                location={location}
+                topBar={
+                    <TopBar notifications={notifications}>
+                        <EditorTabs />
+                    </TopBar>
+                }
+                menu={[
+                    {
+                        id: 'edit',
+                        path: '/edit',
+                        loading: false,
+                        name: 'Edit',
+                        open: false,
+                        icon: <CustomIcon icon="Plan" />,
+                    },
+                    {
+                        id: 'deploy',
+                        path: '/deployments',
+                        loading: false,
+                        name: 'Deploy',
+                        open: false,
+                        icon: <CustomIcon icon="Deploy" />,
+                    },
+                ]}
+                context={{
+                    identity: contexts.profile,
+                    contexts:
+                        contexts.contexts?.memberships.map((m) => ({
+                            ...m.identity,
+                            current: m.identity.handle === contexts.activeContext?.identity.handle,
+                        })) || ([] as any[]),
+                    refreshContexts: contexts.refreshContexts,
+                    setActiveContext: (ctx) => {
+                        const member = contexts.contexts?.memberships.find((m) => m.identity.handle === ctx.handle);
+                        member && contexts.setActiveContext(member);
+                    },
+                    activeContext: contexts.activeContext,
+                }}
+            >
+                <Outlet />
+            </MainLayout>
+        </MainTabsContextProvider>
     );
 };
 
 export function Shell() {
     const location = useLocation();
-
-    const [notifications, notificationsHandler] = useNotifications();
-
-    useBackgroundTasks(notificationsHandler);
-
     const contexts = useKapetaContext();
 
     useEffect(() => {
@@ -105,11 +103,7 @@ export function Shell() {
 
     return (
         <SimpleLoader text="Initialising application..." loading={contexts.loading}>
-            {contexts.profile ? (
-                <InnerShell notifications={notifications} />
-            ) : (
-                <LoginScreen onClickLogin={contexts.logIn} />
-            )}
+            {contexts.profile ? <InnerShell /> : <LoginScreen onClickLogin={contexts.logIn} />}
         </SimpleLoader>
     );
 }

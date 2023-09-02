@@ -1,8 +1,9 @@
+import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { usePlans } from './assetHooks';
-import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { MainTabs, TabInfo, TabOptions } from './types';
 import { MemberIdentity } from '@kapeta/ui-web-types';
+import { KapetaContext, useKapetaContext } from './contextHook';
 
 const TAB_LOCAL_STORAGE = '$main_tabs';
 export const DEFAULT_TAB_PATH = '/edit';
@@ -30,7 +31,30 @@ export function normalizeUrl(url: string) {
 function isContextSensitive(path: string) {
     return path.startsWith('/deployments') && path !== '/deployments';
 }
-export const useMainTabs = (context?: MemberIdentity): MainTabs => {
+
+export const MainTabsContext = createContext<MainTabs>({
+    active: [],
+    current: {
+        path: '',
+    },
+    close: () => {},
+    open: () => {},
+    setTitle: () => {},
+    setContext: () => {},
+});
+
+export const MainTabsContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
+    const kapetaContext = useKapetaContext();
+    const mainTabsContext = createMainTabsContext(kapetaContext.activeContext);
+
+    return <MainTabsContext.Provider value={mainTabsContext}>{children}</MainTabsContext.Provider>;
+};
+
+export const useMainTabs = () => {
+    return useContext(MainTabsContext);
+};
+
+const createMainTabsContext = (context?: MemberIdentity): MainTabs => {
     const location = useLocation();
     const navigate = useNavigate();
     const planAssets = usePlans();

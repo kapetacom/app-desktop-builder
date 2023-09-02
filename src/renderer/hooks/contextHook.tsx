@@ -3,11 +3,10 @@ import { Identity, MemberIdentity, SchemaKind } from '@kapeta/ui-web-types';
 import { useAsyncRetry, useClickAway } from 'react-use';
 import { AssetDisplay } from '@kapeta/ui-web-components';
 import { Plan } from '@kapeta/schemas';
-import { IdentityService } from '@kapeta/ui-web-context';
+import { IdentityService, SocketService } from '@kapeta/ui-web-context';
 import { AssetInfo } from '@kapeta/ui-web-plan-editor';
-import { MainTabs } from './types';
-import { useMainTabs } from './mainTabs';
 
+const AUTH_CHANGED_EVENT = 'auth-change';
 export type BlockHubSelectionCallback = (selection: AssetDisplay[]) => void;
 
 interface BlockHubOpener {
@@ -36,7 +35,6 @@ interface KapetaContextData {
         memberships: MemberIdentity[];
         current: string;
     };
-    tabs: MainTabs;
     loading: boolean;
     blockHub: {
         visible: boolean;
@@ -51,8 +49,6 @@ const createKapetaContext = (): KapetaContextData => {
     const [profile, setProfile] = useState<Identity>();
     const [blockHubVisible, setBlockHubVisible] = useState(false);
     const [blockHubOpener, setBlockHubOpener] = useState<BlockHubOpener>();
-
-    const mainTabs = useMainTabs(activeContext);
 
     const contextData = useAsyncRetry(async () => {
         return window.electron.ipcRenderer.invoke('get-contexts') as Promise<{
@@ -70,6 +66,17 @@ const createKapetaContext = (): KapetaContextData => {
             contextData.retry();
             profileData.retry();
         });
+    }, [contextData.retry, profileData.retry]);
+
+    useEffect(() => {
+        const handler = () => {
+            contextData.retry();
+            profileData.retry();
+        };
+        SocketService.on(AUTH_CHANGED_EVENT, handler);
+        return () => {
+            SocketService.off(AUTH_CHANGED_EVENT, handler);
+        };
     }, [contextData.retry, profileData.retry]);
 
     useEffect(() => {
@@ -131,7 +138,6 @@ const createKapetaContext = (): KapetaContextData => {
         contexts: contextData.value,
         // Prevent flickering when reloading
         loading: contextData.loading && !contextData.value,
-        tabs: mainTabs,
     };
 };
 
@@ -149,16 +155,6 @@ export const KapetaContext = createContext<KapetaContextData>({
         visible: false,
         open: () => {},
         close: () => {},
-    },
-    tabs: {
-        active: [],
-        current: {
-            path: '',
-        },
-        close: () => {},
-        open: () => {},
-        setTitle: () => {},
-        setContext: () => {},
     },
 });
 

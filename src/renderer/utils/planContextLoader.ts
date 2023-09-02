@@ -13,8 +13,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { BlockDefinition, Plan, Resource } from '@kapeta/schemas';
 import Kapeta from '../kapeta';
-import { AsyncState } from 'react-use/lib/useAsyncFn';
-import { AssetListResult, useLocalAssets } from '../hooks/assetHooks';
+import { useLocalAssets } from '../hooks/assetHooks';
 import { AssetInfo, fromAsset, fromAssetDisplay } from '@kapeta/ui-web-plan-editor';
 import { assetFetcher } from '../api/APIService';
 
@@ -102,23 +101,6 @@ const loadProvider = async (providerKind: string): Promise<void> => {
 
 const fetchLocalProviders = () => {
     return simpleFetch(clusterPath(`/providers`));
-};
-
-export const useBlockKinds = (): Set<string> => {
-    const assets = useLocalAssets();
-
-    return useMemo(() => {
-        return new Set<string>(
-            assets.data
-                .filter((asset) => {
-                    // Only blocks do not have a core kind
-                    return asset.exists && ['core/block-type', 'core/block-type-operator'].includes(asset.content.kind);
-                })
-                .map((asset) => {
-                    return parseKapetaUri(asset.ref).fullName;
-                })
-        );
-    }, [assets.data]);
 };
 
 function toBlocks(assets: AssetInfo<SchemaKind>[]): AssetInfo<BlockDefinition>[] {

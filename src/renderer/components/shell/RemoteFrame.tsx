@@ -5,7 +5,7 @@ import { useAuthToken } from '../../utils/tokenHelper';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Box } from '@mui/material';
 import { SimpleLoader } from '@kapeta/ui-web-components';
-import { normalizeUrl } from '../../hooks/mainTabs';
+import { normalizeUrl, useMainTabs } from '../../hooks/mainTabs';
 import { FrameContextInfo } from '@kapeta/web-microfrontend/src/browser/components/FragmentContext';
 
 interface Props {
@@ -15,12 +15,13 @@ interface Props {
 
 export const RemoteFrame = (props: Props) => {
     const context = useKapetaContext();
+    const mainTabs = useMainTabs();
     const token = useAuthToken();
     const location = useLocation();
     const [ready, setReady] = useState(false);
 
     const normalizedPath = normalizeUrl('/' + props.path);
-    const currentTab = context.tabs.active.find((tab) => tab.path === normalizedPath);
+    const currentTab = mainTabs.active.find((tab) => tab.path === normalizedPath);
 
     const frameContext = useMemo<FrameContextInfo | undefined>(() => {
         if (currentTab?.contextId) {
@@ -95,16 +96,16 @@ export const RemoteFrame = (props: Props) => {
                         setReady(true);
                     }}
                     onTitleChange={(data) => {
-                        context.tabs.setTitle(data.path, data.title);
+                        mainTabs.setTitle(data.path, data.title);
                     }}
                     onNavigateTop={(toPath) => {
                         if (location.pathname !== toPath) {
-                            context.tabs.open(toPath, { contextId: frameContext?.id, navigate: true });
+                            mainTabs.open(toPath, { contextId: frameContext?.id, navigate: true });
                         }
                     }}
                     onNavigate={(toPath) => {
                         if (location.pathname !== toPath) {
-                            context.tabs.open(toPath, { contextId: frameContext?.id, navigate: true });
+                            mainTabs.open(toPath, { contextId: frameContext?.id, navigate: true });
                         }
                     }}
                 />
