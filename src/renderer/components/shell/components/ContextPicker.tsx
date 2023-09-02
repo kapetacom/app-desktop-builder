@@ -11,6 +11,7 @@ import { withTheme } from 'renderer/Theme';
 import { SidebarList, SidebarListItem, SidebarListItemButton } from './SidebarMenu';
 import { Context } from '../types/shell';
 import { useKapetaContext } from '../../../hooks/contextHook';
+import { useMainTabs } from '../../../hooks/mainTabs';
 
 interface ContextPickerProps {
     contexts: Context[];
@@ -41,6 +42,7 @@ const LightMenu = withTheme(Menu, 'light');
 
 export const ContextPicker = (props: ContextPickerProps) => {
     const kapetaContext = useKapetaContext();
+    const mainTabs = useMainTabs();
     const currentContext = props.contexts?.find((context) => context.current);
     const userContext = props.contexts?.find((context) => context.handle === props.userHandle);
     const [menuAnchor, setMenuAnchor] = React.useState<HTMLElement | null>(null);
@@ -156,7 +158,7 @@ export const ContextPicker = (props: ContextPickerProps) => {
                 <ListItemButton
                     onClick={() => {
                         close();
-                        kapetaContext.tabs.open('/settings/organizations', { navigate: true });
+                        mainTabs.open('/settings/organizations', { navigate: true });
                     }}
                 >
                     <ListItemIcon>

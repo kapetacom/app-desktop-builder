@@ -10,6 +10,7 @@ import { PlanOverview } from './components/plan-overview/PlanOverview';
 import { usePlans } from './hooks/assetHooks';
 import { SimpleLoader } from '@kapeta/ui-web-components';
 import { RemoteFrame } from './components/shell/RemoteFrame';
+import { useKapetaContext } from './hooks/contextHook';
 
 const router = createMemoryRouter([
     {
@@ -28,12 +29,15 @@ const router = createMemoryRouter([
                         Component: () => {
                             const navigateTo = useNavigate();
                             const plans = usePlans();
+                            const context = useKapetaContext();
+
+                            const samplePlanName = `${context.profile?.handle}/sample-nodejs-plan`;
 
                             return (
-                                <SimpleLoader loading={plans.loading}>
+                                <SimpleLoader loading={plans.loading || context.loading}>
                                     <PlanOverview
                                         assetService={AssetService}
-                                        samplePlanName={'kapeta/sample-nodejs-plan'}
+                                        samplePlanName={samplePlanName}
                                         onPlanImported={async () => {
                                             await plans.refresh();
                                         }}
