@@ -1,3 +1,10 @@
+## [0.31.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.31.2...v0.31.3) (2023-09-02)
+
+
+### Bug Fixes
+
+* Split out main tab context from kapeta context ([#98](https://github.com/kapetacom/app-desktop-builder/issues/98)) ([36ad5aa](https://github.com/kapetacom/app-desktop-builder/commit/36ad5aaded92c9fd8544feffc9840e9ed98e89bf))
+
 ## [0.31.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.31.1...v0.31.2) (2023-09-02)
 
 
