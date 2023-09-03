@@ -1,3 +1,10 @@
+# [0.32.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.31.4...v0.32.0) (2023-09-03)
+
+
+### Features
+
+* Moved services into desktop app and improved sockets and logs ([#100](https://github.com/kapetacom/app-desktop-builder/issues/100)) ([a233d33](https://github.com/kapetacom/app-desktop-builder/commit/a233d337210b7c9e52b125392d442049061e5e74))
+
 ## [0.31.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.31.3...v0.31.4) (2023-09-03)
 
 
