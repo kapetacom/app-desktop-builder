@@ -1,17 +1,16 @@
 import React, { useEffect, useMemo } from 'react';
 import { useAsyncRetry } from 'react-use';
 import { PlannerMode } from '@kapeta/ui-web-plan-editor';
-
-import { AssetService, InstanceEventType, InstanceService, InstanceStatus } from '@kapeta/ui-web-context';
-
-import './PlanView.less';
+import { InstanceEventType, InstanceStatus } from '@kapeta/ui-web-context';
 import { Plan } from '@kapeta/schemas';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import { SimpleLoader } from '@kapeta/ui-web-components';
 import { PlanEditor } from '../components/plan-editor/PlanEditor';
 import { normalizeKapetaUri, useLoadedPlanContext } from '../utils/planContextLoader';
-import { InstanceInfo } from '../components/plan-editor/types';
 import { useAsset } from '../hooks/assetHooks';
+import { AssetService } from 'renderer/api/AssetService';
+import { SystemService } from '../api/SystemService';
+import './PlanView.less';
 
 interface PlanViewProps {
     systemId: string;
@@ -30,7 +29,7 @@ export const PlanView = (props: PlanViewProps) => {
     }
 
     const instanceInfos = useAsyncRetry(async () => {
-        return (await InstanceService.getInstanceStatusForPlan(normalizeKapetaUri(props.systemId))) as InstanceInfo[];
+        return await SystemService.getInstanceStatusForPlan(normalizeKapetaUri(props.systemId));
     }, [props.systemId]);
 
     const instanceStatusMap = useMemo(() => {
@@ -45,15 +44,13 @@ export const PlanView = (props: PlanViewProps) => {
     }, [instanceInfos.value]);
 
     // subscribe and reload instance status
-    useEffect(
-        () =>
-            InstanceService.subscribe(
-                normalizeKapetaUri(props.systemId),
-                InstanceEventType.EVENT_INSTANCE_CHANGED,
-                () => instanceInfos.retry()
-            ),
-        [instanceInfos, props.systemId]
-    );
+    useEffect(() => {
+        return SystemService.subscribe(
+            props.systemId,
+            InstanceEventType.EVENT_INSTANCE_CHANGED,
+            () => !instanceInfos.loading && instanceInfos.retry()
+        );
+    }, [instanceInfos, props.systemId]);
 
     const { resourceAssets, blocks, loading, currentlyLoading } = useLoadedPlanContext(planData.data?.content);
 

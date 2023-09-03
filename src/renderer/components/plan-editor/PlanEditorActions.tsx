@@ -3,9 +3,10 @@ import { ButtonStyle, useConfirmDelete } from '@kapeta/ui-web-components';
 import { IResourceTypeConverter, ResourceRole } from '@kapeta/ui-web-types';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import { useEffect, useMemo } from 'react';
-import { InstanceService, InstanceStatus, ResourceTypeProvider } from '@kapeta/ui-web-context';
+import { InstanceStatus, ResourceTypeProvider } from '@kapeta/ui-web-context';
 import { Connection } from '@kapeta/schemas';
 import { ActionHandlers, DataEntityType, InstanceInfo } from './types';
+import { InstanceService } from '../../api/InstanceService';
 
 function getConverter(planner: PlannerContextData, connection: Connection): IResourceTypeConverter | null {
     try {

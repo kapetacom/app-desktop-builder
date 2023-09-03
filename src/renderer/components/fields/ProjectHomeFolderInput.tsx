@@ -1,10 +1,10 @@
 import { SimpleLoader, useFormFieldController } from '@kapeta/ui-web-components';
 import React, { useEffect, useState } from 'react';
 import { useAsync } from 'react-use';
-import { FileSystemService } from '@kapeta/ui-web-context';
 import { Checkbox, FormControl, Input, InputLabel, Stack } from '@mui/material';
 import { showFilePickerOne } from '../../utils/showFilePicker';
 import './ProjectHomeFolderInput.less';
+import { FileSystemService } from '../../api/FileSystemService';
 
 export interface ProjectHomeFolderInputProps {
     onChange?: (enable: boolean, home: string) => void;

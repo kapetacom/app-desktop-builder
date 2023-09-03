@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
-import { Task, TaskService, TaskStatus } from '@kapeta/ui-web-context';
+import { Task, TaskStatus } from '@kapeta/ui-web-context';
 import { ListActions } from 'react-use/lib/useList';
 import { KapetaNotification } from '../../components/shell/types';
 import { useAsync } from 'react-use';
+import { TaskService } from '../../api/TaskService';
 
 function createNotification(task: Task): KapetaNotification {
     if (task.status === TaskStatus.FAILED) {

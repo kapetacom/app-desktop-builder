@@ -1,10 +1,12 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Identity, MemberIdentity, SchemaKind } from '@kapeta/ui-web-types';
-import { useAsyncRetry, useClickAway } from 'react-use';
+import { useAsyncRetry } from 'react-use';
 import { AssetDisplay } from '@kapeta/ui-web-components';
 import { Plan } from '@kapeta/schemas';
-import { IdentityService, SocketService } from '@kapeta/ui-web-context';
+
 import { AssetInfo } from '@kapeta/ui-web-plan-editor';
+import { IdentityService } from '../api/IdentityService';
+import { SocketService } from '../api/SocketService';
 
 const AUTH_CHANGED_EVENT = 'auth-change';
 export type BlockHubSelectionCallback = (selection: AssetDisplay[]) => void;
@@ -142,7 +144,7 @@ const createKapetaContext = (): KapetaContextData => {
         },
         contexts: data.value?.contexts,
         // Prevent flickering when reloading
-        loading: initialLoad || data.loading,
+        loading: initialLoad,
     };
 };
 
@@ -155,7 +157,7 @@ export const KapetaContext = createContext<KapetaContextData>({
     logOut: () => Promise.resolve(false),
     logIn: () => Promise.resolve({ success: false }),
     contexts: undefined,
-    loading: false,
+    loading: true,
     blockHub: {
         visible: false,
         open: () => {},

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { AssetService, BlockTypeProvider, SocketService } from '@kapeta/ui-web-context';
+import { BlockTypeProvider } from '@kapeta/ui-web-context';
 import { BlockDefinition, Plan } from '@kapeta/schemas';
 import { Asset, SchemaKind } from '@kapeta/ui-web-types';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
@@ -8,6 +8,8 @@ import _ from 'lodash';
 import useSWRImmutable from 'swr/immutable';
 import { useAsyncRetry } from 'react-use';
 import { AssetInfo, fromAsset } from '@kapeta/ui-web-plan-editor';
+import { SocketService } from 'renderer/api/SocketService';
+import { AssetService } from 'renderer/api/AssetService';
 
 interface AssetChangedEvent {
     type: string;

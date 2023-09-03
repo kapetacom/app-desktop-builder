@@ -6,7 +6,6 @@ import { kapetaLight } from '../src/renderer/Theme';
 import { PlanOverview } from '../src/renderer/components/plan-overview/PlanOverview';
 import { Plan } from '@kapeta/schemas';
 import { AssetInfo } from '@kapeta/ui-web-plan-editor';
-import { Config } from '@kapeta/nodejs-registry-utils';
 import { ConfirmProvider } from '@kapeta/ui-web-components';
 import { AssetStore } from '@kapeta/ui-web-context';
 import { Asset, SchemaKind } from '@kapeta/ui-web-types';

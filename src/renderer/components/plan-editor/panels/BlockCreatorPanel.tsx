@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { BlockCreator, createNewBlock } from '../../creators/BlockCreator';
 import { AssetCreatorState } from '../../creators/AssetCreator';
-import { AssetService } from '@kapeta/ui-web-context';
 import { PlannerContext } from '@kapeta/ui-web-plan-editor';
 import { BlockDefinition } from '@kapeta/schemas';
 import { DataEntityType, EditItemInfo } from '../types';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import { useBlocks } from '../../../hooks/assetHooks';
+import { AssetService } from 'renderer/api/AssetService';
 
 interface Props {
     open: boolean;

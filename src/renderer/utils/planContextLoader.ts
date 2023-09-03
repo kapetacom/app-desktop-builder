@@ -1,11 +1,4 @@
-import {
-    BlockService,
-    BlockTargetProvider,
-    BlockTypeProvider,
-    clusterPath,
-    ResourceTypeProvider,
-    simpleFetch,
-} from '@kapeta/ui-web-context';
+import { BlockTargetProvider, BlockTypeProvider, ResourceTypeProvider, simpleFetch } from '@kapeta/ui-web-context';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import _ from 'lodash';
 import { IBlockTypeProvider, ILanguageTargetProvider, IResourceTypeProvider, SchemaKind } from '@kapeta/ui-web-types';
@@ -16,6 +9,8 @@ import Kapeta from '../kapeta';
 import { useLocalAssets } from '../hooks/assetHooks';
 import { AssetInfo, fromAsset, fromAssetDisplay } from '@kapeta/ui-web-plan-editor';
 import { assetFetcher } from '../api/APIService';
+import { clusterPath } from 'renderer/api/ClusterConfig';
+import { BlockService } from 'renderer/api/BlockService';
 
 type PromiseCache<T = void> = { [key: string]: Promise<T> };
 const PROVIDER_CACHE: PromiseCache = {};
