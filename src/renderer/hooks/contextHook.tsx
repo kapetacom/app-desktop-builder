@@ -45,59 +45,66 @@ interface KapetaContextData {
 }
 
 const createKapetaContext = (): KapetaContextData => {
+    const [initialLoad, setInitialLoad] = useState(true);
     const [activeContext, setActiveContext] = useState<MemberIdentity>();
     const [profile, setProfile] = useState<Identity>();
     const [blockHubVisible, setBlockHubVisible] = useState(false);
     const [blockHubOpener, setBlockHubOpener] = useState<BlockHubOpener>();
 
-    const contextData = useAsyncRetry(async () => {
-        return window.electron.ipcRenderer.invoke('get-contexts') as Promise<{
+    const data = useAsyncRetry(async () => {
+        const contexts = (await window.electron.ipcRenderer.invoke('get-contexts')) as {
             memberships: MemberIdentity[];
             current: string;
-        }>;
-    }, []);
+        };
 
-    const profileData = useAsyncRetry(async () => {
-        return IdentityService.getCurrent();
+        const profile = await IdentityService.getCurrent();
+
+        return {
+            contexts,
+            profile,
+        };
     }, []);
 
     useEffect(() => {
         return window.electron.ipcRenderer.on('auth', () => {
-            contextData.retry();
-            profileData.retry();
+            data.retry();
         });
-    }, [contextData.retry, profileData.retry]);
+    }, [data.retry]);
 
     useEffect(() => {
         const handler = () => {
-            contextData.retry();
-            profileData.retry();
+            data.retry();
         };
         SocketService.on(AUTH_CHANGED_EVENT, handler);
         return () => {
             SocketService.off(AUTH_CHANGED_EVENT, handler);
         };
-    }, [contextData.retry, profileData.retry]);
+    }, [data.retry]);
 
     useEffect(() => {
-        if (contextData.value) {
-            const active = contextData.value.memberships.find((m) => m.identity.handle === contextData.value!.current);
+        if (data.loading || !data.value) {
+            return;
+        }
+
+        if (data.value.contexts) {
+            const active = data.value.contexts.memberships.find(
+                (m) => m.identity.handle === data.value?.contexts.current
+            );
             setActiveContext(active);
+        } else {
+            setActiveContext(undefined);
         }
-    }, [contextData.value]);
 
-    useEffect(() => {
-        if (!profileData.loading) {
-            setProfile(profileData.value);
-        }
-    }, [profileData.value, profileData.loading]);
+        setProfile(data.value.profile);
+        setInitialLoad(false);
+    }, [data.loading, data.value]);
 
     return {
         profile,
         setProfile,
         activeContext,
         refreshContexts: () => {
-            contextData.retry();
+            data.retry();
         },
         setActiveContext: (context?: MemberIdentity | undefined) => {
             const handle = !context || context.identity.type === 'user' ? undefined : context.identity.handle;
@@ -109,8 +116,7 @@ const createKapetaContext = (): KapetaContextData => {
             if (await logOutPromise) {
                 setActiveContext(undefined);
                 setProfile(undefined);
-                profileData.retry();
-                contextData.retry();
+                data.retry();
                 return true;
             }
             return false;
@@ -118,8 +124,7 @@ const createKapetaContext = (): KapetaContextData => {
         logIn: async () => {
             const result = (await window.electron.ipcRenderer.invoke('log-in')) as LoginResult;
             if (result.success) {
-                profileData.retry();
-                contextData.retry();
+                data.retry();
             }
             return result;
         },
@@ -135,9 +140,9 @@ const createKapetaContext = (): KapetaContextData => {
                 setBlockHubVisible(true);
             },
         },
-        contexts: contextData.value,
+        contexts: data.value?.contexts,
         // Prevent flickering when reloading
-        loading: contextData.loading && !contextData.value,
+        loading: initialLoad || data.loading,
     };
 };
 
