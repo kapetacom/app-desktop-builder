@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useMemo } from 'react';
 
-import { TrafficService, TrafficEventType, ResourceTypeProvider } from '@kapeta/ui-web-context';
+import { ResourceTypeProvider } from '@kapeta/ui-web-context';
 import { ConnectionMethodsMapping, ResourceRole, Traffic } from '@kapeta/ui-web-types';
 import { Connection } from '@kapeta/schemas';
 import { useList } from 'react-use';
 import { getConnectionId, PlannerContext, PlannerContextData } from '@kapeta/ui-web-plan-editor';
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
+import { TrafficEventType, TrafficService } from 'renderer/api/TrafficService';
 
 interface ModalProps {
     connection: Connection;

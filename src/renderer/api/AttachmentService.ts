@@ -1,4 +1,5 @@
-import { simpleFetch, clusterPath } from '@kapeta/ui-web-context';
+import { simpleFetch } from '@kapeta/ui-web-context';
+import { clusterPath } from './ClusterConfig';
 
 export interface AttachmentInfo {
     type: string;

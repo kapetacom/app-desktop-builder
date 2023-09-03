@@ -1,11 +1,9 @@
-import { kapetaLight } from '../../../Theme';
 import { installerService } from '../../../api/installerService';
 import { api, assetFetcher } from '../../../api/APIService';
 import { ThemeProvider } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { AssetDisplay, AssetType, BlockhubCategory, BlockhubModal } from '@kapeta/ui-web-components';
-import { useAsync, useAsyncRetry } from 'react-use';
-import { AssetService } from '@kapeta/ui-web-context';
+import { useAsyncRetry } from 'react-use';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import { useKapetaContext } from '../../../hooks/contextHook';
 import { versionIsBigger } from '../../../utils/versionHelpers';
@@ -13,6 +11,7 @@ import { versionIsBigger } from '../../../utils/versionHelpers';
 import { normalizeKapetaUri, useLoadedPlanContext } from '../../../utils/planContextLoader';
 import { useAssetsChanged } from '../../../hooks/assetHooks';
 import { AssetInfo, AssetThumbnail, fromAsset, fromAssetDisplay } from '@kapeta/ui-web-plan-editor';
+import { AssetService } from 'renderer/api/AssetService';
 
 interface Props {
     handle?: string;

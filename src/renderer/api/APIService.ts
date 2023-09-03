@@ -1,6 +1,6 @@
 import { RESTService } from '@kapeta/web-microfrontend/browser';
 import { showToasty, ToastType, AssetDisplay } from '@kapeta/ui-web-components';
-import { clusterPath } from '@kapeta/ui-web-context';
+import { clusterPath } from './ClusterConfig';
 
 const errorHandler = (error) => {
     showToasty({

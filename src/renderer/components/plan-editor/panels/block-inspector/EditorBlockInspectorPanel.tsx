@@ -1,11 +1,12 @@
 import React, { useEffect, useMemo } from 'react';
-import { InstanceEventType, InstanceService } from '@kapeta/ui-web-context';
+import { InstanceEventType } from '@kapeta/ui-web-context';
 
 import { BlockInspectorPanel } from '@kapeta/ui-web-plan-editor';
 import { useAsync } from 'react-use';
 
 import { BlockInstance } from '@kapeta/schemas';
 import { getInstanceConfig } from '../../../../api/LocalConfigService';
+import { InstanceService } from 'renderer/api/InstanceService';
 
 interface Props {
     systemId: string;
@@ -16,7 +17,6 @@ interface Props {
 
 export const EditorBlockInspectorPanel = (props: Props) => {
     const { instance } = props;
-    const blockRef = instance?.block.ref;
 
     const emitter = useMemo(() => {
         const listeners: ((entry: any) => void)[] = [];
@@ -24,14 +24,20 @@ export const EditorBlockInspectorPanel = (props: Props) => {
             listeners,
             onLog: (listener: (entry: any) => void) => {
                 listeners.push(listener);
+                return () => {
+                    const ix = listeners.indexOf(listener);
+                    if (ix > -1) {
+                        listeners.splice(ix, 1);
+                    }
+                };
             },
         };
         // cache this per blockRef
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [blockRef]);
+    }, [props.systemId, props.instance?.id]);
 
     useEffect(() => {
-        if (!blockRef) {
+        if (!props.instance?.id || !props.open) {
             return () => {
                 // noop
             };
@@ -43,12 +49,13 @@ export const EditorBlockInspectorPanel = (props: Props) => {
             });
         };
 
-        InstanceService.subscribe(blockRef, InstanceEventType.EVENT_INSTANCE_LOG, onInstanceLog);
-
-        return () => {
-            InstanceService.unsubscribe(blockRef, InstanceEventType.EVENT_INSTANCE_LOG, onInstanceLog);
-        };
-    }, [blockRef, emitter]);
+        return InstanceService.subscribeForLogs(
+            props.systemId,
+            props.instance?.id,
+            InstanceEventType.EVENT_INSTANCE_LOG,
+            onInstanceLog
+        );
+    }, [props.systemId, props.instance?.id, emitter, props.open]);
 
     const instanceConfig = useAsync(async () => {
         if (!props.instance?.id || !props.open) {

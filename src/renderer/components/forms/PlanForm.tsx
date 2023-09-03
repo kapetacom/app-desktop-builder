@@ -2,8 +2,9 @@ import { AssetNameInput, FormField } from '@kapeta/ui-web-components';
 import React from 'react';
 import { useKapetaContext } from '../../hooks/contextHook';
 import { useNamespacesForField } from '../../hooks/useNamespacesForField';
+import { CreatingFormProps } from '../creators/AssetCreator';
 
-interface Props {
+interface Props extends CreatingFormProps {
     readOnly?: boolean;
 }
 

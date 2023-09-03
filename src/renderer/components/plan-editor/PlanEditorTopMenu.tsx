@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
-import { InstanceEventType, InstanceService, TaskService, TaskStatus } from '@kapeta/ui-web-context';
+import { InstanceEventType, TaskStatus } from '@kapeta/ui-web-context';
 import {
     ConfigurationEditor,
     DSL_LANGUAGE_ID,
@@ -22,6 +22,8 @@ import { PlanForm } from '../forms/PlanForm';
 import { getPlanConfig, setPlanConfig } from '../../api/LocalConfigService';
 import { Box, Button, Chip, CircularProgress, Paper, Stack, Tab, Tabs } from '@mui/material';
 import { grey } from '@mui/material/colors';
+import { TaskService } from 'renderer/api/TaskService';
+import { SystemService } from 'renderer/api/SystemService';
 
 const ConfigSchemaEditor = () => {
     const configurationField = useFormContextField('spec.configuration');
@@ -147,7 +149,7 @@ export const PlanEditorTopMenu = (props: Props) => {
     useEffect(() => {
         const updateState = async () => {
             const totalBlocks = planner.plan?.spec?.blocks?.length || 0;
-            const status = await InstanceService.getInstanceStatusForPlan(props.systemId);
+            const status = await SystemService.getInstanceStatusForPlan(props.systemId);
             setAllPlaying(
                 totalBlocks === status.length &&
                     status.length > 0 &&
@@ -158,8 +160,7 @@ export const PlanEditorTopMenu = (props: Props) => {
         updateState().catch(() => {
             // ignore initial error
         });
-
-        return InstanceService.subscribe(props.systemId, InstanceEventType.EVENT_INSTANCE_CHANGED, updateState);
+        return SystemService.subscribe(props.systemId, InstanceEventType.EVENT_INSTANCE_CHANGED, updateState);
     }, [props.systemId]);
 
     const [planConfig, reloadConfig] = useAsyncFn(async () => {
@@ -217,7 +218,7 @@ export const PlanEditorTopMenu = (props: Props) => {
                                     async () => {
                                         setStarting(true);
                                         try {
-                                            await InstanceService.startInstances(props.systemId);
+                                            await SystemService.startInstances(props.systemId);
                                             setAllPlaying(true);
                                         } finally {
                                             setStarting(false);
@@ -254,7 +255,7 @@ export const PlanEditorTopMenu = (props: Props) => {
                                     async () => {
                                         setStopping(true);
                                         try {
-                                            await InstanceService.stopInstances(props.systemId);
+                                            await SystemService.stopInstances(props.systemId);
                                             setAllPlaying(false);
                                         } finally {
                                             setStopping(false);

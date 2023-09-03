@@ -1,7 +1,7 @@
 import { InstallerService } from '@kapeta/ui-web-components';
-import { AssetService } from '@kapeta/ui-web-context';
 import { onAssetChanged } from '../hooks/assetHooks';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
+import { AssetService } from './AssetService';
 
 export const installerService: InstallerService = {
     async get(assetRef: string): Promise<boolean> {

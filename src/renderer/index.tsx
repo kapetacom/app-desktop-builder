@@ -1,7 +1,6 @@
 import { createRoot } from 'react-dom/client';
 import { Box, ThemeProvider } from '@mui/material';
 import { RouterProvider, useParams, createMemoryRouter, useNavigate, useLocation } from 'react-router-dom';
-import { AssetService } from '@kapeta/ui-web-context';
 import { Root } from './Root';
 import { kapetaDark, kapetaLight } from './Theme';
 import { initialise } from './context';
@@ -11,6 +10,7 @@ import { usePlans } from './hooks/assetHooks';
 import { SimpleLoader } from '@kapeta/ui-web-components';
 import { RemoteFrame } from './components/shell/RemoteFrame';
 import { useKapetaContext } from './hooks/contextHook';
+import { AssetService } from './api/AssetService';
 
 const router = createMemoryRouter([
     {

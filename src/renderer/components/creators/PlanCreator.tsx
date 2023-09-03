@@ -1,12 +1,12 @@
 import React from 'react';
-import { FileInfo, SchemaKind } from '@kapeta/ui-web-types';
+import { FileInfo } from '@kapeta/ui-web-types';
 import { AssetStore } from '@kapeta/ui-web-context';
 
 import { AssetCreator, AssetCreatorState } from './AssetCreator';
 import { PlanForm } from '../forms/PlanForm';
-import './PlanCreator.less';
 import { Plan } from '@kapeta/schemas';
 import { AssetInfo } from '@kapeta/ui-web-plan-editor';
+import './PlanCreator.less';
 
 interface PlanImportProps {
     assetService: AssetStore;
