@@ -1,3 +1,10 @@
+## [0.31.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.31.3...v0.31.4) (2023-09-03)
+
+
+### Bug Fixes
+
+* Make sure context is loaded before we show UI ([#99](https://github.com/kapetacom/app-desktop-builder/issues/99)) ([6f2bced](https://github.com/kapetacom/app-desktop-builder/commit/6f2bcedbf8def8259bdc78f296813d262cb0f54f))
+
 ## [0.31.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.31.2...v0.31.3) (2023-09-02)
 
 
