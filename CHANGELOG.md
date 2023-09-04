@@ -1,3 +1,10 @@
+## [0.32.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.32.0...v0.32.1) (2023-09-04)
+
+
+### Bug Fixes
+
+* bump ui-web-components for taskGetter api fix ([dc96d41](https://github.com/kapetacom/app-desktop-builder/commit/dc96d41e6f366fb83e6128e9bf79636911278c50))
+
 # [0.32.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.31.4...v0.32.0) (2023-09-03)
 
 
