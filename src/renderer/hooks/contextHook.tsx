@@ -7,6 +7,8 @@ import { Plan } from '@kapeta/schemas';
 import { AssetInfo } from '@kapeta/ui-web-plan-editor';
 import { IdentityService } from '../api/IdentityService';
 import { SocketService } from '../api/SocketService';
+import { readPostedMessage } from '@kapeta/web-microfrontend/src/browser/utils/helpers';
+import { FragmentMessageTypes } from '@kapeta/web-microfrontend/src/browser/definitions/types';
 
 const AUTH_CHANGED_EVENT = 'auth-change';
 export type BlockHubSelectionCallback = (selection: AssetDisplay[]) => void;
@@ -66,6 +68,19 @@ const createKapetaContext = (): KapetaContextData => {
             profile,
         };
     }, []);
+
+    useEffect(() => {
+        const handler = (event) => {
+            const msg = readPostedMessage(event);
+            if (msg?.type === FragmentMessageTypes.CONTEXT_CHANGE) {
+                data.retry();
+            }
+        };
+        window.addEventListener('message', handler);
+        return () => {
+            window.removeEventListener('message', handler);
+        };
+    }, [data.retry]);
 
     useEffect(() => {
         return window.electron.ipcRenderer.on('auth', () => {
