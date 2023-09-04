@@ -1,6 +1,13 @@
 import React, { ComponentType, useMemo } from 'react';
 
-import { AssetNameInput, FormField, FormFieldType, useFormContextField } from '@kapeta/ui-web-components';
+import {
+    AssetVersionSelector,
+    AssetVersionSelectorEntry,
+    AssetNameInput,
+    FormField,
+    FormFieldType,
+    useFormContextField,
+} from '@kapeta/ui-web-components';
 
 import { BlockTypeProvider } from '@kapeta/ui-web-context';
 
@@ -11,6 +18,7 @@ import { BlockDefinition } from '@kapeta/schemas';
 import { ProjectHomeFolderInputProps } from '../fields/ProjectHomeFolderInput';
 import { useKapetaContext } from '../../hooks/contextHook';
 import { useNamespacesForField } from '../../hooks/useNamespacesForField';
+import { fromTypeProviderToAssetType } from '../../utils/assetTypeConverters';
 
 interface Props extends ProjectHomeFolderInputProps {
     creating?: boolean;
@@ -53,32 +61,25 @@ export const BlockForm = (props: Props) => {
     const namespaces = useNamespacesForField('metadata.name');
     const kindField = useFormContextField<string>('kind');
 
-    const blockTypeOptions = useMemo(() => {
-        const options: { [key: string]: string } = {};
+    const assetTypes: AssetVersionSelectorEntry[] = useMemo(() => {
         try {
-            BlockTypeProvider.listAll().forEach((blockTypeConfig) => {
-                const id = `${blockTypeConfig.kind}:${blockTypeConfig.version}`;
-                const name = blockTypeConfig.title ? blockTypeConfig.title : blockTypeConfig.kind;
-                options[id] = `${name} [${id}]`;
-            });
+            return BlockTypeProvider.listAll().map(fromTypeProviderToAssetType);
         } catch (e) {
             console.error('Failed to create drop down', e);
+            return [];
         }
-
-        return options;
     }, []);
 
     return (
         <div className="block-form">
-            <FormField
+            <AssetVersionSelector
                 name="kind"
                 label="Type"
                 validation={['required']}
-                type={FormFieldType.ENUM}
                 help="The type of block you want to create."
-                options={blockTypeOptions}
                 disabled={!props.creating}
                 readOnly={props.readOnly}
+                assetTypes={assetTypes}
             />
 
             <AssetNameInput
