@@ -1,3 +1,5 @@
+const TsconfigPathsPlugins = require('tsconfig-paths-webpack-plugin');
+
 module.exports = ({ config }) => {
     config.module.rules = [
         {
@@ -70,5 +72,9 @@ module.exports = ({ config }) => {
         },
     ];
     config.resolve.extensions.push('.svg', '.png');
+
+    // Add support for TypeScript paths
+    config.resolve.plugins = config.resolve.plugins || [];
+    config.resolve.plugins.push(new TsconfigPathsPlugins());
     return config;
 };
