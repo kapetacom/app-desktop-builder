@@ -1,3 +1,16 @@
+## [0.32.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.32.2...v0.32.3) (2023-09-04)
+
+
+### Bug Fixes
+
+* add sentry monitoring to electron main + renderer ([a9dc077](https://github.com/kapetacom/app-desktop-builder/commit/a9dc07764bfbd817b4221fc591f46d2deee55616))
+* import the right sentry entrypoint in main process ([bc273dd](https://github.com/kapetacom/app-desktop-builder/commit/bc273ddf605fb540fa266961fca1fd4afa5dc47f))
+
+
+### Reverts
+
+* undeploy buggy sentry code ([9294331](https://github.com/kapetacom/app-desktop-builder/commit/9294331fd03bb48ed9269c277063d1d92bc36bc4))
+
 ## [0.32.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.32.1...v0.32.2) (2023-09-04)
 
 
