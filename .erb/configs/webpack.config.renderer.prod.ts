@@ -14,9 +14,11 @@ import baseConfig from './webpack.config.base';
 import webpackPaths from './webpack.paths';
 import checkNodeEnv from '../scripts/check-node-env';
 import deleteSourceMaps from '../scripts/delete-source-maps';
+import packageJson from '../../package.json';
 
 checkNodeEnv('production');
 deleteSourceMaps();
+const sentryPath = path.join(webpackPaths.srcRendererPath, 'sentry.ts');
 
 const configuration: webpack.Configuration = {
     devtool: 'source-map',
@@ -26,9 +28,9 @@ const configuration: webpack.Configuration = {
     target: ['web', 'electron-renderer'],
 
     entry: {
-        index: [path.join(webpackPaths.srcRendererPath, 'index.tsx')],
-        splash: [path.join(webpackPaths.srcRendererPath, 'modals/splash/splash.tsx')],
-        processing: [path.join(webpackPaths.srcRendererPath, 'modals/processing/processing.tsx')],
+        index: [sentryPath, path.join(webpackPaths.srcRendererPath, 'index.tsx')],
+        splash: [sentryPath, path.join(webpackPaths.srcRendererPath, 'modals/splash/splash.tsx')],
+        processing: [sentryPath, path.join(webpackPaths.srcRendererPath, 'modals/processing/processing.tsx')],
     },
 
     output: {
@@ -136,6 +138,9 @@ const configuration: webpack.Configuration = {
         new webpack.EnvironmentPlugin({
             NODE_ENV: 'production',
             DEBUG_PROD: false,
+            RELEASE_VERSION: packageJson.version,
+
+
         }),
 
         new MiniCssExtractPlugin({
