@@ -64,6 +64,10 @@ const createMainTabsContext = (context?: MemberIdentity): MainTabs => {
             // If it is an editor tab:
             if (/\/edit\/(.+)/.test(tabInfo.path)) {
                 // Open plan
+                if (planAssets.loading) {
+                    // We dont know yet if the plan exists, so we'll keep the tab open
+                    return true;
+                }
                 const ref = decodeURIComponent(/\/edit\/(.+)/.exec(tabInfo.path)?.[1] ?? '');
                 const plan = planAssets.data?.find((a) => a.ref === ref);
                 if (!plan) {
@@ -100,9 +104,13 @@ const createMainTabsContext = (context?: MemberIdentity): MainTabs => {
               ]
     );
     useEffect(() => {
+        if (planAssets.loading) {
+            // Wait for plans to load
+            return;
+        }
         // save to local storage
         localStorage.setItem(TAB_LOCAL_STORAGE, JSON.stringify(tabs.filter(tabFilter)));
-    }, [tabs]);
+    }, [tabs, planAssets.loading]);
 
     const openTab = useCallback(
         (path = DEFAULT_TAB_PATH, opts: TabOptions = {}) => {
