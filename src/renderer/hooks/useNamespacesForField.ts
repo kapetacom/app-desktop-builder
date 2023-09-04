@@ -2,8 +2,6 @@ import { useKapetaContext } from './contextHook';
 import { useMemo } from 'react';
 import { useFormContextField } from '@kapeta/ui-web-components';
 
-export const LOCAL_NAMESPACE = 'local';
-
 export const useNamespacesForField = (fieldName: string) => {
     const context = useKapetaContext();
     const formField = useFormContextField(fieldName);
@@ -12,13 +10,13 @@ export const useNamespacesForField = (fieldName: string) => {
         const fromValue: string[] = [];
         if (formField.get() && formField.get().includes('/')) {
             const existingHandle = formField.get().split('/')[0];
-            if (existingHandle !== LOCAL_NAMESPACE && existingHandle && !fromValue.includes(existingHandle)) {
+            if (existingHandle && !fromValue.includes(existingHandle)) {
                 fromValue.push(existingHandle);
             }
         }
 
         if (!identity) {
-            return [...fromValue, LOCAL_NAMESPACE];
+            return [...fromValue];
         }
 
         const memberships = context.contexts?.memberships ?? [];
@@ -26,7 +24,6 @@ export const useNamespacesForField = (fieldName: string) => {
             ...fromValue,
             identity.handle,
             ...memberships.map((membership) => membership.identity.handle),
-            'local',
         ]);
         return Array.from(out);
     }, [context.profile, context.contexts?.memberships, formField]);
