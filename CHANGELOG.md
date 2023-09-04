@@ -1,3 +1,10 @@
+## [0.32.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.32.3...v0.32.4) (2023-09-04)
+
+
+### Bug Fixes
+
+* listen for context change events via postmessage ([#105](https://github.com/kapetacom/app-desktop-builder/issues/105)) ([dcc68a8](https://github.com/kapetacom/app-desktop-builder/commit/dcc68a8aa8098162bde7b38d13779299663ab431))
+
 ## [0.32.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.32.2...v0.32.3) (2023-09-04)
 
 
