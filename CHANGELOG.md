@@ -1,3 +1,10 @@
+## [0.32.6](https://github.com/kapetacom/app-desktop-builder/compare/v0.32.5...v0.32.6) (2023-09-04)
+
+
+### Bug Fixes
+
+* Do not filter out tabs until plans are done loading ([#107](https://github.com/kapetacom/app-desktop-builder/issues/107)) ([a41f917](https://github.com/kapetacom/app-desktop-builder/commit/a41f917101fd9ebf4422be0189d54ec7f21f7a31))
+
 ## [0.32.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.32.4...v0.32.5) (2023-09-04)
 
 
