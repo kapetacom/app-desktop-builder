@@ -46,8 +46,6 @@ if (
     execSync('npm run postinstall');
 }
 
-const sentryPath = path.join(webpackPaths.srcRendererPath, 'sentry.ts');
-
 const configuration: webpack.Configuration = {
     devtool: 'inline-source-map',
 
@@ -59,7 +57,6 @@ const configuration: webpack.Configuration = {
         index: [
             `webpack-dev-server/client?http://localhost:${port}/dist`,
             'webpack/hot/only-dev-server',
-            sentryPath,
             path.join(webpackPaths.srcRendererPath, 'index.tsx'),
         ],
         splash: [
@@ -182,7 +179,6 @@ const configuration: webpack.Configuration = {
          */
         new webpack.EnvironmentPlugin({
             NODE_ENV: 'development',
-            RELEASE_VERSION: 'development',
         }),
 
         new webpack.LoaderOptionsPlugin({
