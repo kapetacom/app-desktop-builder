@@ -1,3 +1,10 @@
+## [0.32.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.32.4...v0.32.5) (2023-09-04)
+
+
+### Bug Fixes
+
+* Form buttons not activated when they should ([#106](https://github.com/kapetacom/app-desktop-builder/issues/106)) ([baa155f](https://github.com/kapetacom/app-desktop-builder/commit/baa155f27c834204b5ef7720310529c43c34d68b))
+
 ## [0.32.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.32.3...v0.32.4) (2023-09-04)
 
 
