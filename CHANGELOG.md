@@ -1,3 +1,10 @@
+# [0.33.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.32.6...v0.33.0) (2023-09-04)
+
+
+### Features
+
+* Added use of new AssetVersionSelector component ([#108](https://github.com/kapetacom/app-desktop-builder/issues/108)) ([7dc133b](https://github.com/kapetacom/app-desktop-builder/commit/7dc133bc17410728bbf8103903ce2d126aa31826))
+
 ## [0.32.6](https://github.com/kapetacom/app-desktop-builder/compare/v0.32.5...v0.32.6) (2023-09-04)
 
 
