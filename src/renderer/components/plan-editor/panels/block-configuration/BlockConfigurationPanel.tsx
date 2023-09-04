@@ -6,6 +6,8 @@ import {
     FormFieldType,
     SimpleLoader,
     EntityEditorForm,
+    AssetVersionSelector,
+    AssetVersionSelectorEntry,
 } from '@kapeta/ui-web-components';
 
 import { BlockTypeProvider } from '@kapeta/ui-web-context';
@@ -18,11 +20,13 @@ import './BlockConfigurationPanel.less';
 import { useAsyncFn } from 'react-use';
 import { getInstanceConfig, setInstanceConfig } from '../../../../api/LocalConfigService';
 import { Box, Button, Tab, Tabs } from '@mui/material';
+import { normalizeKapetaUri } from '../../../../utils/planContextLoader';
+import { getAssetTitle } from '../../helpers';
 
 type Options = { [key: string]: string };
 
 interface BlockConfigurationData {
-    version: string;
+    blockRef: string;
     name: string;
     configuration?: { [key: string]: string };
 }
@@ -80,16 +84,16 @@ export const BlockConfigurationPanel = (props: Props) => {
 
         if (!props.instance) {
             return {
-                version: '',
+                blockRef: '',
                 name: '',
                 configuration: {
                     ...defaultConfig,
                 },
             };
         }
-        const uri = parseKapetaUri(props.instance.block.ref);
+        const ref = normalizeKapetaUri(props.instance.block.ref);
         return {
-            version: uri.version,
+            blockRef: ref,
             name: props.instance.name,
             configuration: {
                 ...defaultConfig,
@@ -100,23 +104,26 @@ export const BlockConfigurationPanel = (props: Props) => {
 
     const { blockAssets } = useContext(PlannerContext);
 
-    const versionOptions: Options = useMemo(() => {
+    const assetTypes: AssetVersionSelectorEntry[] = useMemo(() => {
         if (!props.instance?.block.ref) {
-            return {} as Options;
+            return [];
         }
 
         const blockUri = parseKapetaUri(props.instance?.block.ref);
-        const opts: Options = {};
-        blockAssets
+
+        return blockAssets
             .filter((asset) => {
                 const uri = parseKapetaUri(asset.ref);
                 return uri.fullName === blockUri.fullName;
             })
-            .forEach((asset) => {
-                opts[asset.version] = asset.version;
+            .map((asset) => {
+                return {
+                    kind: asset.content.kind,
+                    ref: asset.ref,
+                    icon: asset.content.spec.icon,
+                    title: getAssetTitle(asset),
+                };
             });
-
-        return opts;
     }, [props.instance?.block.ref, blockAssets]);
 
     const onSave = async (blockData: BlockConfigurationData) => {
@@ -125,13 +132,11 @@ export const BlockConfigurationPanel = (props: Props) => {
         }
 
         planner.updateBlockInstance(props.instance.id, (instance) => {
-            const uri = parseKapetaUri(instance.block.ref);
-            uri.version = blockData.version;
             return {
                 ...instance,
                 block: {
                     ...instance.block,
-                    ref: uri.id,
+                    ref: normalizeKapetaUri(blockData.blockRef),
                 },
                 name: blockData.name,
             };
@@ -186,13 +191,13 @@ export const BlockConfigurationPanel = (props: Props) => {
                                     type={FormFieldType.STRING}
                                 />
 
-                                <FormField
-                                    name="version"
-                                    label="Version"
-                                    options={versionOptions}
-                                    help="The current version used by this plan"
+                                <AssetVersionSelector
+                                    name="blockRef"
+                                    label="Resource kind"
+                                    validation={['required']}
+                                    help="The block type and version of this instance"
                                     readOnly={planReadOnly}
-                                    type={FormFieldType.ENUM}
+                                    assetTypes={assetTypes}
                                 />
                             </Box>
                         )}

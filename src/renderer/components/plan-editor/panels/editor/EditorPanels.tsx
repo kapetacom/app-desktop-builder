@@ -1,6 +1,7 @@
 import React, { useCallback, useContext, useMemo } from 'react';
 import {
     AssetNameInput,
+    AssetVersionSelector,
     FormButtons,
     FormContainer,
     FormField,
@@ -26,18 +27,13 @@ import { replaceBase64IconWithUrl } from '../../../../utils/iconHelpers';
 import { Button } from '@mui/material';
 import { useKapetaContext } from '../../../../hooks/contextHook';
 import { useNamespacesForField } from '../../../../hooks/useNamespacesForField';
+import { fromTypeProviderToAssetType } from '../../../../utils/assetTypeConverters';
 
-function getVersions(dataKindUri) {
-    const versions: { [key: string]: string } = {};
-    const versionAlternatives = ResourceTypeProvider.getVersionsFor(dataKindUri.fullName);
-    versionAlternatives.forEach((version) => {
-        const versionName = version === 'local' ? 'Local Disk' : version;
-        const altResourceType = ResourceTypeProvider.get(`${dataKindUri.fullName}:${version}`);
-        versions[`${dataKindUri.fullName}:${version}`] =
-            altResourceType && altResourceType.title ? `${altResourceType.title} [${versionName}]` : versionName;
+function getResourceVersions(dataKindUri) {
+    const allVersions = ResourceTypeProvider.getVersionsFor(dataKindUri.fullName);
+    return allVersions.map((version) => {
+        return fromTypeProviderToAssetType(ResourceTypeProvider.get(`${dataKindUri.fullName}:${version}`));
     });
-
-    return versions;
 }
 
 interface BlockFieldsProps {
@@ -49,28 +45,23 @@ const BlockFields = ({ data }: BlockFieldsProps) => {
     const namespaces = useNamespacesForField('metadata.name');
     const kindUri = parseKapetaUri(data.kind);
 
-    const options = useMemo(() => {
+    const assetTypes = useMemo(() => {
         const versions = BlockTypeProvider.getVersionsFor(kindUri.fullName);
-        const out: { [key: string]: string } = {};
-
-        versions.forEach((version) => {
+        return versions.map((version) => {
             const id = `${kindUri.fullName}:${version}`;
             const typeProvider = BlockTypeProvider.get(id);
-            const title = typeProvider.title ?? typeProvider.kind;
-            out[id] = `${title} [${version}]`;
+            return fromTypeProviderToAssetType(typeProvider);
         });
-        return out;
     }, [kindUri.fullName]);
 
     return (
         <>
-            <FormField
+            <AssetVersionSelector
                 name="kind"
-                type={FormFieldType.ENUM}
                 label="Type"
                 validation={['required']}
                 help="The block type and version"
-                options={options}
+                assetTypes={assetTypes}
             />
 
             <AssetNameInput
@@ -189,18 +180,18 @@ const InnerForm = ({ planner, info }: InnerFormProps) => {
         }
 
         const dataKindUri = parseKapetaUri(kind);
-        const versions = getVersions(dataKindUri);
+        const assetTypes = getResourceVersions(dataKindUri);
 
         return (
             <>
-                <FormField
-                    options={versions}
-                    type={FormFieldType.ENUM}
-                    help="The kind and version of this resource"
-                    validation={['required']}
-                    label="Resource kind"
+                <AssetVersionSelector
                     name="kind"
+                    label="Resource kind"
+                    validation={['required']}
+                    help="The kind and version of this resource"
+                    assetTypes={assetTypes}
                 />
+
                 {resourceType?.editorComponent && (
                     <ErrorBoundary resetKeys={[kind, info.item]} fallbackRender={getErrorFallback(kind)}>
                         <resourceType.editorComponent key={kind} block={info.item.block} creating={info.creating} />
