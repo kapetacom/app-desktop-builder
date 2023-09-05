@@ -43,8 +43,34 @@ export const useAssetImporter = (opts: Options): AssetImporter => {
         }
 
         if (opts.allowedKinds && opts.allowedKinds.length > 0) {
-            const kind = normalizeKapetaUri(YAML.parse(result.content).kind);
-            if (!opts.allowedKinds.map(normalizeKapetaUri).includes(kind)) {
+            let parsedContent: any = null;
+            try {
+                parsedContent = YAML.parse(result.content);
+                if (!parsedContent || !parsedContent.kind) {
+                    throw new Error('Invalid content found in file');
+                }
+            } catch (e) {
+                showToasty({
+                    type: ToastType.ALERT,
+                    title: 'Failed to read file',
+                    message: e.message,
+                });
+                setLoading(false);
+                return null;
+            }
+            let kind: string | null = null;
+            try {
+                kind = normalizeKapetaUri(parsedContent.kind);
+            } catch (e) {
+                showToasty({
+                    type: ToastType.ALERT,
+                    title: 'Failed to parse kind of file',
+                    message: e.message,
+                });
+                setLoading(false);
+                return null;
+            }
+            if (!kind || !opts.allowedKinds.map(normalizeKapetaUri).includes(kind)) {
                 showToasty({
                     type: ToastType.ALERT,
                     title: 'Unexpected asset type',
