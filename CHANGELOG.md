@@ -1,3 +1,10 @@
+## [0.33.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.33.2...v0.33.3) (2023-09-05)
+
+
+### Bug Fixes
+
+* Re-added auto-adjustment of resources and entities ([#111](https://github.com/kapetacom/app-desktop-builder/issues/111)) ([58cb177](https://github.com/kapetacom/app-desktop-builder/commit/58cb17716818a29a28d25647f4d8883e59e67b38))
+
 ## [0.33.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.33.1...v0.33.2) (2023-09-05)
 
 
