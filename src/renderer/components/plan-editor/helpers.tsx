@@ -1,5 +1,8 @@
-import { SchemaKind } from '@kapeta/ui-web-types';
+import { ResourceConnectionMappingChange, ResourceRole, SchemaKind } from '@kapeta/ui-web-types';
 import { AssetInfo } from '@kapeta/ui-web-plan-editor';
+import _ from 'lodash';
+import { BlockDefinition, Entity, Resource } from '@kapeta/schemas';
+import { DSL_LANGUAGE_ID, DSLConverters, DSLWriter } from '@kapeta/ui-web-components';
 
 export function ProviderHeaderIcon() {
     return (
@@ -52,4 +55,43 @@ export function getAssetTitle(asset: AssetInfo<SchemaKind>): string {
 
 export function getSchemaTitle(asset: SchemaKind): string {
     return asset.metadata.title ?? asset.metadata.name;
+}
+
+export function updateBlockFromMapping(
+    role: ResourceRole,
+    newResource: Resource,
+    newEntities: Entity[],
+    oldResource: Resource,
+    oldBlock: BlockDefinition
+) {
+    const targetResourceChanged = !_.isEqual(newResource, oldResource);
+    const targetEntitiesChanged = !_.isEqual(oldBlock.spec.entities?.types, newEntities);
+    const targetBlockChanged = targetResourceChanged || targetEntitiesChanged;
+    if (!targetBlockChanged) {
+        return null;
+    }
+    //If we had to add entities to the target block, we need to update the block definition
+    const newBlockDefinition = _.cloneDeep(oldBlock);
+    if (targetEntitiesChanged) {
+        newBlockDefinition.spec.entities = {
+            types: newEntities,
+            source: {
+                type: DSL_LANGUAGE_ID,
+                value: DSLWriter.write(newEntities.map(DSLConverters.fromSchemaEntity)),
+            },
+        };
+    }
+
+    const resourceList =
+        role === ResourceRole.PROVIDES ? newBlockDefinition.spec.providers : newBlockDefinition.spec.consumers;
+
+    if (targetResourceChanged && resourceList) {
+        const targetResourceIx = resourceList.findIndex((res) => res.metadata.name === oldResource.metadata.name);
+
+        if (targetResourceIx > -1) {
+            resourceList[targetResourceIx] = newResource;
+        }
+    }
+
+    return newBlockDefinition;
 }
