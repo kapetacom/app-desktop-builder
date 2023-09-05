@@ -1,3 +1,10 @@
+## [0.33.7](https://github.com/kapetacom/app-desktop-builder/compare/v0.33.6...v0.33.7) (2023-09-05)
+
+
+### Bug Fixes
+
+* Bump local cluster service to be able to import sample ([461eed9](https://github.com/kapetacom/app-desktop-builder/commit/461eed9b44d987ccee7b7dbbb60277df7e1d6dfa))
+
 ## [0.33.6](https://github.com/kapetacom/app-desktop-builder/compare/v0.33.5...v0.33.6) (2023-09-05)
 
 
