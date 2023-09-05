@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Box, IconButton, Stack } from '@mui/material';
-import { useLocation, useNavigate, Location } from 'react-router-dom';
+import { useLocation, useNavigate, Location, useNavigationType } from 'react-router-dom';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import ArrowForward from '@mui/icons-material/ArrowForward';
 
 export const NavigationButtons = (props) => {
     const location = useLocation();
+    const navigationType = useNavigationType();
     const navigate = useNavigate();
 
     const [locationHistory, setLocationHistory] = useState({
@@ -19,19 +20,31 @@ export const NavigationButtons = (props) => {
     const hasNext = locationHistory.idx < locationHistory.history.length - 1;
 
     useEffect(() => {
-        // Current location is not in history
         setLocationHistory((state) => {
-            const isSameLocation = (a, b) => a.pathname === b.pathname && a.search === b.search && a.hash === b.hash;
-            const historyBeforeCurrent = state.idx >= 0 ? state.history.slice(0, state.idx + 1) : state.history;
-            const existingIndex = state.history.findIndex((l) => isSameLocation(l, location));
-            return existingIndex >= 0
-                ? {
-                      history: state.history,
-                      idx: existingIndex,
-                  }
-                : { idx: state.history.length, history: [...historyBeforeCurrent, location] };
+            try {
+                const newIndex = {
+                    PUSH: state.idx + 1,
+                    REPLACE: state.idx,
+                    // Handle initial route by forcing 0
+                    POP: Math.max(
+                        state.history.findIndex((l) => l.key === location.key),
+                        0
+                    ),
+                }[navigationType];
+                const newHistory =
+                    navigationType === 'PUSH' ? state.history.slice(0, state.idx + 1) : [...state.history];
+                newHistory[newIndex] = location;
+
+                return {
+                    history: newHistory,
+                    idx: newIndex,
+                };
+            } catch (e) {
+                console.error(e);
+                return state;
+            }
         });
-    }, [location]);
+    }, [location, navigationType]);
 
     return (
         <Stack

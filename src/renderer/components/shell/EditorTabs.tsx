@@ -21,7 +21,7 @@ export const EditorTabs = () => {
 
     useEffect(() => {
         if (!location.pathname || location.pathname === '/') {
-            navigate(DEFAULT_TAB_PATH);
+            navigate(DEFAULT_TAB_PATH, { replace: true });
             return;
         }
         mainTabs.open(location.pathname, { navigate: false });
