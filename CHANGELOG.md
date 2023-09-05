@@ -1,3 +1,10 @@
+## [0.33.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.33.1...v0.33.2) (2023-09-05)
+
+
+### Bug Fixes
+
+* make back/forward buttons behave (maybe) ([#110](https://github.com/kapetacom/app-desktop-builder/issues/110)) ([28ac7c0](https://github.com/kapetacom/app-desktop-builder/commit/28ac7c0fd740d8498ad8030ae944c32d37cc5314))
+
 ## [0.33.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.33.0...v0.33.1) (2023-09-05)
 
 
