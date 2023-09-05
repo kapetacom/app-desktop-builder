@@ -1,3 +1,10 @@
+## [0.33.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.33.0...v0.33.1) (2023-09-05)
+
+
+### Bug Fixes
+
+* Whitelist all pendo domains ([7f223ee](https://github.com/kapetacom/app-desktop-builder/commit/7f223ee9bf9bd8c80ae582c504a0a6e0cf0f9434))
+
 # [0.33.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.32.6...v0.33.0) (2023-09-04)
 
 
