@@ -1,7 +1,10 @@
-import React, { useCallback, useContext, useMemo } from 'react';
+import React, { useCallback, useContext, useMemo, useState } from 'react';
 import {
     AssetNameInput,
     AssetVersionSelector,
+    DSL_LANGUAGE_ID,
+    DSLConverters,
+    DSLWriter,
     FormButtons,
     FormContainer,
     FormField,
@@ -13,9 +16,9 @@ import { BlockTypeProvider, ResourceTypeProvider } from '@kapeta/ui-web-context'
 
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 
-import type { IResourceTypeProvider, SchemaKind } from '@kapeta/ui-web-types';
+import type { IResourceTypeProvider, ResourceConnectionMappingChange, SchemaKind } from '@kapeta/ui-web-types';
 import { ResourceRole } from '@kapeta/ui-web-types';
-import { BlockDefinition, Resource, Connection, Entity, IconType } from '@kapeta/schemas';
+import { BlockDefinition, Resource, Connection, Entity, IconType, BlockInstance } from '@kapeta/schemas';
 
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import { cloneDeep } from 'lodash';
@@ -28,6 +31,8 @@ import { Button } from '@mui/material';
 import { useKapetaContext } from '../../../../hooks/contextHook';
 import { useNamespacesForField } from '../../../../hooks/useNamespacesForField';
 import { fromTypeProviderToAssetType } from '../../../../utils/assetTypeConverters';
+import _ from 'lodash';
+import { updateBlockFromMapping } from '../../helpers';
 
 function getResourceVersions(dataKindUri) {
     const allVersions = ResourceTypeProvider.getVersionsFor(dataKindUri.fullName);
@@ -80,9 +85,20 @@ const BlockFields = ({ data }: BlockFieldsProps) => {
 interface InnerFormProps {
     planner: PlannerContextData;
     info: EditItemInfo;
+    onContextDataChanged: (data: any) => void;
 }
 
-const InnerForm = ({ planner, info }: InnerFormProps) => {
+interface ConnectionContextData {
+    change: ResourceConnectionMappingChange;
+    fromBlock: BlockDefinition;
+    fromBlockInstance: BlockInstance;
+    fromResource: Resource;
+    toBlock: BlockDefinition;
+    toBlockInstance: BlockInstance;
+    toResource: Resource;
+}
+
+const InnerForm = ({ planner, info, onContextDataChanged }: InnerFormProps) => {
     const mappingField = useFormContextField('mapping');
     const kindField = useFormContextField('kind');
     const getErrorFallback = useCallback(
@@ -126,20 +142,52 @@ const InnerForm = ({ planner, info }: InnerFormProps) => {
         if (!MappingComponent) {
             return null;
         }
-
+        const fromBlockInstance = planner.plan?.spec.blocks.find(
+            (instance) => instance.id === connection.provider.blockId
+        );
         const fromBlock = planner.getBlockById(connection.provider.blockId);
+
+        const toBlockInstance = planner.plan?.spec.blocks.find(
+            (instance) => instance.id === connection.consumer.blockId
+        );
         const toBlock = planner.getBlockById(connection.consumer.blockId);
+
+        const currentValue = mappingField.get(connection.mapping);
+
+        const sourceEntities = useMemo(
+            () => cloneDeep(fromBlock?.spec.entities?.types ?? ([] as Entity[])),
+            [fromBlock?.spec.entities?.types]
+        );
+
+        const targetEntities = useMemo(
+            () => cloneDeep(toBlock?.spec.entities?.types ?? ([] as Entity[])),
+            [toBlock?.spec.entities?.types]
+        );
+
+        const sourceClone = useMemo(() => cloneDeep(source), [source]);
+        const targetClone = useMemo(() => cloneDeep(target), [target]);
 
         return (
             <MappingComponent
                 title="mapping-editor"
-                source={source}
-                target={target}
-                sourceEntities={fromBlock?.spec.entities?.types ?? ([] as Entity[])}
-                targetEntities={toBlock?.spec.entities?.types ?? ([] as Entity[])}
-                value={mappingField.get(connection.mapping)}
+                source={sourceClone}
+                target={targetClone}
+                sourceEntities={sourceEntities}
+                targetEntities={targetEntities}
+                value={currentValue}
                 onDataChanged={(change) => {
                     mappingField.set(change.data);
+
+                    const contextData: ConnectionContextData = {
+                        change,
+                        fromBlock: fromBlock!,
+                        fromBlockInstance: fromBlockInstance!,
+                        toBlock: toBlock!,
+                        toBlockInstance: toBlockInstance!,
+                        fromResource: source,
+                        toResource: target,
+                    };
+                    onContextDataChanged(contextData);
                 }}
             />
         );
@@ -212,11 +260,50 @@ interface Props {
 
 export const EditorPanels: React.FC<Props> = (props) => {
     const planner = useContext(PlannerContext);
+    const [contextData, setContextData] = useState<any>();
     // callbacks
     const saveAndClose = async (data: any) => {
         switch (props.info?.type) {
             case DataEntityType.CONNECTION:
-                planner.updateConnectionMapping(data as Connection);
+                const connection = data as Connection;
+                try {
+                    if (contextData) {
+                        // Mapping might cause changes to the resource or block definitions
+                        const connectionContextData = contextData as ConnectionContextData;
+                        const newFromBlock = updateBlockFromMapping(
+                            ResourceRole.PROVIDES,
+                            connectionContextData.change.source,
+                            connectionContextData.change.sourceEntities,
+                            connectionContextData.fromResource,
+                            connectionContextData.fromBlock
+                        );
+
+                        if (newFromBlock) {
+                            //If we had to add entities to the source block, we need to update the block definition
+                            planner.updateBlockDefinition(
+                                connectionContextData.fromBlockInstance.block.ref,
+                                newFromBlock
+                            );
+                        }
+
+                        const newToBlock = updateBlockFromMapping(
+                            ResourceRole.CONSUMES,
+                            connectionContextData.change.target,
+                            connectionContextData.change.targetEntities,
+                            connectionContextData.toResource,
+                            connectionContextData.toBlock
+                        );
+
+                        if (newToBlock) {
+                            //If we had to add entities to the source block, we need to update the block definition
+                            planner.updateBlockDefinition(connectionContextData.toBlockInstance.block.ref, newToBlock);
+                        }
+                    }
+                    // Update the connection
+                    planner.updateConnectionMapping(connection);
+                } catch (e) {
+                    console.error('Failed to update context from connection: ', e, contextData);
+                }
                 break;
             case DataEntityType.INSTANCE:
             case DataEntityType.BLOCK: {
@@ -321,13 +408,13 @@ export const EditorPanels: React.FC<Props> = (props) => {
                         onSubmitData={(data) => saveAndClose(data)}
                     >
                         <div className="item-form">
-                            <InnerForm planner={planner} info={props.info} />
+                            <InnerForm planner={planner} info={props.info} onContextDataChanged={setContextData} />
                         </div>
                         <FormButtons>
                             <Button variant={'contained'} color={'error'} onClick={props.onClosed}>
                                 Cancel
                             </Button>
-                            <Button variant={'contained'} color={'primary'} type="submit">
+                            <Button variant={'contained'} disabled={false} color={'primary'} type="submit">
                                 Save
                             </Button>
                         </FormButtons>
