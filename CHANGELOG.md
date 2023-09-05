@@ -1,3 +1,10 @@
+## [0.33.6](https://github.com/kapetacom/app-desktop-builder/compare/v0.33.5...v0.33.6) (2023-09-05)
+
+
+### Bug Fixes
+
+* Handle problems during import more gracefully ([e31121b](https://github.com/kapetacom/app-desktop-builder/commit/e31121bd88541678e618d99054c19ee6ed216dcc))
+
 ## [0.33.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.33.4...v0.33.5) (2023-09-05)
 
 
