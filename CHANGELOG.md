@@ -1,3 +1,10 @@
+## [0.33.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.33.4...v0.33.5) (2023-09-05)
+
+
+### Bug Fixes
+
+* Queue codegen tasks if multiple come for the same block ([9d4268c](https://github.com/kapetacom/app-desktop-builder/commit/9d4268cae4512874fa384c63d50f9546f8640f84))
+
 ## [0.33.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.33.3...v0.33.4) (2023-09-05)
 
 
