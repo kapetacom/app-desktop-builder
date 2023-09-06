@@ -1,3 +1,10 @@
+## [0.33.8](https://github.com/kapetacom/app-desktop-builder/compare/v0.33.7...v0.33.8) (2023-09-06)
+
+
+### Bug Fixes
+
+* whitelist all heap domains ([034f6e1](https://github.com/kapetacom/app-desktop-builder/commit/034f6e179c37db4ddf5cd64bb1377757b64906b6))
+
 ## [0.33.7](https://github.com/kapetacom/app-desktop-builder/compare/v0.33.6...v0.33.7) (2023-09-05)
 
 
