@@ -55,7 +55,9 @@ const InnerShell = (props: Props) => {
                     contexts:
                         contexts.contexts?.memberships.map((m) => ({
                             ...m.identity,
-                            current: m.identity.handle === contexts.activeContext?.identity.handle,
+                            current:
+                                m.identity.handle ===
+                                (contexts.activeContext?.identity.handle || contexts.contexts?.current),
                         })) || ([] as any[]),
                     refreshContexts: contexts.refreshContexts,
                     setActiveContext: (ctx) => {
