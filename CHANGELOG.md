@@ -1,3 +1,10 @@
+## [0.33.9](https://github.com/kapetacom/app-desktop-builder/compare/v0.33.8...v0.33.9) (2023-09-06)
+
+
+### Bug Fixes
+
+* attempt fix for no context bug ([#114](https://github.com/kapetacom/app-desktop-builder/issues/114)) ([73bf23f](https://github.com/kapetacom/app-desktop-builder/commit/73bf23f57afe6179da634f09e6a77f7cec3fd490))
+
 ## [0.33.8](https://github.com/kapetacom/app-desktop-builder/compare/v0.33.7...v0.33.8) (2023-09-06)
 
 
