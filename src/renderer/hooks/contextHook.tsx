@@ -48,7 +48,7 @@ interface KapetaContextData {
     };
 }
 
-const createKapetaContext = (): KapetaContextData => {
+const useKapetaContextInternal = (): KapetaContextData => {
     const [initialLoad, setInitialLoad] = useState(true);
     const [activeContext, setActiveContext] = useState<MemberIdentity>();
     const [profile, setProfile] = useState<Identity>();
@@ -181,7 +181,7 @@ export const KapetaContext = createContext<KapetaContextData>({
 });
 
 export const KapetaContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
-    const context = createKapetaContext();
+    const context = useKapetaContextInternal();
 
     return <KapetaContext.Provider value={context}>{children}</KapetaContext.Provider>;
 };
