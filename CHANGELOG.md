@@ -1,3 +1,10 @@
+## [0.33.12](https://github.com/kapetacom/app-desktop-builder/compare/v0.33.11...v0.33.12) (2023-09-07)
+
+
+### Bug Fixes
+
+* Avoid target in all blocks ([#116](https://github.com/kapetacom/app-desktop-builder/issues/116)) ([22fcb26](https://github.com/kapetacom/app-desktop-builder/commit/22fcb26f3716d2c6cab13cd747dd45ceb00b7cb5))
+
 ## [0.33.11](https://github.com/kapetacom/app-desktop-builder/compare/v0.33.10...v0.33.11) (2023-09-07)
 
 
