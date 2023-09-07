@@ -1,8 +1,8 @@
 import { createRoot } from 'react-dom/client';
-import { Box, ThemeProvider } from '@mui/material';
-import { RouterProvider, useParams, createMemoryRouter, useNavigate, useLocation } from 'react-router-dom';
+import { ThemeProvider } from '@mui/material';
+import { RouterProvider, useParams, useNavigate, Navigate, createHashRouter } from 'react-router-dom';
 import { Root } from './Root';
-import { kapetaDark, kapetaLight } from './Theme';
+import { kapetaLight } from './Theme';
 import { initialise } from './context';
 import { PlanView } from './views/PlanView';
 import { PlanOverview } from './components/plan-overview/PlanOverview';
@@ -12,7 +12,7 @@ import { RemoteFrame } from './components/shell/RemoteFrame';
 import { useKapetaContext } from './hooks/contextHook';
 import { AssetService } from './api/AssetService';
 
-const router = createMemoryRouter([
+const router = createHashRouter([
     {
         path: '*',
         Component: Root,
@@ -99,6 +99,12 @@ const router = createMemoryRouter([
                             path={`organizations/${handle}${path ? '/' + path : '/settings/general'}`}
                         />
                     );
+                },
+            },
+            {
+                path: '*',
+                Component: () => {
+                    return <Navigate to={'/edit'} replace />;
                 },
             },
         ],
