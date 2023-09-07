@@ -1,3 +1,10 @@
+## [0.33.11](https://github.com/kapetacom/app-desktop-builder/compare/v0.33.10...v0.33.11) (2023-09-07)
+
+
+### Bug Fixes
+
+* Use hash router to support pendo ([#115](https://github.com/kapetacom/app-desktop-builder/issues/115)) ([0463ed3](https://github.com/kapetacom/app-desktop-builder/commit/0463ed3032944709f2e33955814edf35a169391d))
+
 ## [0.33.10](https://github.com/kapetacom/app-desktop-builder/compare/v0.33.9...v0.33.10) (2023-09-06)
 
 
