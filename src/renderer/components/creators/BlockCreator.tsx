@@ -30,9 +30,6 @@ export const createNewBlock = (): BlockDefinition => {
             version: '0.0.1',
         },
         spec: {
-            target: {
-                kind: '',
-            },
             consumers: [],
             providers: [],
             entities: [],
