@@ -15,6 +15,9 @@ import { KapetaNotification } from '../components/shell/types';
 import { SimpleLoader } from '@kapeta/ui-web-components';
 import { LoginScreen } from './LoginScreen';
 import { MainTabsContextProvider } from '../hooks/mainTabs';
+import { usePrevious } from 'react-use';
+
+const BASE_TRACKING_URL = 'https://desktop.kapeta.com';
 
 interface Props {}
 
@@ -78,6 +81,9 @@ export function Shell() {
     const contexts = useKapetaContext();
 
     useEffect(() => {
+        if (!window.analytics) {
+            return;
+        }
         if (contexts.profile) {
             window.analytics.identify(contexts.profile.id, {
                 name: contexts.profile.name,
@@ -96,10 +102,18 @@ export function Shell() {
         }
     }, [contexts.profile?.id, contexts.activeContext?.identity.id]);
 
+    const previousPath = usePrevious(location.pathname);
+
     useEffect(() => {
+        if (!window.analytics) {
+            return;
+        }
+        const url = BASE_TRACKING_URL + location.pathname;
+        const referrer = previousPath ? BASE_TRACKING_URL + previousPath : undefined;
         window.analytics.page(location.pathname, {
             path: location.pathname,
-            url: 'desktop://kapeta' + location.pathname,
+            referrer,
+            url: url,
         });
     }, [location.pathname]);
 

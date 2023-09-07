@@ -81,7 +81,12 @@ export const installExtensions = async () => {
         .catch(console.log);
 };
 
-export const WindowOpenHandler = (edata: Electron.HandlerDetails): { action: 'deny' } => {
+export const WindowOpenHandler = (edata: Electron.HandlerDetails): { action: 'deny' | 'allow' } => {
+    if (/^https:\/\/[a-z\.]+\.pendo\.io\//i.test(edata.url)) {
+        // Allow Pendo to open within electron
+        return { action: 'allow' };
+    }
+
     shell.openExternal(edata.url);
     return { action: 'deny' };
 };
