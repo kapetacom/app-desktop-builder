@@ -1,6 +1,6 @@
 {
     "name": "@kapeta/ui-web-desktop",
-    "version": "0.33.14",
+    "version": "0.33.15",
     "productName": "Kapeta",
     "private": true,
     "description": "Kapeta Desktop Application",

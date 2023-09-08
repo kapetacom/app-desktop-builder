@@ -1,3 +1,10 @@
+## [0.33.15](https://github.com/kapetacom/app-desktop-builder/compare/v0.33.14...v0.33.15) (2023-09-08)
+
+
+### Bug Fixes
+
+* Upgrade plan editor to include linebreaks between entities ([#119](https://github.com/kapetacom/app-desktop-builder/issues/119)) ([a1f501f](https://github.com/kapetacom/app-desktop-builder/commit/a1f501f4ef748aa38d4cd1bbe37ad3cfff604d8e))
+
 ## [0.33.14](https://github.com/kapetacom/app-desktop-builder/compare/v0.33.13...v0.33.14) (2023-09-08)
 
 
