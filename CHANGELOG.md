@@ -1,3 +1,10 @@
+## [0.33.16](https://github.com/kapetacom/app-desktop-builder/compare/v0.33.15...v0.33.16) (2023-09-08)
+
+
+### Bug Fixes
+
+* Bump dependencies to get correct status titles and colors ([21c9597](https://github.com/kapetacom/app-desktop-builder/commit/21c9597a06fbe6dc4bbd5986151b6bf5fdcebce1))
+
 ## [0.33.15](https://github.com/kapetacom/app-desktop-builder/compare/v0.33.14...v0.33.15) (2023-09-08)
 
 
