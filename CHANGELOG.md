@@ -1,3 +1,10 @@
+## [0.33.17](https://github.com/kapetacom/app-desktop-builder/compare/v0.33.16...v0.33.17) (2023-09-10)
+
+
+### Bug Fixes
+
+* Improve docker reliability ([d4e8798](https://github.com/kapetacom/app-desktop-builder/commit/d4e8798cf16d24107de70253b300431039c91100))
+
 ## [0.33.16](https://github.com/kapetacom/app-desktop-builder/compare/v0.33.15...v0.33.16) (2023-09-08)
 
 
