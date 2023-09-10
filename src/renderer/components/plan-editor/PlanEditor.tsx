@@ -8,6 +8,7 @@ import {
     withPlannerContext,
     randomUUID,
     AssetInfo,
+    resolveConfigurationFromDefinition,
 } from '@kapeta/ui-web-plan-editor';
 import React, { ForwardedRef, forwardRef, useContext, useMemo, useState } from 'react';
 import { IResourceTypeProvider } from '@kapeta/ui-web-types';
@@ -86,14 +87,19 @@ export const PlanEditor = withPlannerContext(
                     const kind = normalizeKapetaUri(block.kind);
 
                     const typeProvider = BlockTypeProvider.get(kind);
-                    if (!typeProvider.createDefaultConfig) {
-                        return;
+                    let defaultConfig = {};
+                    if (typeProvider.createDefaultConfig) {
+                        defaultConfig = typeProvider.createDefaultConfig(block, instance);
                     }
 
-                    config[instance.id] = {
-                        ...typeProvider.createDefaultConfig(block, instance),
-                        ...currentConfig,
-                    };
+                    config[instance.id] = resolveConfigurationFromDefinition(
+                        block.spec.configuration,
+                        {
+                            ...defaultConfig,
+                            ...currentConfig,
+                        },
+                        instance.defaultConfiguration
+                    );
                 } catch (e) {
                     console.warn('Failed to create default config for block', e);
                 }

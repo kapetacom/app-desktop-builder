@@ -16,7 +16,11 @@ import {
     useFormContextField,
 } from '@kapeta/ui-web-components';
 import './PlanEditorTopMenu.less';
-import { PlannerContext } from '@kapeta/ui-web-plan-editor';
+import {
+    createGlobalConfigurationFromEntities,
+    PlannerContext,
+    resolveConfigurationFromDefinition,
+} from '@kapeta/ui-web-plan-editor';
 import { useAsync, useAsyncFn } from 'react-use';
 import { PlanForm } from '../forms/PlanForm';
 import { getPlanConfig, setPlanConfig } from '../../api/LocalConfigService';
@@ -167,7 +171,12 @@ export const PlanEditorTopMenu = (props: Props) => {
         if (!showSettings) {
             return {};
         }
-        return getPlanConfig(props.systemId);
+        const config = await getPlanConfig(props.systemId);
+        return resolveConfigurationFromDefinition(
+            planner.plan?.spec?.configuration?.types,
+            config,
+            planner.plan?.spec?.defaultConfiguration
+        );
     }, [props.systemId, showSettings]);
 
     const formData = useMemo(() => {
@@ -321,7 +330,12 @@ export const PlanEditorTopMenu = (props: Props) => {
                     <FormContainer
                         initialValue={formData}
                         onSubmitData={async (data) => {
-                            planner.updatePlanMetadata(data.metadata, data.spec.configuration);
+                            const defaultConfig = createGlobalConfigurationFromEntities(
+                                data.spec.configuration,
+                                data.configuration
+                            );
+
+                            planner.updatePlanMetadata(data.metadata, data.spec.configuration, defaultConfig);
                             await setPlanConfig(props.systemId, data.configuration);
                             setShowSettings(false);
                         }}

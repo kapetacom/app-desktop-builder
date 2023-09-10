@@ -1,7 +1,7 @@
 import { ResourceConnectionMappingChange, ResourceRole, SchemaKind } from '@kapeta/ui-web-types';
 import { AssetInfo } from '@kapeta/ui-web-plan-editor';
 import _ from 'lodash';
-import { BlockDefinition, Entity, Resource } from '@kapeta/schemas';
+import { BlockDefinition, Entity, EntityList, Resource } from '@kapeta/schemas';
 import { DSL_LANGUAGE_ID, DSLConverters, DSLWriter } from '@kapeta/ui-web-components';
 
 export function ProviderHeaderIcon() {

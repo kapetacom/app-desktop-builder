@@ -14,7 +14,13 @@ import { BlockTypeProvider } from '@kapeta/ui-web-context';
 
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import { BlockInstance } from '@kapeta/schemas';
-import { PlannerContext, PlannerMode, PlannerSidebar } from '@kapeta/ui-web-plan-editor';
+import {
+    createGlobalConfigurationFromEntities,
+    PlannerContext,
+    PlannerMode,
+    PlannerSidebar,
+    resolveConfigurationFromDefinition,
+} from '@kapeta/ui-web-plan-editor';
 
 import './BlockConfigurationPanel.less';
 import { useAsyncFn } from 'react-use';
@@ -91,14 +97,21 @@ export const BlockConfigurationPanel = (props: Props) => {
                 },
             };
         }
+
+        const config = {
+            ...defaultConfig,
+            ...instanceConfig.value,
+        };
+
         const ref = normalizeKapetaUri(props.instance.block.ref);
         return {
             blockRef: ref,
             name: props.instance.name,
-            configuration: {
-                ...defaultConfig,
-                ...instanceConfig.value,
-            },
+            configuration: resolveConfigurationFromDefinition(
+                block?.spec?.configuration,
+                config,
+                props.instance.defaultConfiguration
+            ),
         };
     }, [props.instance, instanceConfig.value, typeProvider, block]);
 
@@ -132,6 +145,11 @@ export const BlockConfigurationPanel = (props: Props) => {
         }
 
         planner.updateBlockInstance(props.instance.id, (instance) => {
+            const defaultConfig = createGlobalConfigurationFromEntities(
+                block?.spec?.configuration,
+                blockData.configuration
+            );
+
             return {
                 ...instance,
                 block: {
@@ -139,6 +157,7 @@ export const BlockConfigurationPanel = (props: Props) => {
                     ref: normalizeKapetaUri(blockData.blockRef),
                 },
                 name: blockData.name,
+                defaultConfiguration: defaultConfig,
             };
         });
 
