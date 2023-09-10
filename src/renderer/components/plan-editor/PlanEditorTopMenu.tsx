@@ -16,7 +16,11 @@ import {
     useFormContextField,
 } from '@kapeta/ui-web-components';
 import './PlanEditorTopMenu.less';
-import { PlannerContext } from '@kapeta/ui-web-plan-editor';
+import {
+    createGlobalConfigurationFromEntities,
+    PlannerContext,
+    resolveConfigurationFromDefinition,
+} from '@kapeta/ui-web-plan-editor';
 import { useAsync, useAsyncFn } from 'react-use';
 import { PlanForm } from '../forms/PlanForm';
 import { getPlanConfig, setPlanConfig } from '../../api/LocalConfigService';
@@ -24,7 +28,6 @@ import { Box, Button, Chip, CircularProgress, Paper, Stack, Tab, Tabs } from '@m
 import { grey } from '@mui/material/colors';
 import { TaskService } from 'renderer/api/TaskService';
 import { SystemService } from 'renderer/api/SystemService';
-import { createGlobalConfigurationFromEntities, getConfigurationFromEntity } from './helpers';
 
 const ConfigSchemaEditor = () => {
     const configurationField = useFormContextField('spec.configuration');
@@ -169,7 +172,7 @@ export const PlanEditorTopMenu = (props: Props) => {
             return {};
         }
         const config = await getPlanConfig(props.systemId);
-        return getConfigurationFromEntity(
+        return resolveConfigurationFromDefinition(
             planner.plan?.spec?.configuration?.types,
             config,
             planner.plan?.spec?.defaultConfiguration

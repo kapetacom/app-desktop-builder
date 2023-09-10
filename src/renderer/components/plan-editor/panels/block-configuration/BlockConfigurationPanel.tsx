@@ -14,15 +14,20 @@ import { BlockTypeProvider } from '@kapeta/ui-web-context';
 
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import { BlockInstance } from '@kapeta/schemas';
-import { PlannerContext, PlannerMode, PlannerSidebar } from '@kapeta/ui-web-plan-editor';
+import {
+    createGlobalConfigurationFromEntities,
+    PlannerContext,
+    PlannerMode,
+    PlannerSidebar,
+    resolveConfigurationFromDefinition,
+} from '@kapeta/ui-web-plan-editor';
 
 import './BlockConfigurationPanel.less';
 import { useAsyncFn } from 'react-use';
 import { getInstanceConfig, setInstanceConfig } from '../../../../api/LocalConfigService';
 import { Box, Button, Tab, Tabs } from '@mui/material';
 import { normalizeKapetaUri } from '../../../../utils/planContextLoader';
-import { getAssetTitle, createGlobalConfigurationFromEntities, getConfigurationFromEntity } from '../../helpers';
-import _ from 'lodash';
+import { getAssetTitle } from '../../helpers';
 
 type Options = { [key: string]: string };
 
@@ -102,7 +107,7 @@ export const BlockConfigurationPanel = (props: Props) => {
         return {
             blockRef: ref,
             name: props.instance.name,
-            configuration: getConfigurationFromEntity(
+            configuration: resolveConfigurationFromDefinition(
                 block?.spec?.configuration,
                 config,
                 props.instance.defaultConfiguration
