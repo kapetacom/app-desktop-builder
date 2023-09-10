@@ -1,3 +1,10 @@
+# [0.34.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.33.17...v0.34.0) (2023-09-10)
+
+
+### Features
+
+* Add support for default config in block instances and plans ([#120](https://github.com/kapetacom/app-desktop-builder/issues/120)) ([95b9920](https://github.com/kapetacom/app-desktop-builder/commit/95b9920e01b33ad1c50b34b9f2f84ba91c5c12df))
+
 ## [0.33.17](https://github.com/kapetacom/app-desktop-builder/compare/v0.33.16...v0.33.17) (2023-09-10)
 
 
