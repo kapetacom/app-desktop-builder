@@ -1,7 +1,7 @@
 import { ResourceConnectionMappingChange, ResourceRole, SchemaKind } from '@kapeta/ui-web-types';
 import { AssetInfo } from '@kapeta/ui-web-plan-editor';
 import _ from 'lodash';
-import { BlockDefinition, Entity, Resource } from '@kapeta/schemas';
+import { BlockDefinition, Entity, EntityList, Resource } from '@kapeta/schemas';
 import { DSL_LANGUAGE_ID, DSLConverters, DSLWriter } from '@kapeta/ui-web-components';
 
 export function ProviderHeaderIcon() {
@@ -94,4 +94,59 @@ export function updateBlockFromMapping(
     }
 
     return newBlockDefinition;
+}
+
+type ConfigMap = { [key: string]: any };
+
+export function getConfigurationFromEntity(
+    entities?: EntityList,
+    config?: ConfigMap,
+    globalConfiguration?: ConfigMap
+): ConfigMap {
+    if (!entities || !globalConfiguration) {
+        return config || {};
+    }
+
+    const mergedConfig = config ? _.cloneDeep(config) : {};
+    entities.types?.forEach((type) => {
+        if (!type.properties) {
+            return;
+        }
+        Object.entries(type.properties).forEach(([propertyName, property]) => {
+            if (!property.global) {
+                return;
+            }
+
+            const configPath = type.name + '.' + propertyName;
+            const defaultValue = globalConfiguration ? _.get(globalConfiguration, configPath) : undefined;
+            if (!_.has(mergedConfig, configPath)) {
+                _.set(mergedConfig, configPath, defaultValue);
+            }
+        });
+    });
+
+    return mergedConfig;
+}
+
+export function createGlobalConfigurationFromEntities(entities?: EntityList, configuration?: ConfigMap) {
+    if (!entities) {
+        return undefined;
+    }
+    const defaultConfig = {};
+    entities.types?.forEach((type) => {
+        if (!type.properties) {
+            return;
+        }
+        Object.entries(type.properties).forEach(([propertyName, property]) => {
+            if (!property.global) {
+                return;
+            }
+
+            const configPath = type.name + '.' + propertyName;
+            const defaultValue = configuration ? _.get(configuration, configPath) : undefined;
+            _.set(defaultConfig, configPath, defaultValue);
+        });
+    });
+
+    return _.isEmpty(defaultConfig) ? undefined : defaultConfig;
 }

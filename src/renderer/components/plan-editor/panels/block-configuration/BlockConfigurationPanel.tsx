@@ -21,7 +21,8 @@ import { useAsyncFn } from 'react-use';
 import { getInstanceConfig, setInstanceConfig } from '../../../../api/LocalConfigService';
 import { Box, Button, Tab, Tabs } from '@mui/material';
 import { normalizeKapetaUri } from '../../../../utils/planContextLoader';
-import { getAssetTitle } from '../../helpers';
+import { getAssetTitle, createGlobalConfigurationFromEntities, getConfigurationFromEntity } from '../../helpers';
+import _ from 'lodash';
 
 type Options = { [key: string]: string };
 
@@ -91,14 +92,21 @@ export const BlockConfigurationPanel = (props: Props) => {
                 },
             };
         }
+
+        const config = {
+            ...defaultConfig,
+            ...instanceConfig.value,
+        };
+
         const ref = normalizeKapetaUri(props.instance.block.ref);
         return {
             blockRef: ref,
             name: props.instance.name,
-            configuration: {
-                ...defaultConfig,
-                ...instanceConfig.value,
-            },
+            configuration: getConfigurationFromEntity(
+                block?.spec?.configuration,
+                config,
+                props.instance.defaultConfiguration
+            ),
         };
     }, [props.instance, instanceConfig.value, typeProvider, block]);
 
@@ -132,6 +140,11 @@ export const BlockConfigurationPanel = (props: Props) => {
         }
 
         planner.updateBlockInstance(props.instance.id, (instance) => {
+            const defaultConfig = createGlobalConfigurationFromEntities(
+                block?.spec?.configuration,
+                blockData.configuration
+            );
+
             return {
                 ...instance,
                 block: {
@@ -139,6 +152,7 @@ export const BlockConfigurationPanel = (props: Props) => {
                     ref: normalizeKapetaUri(blockData.blockRef),
                 },
                 name: blockData.name,
+                defaultConfiguration: defaultConfig,
             };
         });
 

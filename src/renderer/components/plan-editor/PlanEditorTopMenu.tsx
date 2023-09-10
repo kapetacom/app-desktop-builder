@@ -24,6 +24,7 @@ import { Box, Button, Chip, CircularProgress, Paper, Stack, Tab, Tabs } from '@m
 import { grey } from '@mui/material/colors';
 import { TaskService } from 'renderer/api/TaskService';
 import { SystemService } from 'renderer/api/SystemService';
+import { createGlobalConfigurationFromEntities, getConfigurationFromEntity } from './helpers';
 
 const ConfigSchemaEditor = () => {
     const configurationField = useFormContextField('spec.configuration');
@@ -167,7 +168,12 @@ export const PlanEditorTopMenu = (props: Props) => {
         if (!showSettings) {
             return {};
         }
-        return getPlanConfig(props.systemId);
+        const config = await getPlanConfig(props.systemId);
+        return getConfigurationFromEntity(
+            planner.plan?.spec?.configuration?.types,
+            config,
+            planner.plan?.spec?.defaultConfiguration
+        );
     }, [props.systemId, showSettings]);
 
     const formData = useMemo(() => {
@@ -321,7 +327,12 @@ export const PlanEditorTopMenu = (props: Props) => {
                     <FormContainer
                         initialValue={formData}
                         onSubmitData={async (data) => {
-                            planner.updatePlanMetadata(data.metadata, data.spec.configuration);
+                            const defaultConfig = createGlobalConfigurationFromEntities(
+                                data.spec.configuration,
+                                data.configuration
+                            );
+
+                            planner.updatePlanMetadata(data.metadata, data.spec.configuration, defaultConfig);
                             await setPlanConfig(props.systemId, data.configuration);
                             setShowSettings(false);
                         }}
