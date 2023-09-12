@@ -1,3 +1,10 @@
+## [0.34.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.34.2...v0.34.3) (2023-09-12)
+
+
+### Bug Fixes
+
+* Bumps local cluster service to latest ([#124](https://github.com/kapetacom/app-desktop-builder/issues/124)) ([455caec](https://github.com/kapetacom/app-desktop-builder/commit/455caec77deac7cd521d9e312aff615558148285))
+
 ## [0.34.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.34.1...v0.34.2) (2023-09-12)
 
 
