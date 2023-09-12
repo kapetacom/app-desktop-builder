@@ -123,4 +123,12 @@ export function attachHandlers(main: MainWindow) {
             console.error('Failed to open file picker', args, err);
         }
     });
+
+    ipcMain.handle('open-path', async (evt, path) => {
+        try {
+            await shell.openPath(path);
+        } catch (err) {
+            console.error('Failed to open path', path, err);
+        }
+    });
 }

@@ -11,7 +11,8 @@ export type Procedures =
     | 'refresh-context'
     | 'set-context'
     | 'quit-and-install'
-    | 'open-file-dialog';
+    | 'open-file-dialog'
+    | 'open-path';
 
 const electronHandler = {
     ipcRenderer: {
