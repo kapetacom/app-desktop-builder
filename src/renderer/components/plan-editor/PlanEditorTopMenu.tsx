@@ -198,7 +198,7 @@ export const PlanEditorTopMenu = (props: Props) => {
 
     return (
         <Paper
-            className={'planner-top-menu'}
+            className="planner-top-menu"
             elevation={0}
             sx={{
                 padding: '7px 10px',
@@ -318,6 +318,17 @@ export const PlanEditorTopMenu = (props: Props) => {
                         />
                     </Tooltip>
                 )}
+
+                {!props.readonly && planner.asset?.path ? (
+                    <Button
+                        title={`Open ${planner.asset!.path}`}
+                        onClick={() => {
+                            window.electron.ipcRenderer.invoke('open-path', planner.asset!.path);
+                        }}
+                    >
+                        Open folder
+                    </Button>
+                ) : null}
             </Stack>
 
             <KapDialog open={showSettings} className="modal-plan-settings" onClose={() => setShowSettings(false)}>
