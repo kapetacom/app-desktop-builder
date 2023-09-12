@@ -1,3 +1,10 @@
+# [0.35.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.34.3...v0.35.0) (2023-09-12)
+
+
+### Features
+
+* adds "open folder" button to planner UI ([#122](https://github.com/kapetacom/app-desktop-builder/issues/122)) ([af159e8](https://github.com/kapetacom/app-desktop-builder/commit/af159e88aa88931415e94337d5822c6e4004f2d0))
+
 ## [0.34.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.34.2...v0.34.3) (2023-09-12)
 
 
