@@ -1,3 +1,10 @@
+## [0.34.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.34.0...v0.34.1) (2023-09-12)
+
+
+### Bug Fixes
+
+* windows publish ([3e695f5](https://github.com/kapetacom/app-desktop-builder/commit/3e695f518c56f8c253a4e2d49cec206ccc304d49))
+
 # [0.34.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.33.17...v0.34.0) (2023-09-10)
 
 
