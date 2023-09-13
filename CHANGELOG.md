@@ -1,3 +1,10 @@
+## [0.35.8](https://github.com/kapetacom/app-desktop-builder/compare/v0.35.7...v0.35.8) (2023-09-13)
+
+
+### Bug Fixes
+
+* trying to use a new token ([e9bc9b1](https://github.com/kapetacom/app-desktop-builder/commit/e9bc9b1702dd352e096c257e67a34a4dd1410205))
+
 ## [0.35.7](https://github.com/kapetacom/app-desktop-builder/compare/v0.35.6...v0.35.7) (2023-09-13)
 
 
