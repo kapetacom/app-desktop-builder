@@ -80,14 +80,12 @@ jobs:
           malware_block: false
           # Environment Name, For Production 'PROD' or For Staging 'TEST'
           environment_name: PROD
-      - name: list signed files
-        run: |
-          dir release\signed
+
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: release\signed\*.exe
+          file: release/signed/*.exe
           tag: ${{ github.ref }}
           overwrite: true
           file_glob: true
