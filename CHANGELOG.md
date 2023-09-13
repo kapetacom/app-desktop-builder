@@ -1,3 +1,10 @@
+## [0.35.7](https://github.com/kapetacom/app-desktop-builder/compare/v0.35.6...v0.35.7) (2023-09-13)
+
+
+### Bug Fixes
+
+* trying to publish to kapeta-desktop ([f1b4ed0](https://github.com/kapetacom/app-desktop-builder/commit/f1b4ed0ccceb0d5b8399b035aa0bbb9092113b50))
+
 ## [0.35.6](https://github.com/kapetacom/app-desktop-builder/compare/v0.35.5...v0.35.6) (2023-09-13)
 
 
