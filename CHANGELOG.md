@@ -1,3 +1,10 @@
+## [0.35.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.35.3...v0.35.4) (2023-09-13)
+
+
+### Bug Fixes
+
+* listing signed files for windows ([dd876c4](https://github.com/kapetacom/app-desktop-builder/commit/dd876c4f13b554dc44d3c0743f953338b95f385c))
+
 ## [0.35.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.35.2...v0.35.3) (2023-09-13)
 
 
