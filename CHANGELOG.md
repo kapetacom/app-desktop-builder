@@ -1,3 +1,10 @@
+## [0.35.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.35.4...v0.35.5) (2023-09-13)
+
+
+### Bug Fixes
+
+* build: using windows paths on windows ([5782e90](https://github.com/kapetacom/app-desktop-builder/commit/5782e90fcf82bc154d06863eae99f08cca48dc9b))
+
 ## [0.35.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.35.3...v0.35.4) (2023-09-13)
 
 
