@@ -1,3 +1,10 @@
+## [0.35.9](https://github.com/kapetacom/app-desktop-builder/compare/v0.35.8...v0.35.9) (2023-09-13)
+
+
+### Bug Fixes
+
+* bump plan-editor w/ new block state fix [KAP-1212] ([#125](https://github.com/kapetacom/app-desktop-builder/issues/125)) ([c4742c1](https://github.com/kapetacom/app-desktop-builder/commit/c4742c19fd647eab072360b9e0db5bb4fef72085))
+
 ## [0.35.8](https://github.com/kapetacom/app-desktop-builder/compare/v0.35.7...v0.35.8) (2023-09-13)
 
 
