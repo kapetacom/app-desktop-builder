@@ -1,3 +1,10 @@
+## [0.35.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.35.2...v0.35.3) (2023-09-13)
+
+
+### Bug Fixes
+
+* trying to upload windows file ([dc0b06f](https://github.com/kapetacom/app-desktop-builder/commit/dc0b06f7fb4011e1d80e2e31e9b5553bb7988900))
+
 ## [0.35.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.35.1...v0.35.2) (2023-09-13)
 
 
