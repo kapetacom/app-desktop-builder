@@ -89,6 +89,7 @@ jobs:
           tag: ${{ github.ref }}
           overwrite: true
           file_glob: true
+          repo_name: kapetacom/kapeta-desktop
 
   publish_mac:
     runs-on: macos-latest
