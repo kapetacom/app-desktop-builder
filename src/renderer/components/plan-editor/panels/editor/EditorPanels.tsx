@@ -94,8 +94,8 @@ interface ConnectionContextData {
 }
 
 const InnerForm = ({ planner, info, onContextDataChanged }: InnerFormProps) => {
-    // TODO: This seems bad
-    /* eslint-disable react-hooks/rules-of-hooks */
+    /* eslint react-hooks/rules-of-hooks: warn */
+
     const mappingField = useFormContextField('mapping');
     const kindField = useFormContextField('kind');
     const getErrorFallback = useCallback(

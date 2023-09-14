@@ -1,5 +1,4 @@
-// TODO: seems bad
-/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint react-hooks/rules-of-hooks: warn */
 import { useDesktop, TaskGetter, TaskState } from '@kapeta/ui-web-components';
 import { Task, TaskStatus } from '@kapeta/ui-web-context';
 import { useCallback, useEffect, useState } from 'react';

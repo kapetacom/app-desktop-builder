@@ -134,7 +134,7 @@ export const useLocalAssets = <T = SchemaKind>(kinds: string[] = empty): AssetLi
 };
 
 export const usePlans = () => {
-    return useLocalAssets<Plan>('core/plan');
+    return useLocalAssets<Plan>(['core/plan']);
 };
 
 export const useBlocks = () => {

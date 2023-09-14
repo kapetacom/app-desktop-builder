@@ -1,11 +1,5 @@
 import { useEffect, useState } from 'react';
-import {
-    AssetDisplay,
-    AssetType,
-    BlockHubDetailsPreviewer,
-    BlockhubCategory,
-    BlockhubModal,
-} from '@kapeta/ui-web-components';
+import { AssetDisplay, AssetType, BlockhubCategory, BlockhubModal } from '@kapeta/ui-web-components';
 import { useAsyncRetry } from 'react-use';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import { AssetInfo, AssetThumbnail, fromAsset, fromAssetDisplay } from '@kapeta/ui-web-plan-editor';
@@ -13,11 +7,7 @@ import { AssetService } from 'renderer/api/AssetService';
 import { useKapetaContext } from '../../../hooks/contextHook';
 import { versionIsBigger } from '../../../utils/versionHelpers';
 
-import {
-    normalizeKapetaUri,
-    useCurriedLoadedPlanContext,
-    useLoadedPlanContext,
-} from '../../../utils/planContextLoader';
+import { normalizeKapetaUri, useCurriedLoadedPlanContext } from '../../../utils/planContextLoader';
 import { useAssetsChanged } from '../../../hooks/assetHooks';
 import { api, assetFetcher } from '../../../api/APIService';
 import { installerService } from '../../../api/installerService';

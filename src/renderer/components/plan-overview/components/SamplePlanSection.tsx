@@ -12,7 +12,8 @@ interface Props {
 
 export const SamplePlanSection = (props: Props) => {
     const title = props.sample.content.metadata.title ?? props.sample.content.metadata.name;
-    const hack = useLoadedPlanContext(props.sample.content);
+    // We can preload it already
+    const planContext = useLoadedPlanContext(props.sample.content);
     return (
         <Box className="sample-plan-section">
             <Typography variant="h6" pb={2} pt={2}>
@@ -42,9 +43,7 @@ export const SamplePlanSection = (props: Props) => {
                         onClick={props.onOpenSample}
                         width={761}
                         height={408}
-                        loadPlanContext={(_plan) => {
-                            return hack;
-                        }}
+                        loadPlanContext={() => planContext}
                     />
                 </Box>
                 <Box
