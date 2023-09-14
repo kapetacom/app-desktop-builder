@@ -1,3 +1,10 @@
+## [0.35.13](https://github.com/kapetacom/app-desktop-builder/compare/v0.35.12...v0.35.13) (2023-09-14)
+
+
+### Bug Fixes
+
+* renaming windows file to use - instead of . ([aa38bce](https://github.com/kapetacom/app-desktop-builder/commit/aa38bcef4eadef1ca921dd880cd618c5b79247a6))
+
 ## [0.35.12](https://github.com/kapetacom/app-desktop-builder/compare/v0.35.11...v0.35.12) (2023-09-14)
 
 
