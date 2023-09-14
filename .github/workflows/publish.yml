@@ -80,7 +80,9 @@ jobs:
           malware_block: false
           # Environment Name, For Production 'PROD' or For Staging 'TEST'
           environment_name: PROD
-
+      - name: copy latest.yml
+        run: |
+          cp release/build/latest.yml release/signed/latest.yml
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         with:
