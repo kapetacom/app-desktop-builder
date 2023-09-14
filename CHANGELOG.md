@@ -1,3 +1,10 @@
+## [0.35.10](https://github.com/kapetacom/app-desktop-builder/compare/v0.35.9...v0.35.10) (2023-09-14)
+
+
+### Bug Fixes
+
+* adding release text to release on kapetacom/kapeta-desktop ([6f4e46a](https://github.com/kapetacom/app-desktop-builder/commit/6f4e46aae1bd53c95d8f95ace889a80bd958e5e6))
+
 ## [0.35.9](https://github.com/kapetacom/app-desktop-builder/compare/v0.35.8...v0.35.9) (2023-09-13)
 
 
