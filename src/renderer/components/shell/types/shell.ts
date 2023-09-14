@@ -10,6 +10,7 @@ export interface MenuSection {
     hidden?: boolean;
     requiredAccess?: string[];
     icon?: React.ReactNode;
+    'data-kap-id'?: string;
     // submenu?: FragmentMenuItem[];
 }
 

@@ -66,6 +66,7 @@ export const ContextPicker = (props: ContextPickerProps) => {
                             setMenuAnchor(e.currentTarget);
                             props.onOpen && props.onOpen();
                         }}
+                        data-kap-id="app-left-menu-context-picker"
                     >
                         <ListItemIcon>
                             <UserAvatar name={currentContext?.name} size={24} />

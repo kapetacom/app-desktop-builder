@@ -15,11 +15,11 @@ import {
     Typography,
     Zoom,
 } from '@mui/material';
-
+import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
+import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import { UserAvatar } from '@kapeta/ui-web-components';
-
 import { KapetaNotification, StateNotificationType } from './types';
-import { useKapetaContext } from '../../hooks/contextHook';
 import { withTheme } from '../../Theme';
 
 const noHoverSX = {
@@ -37,8 +37,8 @@ const popoverSX = {
     },
 };
 
-function getIconForType(type: StateNotificationType): string | undefined {
-    switch (type) {
+function getIconForType(notificationType: StateNotificationType): string | undefined {
+    switch (notificationType) {
         case 'success':
             return 'fa fa-check-circle';
         case 'warning':
@@ -47,11 +47,15 @@ function getIconForType(type: StateNotificationType): string | undefined {
             return 'fa fa-do-not-enter';
         case 'info':
             return 'fa fa-exclamation-circle';
+        default: {
+            notificationType satisfies never;
+        }
     }
+    return undefined;
 }
 
-function getColorForType(type: StateNotificationType): string | undefined {
-    switch (type) {
+function getColorForType(notificationType: StateNotificationType): string | undefined {
+    switch (notificationType) {
         case 'success':
             return 'success.main';
         case 'warning':
@@ -60,7 +64,11 @@ function getColorForType(type: StateNotificationType): string | undefined {
             return 'error.main';
         case 'info':
             return 'secondary.main';
+        default: {
+            notificationType satisfies never;
+        }
     }
+    return undefined;
 }
 
 interface TopBarProps {
@@ -69,18 +77,17 @@ interface TopBarProps {
 }
 
 export const TopBar = withTheme((props: TopBarProps) => {
-    const [profileMenuAnchorEl, setProfileMenuAchor] = useState<null | HTMLElement>(null);
     const [notificationMenuAnchor, setNotificationMenuAnchor] = useState<null | HTMLElement>(null);
 
     const [notifications, setNotifications] = useState(props.notifications ?? []);
 
-    const contexts = useKapetaContext();
-
     useEffect(() => {
-        setNotifications((prev) => {
+        setNotifications((prevNotifications) => {
             let newNotifications = props.notifications ?? [];
             return newNotifications.map((newNotification) => {
-                const oldNotification = prev.find((oldNotification) => oldNotification.id === newNotification.id);
+                const oldNotification = prevNotifications.find(
+                    (prevNotification) => prevNotification.id === newNotification.id
+                );
                 return {
                     ...newNotification,
                     read: oldNotification?.read ?? false,
@@ -90,6 +97,7 @@ export const TopBar = withTheme((props: TopBarProps) => {
     }, [props.notifications]);
 
     const unreadNotifications = notifications.filter((n) => !n.read).length ?? 0;
+    const hasUnreadNotifications = unreadNotifications > 0;
     const notificationProgress = notifications.some((n) => {
         return n.type === 'progress' && n.progress < 100;
     });
@@ -115,18 +123,27 @@ export const TopBar = withTheme((props: TopBarProps) => {
                         height: '100%',
                     }}
                 />
-                <Stack direction="row" divider={<Divider orientation="vertical" flexItem />} spacing={2}>
-                    {/* Just to trigger another divider */}
-                    <span />
+                <Stack
+                    direction="row"
+                    divider={<Divider orientation="vertical" flexItem />}
+                    spacing={1}
+                    marginRight={1}
+                >
+                    <IconButton
+                        size="small"
+                        sx={{ width: '40px', height: '40px' }}
+                        data-kap-id="app-top-bar-help-button"
+                    >
+                        <QuestionMarkIcon fontSize="medium" />
+                    </IconButton>
 
                     <IconButton
                         size="small"
                         sx={{
-                            width: '42px',
-                            height: '42px',
-                            marginTop: '10px',
-                            marginRight: '16px !important',
-                            color: unreadNotifications > 0 ? 'text.primary' : 'text.secondary',
+                            position: 'relative',
+                            width: '40px',
+                            height: '40px',
+                            color: hasUnreadNotifications ? 'text.primary' : 'text.secondary',
                         }}
                         onClick={(e) => {
                             setNotificationMenuAnchor(e.currentTarget as any);
@@ -136,24 +153,15 @@ export const TopBar = withTheme((props: TopBarProps) => {
                                 })
                             );
                         }}
+                        data-kap-id="app-top-bar-notifications-button"
                     >
-                        <i className="far fa-bell" />
+                        {hasUnreadNotifications ? (
+                            <NotificationsActiveIcon fontSize="medium" color="inherit" />
+                        ) : (
+                            <NotificationsNoneIcon fontSize="medium" color="inherit" />
+                        )}
                         {notificationProgress && (
-                            <Box
-                                sx={{
-                                    position: 'relative',
-                                    marginTop: '1px',
-                                }}
-                            >
-                                <CircularProgress
-                                    size={40}
-                                    sx={{
-                                        position: 'absolute',
-                                        top: '-21px',
-                                        left: '-28px',
-                                    }}
-                                />
-                            </Box>
+                            <CircularProgress size={36} sx={{ position: 'absolute' }} color="inherit" />
                         )}
                     </IconButton>
                 </Stack>
@@ -226,7 +234,7 @@ export const TopBar = withTheme((props: TopBarProps) => {
                                     return (
                                         <MenuItem sx={sxIconItem} key={notification.id}>
                                             <ListItemIcon>
-                                                <Zoom in={true} timeout={400}>
+                                                <Zoom in timeout={400}>
                                                     <Box
                                                         sx={{
                                                             width: '26px',
@@ -261,7 +269,7 @@ export const TopBar = withTheme((props: TopBarProps) => {
                                                 {notification.message}
                                             </Typography>
                                         </div>
-                                        <div className={'progress'}>
+                                        <div className="progress">
                                             <LinearProgress
                                                 variant={notification.progress > -1 ? 'determinate' : 'indeterminate'}
                                                 value={notification.progress}
@@ -288,7 +296,7 @@ export const TopBar = withTheme((props: TopBarProps) => {
                             return (
                                 <MenuItem sx={sxIconItem} key={notification.id}>
                                     <ListItemIcon>
-                                        <Zoom in={true} timeout={400}>
+                                        <Zoom in timeout={400}>
                                             <Box
                                                 sx={{
                                                     width: '26px',
@@ -311,7 +319,7 @@ export const TopBar = withTheme((props: TopBarProps) => {
                             );
                         })
                     ) : (
-                        <MenuItem key={'none'} sx={noHoverSX}>
+                        <MenuItem key="none" sx={noHoverSX}>
                             No notifications
                         </MenuItem>
                     )}

@@ -43,6 +43,7 @@ const InnerShell = (props: Props) => {
                         name: 'Edit',
                         open: false,
                         icon: <CustomIcon icon="Plan" />,
+                        'data-kap-id': 'app-left-menu-edit-button',
                     },
                     {
                         id: 'deploy',
@@ -51,6 +52,7 @@ const InnerShell = (props: Props) => {
                         name: 'Deploy',
                         open: false,
                         icon: <CustomIcon icon="Deploy" />,
+                        'data-kap-id': 'app-left-menu-deploy-button',
                     },
                 ]}
                 context={{
