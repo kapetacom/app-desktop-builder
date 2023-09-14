@@ -80,7 +80,11 @@ export const MainLayout = (props: Props) => {
 
                                 return (
                                     <SidebarListItem key={`${linkPath}-item`}>
-                                        <SidebarListItemButton href={item.path} selected={current}>
+                                        <SidebarListItemButton
+                                            href={item.path}
+                                            selected={current}
+                                            data-kap-id={item['data-kap-id']}
+                                        >
                                             <ListItemIcon>{icon}</ListItemIcon>
                                             <ListItemText primary={item.name} />
                                         </SidebarListItemButton>
@@ -90,11 +94,14 @@ export const MainLayout = (props: Props) => {
 
                         <Divider />
                         <SidebarListItem>
-                            <SidebarListItemButton onClick={() => kapetaContext.blockHub.open()}>
+                            <SidebarListItemButton
+                                onClick={() => kapetaContext.blockHub.open()}
+                                data-kap-id="app-left-menu-block-hub-button"
+                            >
                                 <ListItemIcon>
                                     <CustomIcon icon="Block" />
                                 </ListItemIcon>
-                                <ListItemText primary={'Block Hub'} />
+                                <ListItemText primary="Block Hub" />
                             </SidebarListItemButton>
                         </SidebarListItem>
                     </SidebarList>
