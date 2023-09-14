@@ -1,3 +1,10 @@
+## [0.35.11](https://github.com/kapetacom/app-desktop-builder/compare/v0.35.10...v0.35.11) (2023-09-14)
+
+
+### Bug Fixes
+
+* include latest.xml for windows ([e1f401f](https://github.com/kapetacom/app-desktop-builder/commit/e1f401fa8ed17fbfbddbcd423eb2226de778bbc6))
+
 ## [0.35.10](https://github.com/kapetacom/app-desktop-builder/compare/v0.35.9...v0.35.10) (2023-09-14)
 
 
