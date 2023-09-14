@@ -51,7 +51,8 @@ export const useAssetsChanged = (handler: (evt: AssetChangedEvent) => void, depe
     }, [callback]);
 };
 
-export const useLocalAssets = <T = SchemaKind>(...kinds: string[]): AssetListResult<T> => {
+const empty = [];
+export const useLocalAssets = <T = SchemaKind>(kinds: string[] = empty): AssetListResult<T> => {
     const [assets, setAssets] = useState<AssetInfo<T>[]>([]);
     const [loading, setLoading] = useState(true);
     const assetResults = useSWRImmutable('local-assets', async () => {
@@ -88,6 +89,7 @@ export const useLocalAssets = <T = SchemaKind>(...kinds: string[]): AssetListRes
                 return;
             }
             try {
+                console.log('Reloading assets', evt);
                 await assetResults.mutate();
             } catch (e) {
                 console.warn('Failed to reload assets', e);

@@ -13,7 +13,11 @@ import { AssetService } from 'renderer/api/AssetService';
 import { useKapetaContext } from '../../../hooks/contextHook';
 import { versionIsBigger } from '../../../utils/versionHelpers';
 
-import { normalizeKapetaUri, useLoadedPlanContext } from '../../../utils/planContextLoader';
+import {
+    normalizeKapetaUri,
+    useCurriedLoadedPlanContext,
+    useLoadedPlanContext,
+} from '../../../utils/planContextLoader';
 import { useAssetsChanged } from '../../../hooks/assetHooks';
 import { api, assetFetcher } from '../../../api/APIService';
 import { installerService } from '../../../api/installerService';
@@ -22,17 +26,30 @@ interface Props {
     handle?: string;
 }
 
-const renderPreview: BlockHubDetailsPreviewer = (asset, size) => {
+const PreviewLoader = (props: {
+    children: (args: { planLoader: ReturnType<typeof useCurriedLoadedPlanContext> }) => JSX.Element;
+}) => {
+    const planLoader = useCurriedLoadedPlanContext();
+
+    return props.children({ planLoader });
+};
+
+const previewRenderer = (asset, size) => {
     return (
-        <AssetThumbnail
-            width={size.width}
-            height={size.height}
-            hideMetadata
-            loadPlanContext={(plan) => {
-                return useLoadedPlanContext(plan.content);
-            }}
-            asset={fromAssetDisplay(asset)}
-        />
+        <PreviewLoader>
+            {({ planLoader }) => (
+                <AssetThumbnail
+                    width={size.width}
+                    height={size.height}
+                    hideMetadata
+                    loadPlanContext={(plan) => {
+                        planLoader.setPlan(plan.content);
+                        return planLoader.context;
+                    }}
+                    asset={fromAssetDisplay(asset)}
+                />
+            )}
+        </PreviewLoader>
     );
 };
 
@@ -148,7 +165,7 @@ export const BlockhubShell = (props: Props) => {
             onClose={() => {
                 kapetaContext.blockHub.close();
             }}
-            previewRenderer={renderPreview}
+            previewRenderer={previewRenderer}
         />
     );
 };

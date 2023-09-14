@@ -223,3 +223,16 @@ export const useLoadedPlanContext = (plan: Plan | undefined) => {
         error: results.error,
     };
 };
+
+export const useCurriedLoadedPlanContext = () => {
+    const [plan, setPlan] = useState<Plan | undefined>();
+    const context = useLoadedPlanContext(plan);
+
+    return useMemo(
+        () => ({
+            context,
+            setPlan,
+        }),
+        [context]
+    );
+};

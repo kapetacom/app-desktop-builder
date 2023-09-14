@@ -12,7 +12,7 @@ import { TransitionGroup } from 'react-transition-group';
 import { AssetInfo, AssetThumbnail } from '@kapeta/ui-web-plan-editor';
 import { grey } from '@mui/material/colors';
 import { useKapetaContext } from '../../../hooks/contextHook';
-import { useLoadedPlanContext } from '../../../utils/planContextLoader';
+import { useCurriedLoadedPlanContext } from '../../../utils/planContextLoader';
 import { installerService } from '../../../api/installerService';
 
 interface Props {
@@ -24,6 +24,7 @@ interface Props {
 
 const YourPlansListInner = (props: Props) => {
     const kapetaContext = useKapetaContext();
+    const planLoader = useCurriedLoadedPlanContext();
 
     if (props.plans.length < 1) {
         return (
@@ -129,7 +130,8 @@ const YourPlansListInner = (props: Props) => {
                                 installerService={installerService}
                                 onClick={props.onPlanOpen}
                                 loadPlanContext={(planInfo) => {
-                                    return useLoadedPlanContext(planInfo.content);
+                                    planLoader.setPlan(planInfo.content);
+                                    return planLoader.context;
                                 }}
                             />
                         </Slide>
