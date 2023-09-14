@@ -1,3 +1,10 @@
+## [0.35.12](https://github.com/kapetacom/app-desktop-builder/compare/v0.35.11...v0.35.12) (2023-09-14)
+
+
+### Bug Fixes
+
+* add latest.xml to the signed folder ([d111038](https://github.com/kapetacom/app-desktop-builder/commit/d1110385509a74a50f47ab847b119e8c09f6e91e))
+
 ## [0.35.11](https://github.com/kapetacom/app-desktop-builder/compare/v0.35.10...v0.35.11) (2023-09-14)
 
 
