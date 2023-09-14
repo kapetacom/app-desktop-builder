@@ -1,3 +1,16 @@
+# [0.36.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.35.13...v0.36.0) (2023-09-14)
+
+
+### Bug Fixes
+
+* Fix things to please linter ([3c38137](https://github.com/kapetacom/app-desktop-builder/commit/3c381377c1d208ae357624f1920b20d6d24b520c))
+
+
+### Features
+
+* Add data-kap-id some places to help with pendo tagging ([0863dc3](https://github.com/kapetacom/app-desktop-builder/commit/0863dc33733adc218eb815a4f2bfa31af368f1b0))
+* Add help button in top bar ([d612f28](https://github.com/kapetacom/app-desktop-builder/commit/d612f284f4c964b407e15e0611b1d0bd648967b2))
+
 ## [0.35.13](https://github.com/kapetacom/app-desktop-builder/compare/v0.35.12...v0.35.13) (2023-09-14)
 
 
