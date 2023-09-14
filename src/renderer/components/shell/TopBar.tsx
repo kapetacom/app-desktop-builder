@@ -37,8 +37,8 @@ const popoverSX = {
     },
 };
 
-function getIconForType(type: StateNotificationType): string | undefined {
-    switch (type) {
+function getIconForType(notificationType: StateNotificationType): string | undefined {
+    switch (notificationType) {
         case 'success':
             return 'fa fa-check-circle';
         case 'warning':
@@ -47,11 +47,15 @@ function getIconForType(type: StateNotificationType): string | undefined {
             return 'fa fa-do-not-enter';
         case 'info':
             return 'fa fa-exclamation-circle';
+        default: {
+            notificationType satisfies never;
+        }
     }
+    return undefined;
 }
 
-function getColorForType(type: StateNotificationType): string | undefined {
-    switch (type) {
+function getColorForType(notificationType: StateNotificationType): string | undefined {
+    switch (notificationType) {
         case 'success':
             return 'success.main';
         case 'warning':
@@ -60,7 +64,11 @@ function getColorForType(type: StateNotificationType): string | undefined {
             return 'error.main';
         case 'info':
             return 'secondary.main';
+        default: {
+            notificationType satisfies never;
+        }
     }
+    return undefined;
 }
 
 interface TopBarProps {
@@ -226,7 +234,7 @@ export const TopBar = withTheme((props: TopBarProps) => {
                                     return (
                                         <MenuItem sx={sxIconItem} key={notification.id}>
                                             <ListItemIcon>
-                                                <Zoom in={true} timeout={400}>
+                                                <Zoom in timeout={400}>
                                                     <Box
                                                         sx={{
                                                             width: '26px',
@@ -261,7 +269,7 @@ export const TopBar = withTheme((props: TopBarProps) => {
                                                 {notification.message}
                                             </Typography>
                                         </div>
-                                        <div className={'progress'}>
+                                        <div className="progress">
                                             <LinearProgress
                                                 variant={notification.progress > -1 ? 'determinate' : 'indeterminate'}
                                                 value={notification.progress}
@@ -288,7 +296,7 @@ export const TopBar = withTheme((props: TopBarProps) => {
                             return (
                                 <MenuItem sx={sxIconItem} key={notification.id}>
                                     <ListItemIcon>
-                                        <Zoom in={true} timeout={400}>
+                                        <Zoom in timeout={400}>
                                             <Box
                                                 sx={{
                                                     width: '26px',
@@ -311,7 +319,7 @@ export const TopBar = withTheme((props: TopBarProps) => {
                             );
                         })
                     ) : (
-                        <MenuItem key={'none'} sx={noHoverSX}>
+                        <MenuItem key="none" sx={noHoverSX}>
                             No notifications
                         </MenuItem>
                     )}
