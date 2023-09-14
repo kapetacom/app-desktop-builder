@@ -1,14 +1,11 @@
 import React, { useCallback, useContext, useMemo, useState } from 'react';
+import { Button } from '@mui/material';
 import {
     AssetNameInput,
     AssetVersionSelector,
-    DSL_LANGUAGE_ID,
-    DSLConverters,
-    DSLWriter,
     FormButtons,
     FormContainer,
     FormField,
-    FormFieldType,
     useFormContextField,
 } from '@kapeta/ui-web-components';
 
@@ -18,7 +15,7 @@ import { parseKapetaUri } from '@kapeta/nodejs-utils';
 
 import type { IResourceTypeProvider, ResourceConnectionMappingChange, SchemaKind } from '@kapeta/ui-web-types';
 import { ResourceRole } from '@kapeta/ui-web-types';
-import { BlockDefinition, Resource, Connection, Entity, IconType, BlockInstance } from '@kapeta/schemas';
+import { BlockDefinition, Resource, Connection, Entity, BlockInstance } from '@kapeta/schemas';
 
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import { cloneDeep } from 'lodash';
@@ -27,11 +24,9 @@ import { BlockInfo, DataEntityType, EditItemInfo } from '../../types';
 
 import './ItemEditorPanel.less';
 import { replaceBase64IconWithUrl } from '../../../../utils/iconHelpers';
-import { Button } from '@mui/material';
 import { useKapetaContext } from '../../../../hooks/contextHook';
 import { useNamespacesForField } from '../../../../hooks/useNamespacesForField';
 import { fromTypeProviderToAssetType } from '../../../../utils/assetTypeConverters';
-import _ from 'lodash';
 import { updateBlockFromMapping } from '../../helpers';
 
 function getResourceVersions(dataKindUri) {
@@ -99,6 +94,8 @@ interface ConnectionContextData {
 }
 
 const InnerForm = ({ planner, info, onContextDataChanged }: InnerFormProps) => {
+    // TODO: This seems bad
+    /* eslint-disable react-hooks/rules-of-hooks */
     const mappingField = useFormContextField('mapping');
     const kindField = useFormContextField('kind');
     const getErrorFallback = useCallback(
@@ -134,14 +131,8 @@ const InnerForm = ({ planner, info, onContextDataChanged }: InnerFormProps) => {
         }
 
         const ConverterType = ResourceTypeProvider.getConverterFor(source.kind, target.kind);
-        if (!ConverterType) {
-            return null;
-        }
+        const MappingComponent = ConverterType?.mappingComponentType;
 
-        const MappingComponent = ConverterType.mappingComponentType;
-        if (!MappingComponent) {
-            return null;
-        }
         const fromBlockInstance = planner.plan?.spec.blocks.find(
             (instance) => instance.id === connection.provider.blockId
         );
@@ -166,6 +157,14 @@ const InnerForm = ({ planner, info, onContextDataChanged }: InnerFormProps) => {
 
         const sourceClone = useMemo(() => cloneDeep(source), [source]);
         const targetClone = useMemo(() => cloneDeep(target), [target]);
+
+        if (!ConverterType) {
+            return null;
+        }
+
+        if (!MappingComponent) {
+            return null;
+        }
 
         return (
             <MappingComponent
@@ -264,7 +263,7 @@ export const EditorPanels: React.FC<Props> = (props) => {
     // callbacks
     const saveAndClose = async (data: any) => {
         switch (props.info?.type) {
-            case DataEntityType.CONNECTION:
+            case DataEntityType.CONNECTION: {
                 const connection = data as Connection;
                 try {
                     if (contextData) {
@@ -279,7 +278,7 @@ export const EditorPanels: React.FC<Props> = (props) => {
                         );
 
                         if (newFromBlock) {
-                            //If we had to add entities to the source block, we need to update the block definition
+                            // If we had to add entities to the source block, we need to update the block definition
                             planner.updateBlockDefinition(
                                 connectionContextData.fromBlockInstance.block.ref,
                                 newFromBlock
@@ -295,7 +294,7 @@ export const EditorPanels: React.FC<Props> = (props) => {
                         );
 
                         if (newToBlock) {
-                            //If we had to add entities to the source block, we need to update the block definition
+                            // If we had to add entities to the source block, we need to update the block definition
                             planner.updateBlockDefinition(connectionContextData.toBlockInstance.block.ref, newToBlock);
                         }
                     }
@@ -305,6 +304,7 @@ export const EditorPanels: React.FC<Props> = (props) => {
                     console.error('Failed to update context from connection: ', e, contextData);
                 }
                 break;
+            }
             case DataEntityType.INSTANCE:
             case DataEntityType.BLOCK: {
                 const blockData = data as BlockDefinition;
@@ -411,10 +411,10 @@ export const EditorPanels: React.FC<Props> = (props) => {
                             <InnerForm planner={planner} info={props.info} onContextDataChanged={setContextData} />
                         </div>
                         <FormButtons>
-                            <Button variant={'contained'} color={'error'} onClick={props.onClosed}>
+                            <Button variant="contained" color="error" onClick={props.onClosed}>
                                 Cancel
                             </Button>
-                            <Button variant={'contained'} disabled={false} color={'primary'} type="submit">
+                            <Button variant="contained" disabled={false} color="primary" type="submit">
                                 Save
                             </Button>
                         </FormButtons>

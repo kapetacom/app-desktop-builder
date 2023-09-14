@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from 'react';
-
 import './index.less';
 
-import { kapetaDark } from '../src/renderer/Theme';
 import { ThemeProvider } from '@mui/material';
-import { TopBar } from '../src/renderer/components/shell/TopBar';
 import { MemoryRouter } from 'react-router-dom';
+import { kapetaDark } from '../src/renderer/Theme';
+import { TopBar } from '../src/renderer/components/shell/TopBar';
 
 export default {
     title: 'Top bar',

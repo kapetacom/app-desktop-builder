@@ -1,13 +1,13 @@
 import { createRoot } from 'react-dom/client';
 import { ThemeProvider } from '@mui/material';
 import { RouterProvider, useParams, useNavigate, Navigate, createHashRouter } from 'react-router-dom';
+import { SimpleLoader } from '@kapeta/ui-web-components';
 import { Root } from './Root';
 import { kapetaLight } from './Theme';
 import { initialise } from './context';
 import { PlanView } from './views/PlanView';
 import { PlanOverview } from './components/plan-overview/PlanOverview';
 import { usePlans } from './hooks/assetHooks';
-import { SimpleLoader } from '@kapeta/ui-web-components';
 import { RemoteFrame } from './components/shell/RemoteFrame';
 import { useKapetaContext } from './hooks/contextHook';
 import { AssetService } from './api/AssetService';
@@ -71,7 +71,7 @@ const router = createHashRouter([
                     while (path && path.startsWith('/')) {
                         path = path.substr(1);
                     }
-                    path = 'deployments' + (path ? '/' + path : '');
+                    path = `deployments${path ? `/${path}` : ''}`;
 
                     return <RemoteFrame baseUrl={window.KapetaDesktop.urls.deployments} path={path} />;
                 },
@@ -91,12 +91,12 @@ const router = createHashRouter([
             {
                 path: 'organizations/:handle/*',
                 Component: () => {
-                    const { handle: handle } = useParams();
+                    const { handle } = useParams();
                     let { '*': path } = useParams();
                     return (
                         <RemoteFrame
                             baseUrl={window.KapetaDesktop.urls.settings}
-                            path={`organizations/${handle}${path ? '/' + path : '/settings/general'}`}
+                            path={`organizations/${handle}${path ? `/${path}` : '/settings/general'}`}
                         />
                     );
                 },
@@ -104,7 +104,7 @@ const router = createHashRouter([
             {
                 path: '*',
                 Component: () => {
-                    return <Navigate to={'/edit'} replace />;
+                    return <Navigate to="/edit" replace />;
                 },
             },
         ],

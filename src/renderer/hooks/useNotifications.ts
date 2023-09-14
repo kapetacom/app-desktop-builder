@@ -1,9 +1,8 @@
 import { useEffect, useMemo } from 'react';
-import { KapetaNotification } from '../components/shell/types';
 import { EventEmitter } from 'events';
 import { useInterval, useList } from 'react-use';
 import { ListActions } from 'react-use/lib/useList';
-import { useAutoUpdater } from '../auto-updater/hooks';
+import { KapetaNotification } from '../components/shell/types';
 
 const NOTIFICATION_TTL = 60000;
 const globalEmitter = new EventEmitter();
@@ -35,8 +34,6 @@ export const useNotifications = (): [KapetaNotification[], ListActions<KapetaNot
     useNotificationListener((notification) => {
         notificationsHandler.upsert((a, b) => a.id === b.id, notification);
     });
-
-    useAutoUpdater();
 
     return [notifications, notificationsHandler];
 };

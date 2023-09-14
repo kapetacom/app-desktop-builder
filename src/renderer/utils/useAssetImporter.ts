@@ -1,10 +1,10 @@
-import { showFilePickerOne } from './showFilePicker';
 import { AssetStore } from '@kapeta/ui-web-context';
 import { showToasty, ToastType } from '@kapeta/ui-web-components';
 import { useState } from 'react';
 import YAML from 'yaml';
-import { normalizeKapetaUri } from './planContextLoader';
 import { Asset } from '@kapeta/ui-web-types';
+import { normalizeKapetaUri } from './planContextLoader';
+import { showFilePickerOne } from './showFilePicker';
 
 interface Options {
     assetService?: AssetStore;

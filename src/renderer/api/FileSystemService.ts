@@ -1,8 +1,8 @@
 import * as Path from 'path';
 
 import { FileInfo } from '@kapeta/ui-web-types';
-import { clusterPath } from './ClusterConfig';
 import { FileSystemStore, simpleFetch } from '@kapeta/ui-web-context';
+import { clusterPath } from './ClusterConfig';
 
 class FileSystemServiceImpl implements FileSystemStore {
     async createFolder(path: string, folderName: string) {

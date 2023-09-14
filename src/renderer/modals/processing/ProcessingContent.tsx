@@ -1,17 +1,15 @@
-import React from 'react';
 import { Box, Button, CircularProgress, Paper, Stack, Typography } from '@mui/material';
+
+import './ProcessingContent.less';
+import { isMac } from '../../utils/osUtils';
 
 interface Props {
     title?: string | null;
     text: string | null;
     linkText: string | null;
     link: string | null;
-    onLinkOpen?: (url) => void | Promise<void>;
     onCancel?: () => void;
 }
-
-import './ProcessingContent.less';
-import { isMac } from '../../utils/osUtils';
 
 export const ProcessingContent = (props: Props) => {
     const borderRadius = isMac() ? '10px' : '0px';
@@ -34,7 +32,7 @@ export const ProcessingContent = (props: Props) => {
             }}
         >
             <Typography
-                variant={'h6'}
+                variant="h6"
                 sx={{
                     padding: '16px 24px',
                     fontWeight: 400,
@@ -46,7 +44,7 @@ export const ProcessingContent = (props: Props) => {
             </Typography>
 
             <Stack
-                direction={'row'}
+                direction="row"
                 sx={{
                     padding: '0 24px',
                 }}
@@ -54,7 +52,7 @@ export const ProcessingContent = (props: Props) => {
                 <Box sx={{ mr: 2 }}>
                     <CircularProgress size={64} />
                 </Box>
-                {props.text && <Typography variant={'body2'}>{props.text}</Typography>}
+                {props.text && <Typography variant="body2">{props.text}</Typography>}
             </Stack>
 
             <div
@@ -64,9 +62,9 @@ export const ProcessingContent = (props: Props) => {
                 }}
             >
                 <Button
-                    size={'medium'}
-                    color={'inherit'}
-                    variant={'text'}
+                    size="medium"
+                    color="inherit"
+                    variant="text"
                     onClick={() => {
                         props.onCancel?.();
                         window.close();
@@ -77,9 +75,9 @@ export const ProcessingContent = (props: Props) => {
                 {props.link && (
                     <Button
                         href={props.link}
-                        size={'medium'}
-                        variant={'text'}
-                        color={'primary'}
+                        size="medium"
+                        variant="text"
+                        color="primary"
                         rel="noreferrer"
                         target="_blank"
                     >

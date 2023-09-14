@@ -1,7 +1,7 @@
-import { Box, Button, CircularProgress, Link, Paper, Stack, ThemeProvider, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Stack, ThemeProvider, Typography } from '@mui/material';
+import { useState } from 'react';
 import { Logo } from '../components/shell/components/KapetaLogo';
 import { kapetaLight } from '../Theme';
-import { useState } from 'react';
 
 interface LoginResult {
     success: boolean;
@@ -19,22 +19,22 @@ export const LoginScreen = (props: Props) => {
 
     return (
         <Stack
-            direction={'row'}
+            direction="row"
             sx={{
                 '-webkit-app-region': 'drag',
                 cursor: 'move',
             }}
-            justifyContent={'center'}
-            width={'100%'}
-            height={'100%'}
-            alignItems={'center'}
+            justifyContent="center"
+            width="100%"
+            height="100%"
+            alignItems="center"
         >
             <ThemeProvider theme={kapetaLight}>
                 <Box>
-                    <Stack direction={'column'} gap={4} alignItems={'center'}>
+                    <Stack direction="column" gap={4} alignItems="center">
                         <Logo width={120} />
                         <Typography
-                            variant={'h1'}
+                            variant="h1"
                             sx={{
                                 fontWeight: 400,
                                 fontSize: '48px',
@@ -42,13 +42,13 @@ export const LoginScreen = (props: Props) => {
                         >
                             Log in to Kapeta
                         </Typography>
-                        <Box position={'relative'}>
+                        <Box position="relative">
                             <Button
                                 sx={{
                                     '-webkit-app-region': 'no-drag',
                                 }}
                                 variant={loggingIn ? 'outlined' : 'contained'}
-                                size={'large'}
+                                size="large"
                                 onClick={async () => {
                                     setLoggingIn(true);
                                     setError(undefined);
@@ -74,25 +74,26 @@ export const LoginScreen = (props: Props) => {
                             </Button>
                             {error && (
                                 <Typography
-                                    textAlign={'center'}
-                                    component={'p'}
-                                    variant={'caption'}
-                                    color={'error.main'}
+                                    textAlign="center"
+                                    component="p"
+                                    variant="caption"
+                                    color="error.main"
                                     mt={1}
                                 >
                                     {error}
                                 </Typography>
                             )}
                         </Box>
-                        <Typography variant={'caption'}>
+                        <Typography variant="caption">
                             No account?{' '}
                             <a
-                                target={'_blank'}
+                                target="_blank"
                                 style={{
-                                    //@ts-ignore
+                                    // @ts-ignore
                                     '-webkit-app-region': 'no-drag',
                                 }}
-                                href={'https://app.kapeta.com/signup'}
+                                href="https://app.kapeta.com/signup"
+                                rel="noreferrer"
                             >
                                 Create one
                             </a>

@@ -1,6 +1,6 @@
 import { InstallerService } from '@kapeta/ui-web-components';
-import { onAssetChanged } from '../hooks/assetHooks';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
+import { onAssetChanged } from '../hooks/assetHooks';
 import { AssetService } from './AssetService';
 
 export const installerService: InstallerService = {

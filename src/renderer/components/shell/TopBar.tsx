@@ -78,7 +78,6 @@ interface TopBarProps {
 
 export const TopBar = withTheme((props: TopBarProps) => {
     const [notificationMenuAnchor, setNotificationMenuAnchor] = useState<null | HTMLElement>(null);
-
     const [notifications, setNotifications] = useState(props.notifications ?? []);
 
     useEffect(() => {

@@ -20,24 +20,6 @@ interface ContextPickerProps {
     onOpen?: () => void;
 }
 
-const toInitials = (name: string) => {
-    if (!name) {
-        return '';
-    }
-
-    if (name.length < 3) {
-        return name;
-    }
-    const parts = name.trim().split(/\s+/);
-    if (parts.length < 2) {
-        return parts[0].substring(0, 2).toUpperCase();
-    }
-
-    const firstPart = parts[0];
-    const lastPart = parts[parts.length - 1];
-    return (firstPart[0] + lastPart[0]).toUpperCase();
-};
-
 const LightMenu = withTheme(Menu, 'light');
 
 export const ContextPicker = (props: ContextPickerProps) => {
@@ -124,7 +106,7 @@ export const ContextPicker = (props: ContextPickerProps) => {
                     {userContext?.current ? <Check sx={{ pl: 1 }} /> : null}
                 </ListItemButton>
 
-                <ListItemButton href={`/settings`} onClick={close}>
+                <ListItemButton href="/settings" onClick={close}>
                     <ListItemIcon />
                     <ListItemText primary="Settings" />
                 </ListItemButton>

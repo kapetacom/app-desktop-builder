@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 
-import { ListItemIcon, ListItemText, styled, Divider, IconButton, Box, Stack, Button } from '@mui/material';
+import { ListItemIcon, ListItemText, Divider, IconButton } from '@mui/material';
 import { useMatches } from 'react-router-dom';
 import './MainLayout.less';
+import { Identity, MemberIdentity } from '@kapeta/ui-web-types';
 import { Context, MenuSection } from './types/shell';
 import { MiniDrawer } from './components/MiniDrawer';
 import { ContextPicker } from './components/ContextPicker';
@@ -10,27 +11,12 @@ import { KapetaIcon } from './components/KapetaIcon';
 import { Logo } from './components/KapetaLogo';
 import { SidebarList, SidebarListItem, SidebarListItemButton } from './components/SidebarMenu';
 import { CustomIcon } from './components/CustomIcon';
-import { Identity, MemberIdentity } from '@kapeta/ui-web-types';
 import { BlockhubShell } from './components/BlockhubShell';
 import { useKapetaContext } from '../../hooks/contextHook';
 import { NavigationButtons } from './NavigationButtons';
 
-interface ConsoleLocation {
-    pathname: string;
-}
-
-const DrawerHeader = styled('div')(({ theme }) => ({
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'stretch',
-    borderBottom: `1px solid ${theme.palette.divider}`,
-    // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
-}));
-
 interface Props {
     menu: MenuSection[];
-    location: ConsoleLocation;
     context?: {
         identity?: Identity;
         contexts?: Context[];

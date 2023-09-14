@@ -5,12 +5,12 @@ import { IBlockTypeProvider, ILanguageTargetProvider, IResourceTypeProvider, Sch
 import { useEffect, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { BlockDefinition, Plan, Resource } from '@kapeta/schemas';
-import Kapeta from '../kapeta';
-import { useLocalAssets } from '../hooks/assetHooks';
 import { AssetInfo, fromAsset, fromAssetDisplay } from '@kapeta/ui-web-plan-editor';
-import { assetFetcher } from '../api/APIService';
 import { clusterPath } from 'renderer/api/ClusterConfig';
 import { BlockService } from 'renderer/api/BlockService';
+import Kapeta from '../kapeta';
+import { useLocalAssets } from '../hooks/assetHooks';
+import { assetFetcher } from '../api/APIService';
 
 type PromiseCache<T = void> = { [key: string]: Promise<T> };
 const PROVIDER_CACHE: PromiseCache = {};
@@ -72,26 +72,24 @@ const registerMissing = () => {
 };
 
 const loadProvider = async (providerKind: string): Promise<void> => {
-    return new Promise(async (resolve) => {
+    return (async () => {
         try {
             const uri = parseKapetaUri(providerKind);
             const path = `/providers/asset/${uri.handle}/${uri.name}/${uri.version}/web.js`;
             const scriptElm = document.createElement('script');
             scriptElm.setAttribute('src', clusterPath(path));
-            const loaderPromise = new Promise((scriptResolve) => {
-                scriptElm.addEventListener('load', scriptResolve);
-                scriptElm.addEventListener('error', scriptResolve);
+            const loaderPromise = new Promise((resolve) => {
+                scriptElm.addEventListener('load', resolve);
+                scriptElm.addEventListener('error', resolve);
             });
             document.body.appendChild(scriptElm);
             // eslint-disable-next-line no-await-in-loop
             await loaderPromise;
-            const result = registerMissing();
+            registerMissing();
         } catch (e) {
             console.warn('Failed to load provider', providerKind, e);
-        } finally {
-            resolve();
         }
-    });
+    })();
 };
 
 const fetchLocalProviders = () => {
@@ -125,7 +123,7 @@ export const useLoadedPlanContext = (plan: Plan | undefined) => {
     const missingData = !plan || !localAssetsResult.data || !localBlocks;
     const results = useAsync(async () => {
         if (missingData) {
-            return;
+            return undefined;
         }
         const providerRefs = new Set<string>();
         const blockDefinitionRefs = new Set<string>();
@@ -144,9 +142,9 @@ export const useLoadedPlanContext = (plan: Plan | undefined) => {
             blockDefinitionRefs.add(asset.ref);
         });
 
-        const blockDefinitionPromises = Array.from(blockDefinitionRefs).map(async (blockRef) => {
-            const blockUri = parseKapetaUri(blockRef);
-            blockRef = normalizeKapetaUri(blockRef);
+        const blockDefinitionPromises = Array.from(blockDefinitionRefs).map(async (blockRefX) => {
+            const blockUri = parseKapetaUri(blockRefX);
+            const blockRef = normalizeKapetaUri(blockRefX);
 
             let localBlock = localBlocks?.find((asset) => parseKapetaUri(asset.ref).equals(blockUri));
 
@@ -158,7 +156,7 @@ export const useLoadedPlanContext = (plan: Plan | undefined) => {
                 return BLOCK_CACHE[blockRef];
             }
 
-            return (BLOCK_CACHE[blockRef] = new Promise<AssetInfo<BlockDefinition> | null>(async (resolve) => {
+            BLOCK_CACHE[blockRef] = (async () => {
                 try {
                     const block =
                         blockUri.version === 'local'
@@ -167,8 +165,7 @@ export const useLoadedPlanContext = (plan: Plan | undefined) => {
                     setCurrentlyLoading(blockRef);
 
                     if (!block) {
-                        resolve(null);
-                        return;
+                        return null;
                     }
 
                     providerRefs.add(block.content.kind);
@@ -180,18 +177,19 @@ export const useLoadedPlanContext = (plan: Plan | undefined) => {
                     if (block.content.spec?.target?.kind) {
                         providerRefs.add(block.content.spec.target.kind);
                     }
-                    resolve(block);
+                    return block;
                 } catch (e) {
-                    resolve(null);
                     console.warn('Failed to load block', blockRef, e);
+                    return null;
                 }
-            }));
+            })();
+            return BLOCK_CACHE[blockRef];
         });
 
         const allBlocks = await Promise.all(blockDefinitionPromises);
 
-        const providerPromises = Array.from(providerRefs).map(async (ref) => {
-            ref = normalizeKapetaUri(ref);
+        const providerPromises = Array.from(providerRefs).map(async (refX) => {
+            const ref = normalizeKapetaUri(refX);
             if (ref in PROVIDER_CACHE) {
                 return PROVIDER_CACHE[ref];
             }

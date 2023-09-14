@@ -1,9 +1,9 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
-import { usePlans } from './assetHooks';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { MainTabs, TabInfo, TabOptions } from './types';
 import { MemberIdentity } from '@kapeta/ui-web-types';
-import { KapetaContext, useKapetaContext } from './contextHook';
+import { usePlans } from './assetHooks';
+import { MainTabs, TabInfo, TabOptions } from './types';
+import { useKapetaContext } from './contextHook';
 
 const TAB_LOCAL_STORAGE = '$main_tabs';
 export const DEFAULT_TAB_PATH = '/edit';
@@ -11,16 +11,15 @@ export const DEFAULT_TITLE = 'My Plans';
 
 export function normalizeUrl(url: string) {
     if (url.startsWith('/settings')) {
-        url = '/settings';
+        return '/settings';
     }
 
     if (url.startsWith('/organizations')) {
-        const handle = /\/organizations\/([^\/]+)/.exec(url)?.[1];
+        const handle = /\/organizations\/([^/]+)/.exec(url)?.[1];
         if (handle) {
-            url = `/organizations/${handle}`;
-        } else {
-            url = '/organizations';
+            return `/organizations/${handle}`;
         }
+        return '/organizations';
     }
     return url;
 }
@@ -32,20 +31,23 @@ function isContextSensitive(path: string) {
     return path.startsWith('/deployments') && path !== '/deployments';
 }
 
+const noop = () => {
+    // do nothing
+};
 export const MainTabsContext = createContext<MainTabs>({
     active: [],
     current: {
         path: '',
     },
-    close: () => {},
-    open: () => {},
-    setTitle: () => {},
-    setContext: () => {},
+    close: noop,
+    open: noop,
+    setTitle: noop,
+    setContext: noop,
 });
 
 export const MainTabsContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
     const kapetaContext = useKapetaContext();
-    const mainTabsContext = createMainTabsContext(kapetaContext.activeContext);
+    const mainTabsContext = useCreateMainTabContext(kapetaContext.activeContext);
 
     return <MainTabsContext.Provider value={mainTabsContext}>{children}</MainTabsContext.Provider>;
 };
@@ -54,44 +56,47 @@ export const useMainTabs = () => {
     return useContext(MainTabsContext);
 };
 
-const createMainTabsContext = (context?: MemberIdentity): MainTabs => {
+const useCreateMainTabContext = (context?: MemberIdentity): MainTabs => {
     const location = useLocation();
     const navigate = useNavigate();
     const planAssets = usePlans();
 
-    const tabFilter = (tabInfo: TabInfo) => {
-        if (tabInfo.path.startsWith('/edit')) {
-            // If it is an editor tab:
-            if (/\/edit\/(.+)/.test(tabInfo.path)) {
-                // Open plan
-                if (planAssets.loading) {
-                    // We dont know yet if the plan exists, so we'll keep the tab open
+    const tabFilter = useCallback(
+        (tabInfo: TabInfo) => {
+            if (tabInfo.path.startsWith('/edit')) {
+                // If it is an editor tab:
+                if (/\/edit\/(.+)/.test(tabInfo.path)) {
+                    // Open plan
+                    if (planAssets.loading) {
+                        // We dont know yet if the plan exists, so we'll keep the tab open
+                        return true;
+                    }
+                    const ref = decodeURIComponent(/\/edit\/(.+)/.exec(tabInfo.path)?.[1] ?? '');
+                    const plan = planAssets.data?.find((a) => a.ref === ref);
+                    if (!plan) {
+                        return false;
+                    }
                     return true;
-                }
-                const ref = decodeURIComponent(/\/edit\/(.+)/.exec(tabInfo.path)?.[1] ?? '');
-                const plan = planAssets.data?.find((a) => a.ref === ref);
-                if (!plan) {
-                    return false;
                 }
                 return true;
             }
-            return true;
-        }
 
-        if (tabInfo.path.startsWith('/deployments')) {
-            return true;
-        }
+            if (tabInfo.path.startsWith('/deployments')) {
+                return true;
+            }
 
-        if (tabInfo.path.startsWith('/settings')) {
-            return true;
-        }
+            if (tabInfo.path.startsWith('/settings')) {
+                return true;
+            }
 
-        if (tabInfo.path.startsWith('/organizations')) {
-            return true;
-        }
+            if (tabInfo.path.startsWith('/organizations')) {
+                return true;
+            }
 
-        return false;
-    };
+            return false;
+        },
+        [planAssets.loading, planAssets.data]
+    );
 
     const [tabs, setTabs] = useState<TabInfo[]>(
         localStorage.getItem(TAB_LOCAL_STORAGE)
@@ -110,7 +115,7 @@ const createMainTabsContext = (context?: MemberIdentity): MainTabs => {
         }
         // save to local storage
         localStorage.setItem(TAB_LOCAL_STORAGE, JSON.stringify(tabs.filter(tabFilter)));
-    }, [tabs, planAssets.loading]);
+    }, [tabs, planAssets.loading, tabFilter]);
 
     const openTab = useCallback(
         (path = DEFAULT_TAB_PATH, opts: TabOptions = {}) => {
@@ -141,7 +146,7 @@ const createMainTabsContext = (context?: MemberIdentity): MainTabs => {
                 navigate(path);
             }
         },
-        [setTabs, navigate, context, DEFAULT_TAB_PATH]
+        [setTabs, navigate, context]
     );
 
     const closeTab = useCallback(
@@ -174,7 +179,7 @@ const createMainTabsContext = (context?: MemberIdentity): MainTabs => {
                 return newTabState;
             });
         },
-        [location.pathname, tabs]
+        [location.pathname, navigate]
     );
 
     // listen for tab events from main process
@@ -231,9 +236,9 @@ const createMainTabsContext = (context?: MemberIdentity): MainTabs => {
         open: openTab,
         close: closeTab,
         setContext: (path: string, contextId: string | undefined) => {
-            path = normalizeUrl(path);
+            const normalizedPath = normalizeUrl(path);
             setTabs((tabState) => {
-                const i = tabState.findIndex((tab) => tab.path === path);
+                const i = tabState.findIndex((tab) => tab.path === normalizedPath);
                 if (i > -1) {
                     tabState[i] = { ...tabState[i], contextId };
                     return [...tabState];
@@ -242,9 +247,9 @@ const createMainTabsContext = (context?: MemberIdentity): MainTabs => {
             });
         },
         setTitle: (path: string, title: string) => {
-            path = normalizeUrl(path);
+            const normalizedPath = normalizeUrl(path);
             setTabs((tabState) => {
-                const i = tabState.findIndex((tab) => tab.path === path);
+                const i = tabState.findIndex((tab) => tab.path === normalizedPath);
                 if (i > -1) {
                     tabState[i] = { ...tabState[i], title };
                     return [...tabState];

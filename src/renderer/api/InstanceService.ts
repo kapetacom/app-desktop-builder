@@ -1,6 +1,6 @@
+import { BlockStatusListener, InstanceEventType, simpleFetch } from '@kapeta/ui-web-context';
 import { SocketService } from './SocketService';
 import { clusterPath } from './ClusterConfig';
-import { BlockStatusListener, InstanceEventType, PlanStatusListener, simpleFetch } from '@kapeta/ui-web-context';
 
 class InstanceServiceImpl {
     public subscribeForLogs(
@@ -15,7 +15,7 @@ class InstanceServiceImpl {
                 return;
             }
 
-            return handler(evt.payload);
+            handler(evt.payload);
         };
 
         SocketService.joinRoom(contextId);

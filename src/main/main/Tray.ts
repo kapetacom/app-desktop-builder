@@ -1,16 +1,14 @@
 import { app, Menu, MenuItemConstructorOptions, shell, Tray, nativeTheme } from 'electron';
-import { ExtendedIdentity, KapetaAPI, Membership } from '@kapeta/nodejs-api-client';
-import { createFuture, getAssetPath, showError, showInfo, appVersion } from '../helpers';
+import { getAssetPath, appVersion } from '../helpers';
 import { ClusterService } from '../services/ClusterService';
-import { MainWindow } from './MainWindow';
+import type { MainWindow } from './MainWindow';
 import { ModalProcessing } from '../modals/ModalProcessing';
 
 import MenuItem = Electron.MenuItem;
-import { MemberIdentity } from '@kapeta/ui-web-types';
 
 type TrayMenuItem = MenuItemConstructorOptions | MenuItem;
 
-//Always use system theme
+// Always use system theme
 nativeTheme.themeSource = 'system';
 
 const getTrayIcon = () => {
@@ -25,8 +23,11 @@ const getTrayIcon = () => {
 
 export class TrayWrapper {
     private tray: Tray;
+
     private mainWindow: MainWindow;
+
     private processingModal: ModalProcessing;
+
     private clusterService: ClusterService;
 
     constructor(mainWindow: MainWindow, clusterService: ClusterService) {
@@ -54,7 +55,7 @@ export class TrayWrapper {
             },
             { type: 'separator' },
             {
-                label: 'Version: ' + appVersion(),
+                label: `Version: ${appVersion()}`,
                 enabled: false,
                 type: 'normal',
             },

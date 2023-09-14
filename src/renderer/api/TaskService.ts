@@ -1,6 +1,6 @@
+import { simpleFetch, Task, TaskStore } from '@kapeta/ui-web-context';
 import { SocketService } from './SocketService';
 import { clusterPath } from './ClusterConfig';
-import { simpleFetch, Task, TaskStore } from '@kapeta/ui-web-context';
 
 export const EVENT_TASK_UPDATED = 'task-updated';
 export const EVENT_TASK_ADDED = 'task-added';

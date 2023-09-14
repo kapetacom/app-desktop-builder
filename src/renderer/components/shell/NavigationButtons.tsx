@@ -4,7 +4,7 @@ import { useLocation, useNavigate, Location, useNavigationType } from 'react-rou
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import ArrowForward from '@mui/icons-material/ArrowForward';
 
-export const NavigationButtons = (props) => {
+export const NavigationButtons = () => {
     const location = useLocation();
     const navigationType = useNavigationType();
     const navigate = useNavigate();
@@ -48,8 +48,8 @@ export const NavigationButtons = (props) => {
 
     return (
         <Stack
-            direction={'row'}
-            justifyContent={'end'}
+            direction="row"
+            justifyContent="end"
             sx={{
                 height: '40px',
                 marginTop: '-40px',

@@ -94,7 +94,7 @@ export const usePlanEditorActions = (
                     enabled(): boolean {
                         return true; // planner.mode !== PlannerMode.VIEW;
                     },
-                    onClick(context, { block, blockInstance }) {
+                    onClick(_context, { block, blockInstance }) {
                         handlers.inspect({
                             type: DataEntityType.INSTANCE,
                             item: {
@@ -125,14 +125,14 @@ export const usePlanEditorActions = (
                     label: 'Delete',
                 },
                 {
-                    enabled(context, { blockInstance }): boolean {
+                    enabled(_context, { blockInstance }): boolean {
                         return (
                             planner.mode === PlannerMode.EDIT &&
                             !!blockInstance &&
                             parseKapetaUri(blockInstance.block.ref).version === 'local'
                         );
                     },
-                    onClick(context, { blockInstance, block }) {
+                    onClick(_context, { blockInstance, block }) {
                         handlers.edit({
                             type: DataEntityType.INSTANCE,
                             item: {
@@ -150,7 +150,7 @@ export const usePlanEditorActions = (
                     enabled(context): boolean {
                         return context.mode === PlannerMode.CONFIGURATION || context.mode === PlannerMode.EDIT;
                     },
-                    onClick(context, { blockInstance, block }) {
+                    onClick(_context, { blockInstance, block }) {
                         handlers.configure({
                             type: DataEntityType.INSTANCE,
                             item: {
@@ -178,21 +178,21 @@ export const usePlanEditorActions = (
                             await InstanceService.startInstance(context.uri?.id, blockInstance.id);
                         }
                     },
-                    buttonStyle(context, { blockInstance }): ButtonStyle {
+                    buttonStyle(_context, { blockInstance }): ButtonStyle {
                         const info = instanceInfos.find((ix) => ix.instanceId === blockInstance?.id);
                         if (isRunning(info?.status)) {
                             return ButtonStyle.DANGER;
                         }
                         return ButtonStyle.PRIMARY;
                     },
-                    icon(context, { blockInstance }): string {
+                    icon(_context, { blockInstance }): string {
                         const info = instanceInfos.find((ix) => ix.instanceId === blockInstance?.id);
                         if (isRunning(info?.status)) {
                             return 'fa fa-stop';
                         }
                         return 'fa fa-play';
                     },
-                    label(context, { blockInstance }): string {
+                    label(_context, { blockInstance }): string {
                         const info = instanceInfos.find((ix) => ix.instanceId === blockInstance?.id);
                         if (isRunning(info?.status)) {
                             return 'Stop';
@@ -201,7 +201,7 @@ export const usePlanEditorActions = (
                     },
                 },
                 {
-                    enabled(context, { blockInstance }): boolean {
+                    enabled(_context, { blockInstance }): boolean {
                         const info = instanceInfos.find((ix) => ix.instanceId === blockInstance?.id);
                         if (!info?.address) {
                             return false;
@@ -209,7 +209,7 @@ export const usePlanEditorActions = (
 
                         return isRunning(info.status);
                     },
-                    onClick(context, { blockInstance }) {
+                    onClick(_context, { blockInstance }) {
                         const info = instanceInfos.find((ix) => ix.instanceId === blockInstance?.id);
                         if (!info?.address) {
                             return;
@@ -223,14 +223,14 @@ export const usePlanEditorActions = (
             ],
             resource: [
                 {
-                    enabled(context, { blockInstance }): boolean {
+                    enabled(_context, { blockInstance }): boolean {
                         return (
                             planner.mode !== PlannerMode.VIEW &&
                             !!blockInstance &&
                             parseKapetaUri(blockInstance.block.ref).version === 'local'
                         );
                     },
-                    onClick(p, { resource, block, blockInstance }) {
+                    onClick(_context, { resource, block, blockInstance }) {
                         handlers.edit({
                             type: DataEntityType.RESOURCE,
                             item: {
@@ -246,7 +246,7 @@ export const usePlanEditorActions = (
                     label: 'Edit',
                 },
                 {
-                    enabled(context, { blockInstance }): boolean {
+                    enabled(_context, { blockInstance }): boolean {
                         return (
                             planner.mode !== PlannerMode.VIEW &&
                             !!blockInstance &&
@@ -269,10 +269,10 @@ export const usePlanEditorActions = (
             ],
             connection: [
                 {
-                    enabled(context): boolean {
+                    enabled(): boolean {
                         return planner.mode === PlannerMode.EDIT;
                     },
-                    async onClick(context, { connection }) {
+                    async onClick(_context, { connection }) {
                         const from = planner.getResourceByBlockIdAndName(
                             connection!.provider.blockId,
                             connection!.provider.resourceName,
@@ -298,7 +298,7 @@ export const usePlanEditorActions = (
                     label: 'Delete',
                 },
                 {
-                    enabled(context, actionContext): boolean {
+                    enabled(_context, actionContext): boolean {
                         if (planner.mode !== PlannerMode.EDIT) {
                             return false;
                         }
@@ -312,7 +312,7 @@ export const usePlanEditorActions = (
 
                         return !!(converter && converter.mappingComponentType);
                     },
-                    onClick(context, { connection }) {
+                    onClick(_context, { connection }) {
                         if (connection) {
                             handlers.edit({
                                 type: DataEntityType.CONNECTION,
@@ -336,7 +336,7 @@ export const usePlanEditorActions = (
 
                         return !!(converter && converter.inspectComponentType);
                     },
-                    onClick(context, { connection }) {
+                    onClick(_context, { connection }) {
                         if (connection) {
                             handlers.inspect({
                                 type: DataEntityType.CONNECTION,
@@ -350,5 +350,5 @@ export const usePlanEditorActions = (
                 },
             ],
         } satisfies PlannerActionConfig;
-    }, [planner, handlers, instanceInfos]);
+    }, [planner, handlers, instanceInfos, showDelete]);
 };

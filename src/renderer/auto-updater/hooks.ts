@@ -1,7 +1,7 @@
-import { useNotificationEmitter } from '../hooks/useNotifications';
-import { StateNotificationType } from '../components/shell/types';
 import { useEffect } from 'react';
 import { showToasty, ToastType, useConfirm } from '@kapeta/ui-web-components';
+import { useNotificationEmitter } from 'renderer/hooks/useNotifications';
+import { StateNotificationType } from '../components/shell/types';
 
 interface AutoUpdateResult {
     state: 'AVAILABLE' | 'NOT_AVAILABLE' | 'FAILED';
@@ -61,7 +61,7 @@ export const useAutoUpdater = () => {
                     case 'error':
                         showToasty({
                             type: ToastType.DANGER,
-                            message: message,
+                            message,
                             title: 'Update failed',
                         });
                         break;
@@ -69,19 +69,18 @@ export const useAutoUpdater = () => {
                     case 'info':
                         showToasty({
                             type: ToastType.SUCCESS,
-                            message: message,
+                            message,
                             title: 'No updates available',
                         });
                         break;
                 }
                 notificationEmitter({
                     id: 'auto-updater',
-                    type: type,
+                    type,
                     timestamp: Date.now(),
                     message,
                     read: false,
                 });
-                return;
             }
         };
 
@@ -104,7 +103,7 @@ export const useAutoUpdater = () => {
                                 `Update installed: ${evt.data?.nextVersion}. Restart to apply the update.`,
                                 evt.initiatedByUser
                             );
-                            await showUpdateInstalled(evt.data?.nextVersion!);
+                            await showUpdateInstalled(evt.data?.nextVersion || 'Unknown');
                             break;
                         case 'NOT_AVAILABLE':
                             showStatus(
@@ -122,5 +121,5 @@ export const useAutoUpdater = () => {
         };
 
         return window.electron.ipcRenderer.on(CHANNEL, handler);
-    }, []);
+    }, [confirm, notificationEmitter]);
 };

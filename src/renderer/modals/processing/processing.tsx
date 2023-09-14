@@ -2,10 +2,10 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import '../../index.less';
 
-import { ProcessingContent } from './ProcessingContent';
-import { kapetaLight } from '../../Theme';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { MemoryRouter } from 'react-router-dom';
+import { ProcessingContent } from './ProcessingContent';
+import { kapetaLight } from '../../Theme';
 
 const root = createRoot(document.getElementById('root')!);
 
@@ -22,9 +22,6 @@ function render(state: State) {
             <CssBaseline />
             <ThemeProvider theme={kapetaLight}>
                 <ProcessingContent
-                    onLinkOpen={async (url) => {
-                        window.open(url);
-                    }}
                     title={state.title ?? null}
                     text={state.text ?? null}
                     linkText={state.linkText ?? null}

@@ -1,7 +1,9 @@
+/* eslint-disable global-require */
+/* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint import/prefer-default-export: off */
 import { URL } from 'url';
 import path from 'path';
-import { session, app, BrowserWindow, ipcMain, shell, dialog, nativeImage } from 'electron';
+import { session, app, BrowserWindow, ipcMain, shell, dialog } from 'electron';
 import packageJson from '../../package.json';
 
 import MessageBoxOptions = Electron.MessageBoxOptions;
@@ -82,7 +84,7 @@ export const installExtensions = async () => {
 };
 
 export const WindowOpenHandler = (edata: Electron.HandlerDetails): { action: 'deny' | 'allow' } => {
-    if (/^https:\/\/[a-z\.]+\.pendo\.io\//i.test(edata.url)) {
+    if (/^https:\/\/[a-z.]+\.pendo\.io\//i.test(edata.url)) {
         // Allow Pendo to open within electron
         return { action: 'allow' };
     }
@@ -102,10 +104,11 @@ export function resolveHtmlPath(htmlFileName: string) {
 }
 
 export function createFuture() {
-    let resolve, reject;
-    const promise = new Promise((res, rej) => {
-        resolve = res;
-        reject = rej;
+    let resolve;
+    let reject;
+    const promise = new Promise((_resolve, _reject) => {
+        resolve = _resolve;
+        reject = _reject;
     });
     return { promise, resolve, reject };
 }

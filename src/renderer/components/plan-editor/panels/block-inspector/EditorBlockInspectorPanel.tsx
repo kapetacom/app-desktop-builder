@@ -5,8 +5,8 @@ import { BlockInspectorPanel } from '@kapeta/ui-web-plan-editor';
 import { useAsync } from 'react-use';
 
 import { BlockInstance } from '@kapeta/schemas';
-import { getInstanceConfig } from '../../../../api/LocalConfigService';
 import { InstanceService } from 'renderer/api/InstanceService';
+import { getInstanceConfig } from '../../../../api/LocalConfigService';
 
 interface Props {
     systemId: string;

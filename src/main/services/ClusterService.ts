@@ -13,12 +13,13 @@ export interface ClusterInfo {
 }
 
 const SERVICE_FILE = app.isPackaged
-    ? Path.resolve(__dirname, '../service/index.js') //Relative to main.js - the entry point of the app
+    ? Path.resolve(__dirname, '../service/index.js') // Relative to main.js - the entry point of the app
     : Path.resolve(__dirname, '../../service/index.js');
 
 export class ClusterService extends EventEmitter {
     private info: ClusterInfo | null = null;
-    private stoppedIntentionally: boolean = false;
+
+    private stoppedIntentionally = false;
 
     constructor() {
         super();
@@ -38,7 +39,7 @@ export class ClusterService extends EventEmitter {
         }
 
         return new Promise((resolve, reject) => {
-            request.get(clusterAddress + '/status', (err, res, body) => {
+            request.get(`${clusterAddress}/status`, (err, res, body) => {
                 if (err) {
                     reject(err);
                     return;
@@ -53,7 +54,7 @@ export class ClusterService extends EventEmitter {
 
                 resolve({
                     host: ClusterConfiguration.getClusterServiceHost(),
-                    port: parseInt(ClusterConfiguration.getClusterServicePort()),
+                    port: parseInt(ClusterConfiguration.getClusterServicePort(), 10),
                     dockerStatus: status.dockerStatus,
                 });
             });

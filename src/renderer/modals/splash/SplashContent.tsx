@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
-import { Paper, Alert, Typography, Button } from '@mui/material';
+import { Paper, Typography, Button } from '@mui/material';
 import LogoSquareDark from '../../../../assets/logo_square_dark.svg';
 import LogoTextWhite from '../../../../assets/logo_text_white.svg';
 import ImageRocket from '../../../../assets/images/rocket.png';
 import { isMac } from '../../utils/osUtils';
+
 export enum SplashStatusCheck {
     LOADING = 'LOADING',
     OK = 'OK',
@@ -15,9 +16,9 @@ export const SplashStatusIcon = (props: { status: SplashStatusCheck | null }) =>
         return null;
     }
     return {
-        [SplashStatusCheck.LOADING]: <i className="fas fa-circle-notch fa-spin"></i>,
-        [SplashStatusCheck.OK]: <i className="fas fa-check"></i>,
-        [SplashStatusCheck.ERROR]: <i className="fal fa-exclamation-circle"></i>,
+        [SplashStatusCheck.LOADING]: <i className="fas fa-circle-notch fa-spin" />,
+        [SplashStatusCheck.OK]: <i className="fas fa-check" />,
+        [SplashStatusCheck.ERROR]: <i className="fal fa-exclamation-circle" />,
     }[props.status];
 };
 
@@ -60,7 +61,7 @@ export const SplashContent = (props: Props) => {
 
     useEffect(() => {
         if (okCount === TOTAL_STEPS) {
-            props.onDone && props.onDone();
+            props.onDone && props.onDone.call(null);
         }
     }, [okCount, props.onDone]);
 
@@ -80,30 +81,31 @@ export const SplashContent = (props: Props) => {
         ) {
             text = 'Failed...';
         }
-    } else {
-        if (props.npmStatus === SplashStatusCheck.LOADING) {
-            text = 'Checking npm...';
-        } else if (props.dockerStatus === SplashStatusCheck.LOADING) {
-            text = 'Checking docker...';
-        } else if (props.localClusterStatus === SplashStatusCheck.LOADING) {
-            text = 'Starting cluster...';
-        }
+    } else if (props.npmStatus === SplashStatusCheck.LOADING) {
+        text = 'Checking npm...';
+    } else if (props.dockerStatus === SplashStatusCheck.LOADING) {
+        text = 'Checking docker...';
+    } else if (props.localClusterStatus === SplashStatusCheck.LOADING) {
+        text = 'Starting cluster...';
     }
 
     useEffect(() => {
-        if (minProgress > progress) {
-            setProgress((prevState) => minProgress);
-        }
+        setProgress((prevProgress) => Math.max(minProgress, prevProgress));
 
         if (done) {
-            return () => {};
+            return () => {
+                // noop
+            };
         }
 
         const timer = setInterval(() => {
-            setProgress((prevProgress) => (prevProgress >= 100 ? 100 : Math.max(minProgress, prevProgress + 5)));
-            if (progress >= 100) {
-                clearInterval(timer);
-            }
+            setProgress((prevProgress) => {
+                const value = prevProgress >= 100 ? 100 : Math.max(minProgress, prevProgress + 5);
+                if (value >= 100) {
+                    clearInterval(timer);
+                }
+                return value;
+            });
         }, 500);
 
         return () => {
@@ -111,7 +113,7 @@ export const SplashContent = (props: Props) => {
         };
     }, [done, minProgress, props.dockerStatus, props.localClusterStatus]);
 
-    //Windows can't do transparent modals
+    // Windows can't do transparent modals
     const borderRadius = isMac() ? '10px' : '0px';
     const elevation = isMac() ? 7 : 0;
 
@@ -234,9 +236,9 @@ export const SplashContent = (props: Props) => {
         >
             <div className="left">
                 <LogoSquareDark className="logo" />
-                <div className={'main-text'}>{text}</div>
-                <div className="status"></div>
-                <div className={'status-list'}>
+                <div className="main-text">{text}</div>
+                <div className="status" />
+                <div className="status-list">
                     <div>
                         <SplashStatusIcon status={props.dockerStatus} />
                         <span>
@@ -265,36 +267,36 @@ export const SplashContent = (props: Props) => {
             </div>
             <div className="right">
                 {hasError && (
-                    <div className={'errors'}>
+                    <div className="errors">
                         <Typography
-                            variant={'body2'}
+                            variant="body2"
                             sx={{
                                 fontSize: '13px',
                                 lineHeight: '18px',
                             }}
                         >
                             {props.localClusterStatus === SplashStatusCheck.ERROR && (
-                                <div className={'error-message'}>
-                                    <i className="fas fa-circle"></i>
+                                <div className="error-message">
+                                    <i className="fas fa-circle" />
                                     <span>Local cluster failed to start.</span>
                                 </div>
                             )}
                             {props.dockerStatus === SplashStatusCheck.ERROR && (
-                                <div className={'error-message'}>
-                                    <i className="fas fa-circle"></i>
+                                <div className="error-message">
+                                    <i className="fas fa-circle" />
                                     <span>Make sure docker is installed and running</span>
                                 </div>
                             )}
                             {props.npmStatus === SplashStatusCheck.ERROR && (
-                                <div className={'error-message'}>
-                                    <i className="fas fa-circle"></i>
+                                <div className="error-message">
+                                    <i className="fas fa-circle" />
                                     <span>Make sure NPM is installed</span>
                                 </div>
                             )}
                         </Typography>
-                        <div className={'buttons'}>
+                        <div className="buttons">
                             <Button
-                                size={'small'}
+                                size="small"
                                 sx={{
                                     marginRight: '5px',
                                     '&:hover': {
@@ -310,7 +312,7 @@ export const SplashContent = (props: Props) => {
                                 Quit
                             </Button>
                             <Button
-                                size={'small'}
+                                size="small"
                                 sx={{
                                     border: '1px solid rgba(255, 255, 255, 0.20)',
                                     '&:hover': {
@@ -322,7 +324,7 @@ export const SplashContent = (props: Props) => {
                                     props.onRetry();
                                 }}
                                 color="inherit"
-                                variant={'outlined'}
+                                variant="outlined"
                             >
                                 Try again
                             </Button>

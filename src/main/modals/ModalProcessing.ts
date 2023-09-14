@@ -1,6 +1,6 @@
 import { BrowserWindow } from 'electron';
-import { getPreloadScript, resolveHtmlPath, WindowOpenHandler } from '../helpers';
 import { EventEmitter } from 'node:events';
+import { getPreloadScript, resolveHtmlPath, WindowOpenHandler } from '../helpers';
 
 interface Props {
     title?: string;
@@ -12,10 +12,6 @@ interface Props {
 export class ModalProcessing extends EventEmitter {
     private win: BrowserWindow | null = null;
 
-    constructor() {
-        super();
-    }
-
     async open(parent: BrowserWindow | undefined, props: Props) {
         if (this.win) {
             this.setProps(props);
@@ -26,7 +22,7 @@ export class ModalProcessing extends EventEmitter {
             show: true,
             transparent: process.platform === 'darwin',
             alwaysOnTop: false,
-            parent: parent,
+            parent,
             width: 500,
             height: process.platform === 'darwin' ? 250 : 220,
             center: true,

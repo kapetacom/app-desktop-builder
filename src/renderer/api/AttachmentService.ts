@@ -22,7 +22,7 @@ export const uploadAttachment = async (
         method: 'PUT',
         headers: {
             'content-type': attachment.mimeType,
-            'content-length': attachment.data.length + '',
+            'content-length': `${attachment.data.length}`,
             'content-disposition': attachment.type,
         },
         body: attachment.data,

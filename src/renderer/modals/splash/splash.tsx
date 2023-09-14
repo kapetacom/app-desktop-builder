@@ -1,4 +1,4 @@
-import React from 'react';
+/* eslint-disable no-nested-ternary */
 import { createRoot } from 'react-dom/client';
 import { ThemeProvider } from '@mui/material';
 import '../../index.less';
@@ -34,7 +34,7 @@ function render(state: State) {
     );
 }
 
-window.electron.ipcRenderer.on('splash', ([eventType, data]) => {
+window.electron.ipcRenderer.on('splash', ([eventType, data]: [string, any]) => {
     if (eventType === 'changed') {
         render({
             localClusterStatus:

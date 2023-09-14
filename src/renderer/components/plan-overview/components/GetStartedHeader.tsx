@@ -1,11 +1,10 @@
-import React from 'react';
 import { Button, CircularProgress, Stack, Typography } from '@mui/material';
-import { CustomIcon } from '../../shell/components/CustomIcon';
 import AddIcon from '../../shell/components/icons/large/AddIcon.svg';
 import ImportIcon from '../../shell/components/icons/large/ImportIcon.svg';
 import BlockHubIcon from '../../shell/components/icons/large/BlockHubIcon.svg';
 import { useKapetaContext } from '../../../hooks/contextHook';
 import { AssetImporter } from '../../../utils/useAssetImporter';
+
 interface XLButtonProps {
     variant: 'edit' | 'blockhub' | 'import';
     label: string;
@@ -14,12 +13,12 @@ interface XLButtonProps {
 }
 
 const XLButton = (props: XLButtonProps) => {
-    let icon,
-        color = 'primary.contrastText',
-        bgColor,
-        bgColorHover,
-        border,
-        borderHover;
+    let icon;
+    let color = 'primary.contrastText';
+    let bgColor;
+    let bgColorHover;
+    let border;
+    let borderHover;
 
     switch (props.variant) {
         case 'blockhub':
@@ -48,7 +47,7 @@ const XLButton = (props: XLButtonProps) => {
 
     return (
         <Button
-            className={'xl-button'}
+            className="xl-button"
             onClick={props.onClick}
             sx={{
                 border,
@@ -58,7 +57,7 @@ const XLButton = (props: XLButtonProps) => {
                 padding: '20px 16px',
                 height: '110px',
                 bgcolor: bgColor,
-                color: color,
+                color,
                 textAlign: 'center',
 
                 '&:hover': {
@@ -69,7 +68,7 @@ const XLButton = (props: XLButtonProps) => {
             }}
         >
             {icon}
-            <Typography color={'inherit'}>{props.label}</Typography>
+            <Typography color="inherit">{props.label}</Typography>
         </Button>
     );
 };
@@ -85,17 +84,17 @@ export const GetStartedHeader = (props: Props) => {
 
     return (
         <Stack
-            direction={'column'}
+            direction="column"
             sx={{
                 pt: 2,
                 pb: 2,
             }}
         >
-            <Typography variant={'h6'} pb={2} pt={2}>
+            <Typography variant="h6" pb={2} pt={2}>
                 Get started
             </Typography>
             <Stack
-                direction={'row'}
+                direction="row"
                 sx={{
                     '.xl-button': {
                         flex: 1,
@@ -103,11 +102,11 @@ export const GetStartedHeader = (props: Props) => {
                     gap: 3,
                 }}
             >
-                <XLButton variant={'edit'} label={'New Plan'} onClick={props.onPlanCreate} />
-                <XLButton variant={'blockhub'} label={'Block Hub'} onClick={() => kapetaContext.blockHub.open()} />
+                <XLButton variant="edit" label="New Plan" onClick={props.onPlanCreate} />
+                <XLButton variant="blockhub" label="Block Hub" onClick={() => kapetaContext.blockHub.open()} />
                 <XLButton
-                    variant={'import'}
-                    label={'Import'}
+                    variant="import"
+                    label="Import"
                     processing={props.assetImporter.loading}
                     onClick={props.onPlanImport}
                 />

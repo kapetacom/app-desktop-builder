@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { Task, TaskStatus } from '@kapeta/ui-web-context';
 import { ListActions } from 'react-use/lib/useList';
-import { KapetaNotification } from '../../components/shell/types';
 import { useAsync } from 'react-use';
+import { KapetaNotification } from '../../components/shell/types';
 import { TaskService } from '../../api/TaskService';
 
 function createNotification(task: Task): KapetaNotification {
@@ -46,7 +46,7 @@ export const useBackgroundTasks = (notificationsHandler: ListActions<KapetaNotif
                 return a.id === b.id;
             }, createNotification(task));
         });
-    }, [tasks.value]);
+    }, [tasks.value, notificationsHandler]);
 
     useEffect(() => {
         const taskUpdated = (task: Task) => {

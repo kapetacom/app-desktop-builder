@@ -1,12 +1,12 @@
 import { useMemo, useState } from 'react';
 import { SectionFrameElement } from '@kapeta/web-microfrontend/src/browser/components/SectionFrameElement';
-import { useKapetaContext } from '../../hooks/contextHook';
-import { useAuthToken } from '../../utils/tokenHelper';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Box } from '@mui/material';
 import { SimpleLoader } from '@kapeta/ui-web-components';
-import { normalizeUrl, useMainTabs } from '../../hooks/mainTabs';
 import { FrameContextInfo } from '@kapeta/web-microfrontend/src/browser/components/FragmentContext';
+import { normalizeUrl, useMainTabs } from '../../hooks/mainTabs';
+import { useAuthToken } from '../../utils/tokenHelper';
+import { useKapetaContext } from '../../hooks/contextHook';
 
 interface Props {
     path: string;
@@ -20,7 +20,7 @@ export const RemoteFrame = (props: Props) => {
     const location = useLocation();
     const [ready, setReady] = useState(false);
 
-    const normalizedPath = normalizeUrl('/' + props.path);
+    const normalizedPath = normalizeUrl(`/${props.path}`);
     const currentTab = mainTabs.active.find((tab) => tab.path === normalizedPath);
 
     const frameContext = useMemo<FrameContextInfo | undefined>(() => {
@@ -53,18 +53,18 @@ export const RemoteFrame = (props: Props) => {
             access: context.activeContext.scopes,
             type: context.activeContext.identity.type,
         };
-    }, [currentTab, context.activeContext]);
+    }, [currentTab, context.activeContext, context.contexts?.memberships, context.profile]);
 
     const initialSrc = useMemo(() => {
         if (!token.value) {
             return undefined;
         }
         return `${props.baseUrl}/${props.path}?token=${token.value}`;
-    }, [token.value]);
+    }, [token.value, props.baseUrl, props.path]);
 
     const origin = useMemo(() => {
         return new URL(props.baseUrl).origin;
-    }, []);
+    }, [props.baseUrl]);
 
     const loading = !ready || context.loading || token.loading;
 

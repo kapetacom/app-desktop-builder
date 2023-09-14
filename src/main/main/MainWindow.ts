@@ -8,9 +8,13 @@ import { AutoUpdateHelper } from './AutoUpdateHelper';
 
 export class MainWindow {
     private _window: BrowserWindow | undefined = undefined;
+
     private tray: TrayWrapper;
+
     private dock: DockWrapper;
+
     private autoUpdater: AutoUpdateHelper;
+
     private clusterService: ClusterService;
 
     constructor(clusterService: ClusterService) {
@@ -134,7 +138,7 @@ export class MainWindow {
         if (this.isMinimized()) {
             this.restore();
         }
-        this.focus();
+        return this.focus();
     }
 
     isMinimized() {
