@@ -54,7 +54,7 @@ export const MainLayout = (props: Props) => {
         <>
             <section className="main-layout">
                 <MiniDrawer variant="permanent" open={drawerIsOpen}>
-                    <NavigationButtons />
+                    <NavigationButtons show={drawerIsOpen} />
 
                     <ContextPicker
                         contexts={props.context?.contexts || []}

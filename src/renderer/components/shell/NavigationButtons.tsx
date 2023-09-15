@@ -4,7 +4,11 @@ import { useLocation, useNavigate, Location, useNavigationType } from 'react-rou
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import ArrowForward from '@mui/icons-material/ArrowForward';
 
-export const NavigationButtons = (props) => {
+interface NavigationButtonsProps {
+    show: boolean;
+}
+
+export const NavigationButtons = (props: NavigationButtonsProps) => {
     const location = useLocation();
     const navigationType = useNavigationType();
     const navigate = useNavigate();
@@ -53,6 +57,7 @@ export const NavigationButtons = (props) => {
             sx={{
                 height: '40px',
                 marginTop: '-40px',
+                display: props.show ? 'flex' : 'none',
             }}
         >
             {/* Make the empty space draggable */}
