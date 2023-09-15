@@ -24,12 +24,10 @@ import {
 
 import './BlockConfigurationPanel.less';
 import { useAsyncFn } from 'react-use';
-import { getInstanceConfig, setInstanceConfig } from '../../../../api/LocalConfigService';
 import { Box, Button, Tab, Tabs } from '@mui/material';
+import { getInstanceConfig, setInstanceConfig } from '../../../../api/LocalConfigService';
 import { normalizeKapetaUri } from '../../../../utils/planContextLoader';
 import { getAssetTitle } from '../../helpers';
-
-type Options = { [key: string]: string };
 
 interface BlockConfigurationData {
     blockRef: string;
@@ -72,7 +70,7 @@ export const BlockConfigurationPanel = (props: Props) => {
         if (!props.instance?.block.ref) {
             return undefined;
         }
-        return planner.getBlockByRef(props.instance.block.ref);
+        return planner.getBlockByRef.call(null, props.instance.block.ref);
     }, [props.instance?.block.ref, planner.getBlockByRef]);
 
     const typeProvider = useMemo(() => {
@@ -197,8 +195,8 @@ export const BlockConfigurationPanel = (props: Props) => {
                             value={currentTab}
                             onChange={(evt, newTabId) => setCurrentTab(newTabId)}
                         >
-                            <Tab value={'general'} label="General" />
-                            {showConfigTab && <Tab value={'configuration'} label="Configuration" />}
+                            <Tab value="general" label="General" />
+                            {showConfigTab && <Tab value="configuration" label="Configuration" />}
                         </Tabs>
                         {currentTab === 'general' && (
                             <Box>
@@ -253,10 +251,10 @@ export const BlockConfigurationPanel = (props: Props) => {
                             ))}
 
                         <FormButtons>
-                            <Button variant={'contained'} color={'error'} onClick={props.onClosed}>
+                            <Button variant="contained" color="error" onClick={props.onClosed}>
                                 Cancel
                             </Button>
-                            <Button variant={'contained'} disabled={configReadOnly} color={'primary'} type="submit">
+                            <Button variant="contained" disabled={configReadOnly} color="primary" type="submit">
                                 Save
                             </Button>
                         </FormButtons>

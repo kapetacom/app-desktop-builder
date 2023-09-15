@@ -3,15 +3,15 @@ import React, { useMemo, useState } from 'react';
 import { AssetStore } from '@kapeta/ui-web-context';
 import { CoreTypes } from '@kapeta/ui-web-components';
 import { Plan } from '@kapeta/schemas';
+import { Box, Stack } from '@mui/material';
+import { AssetInfo, fromAsset } from '@kapeta/ui-web-plan-editor';
+import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import { GetStartedHeader } from './components/GetStartedHeader';
 import { SamplePlanSection } from './components/SamplePlanSection';
-import { Box, Stack } from '@mui/material';
 import { YourPlansList } from './components/YourPlansList';
 import { PlanCreator } from '../creators/PlanCreator';
 import { AssetCreatorState } from '../creators/AssetCreator';
-import { AssetInfo, fromAsset } from '@kapeta/ui-web-plan-editor';
 import { useAssetImporter } from '../../utils/useAssetImporter';
-import { parseKapetaUri } from '@kapeta/nodejs-utils';
 
 interface Props {
     plans: AssetInfo<Plan>[];
@@ -19,6 +19,8 @@ interface Props {
     assetService?: AssetStore;
     onPlanImported?: (plan: AssetInfo<Plan>) => void;
     onPlanAdded?: (plan: AssetInfo<Plan>) => void;
+    // TODO: implement
+    // eslint-disable-next-line react/no-unused-prop-types
     onPlanRemoved?: (plan: AssetInfo<Plan>) => void;
     onPlanSelected?: (plan: AssetInfo<Plan>) => void;
 }
@@ -44,19 +46,19 @@ export const PlanOverview = (props: Props) => {
     };
 
     const { plans, samplePlan } = useMemo(() => {
-        const samplePlan = props.plans.find((plan) => {
+        const samplePlanObj = props.plans.find((plan) => {
             return parseKapetaUri(plan.ref).fullName === props.samplePlanName;
         });
-        let plans;
-        if (samplePlan && props.plans.length === 1) {
-            plans = [];
+        let plansWithoutSample;
+        if (samplePlanObj && props.plans.length === 1) {
+            plansWithoutSample = [];
         } else {
-            plans = [...props.plans];
+            plansWithoutSample = [...props.plans];
         }
 
         return {
-            samplePlan,
-            plans,
+            samplePlan: samplePlanObj,
+            plans: plansWithoutSample,
         };
     }, [props.plans, props.samplePlanName]);
 
@@ -72,9 +74,9 @@ export const PlanOverview = (props: Props) => {
                 pr: 2,
             }}
         >
-            <Box sx={{ pt: '50px' }}></Box>
+            <Box sx={{ pt: '50px' }} />
             <Stack
-                direction={'column'}
+                direction="column"
                 sx={{
                     margin: '0 auto',
                     maxWidth: '1152px',
@@ -114,7 +116,7 @@ export const PlanOverview = (props: Props) => {
                     })}
                 />
             )}
-            <Box sx={{ pb: 4 }}></Box>
+            <Box sx={{ pb: 4 }} />
         </Box>
     );
 };

@@ -44,14 +44,15 @@ export const onAssetChanged = (callback: (evt: AssetChangedEvent) => void) => {
 };
 
 export const useAssetsChanged = (handler: (evt: AssetChangedEvent) => void, dependencies: any[]) => {
-    const callback = useCallback(handler, dependencies);
+    const callback = useCallback(handler, [handler, ...dependencies]);
 
     useEffect(() => {
         return onAssetChanged(callback);
     }, [callback]);
 };
 
-export const useLocalAssets = <T = SchemaKind>(...kinds: string[]): AssetListResult<T> => {
+const empty = [];
+export const useLocalAssets = <T = SchemaKind>(kinds: string[] = empty): AssetListResult<T> => {
     const [assets, setAssets] = useState<AssetInfo<T>[]>([]);
     const [loading, setLoading] = useState(true);
     const assetResults = useSWRImmutable('local-assets', async () => {
@@ -59,6 +60,7 @@ export const useLocalAssets = <T = SchemaKind>(...kinds: string[]): AssetListRes
             return await AssetService.list();
         } catch (e: any) {
             console.warn('Failed to load assets', e);
+            throw e;
         }
     });
 
@@ -76,7 +78,7 @@ export const useLocalAssets = <T = SchemaKind>(...kinds: string[]): AssetListRes
             .filter((asset) => {
                 return kinds.includes(asset.content.kind.toLowerCase());
             }) as AssetInfo<T>[];
-    }, [assetResults.data, kinds.join(':')]);
+    }, [assetResults.data, kinds]);
 
     const callback = useCallback(
         async (evt: AssetChangedEvent) => {
@@ -87,12 +89,13 @@ export const useLocalAssets = <T = SchemaKind>(...kinds: string[]): AssetListRes
                 return;
             }
             try {
+                console.log('Reloading assets', evt);
                 await assetResults.mutate();
             } catch (e) {
                 console.warn('Failed to reload assets', e);
             }
         },
-        [assetResults]
+        [assetResults, kinds]
     );
 
     useEffect(() => {
@@ -131,7 +134,7 @@ export const useLocalAssets = <T = SchemaKind>(...kinds: string[]): AssetListRes
 };
 
 export const usePlans = () => {
-    return useLocalAssets<Plan>('core/plan');
+    return useLocalAssets<Plan>(['core/plan']);
 };
 
 export const useBlocks = () => {
@@ -148,10 +151,7 @@ export const useBlocks = () => {
     };
 };
 
-export const useAsset = <T = SchemaKind>(ref: string, ensure?: boolean): AssetResult<T> => {
-    if (ensure === undefined) {
-        ensure = false;
-    }
+export const useAsset = <T = SchemaKind>(ref: string, ensure = false): AssetResult<T> => {
     const assetResult = useAsyncRetry(async () => {
         try {
             const asset = await AssetService.get(ref, ensure);
@@ -161,6 +161,7 @@ export const useAsset = <T = SchemaKind>(ref: string, ensure?: boolean): AssetRe
             return fromAsset(asset as Asset<T>);
         } catch (e: any) {
             console.warn('Failed to load assets', e);
+            throw e;
         }
     }, [ref, ensure]);
 
@@ -181,7 +182,7 @@ export const useAsset = <T = SchemaKind>(ref: string, ensure?: boolean): AssetRe
                     evt.asset.handle === uri.handle &&
                     evt.asset.version === uri.version
                 ) {
-                    await assetResult.retry();
+                    assetResult.retry();
                 }
             } catch (e) {
                 console.warn(`Failed to reload asset: ${ref}`, e, evt);

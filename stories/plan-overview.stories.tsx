@@ -1,14 +1,12 @@
-import React from 'react';
-
 import './index.less';
 import { ThemeProvider } from '@mui/material';
-import { kapetaLight } from '../src/renderer/Theme';
-import { PlanOverview } from '../src/renderer/components/plan-overview/PlanOverview';
 import { Plan } from '@kapeta/schemas';
 import { AssetInfo } from '@kapeta/ui-web-plan-editor';
 import { ConfirmProvider } from '@kapeta/ui-web-components';
 import { AssetStore } from '@kapeta/ui-web-context';
-import { Asset, SchemaKind } from '@kapeta/ui-web-types';
+import { Asset } from '@kapeta/ui-web-types';
+import { PlanOverview } from '../src/renderer/components/plan-overview/PlanOverview';
+import { kapetaLight } from '../src/renderer/Theme';
 
 const defaultInfo = {
     ymlPath: '',
@@ -42,10 +40,10 @@ const SAMPLE_PLAN: AssetInfo<Plan> = {
 
 const assetService: AssetStore = {
     list: () => Promise.resolve([]),
-    get: (ref: string, ensure: boolean) => Promise.resolve({} as Asset),
-    import: (ref: string) => Promise.resolve([]),
-    create: (path: string, content: SchemaKind) => Promise.resolve([]),
-    remove: (ref: string) => Promise.resolve(),
+    get: () => Promise.resolve({} as Asset),
+    import: () => Promise.resolve([]),
+    create: () => Promise.resolve([]),
+    remove: () => Promise.resolve(),
 };
 
 export default {

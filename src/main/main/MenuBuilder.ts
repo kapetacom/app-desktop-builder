@@ -8,6 +8,7 @@ interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
 
 export class MenuBuilder {
     private readonly mainWindow: BrowserWindow;
+
     private readonly autoUpdater: AutoUpdateHelper;
 
     constructor(mainWindow: BrowserWindow, autoUpdater: AutoUpdateHelper) {

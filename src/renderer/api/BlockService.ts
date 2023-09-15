@@ -1,7 +1,7 @@
-import { AssetService } from './AssetService';
 import { Asset } from '@kapeta/ui-web-types';
 import { BlockDefinition } from '@kapeta/schemas';
 import { BlockStore, BlockTypeProvider } from '@kapeta/ui-web-context';
+import { AssetService } from './AssetService';
 
 class BlockServiceImpl implements BlockStore {
     async list(): Promise<Asset<BlockDefinition>[]> {

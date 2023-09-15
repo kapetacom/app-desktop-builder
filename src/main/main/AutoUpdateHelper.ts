@@ -1,7 +1,8 @@
 import { app, BrowserWindow } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
-import { MainWindow } from './MainWindow';
+import type { MainWindow } from './MainWindow';
+
 const AUTO_UPDATE_INTERVAL_MS = 10 * 60 * 1000;
 
 // Configure auto updater
@@ -13,9 +14,12 @@ autoUpdater.forceDevUpdateConfig = !!process.env.TEST_UPDATES;
 
 export class AutoUpdateHelper {
     private initiated: boolean;
+
     private readonly updatesApplied = new Set<string>();
+
     private updatePromise: Promise<void> | undefined;
-    private downloadReady: boolean = false;
+
+    private downloadReady = false;
 
     private send(main: BrowserWindow | undefined, type, initiatedByUser, data?: any) {
         if (!main) {

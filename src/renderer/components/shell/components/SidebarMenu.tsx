@@ -21,7 +21,7 @@ export const SidebarList = styled(List, {
     },
 }));
 
-export const SidebarListItem = styled(ListItem)(({ theme }) => ({
+export const SidebarListItem = styled(ListItem)(() => ({
     padding: 0,
 }));
 

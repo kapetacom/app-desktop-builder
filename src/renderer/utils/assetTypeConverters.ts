@@ -1,6 +1,6 @@
-import { normalizeKapetaUri } from './planContextLoader';
 import { IBlockTypeProvider, IResourceTypeProvider } from '@kapeta/ui-web-types';
 import { AssetVersionSelectorEntry } from '@kapeta/ui-web-components';
+import { normalizeKapetaUri } from './planContextLoader';
 
 export const fromTypeProviderToAssetType = (
     typeProvider: IResourceTypeProvider | IBlockTypeProvider

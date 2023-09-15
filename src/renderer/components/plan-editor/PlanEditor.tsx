@@ -10,9 +10,11 @@ import {
     AssetInfo,
     resolveConfigurationFromDefinition,
 } from '@kapeta/ui-web-plan-editor';
-import React, { ForwardedRef, forwardRef, useContext, useMemo, useState } from 'react';
-import { IResourceTypeProvider } from '@kapeta/ui-web-types';
+import { ForwardedRef, forwardRef, useContext, useMemo, useState } from 'react';
 import { useAsyncRetry } from 'react-use';
+import { toClass } from '@kapeta/ui-web-utils';
+import { BlockDefinition } from '@kapeta/schemas';
+import { BlockTypeProvider } from '@kapeta/ui-web-context';
 import { PlanEditorTopMenu } from './PlanEditorTopMenu';
 import { usePlanEditorActions } from './PlanEditorActions';
 import { BlockConfigurationPanel } from './panels/block-configuration/BlockConfigurationPanel';
@@ -21,23 +23,17 @@ import { EditorPanels } from './panels/editor/EditorPanels';
 import { InspectorPanels } from './panels/InspectorPanels';
 import './PlanEditor.less';
 import { getInstanceConfigs } from '../../api/LocalConfigService';
-import { toClass } from '@kapeta/ui-web-utils';
 import { useKapetaContext } from '../../hooks/contextHook';
 import { BlockCreatorPanel } from './panels/BlockCreatorPanel';
-import { BlockDefinition } from '@kapeta/schemas';
 import { normalizeKapetaUri } from '../../utils/planContextLoader';
-import { BlockTypeProvider } from '@kapeta/ui-web-context';
 
 interface Props {
     systemId: string;
-    resourceAssets: IResourceTypeProvider[];
     instanceInfos?: InstanceInfo[];
-    ref: ForwardedRef<HTMLDivElement>;
 }
 
 export const PlanEditor = withPlannerContext(
     forwardRef((props: Props, ref: ForwardedRef<HTMLDivElement>) => {
-        const uri = parseKapetaUri(props.systemId);
         const planner = useContext(PlannerContext);
         const kapetaContext = useKapetaContext();
 
@@ -58,7 +54,7 @@ export const PlanEditor = withPlannerContext(
         });
 
         const configFromInstances = useAsyncRetry(async () => {
-            return await getInstanceConfigs(props.systemId);
+            return getInstanceConfigs(props.systemId);
         }, [props.systemId]);
 
         const configurations = useMemo(() => {
@@ -77,10 +73,10 @@ export const PlanEditor = withPlannerContext(
                 }
                 const currentConfig = config[instance.id];
                 try {
-                    const ref = normalizeKapetaUri(instance.block.ref);
-                    const block = planner.getBlockByRef(ref);
+                    const blockRef = normalizeKapetaUri(instance.block.ref);
+                    const block = planner.getBlockByRef.call(null, blockRef);
                     if (!block) {
-                        console.log('Block not found', ref);
+                        console.log('Block not found', blockRef);
                         return;
                     }
 
@@ -106,20 +102,26 @@ export const PlanEditor = withPlannerContext(
             });
 
             return config;
-        }, [configFromInstances.value, configFromInstances.loading, planner.plan, planner.blockAssets]);
+        }, [
+            configFromInstances.value,
+            configFromInstances.loading,
+            planner.plan,
+            planner.blockAssets,
+            planner.getBlockByRef,
+        ]);
 
         const readonly = planner.mode !== PlannerMode.EDIT;
 
         const containerClass = toClass({
             'plan-editor': true,
-            readonly: readonly,
+            readonly,
         });
 
         const creatingNewBlock = !!(editInfo?.creating && editInfo.type === DataEntityType.BLOCK);
 
         return (
             <div className={containerClass} ref={ref}>
-                <PlanEditorTopMenu readonly={readonly} version={uri.version} systemId={props.systemId} />
+                <PlanEditorTopMenu readonly={readonly} systemId={props.systemId} />
 
                 <BlockConfigurationPanel
                     systemId={props.systemId}
@@ -160,12 +162,14 @@ export const PlanEditor = withPlannerContext(
                         onShowMoreAssets={() => {
                             kapetaContext.blockHub.open(planner.asset!, (selection) => {
                                 selection.forEach((asset, i) => {
-                                    const ref = normalizeKapetaUri(asset.content.metadata.name + ':' + asset.version);
+                                    const assetRef = normalizeKapetaUri(
+                                        `${asset.content.metadata.name}:${asset.version}`
+                                    );
                                     planner.addBlockInstance({
-                                        name: asset.content.metadata.title ?? parseKapetaUri(ref).name,
+                                        name: asset.content.metadata.title ?? parseKapetaUri(assetRef).name,
                                         id: randomUUID(),
                                         block: {
-                                            ref,
+                                            ref: assetRef,
                                         },
                                         dimensions: {
                                             top: 50 + i * 150,

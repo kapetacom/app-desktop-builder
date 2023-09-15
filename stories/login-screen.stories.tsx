@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
-
-import { LoginScreen } from '../src/renderer/views/LoginScreen';
-import './index.less';
 import { MemoryRouter } from 'react-router-dom';
 import { DefaultContext } from '@kapeta/ui-web-components';
+import { LoginScreen } from '../src/renderer/views/LoginScreen';
+
+import './index.less';
 
 export default {
     title: 'Log In Screen',
@@ -15,7 +14,7 @@ export const LogInSuccess = () => {
             <MemoryRouter>
                 <LoginScreen
                     onClickLogin={() => {
-                        return new Promise((resolve, reject) => {
+                        return new Promise((resolve) => {
                             setTimeout(() => {
                                 resolve({ success: true });
                             }, 2000);
@@ -36,7 +35,7 @@ export const LogInFail = () => {
             <MemoryRouter>
                 <LoginScreen
                     onClickLogin={() => {
-                        return new Promise((resolve, reject) => {
+                        return new Promise((resolve) => {
                             setTimeout(() => {
                                 resolve({ success: false, error: 'Something went wrong' });
                             }, 2000);
@@ -57,7 +56,7 @@ export const LongLoading = () => {
             <MemoryRouter>
                 <LoginScreen
                     onClickLogin={() => {
-                        return new Promise((resolve, reject) => {
+                        return new Promise((resolve) => {
                             setTimeout(() => {
                                 resolve({ success: false, error: 'Something went wrong' });
                             }, 6000000);

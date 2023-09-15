@@ -1,6 +1,6 @@
-import { clusterPath } from './ClusterConfig';
 import { Identity, MemberIdentity } from '@kapeta/ui-web-types';
 import { IdentityStore, simpleFetch } from '@kapeta/ui-web-context';
+import { clusterPath } from './ClusterConfig';
 
 class IdentityServiceImpl implements IdentityStore {
     async getCurrent(): Promise<Identity> {

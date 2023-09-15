@@ -2,15 +2,15 @@ import React, { useEffect } from 'react';
 import { Box, Button, IconButton, Stack, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { Person } from '@mui/icons-material';
+import ApartmentIcon from '@mui/icons-material/Apartment';
+import { Tooltip } from '@kapeta/ui-web-components';
 import { getAssetTitle } from '../plan-editor/helpers';
 import { KapetaTab, KapetaTabs, KapetaTabsType } from './components/KapetaTabs';
 import { CustomIcon } from './components/CustomIcon';
-import { Person } from '@mui/icons-material';
 import { useKapetaContext } from '../../hooks/contextHook';
 import { DEFAULT_TAB_PATH, normalizeUrl, useMainTabs } from '../../hooks/mainTabs';
 import { usePlans } from '../../hooks/assetHooks';
-import ApartmentIcon from '@mui/icons-material/Apartment';
-import { Tooltip } from '@kapeta/ui-web-components';
 
 export const EditorTabs = () => {
     const planAssets = usePlans();
@@ -24,11 +24,11 @@ export const EditorTabs = () => {
             navigate(DEFAULT_TAB_PATH, { replace: true });
             return;
         }
-        mainTabs.open(location.pathname, { navigate: false });
-    }, [location.pathname, mainTabs.open]);
+        mainTabs.open.call(null, location.pathname, { navigate: false });
+    }, [location.pathname, mainTabs.open, navigate]);
 
     return (
-        <KapetaTabs value={normalizeUrl(location.pathname)} variant={'scrollable'}>
+        <KapetaTabs value={normalizeUrl(location.pathname)} variant="scrollable">
             {mainTabs.active.map((tabInfo) => {
                 let label: React.ReactNode = 'New tab';
                 let variant: KapetaTabsType = 'edit';
@@ -58,7 +58,7 @@ export const EditorTabs = () => {
                     } else {
                         const ref = decodeURIComponent(/\/deployments\/(.+)/.exec(tabInfo.path)?.[1] ?? '');
                         if (ref.includes('/')) {
-                            const [handle, name, version] = ref.split(/\//);
+                            const [, name, version] = ref.split(/\//);
                             label = tabInfo.title ?? `${name} [${version}]`;
                         } else {
                             label = tabInfo.title ?? ref;
@@ -104,19 +104,19 @@ export const EditorTabs = () => {
                         href={value}
                         variant={variant}
                         icon={icon}
-                        iconPosition={'start'}
+                        iconPosition="start"
                         label={
                             <Stack
-                                gap={'4px'}
-                                alignItems={'center'}
-                                width={'calc(100% - 32px)'}
-                                direction={'row'}
-                                justifyContent={'space-between'}
+                                gap="4px"
+                                alignItems="center"
+                                width="calc(100% - 32px)"
+                                direction="row"
+                                justifyContent="space-between"
                             >
-                                <Box flex={1} overflow={'hidden'}>
-                                    <Tooltip title={tooltipTitle} enterDelay={1000} placement={'bottom'}>
+                                <Box flex={1} overflow="hidden">
+                                    <Tooltip title={tooltipTitle} enterDelay={1000} placement="bottom">
                                         <Typography
-                                            fontSize={'12px'}
+                                            fontSize="12px"
                                             style={{
                                                 width: '100%',
                                                 whiteSpace: 'nowrap',

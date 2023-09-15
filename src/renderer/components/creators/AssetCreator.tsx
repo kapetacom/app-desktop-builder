@@ -3,11 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { FileInfo, SchemaKind } from '@kapeta/ui-web-types';
 import { AssetStore } from '@kapeta/ui-web-context';
 import { FormButtons, FormContainer, showToasty, ToastType } from '@kapeta/ui-web-components';
+import { AssetInfo, fromAsset, PlannerSidebar } from '@kapeta/ui-web-plan-editor';
+import { Button } from '@mui/material';
 import { ProjectHomeFolderInput } from '../fields/ProjectHomeFolderInput';
 import { replaceBase64IconWithUrl } from '../../utils/iconHelpers';
-import { AssetInfo, fromAsset, PlannerSidebar } from '@kapeta/ui-web-plan-editor';
-import { kapetaLight } from '../../Theme';
-import { Button, ThemeProvider } from '@mui/material';
 import { showFilePickerOne } from '../../utils/showFilePicker';
 import './AssetCreator.less';
 
@@ -26,11 +25,26 @@ interface Props {
     onAssetCreateStart?: (data: SchemaKind) => void;
     onAssetCreateEnd?: (errorMessage?: string) => void;
     onDone?: (asset?: AssetInfo<SchemaKind>) => void;
+    /**
+     * Unused
+     * @deprecated
+     */
+    // eslint-disable-next-line react/no-unused-prop-types
     skipFiles: string[]; // A collection of files to prevent importing as they are already loaded
     title: string;
+    /**
+     * Unused
+     * @deprecated
+     */
+    // eslint-disable-next-line react/no-unused-prop-types
     fileName: string;
     createNewKind: () => SchemaKind;
     formRenderer: React.ComponentType<CreatingFormProps>;
+    /**
+     * Unused
+     * @deprecated
+     */
+    // eslint-disable-next-line react/no-unused-prop-types
     fileSelectableHandler: (file: FileInfo) => boolean;
     onAssetAdded?: (asset: AssetInfo<SchemaKind>) => void;
     state: AssetCreatorState;
@@ -109,9 +123,9 @@ export const AssetCreator = (props: Props) => {
     useEffect(() => {
         if (props.state === AssetCreatorState.CREATING) {
             // When changed to creating - set new entity
-            setNewEntity(props.createNewKind());
+            setNewEntity(props.createNewKind.call(null));
         }
-    }, [props.state, props.assetService]);
+    }, [props.state, props.assetService, props.createNewKind]);
 
     const InnerFormRenderer = props.formRenderer;
     return (
@@ -137,8 +151,8 @@ export const AssetCreator = (props: Props) => {
 
                     <FormButtons>
                         <Button
-                            color={'error'}
-                            variant={'contained'}
+                            color="error"
+                            variant="contained"
                             onClick={() => {
                                 if (props.onCancel) {
                                     props.onCancel();
@@ -147,7 +161,7 @@ export const AssetCreator = (props: Props) => {
                         >
                             Cancel
                         </Button>
-                        <Button color={'primary'} type={'submit'} variant={'contained'}>
+                        <Button color="primary" type="submit" variant="contained">
                             Create
                         </Button>
                     </FormButtons>

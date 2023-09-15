@@ -5,9 +5,9 @@
 
 import webpack from 'webpack';
 import TsconfigPathsPlugins from 'tsconfig-paths-webpack-plugin';
+import Path from "path";
 import webpackPaths from './webpack.paths';
 import { dependencies as externals } from '../../release/app/package.json';
-import Path from "path";
 
 const configuration: webpack.Configuration = {
     externals: [...Object.keys(externals || {})],

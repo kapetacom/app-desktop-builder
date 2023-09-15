@@ -1,15 +1,19 @@
-import React from 'react';
+/* eslint react-hooks/rules-of-hooks: warn */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/anchor-is-valid */
+
 import { Box, Button, Slide, Stack, Typography } from '@mui/material';
 import { Plan } from '@kapeta/schemas';
 import { Image } from '@mui/icons-material';
 import { toClass } from '@kapeta/ui-web-utils';
 
-import { useKapetaContext } from '../../../hooks/contextHook';
 import { TransitionGroup } from 'react-transition-group';
 import { AssetInfo, AssetThumbnail } from '@kapeta/ui-web-plan-editor';
-import { useLoadedPlanContext } from '../../../utils/planContextLoader';
-import { installerService } from '../../../api/installerService';
 import { grey } from '@mui/material/colors';
+import { useKapetaContext } from '../../../hooks/contextHook';
+import { useCurriedLoadedPlanContext } from '../../../utils/planContextLoader';
+import { installerService } from '../../../api/installerService';
 
 interface Props {
     plans: AssetInfo<Plan>[];
@@ -20,6 +24,7 @@ interface Props {
 
 const YourPlansListInner = (props: Props) => {
     const kapetaContext = useKapetaContext();
+    const planLoader = useCurriedLoadedPlanContext();
 
     if (props.plans.length < 1) {
         return (
@@ -29,7 +34,7 @@ const YourPlansListInner = (props: Props) => {
                     border: '1px dashed rgba(55, 71, 79, 0.50)',
                     height: '350px',
                 }}
-                direction={'row'}
+                direction="row"
                 gap={4}
                 pl={6}
             >
@@ -80,14 +85,14 @@ const YourPlansListInner = (props: Props) => {
                             </p>
                         </Typography>
                         <Button
-                            variant={'outlined'}
-                            color={'inherit'}
+                            variant="outlined"
+                            color="inherit"
                             sx={{
                                 '&:hover': {
                                     bgcolor: grey[100],
                                 },
                             }}
-                            size={'large'}
+                            size="large"
                             onClick={props.onPlanCreate}
                         >
                             Create new Plan
@@ -105,18 +110,18 @@ const YourPlansListInner = (props: Props) => {
                     }}
                 >
                     {/* @ts-ignore */}
-                    <Image fontSize={'100px'} opacity={0.2} />
+                    <Image fontSize="100px" opacity={0.2} />
                 </Box>
             </Stack>
         );
     }
 
     return (
-        <Stack direction={'row'} flexWrap={'wrap'} alignItems={'flex-start'} alignContent={'flex-start'} gap={3}>
-            <TransitionGroup component={null} enter={true} exit={true} appear={true}>
-                {props.plans.map((plan, index) => {
+        <Stack direction="row" flexWrap="wrap" alignItems="flex-start" alignContent="flex-start" gap={3}>
+            <TransitionGroup component={null} enter exit appear>
+                {props.plans.map((plan) => {
                     return (
-                        <Slide key={`plan_${plan.ref}`} direction={'right'} unmountOnExit={true} mountOnEnter={true}>
+                        <Slide key={`plan_${plan.ref}`} direction="right" unmountOnExit mountOnEnter>
                             <AssetThumbnail
                                 key={`plan_${plan.ref}`}
                                 width={366}
@@ -124,8 +129,9 @@ const YourPlansListInner = (props: Props) => {
                                 asset={plan}
                                 installerService={installerService}
                                 onClick={props.onPlanOpen}
-                                loadPlanContext={(plan) => {
-                                    return useLoadedPlanContext(plan.content);
+                                loadPlanContext={(planInfo) => {
+                                    planLoader.setPlan(planInfo.content);
+                                    return planLoader.context;
                                 }}
                             />
                         </Slide>
@@ -143,7 +149,7 @@ export const YourPlansList = (props: Props) => {
     });
     return (
         <Box className={className}>
-            <Typography variant={'h6'} pb={2} pt={2}>
+            <Typography variant="h6" pb={2} pt={2}>
                 Your plans
             </Typography>
             <YourPlansListInner {...props} />

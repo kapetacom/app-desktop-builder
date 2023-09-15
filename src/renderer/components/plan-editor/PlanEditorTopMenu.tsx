@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 import { InstanceEventType, TaskStatus } from '@kapeta/ui-web-context';
 import {
@@ -22,12 +22,12 @@ import {
     resolveConfigurationFromDefinition,
 } from '@kapeta/ui-web-plan-editor';
 import { useAsync, useAsyncFn } from 'react-use';
-import { PlanForm } from '../forms/PlanForm';
-import { getPlanConfig, setPlanConfig } from '../../api/LocalConfigService';
 import { Box, Button, Chip, CircularProgress, Paper, Stack, Tab, Tabs } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { TaskService } from 'renderer/api/TaskService';
 import { SystemService } from 'renderer/api/SystemService';
+import { getPlanConfig, setPlanConfig } from '../../api/LocalConfigService';
+import { PlanForm } from '../forms/PlanForm';
 
 const ConfigSchemaEditor = () => {
     const configurationField = useFormContextField('spec.configuration');
@@ -59,11 +59,7 @@ const ConfigSchemaEditor = () => {
     );
 };
 
-interface ConfigValueProps {
-    systemId: string;
-}
-
-const ConfigValueEditor = (props: ConfigValueProps) => {
+const ConfigValueEditor = () => {
     const configurationSchemaField = useFormContextField('spec.configuration');
     const configurationField = useFormContextField('configuration');
 
@@ -82,7 +78,6 @@ const ConfigValueEditor = (props: ConfigValueProps) => {
 
 interface Props {
     readonly: boolean;
-    version: string;
     systemId: string;
 }
 
@@ -152,6 +147,7 @@ export const PlanEditorTopMenu = (props: Props) => {
 
     useEffect(() => {
         const updateState = async () => {
+            // TODO: This might use stale reference to plan
             const totalBlocks = planner.plan?.spec?.blocks?.length || 0;
             const status = await SystemService.getInstanceStatusForPlan(props.systemId);
             setAllPlaying(
@@ -165,6 +161,7 @@ export const PlanEditorTopMenu = (props: Props) => {
             // ignore initial error
         });
         return SystemService.subscribe(props.systemId, InstanceEventType.EVENT_INSTANCE_CHANGED, updateState);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.systemId]);
 
     const [planConfig, reloadConfig] = useAsyncFn(async () => {
@@ -214,13 +211,13 @@ export const PlanEditorTopMenu = (props: Props) => {
                 boxSizing: 'border-box',
             }}
         >
-            <Stack direction="row" justifyContent={'space-between'} alignItems={'center'}>
+            <Stack direction="row" justifyContent="space-between" alignItems="center">
                 <Stack spacing={2} direction="row">
-                    <Tooltip title={'Start all blocks'}>
+                    <Tooltip title="Start all blocks">
                         <Button
                             disabled={allPlaying || processing}
-                            variant={'contained'}
-                            color={'primary'}
+                            variant="contained"
+                            color="primary"
                             startIcon={<i className="fa fa-play" />}
                             onClick={async () => {
                                 await doProcess(
@@ -253,11 +250,11 @@ export const PlanEditorTopMenu = (props: Props) => {
                             )}
                         </Button>
                     </Tooltip>
-                    <Tooltip title={'Stop all blocks'}>
+                    <Tooltip title="Stop all blocks">
                         <Button
                             disabled={!anyPlaying || processing}
                             variant="outlined"
-                            color={'warning'}
+                            color="warning"
                             startIcon={<i className="fa fa-stop" />}
                             onClick={async () => {
                                 await doProcess(
@@ -294,7 +291,7 @@ export const PlanEditorTopMenu = (props: Props) => {
                     <Button
                         startIcon={<i className="fa fa-gear" />}
                         variant="outlined"
-                        color={'secondary'}
+                        color="secondary"
                         onClick={() => {
                             setShowSettings(true);
                         }}
@@ -314,7 +311,7 @@ export const PlanEditorTopMenu = (props: Props) => {
                             sx={{
                                 cursor: 'help',
                             }}
-                            label={`Read-only`}
+                            label="Read-only"
                         />
                     </Tooltip>
                 )}
@@ -351,7 +348,7 @@ export const PlanEditorTopMenu = (props: Props) => {
                             setShowSettings(false);
                         }}
                     >
-                        <Stack direction={'column'}>
+                        <Stack direction="column">
                             <Box
                                 sx={{
                                     borderBottom: 1,
@@ -359,21 +356,21 @@ export const PlanEditorTopMenu = (props: Props) => {
                                 }}
                             >
                                 <Tabs
-                                    orientation={'horizontal'}
+                                    orientation="horizontal"
                                     value={settingsTab}
-                                    onChange={(evt, tabId) => setSettingsTab(tabId)}
+                                    onChange={(_evt, tabId) => setSettingsTab(tabId)}
                                 >
                                     <Tab value="general" label="General" />
                                     {hasConfig && <Tab value="configuration" label="Configuration" />}
                                     {!props.readonly && <Tab value="config-schema" label="Configuration Schema" />}
                                 </Tabs>
                             </Box>
-                            <Box flex={1} minHeight={'300px'} minWidth={'500px'}>
+                            <Box flex={1} minHeight="300px" minWidth="500px">
                                 {settingsTab === 'general' && <PlanForm readOnly={props.readonly} />}
                                 {settingsTab === 'configuration' && (
                                     <div className="configuration-editor">
                                         <p className="info">Define configuration locally for this plan</p>
-                                        <ConfigValueEditor systemId={props.systemId} />
+                                        <ConfigValueEditor />
                                     </div>
                                 )}
                                 {settingsTab === 'config-schema' && !props.readonly && (
@@ -386,15 +383,15 @@ export const PlanEditorTopMenu = (props: Props) => {
                         </Stack>
                         <FormButtons>
                             <Button
-                                variant={'outlined'}
-                                color={'error'}
+                                variant="outlined"
+                                color="error"
                                 onClick={() => {
                                     setShowSettings(false);
                                 }}
                             >
                                 Cancel
                             </Button>
-                            <Button variant={'contained'} color={'primary'} type={'submit'}>
+                            <Button variant="contained" color="primary" type="submit">
                                 Save
                             </Button>
                         </FormButtons>

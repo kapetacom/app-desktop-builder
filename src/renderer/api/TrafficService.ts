@@ -1,5 +1,5 @@
-import { SocketService } from './SocketService';
 import { Traffic } from '@kapeta/ui-web-types';
+import { SocketService } from './SocketService';
 
 export enum TrafficEventType {
     TRAFFIC_START = 'traffic_start',

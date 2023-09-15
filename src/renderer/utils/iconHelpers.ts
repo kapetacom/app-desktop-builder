@@ -1,6 +1,6 @@
 import { IconType, IconValue } from '@kapeta/schemas';
-import { uploadAttachment } from '../api/AttachmentService';
 import { SchemaKind } from '@kapeta/ui-web-types';
+import { uploadAttachment } from '../api/AttachmentService';
 
 export const replaceBase64IconWithUrl = async (blockData: SchemaKind) => {
     if (!blockData.spec.icon) {
@@ -26,9 +26,9 @@ export const replaceBase64IconWithUrl = async (blockData: SchemaKind) => {
 
             // Add a cache buster since we might be overwriting an existing icon
             if (result.url.includes('?')) {
-                result.url += '&v=' + Date.now();
+                result.url += `&v=${Date.now()}`;
             } else {
-                result.url += '?v=' + Date.now();
+                result.url += `?v=${Date.now()}`;
             }
 
             icon.value = result.url;

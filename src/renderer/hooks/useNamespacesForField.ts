@@ -1,6 +1,6 @@
-import { useKapetaContext } from './contextHook';
 import { useMemo } from 'react';
 import { useFormContextField } from '@kapeta/ui-web-components';
+import { useKapetaContext } from './contextHook';
 
 export const useNamespacesForField = (fieldName: string) => {
     const context = useKapetaContext();

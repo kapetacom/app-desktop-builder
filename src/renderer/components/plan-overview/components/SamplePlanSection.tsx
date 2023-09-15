@@ -1,9 +1,8 @@
 import { Box, Button, Stack, Typography } from '@mui/material';
-import React from 'react';
 import { Plan } from '@kapeta/schemas';
 import { AssetInfo, AssetThumbnail } from '@kapeta/ui-web-plan-editor';
-import { useLoadedPlanContext } from '../../../utils/planContextLoader';
 import { grey } from '@mui/material/colors';
+import { useLoadedPlanContext } from '../../../utils/planContextLoader';
 import SampleChecklist from '../../../../../assets/images/sample-checklist.svg';
 
 interface Props {
@@ -13,12 +12,14 @@ interface Props {
 
 export const SamplePlanSection = (props: Props) => {
     const title = props.sample.content.metadata.title ?? props.sample.content.metadata.name;
+    // We can preload it already
+    const planContext = useLoadedPlanContext(props.sample.content);
     return (
-        <Box className={'sample-plan-section'}>
-            <Typography variant={'h6'} pb={2} pt={2}>
+        <Box className="sample-plan-section">
+            <Typography variant="h6" pb={2} pt={2}>
                 Sample Plan
             </Typography>
-            <Stack direction={'row'} gap={3}>
+            <Stack direction="row" gap={3}>
                 <Box
                     sx={{
                         width: '761px',
@@ -42,9 +43,7 @@ export const SamplePlanSection = (props: Props) => {
                         onClick={props.onOpenSample}
                         width={761}
                         height={408}
-                        loadPlanContext={(plan) => {
-                            return useLoadedPlanContext(plan.content);
-                        }}
+                        loadPlanContext={() => planContext}
                     />
                 </Box>
                 <Box
@@ -52,7 +51,7 @@ export const SamplePlanSection = (props: Props) => {
                         flex: 1,
                     }}
                 >
-                    <Typography variant={'h6'} mb={2}>
+                    <Typography variant="h6" mb={2}>
                         {title}
                     </Typography>
                     <Typography mb={3}>
@@ -60,9 +59,9 @@ export const SamplePlanSection = (props: Props) => {
                         change the way you design, build and deploy software.
                     </Typography>
                     <Button
-                        variant={'outlined'}
-                        size={'large'}
-                        color={'inherit'}
+                        variant="outlined"
+                        size="large"
+                        color="inherit"
                         sx={{
                             '&:hover': {
                                 bgcolor: grey[100],

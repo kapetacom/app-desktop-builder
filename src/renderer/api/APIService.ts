@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import { RESTService } from '@kapeta/web-microfrontend/browser';
 import { showToasty, ToastType, AssetDisplay } from '@kapeta/ui-web-components';
 import { clusterPath } from './ClusterConfig';

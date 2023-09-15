@@ -1,6 +1,6 @@
+import { BlockStatusListener, InstanceEventType, PlanStatusListener, simpleFetch } from '@kapeta/ui-web-context';
 import { SocketService } from './SocketService';
 import { clusterPath } from './ClusterConfig';
-import { BlockStatusListener, InstanceEventType, PlanStatusListener, simpleFetch } from '@kapeta/ui-web-context';
 import { InstanceInfo } from '../components/plan-editor/types';
 import { normalizeKapetaUri } from '../utils/planContextLoader';
 
@@ -10,11 +10,11 @@ class SystemServiceImpl {
         eventType: InstanceEventType,
         handler: PlanStatusListener | BlockStatusListener
     ) {
-        systemId = normalizeKapetaUri(systemId);
-        const contextId = `system-events/${encodeURIComponent(systemId)}`;
+        const normalizedSystemId = normalizeKapetaUri(systemId);
+        const contextId = `system-events/${encodeURIComponent(normalizedSystemId)}`;
         const contextHandler = (evt: any) => {
             if (evt.context !== contextId) {
-                return;
+                return undefined;
             }
 
             return handler(evt.payload);

@@ -21,7 +21,7 @@ export const kapetaDark = createTheme(
     {
         components: {
             MuiLink: {
-                //@ts-ignore
+                // @ts-ignore
                 defaultProps: {
                     component: LinkBehavior,
                 } as LinkProps,
@@ -47,7 +47,7 @@ export const kapetaLight = createTheme(
     {
         components: {
             MuiLink: {
-                //@ts-ignore
+                // @ts-ignore
                 defaultProps: {
                     component: LinkBehavior,
                 } as LinkProps,
@@ -71,7 +71,9 @@ export const withTheme = <T extends object>(
     const displayName = Component.displayName || Component.name || 'Component'; // Create a displayName for React Dev Tools.
 
     const ComponentWithTheme = (props: T) => (
-        <ThemeProvider theme={theme === 'light' ? kapetaLight : kapetaDark}>{<Component {...props} />}</ThemeProvider>
+        <ThemeProvider theme={theme === 'light' ? kapetaLight : kapetaDark}>
+            <Component {...props} />
+        </ThemeProvider>
     );
 
     ComponentWithTheme.displayName =

@@ -1,7 +1,7 @@
 import { ipcMain, dialog, shell } from 'electron';
 import { KapetaAPI } from '@kapeta/nodejs-api-client';
-import { MainWindow } from '../main/MainWindow';
 import FS from 'fs-extra';
+import { MainWindow } from '../main/MainWindow';
 import OpenDialogOptions = Electron.OpenDialogOptions;
 
 export function attachHandlers(main: MainWindow) {
@@ -16,6 +16,7 @@ export function attachHandlers(main: MainWindow) {
             // Expected error when user is not logged in
             console.error('Failed to get access token', err);
         }
+        return null;
     });
 
     //
@@ -46,6 +47,7 @@ export function attachHandlers(main: MainWindow) {
             }
 
             console.error('Failed to get contexts', err);
+            throw err;
         }
     });
 
@@ -80,7 +82,7 @@ export function attachHandlers(main: MainWindow) {
         main.quitAndInstall();
     });
 
-    ipcMain.handle('set-context', async (evt, ...args: any[]) => {
+    ipcMain.handle('set-context', async (_evt, ...args: any[]) => {
         try {
             const api = new KapetaAPI();
             const handle = args && args[0] ? args[0] : undefined;
@@ -103,7 +105,7 @@ export function attachHandlers(main: MainWindow) {
         }
     });
 
-    ipcMain.handle('open-file-dialog', async (evt, ...args: any[]) => {
+    ipcMain.handle('open-file-dialog', async (_evt, ...args: any[]) => {
         try {
             const opts = args[0] as OpenDialogOptions & {
                 readContent?: boolean;
@@ -121,6 +123,7 @@ export function attachHandlers(main: MainWindow) {
             return [dialogResponse, content];
         } catch (err) {
             console.error('Failed to open file picker', args, err);
+            return undefined;
         }
     });
 

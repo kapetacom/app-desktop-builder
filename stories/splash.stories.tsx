@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import './index.less';
-import { SplashContent, SplashStatusCheck } from '../src/renderer/modals/splash/SplashContent';
-import { kapetaDark, kapetaLight } from '../src/renderer/Theme';
 import { ThemeProvider } from '@mui/material';
+import { SplashContent, SplashStatusCheck } from '../src/renderer/modals/splash/SplashContent';
+import { kapetaLight } from '../src/renderer/Theme';
 
 export default {
     title: 'Splash',

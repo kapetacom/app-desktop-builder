@@ -1,5 +1,3 @@
-import { MemberIdentity } from '@kapeta/ui-web-types';
-
 export interface TabInfo {
     path: string;
     title?: string;

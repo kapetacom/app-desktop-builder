@@ -1,18 +1,18 @@
 import { EventEmitter } from 'events';
-import { SocketService } from './SocketService';
 
 import { Asset, SchemaKind } from '@kapeta/ui-web-types';
 
-import { clusterPath } from './ClusterConfig';
 import YAML from 'yaml';
-import { AssetListener, AssetStore, asSingleton, simpleFetch } from '@kapeta/ui-web-context';
+import { AssetListener, AssetStore, simpleFetch } from '@kapeta/ui-web-context';
+import { clusterPath } from './ClusterConfig';
+import { SocketService } from './SocketService';
 
 class AssetServiceImpl extends EventEmitter implements AssetStore {
     async list(): Promise<Asset[]> {
         return simpleFetch(clusterPath(`/assets/`));
     }
 
-    async get(ref: string, ensure: boolean = true): Promise<Asset> {
+    async get(ref: string, ensure = true): Promise<Asset> {
         return simpleFetch(clusterPath(`/assets/read`, { ref, ensure: String(ensure) }));
     }
 

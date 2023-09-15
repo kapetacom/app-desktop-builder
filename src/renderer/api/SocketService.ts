@@ -3,7 +3,9 @@ import { socketPath } from './ClusterConfig';
 
 class SocketServiceImpl {
     private readonly _socket: Socket;
+
     private readonly _rooms: Set<string> = new Set<string>();
+
     private readonly _roomListeners: { [key: string]: number } = {};
 
     constructor() {

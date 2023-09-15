@@ -1,4 +1,3 @@
-import React from 'react';
 import { toClass, createHexagonPath, Orientation } from '@kapeta/ui-web-utils';
 import { SVGText } from '@kapeta/ui-web-components';
 
@@ -8,7 +7,6 @@ import './Menu.less';
 interface MenuWrapperProps {
     menuItems: MenuItem[];
     visible?: boolean;
-    color?: string;
     closeMenu: () => void;
 }
 

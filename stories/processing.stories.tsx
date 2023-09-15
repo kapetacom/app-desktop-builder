@@ -14,7 +14,7 @@ export const ProcessingModal = () => {
         <div style={{ width: '400px' }}>
             <ThemeProvider theme={kapetaLight}>
                 <ProcessingContent
-                    title={'Signing in...'}
+                    title="Signing in..."
                     text="We are signing you in to Kapeta in your browser. This will log you in to your Kapeta account. If you cancel, you will not be able to sign in to Kapeta."
                     linkText="View in browser"
                     link="https://kapeta.com"

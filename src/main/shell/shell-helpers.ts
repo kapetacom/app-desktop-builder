@@ -1,11 +1,10 @@
 import process from 'node:process';
 import { userInfo } from 'os';
 import { spawnSync } from 'child_process';
-import { dialog } from 'electron';
 
 const args = ['-ilc', 'echo -n "_SHELL_ENV_DELIMITER_"; env; echo -n "_SHELL_ENV_DELIMITER_"; exit'];
 
-const env = {
+const spawnEnv = {
     // Disables Oh My Zsh auto-update thing that can block the process.
     DISABLE_AUTO_UPDATE: 'true',
 };
@@ -22,7 +21,9 @@ export const detectDefaultShell = () => {
         if (shell) {
             return shell;
         }
-    } catch {}
+    } catch {
+        // Ignore
+    }
 
     if (process.platform === 'darwin') {
         return env.SHELL || '/bin/zsh';
@@ -33,11 +34,12 @@ export const detectDefaultShell = () => {
 
 const defaultShell = detectDefaultShell();
 
-function parseEnv(env: string) {
-    env = env.split('_SHELL_ENV_DELIMITER_')[1];
+function parseEnv(envString: string) {
+    const cleanEnv = envString.split('_SHELL_ENV_DELIMITER_')[1];
     const returnValue = {};
 
-    for (const line of env.split('\n').filter((line) => Boolean(line))) {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const line of cleanEnv.split('\n').filter((lineI) => Boolean(lineI))) {
         const [key, ...values] = line.split('=');
         returnValue[key] = values.join('=');
     }
@@ -54,7 +56,7 @@ export function shellEnvSync(shell?: string): NodeJS.ProcessEnv {
         const { stdout } = spawnSync(shell || defaultShell, args, {
             env: {
                 ...process.env,
-                ...env,
+                ...spawnEnv,
             },
         });
         return parseEnv(stdout.toString());

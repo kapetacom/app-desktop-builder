@@ -1,11 +1,13 @@
 import { BrowserWindow } from 'electron';
+import { hasApp } from '@kapeta/nodejs-process';
 import { attachIPCListener, getPreloadScript, resolveHtmlPath } from '../helpers';
 import { ClusterService } from '../services/ClusterService';
-import { hasApp } from '@kapeta/nodejs-process';
 
 export class SplashScreen {
     private win: BrowserWindow | null = null;
+
     private clusterService: ClusterService;
+
     private status: any = {};
 
     constructor(clusterService: ClusterService) {
@@ -24,6 +26,7 @@ export class SplashScreen {
             });
         }
     }
+
     private async startCluster(win: BrowserWindow) {
         try {
             delete this.status.localClusterStatus;
@@ -33,7 +36,9 @@ export class SplashScreen {
             if (this.clusterService.isRunning()) {
                 await this.clusterService.stop();
                 // We need to wait a bit for the port to be released
-                await new Promise((resolve) => setTimeout(resolve, 1000));
+                await new Promise((resolve) => {
+                    setTimeout(resolve, 1000);
+                });
             }
             const info = await this.clusterService.start();
 
@@ -68,6 +73,7 @@ export class SplashScreen {
 
         this.status = {};
 
+        // eslint-disable-next-line no-async-promise-executor
         return new Promise<void>(async (resolve, reject) => {
             this.win = new BrowserWindow({
                 frame: false,

@@ -49,7 +49,7 @@ export const ProjectHomeFolderInput = (props: ProjectHomeFolderInputProps) => {
                 required={controller.required}
                 error={controller.showError}
                 autoFocus={controller.autoFocus}
-                variant={'standard'}
+                variant="standard"
                 sx={{
                     display: 'block',
                     mt: 1,
@@ -59,10 +59,10 @@ export const ProjectHomeFolderInput = (props: ProjectHomeFolderInputProps) => {
                     },
                 }}
             >
-                <InputLabel shrink={true} required={controller.required}>
+                <InputLabel shrink required={controller.required}>
                     {controller.label}
                 </InputLabel>
-                <Stack gap={1} justifyContent={'stretch'} direction={'row'} pt={2}>
+                <Stack gap={1} justifyContent="stretch" direction="row" pt={2}>
                     <Checkbox
                         checked={isEnabled}
                         onChange={(evt) => {

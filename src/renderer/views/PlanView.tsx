@@ -5,10 +5,10 @@ import { InstanceEventType, InstanceStatus } from '@kapeta/ui-web-context';
 import { Plan } from '@kapeta/schemas';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import { SimpleLoader } from '@kapeta/ui-web-components';
+import { AssetService } from 'renderer/api/AssetService';
 import { PlanEditor } from '../components/plan-editor/PlanEditor';
 import { normalizeKapetaUri, useLoadedPlanContext } from '../utils/planContextLoader';
 import { useAsset } from '../hooks/assetHooks';
-import { AssetService } from 'renderer/api/AssetService';
 import { SystemService } from '../api/SystemService';
 import './PlanView.less';
 
@@ -29,7 +29,7 @@ export const PlanView = (props: PlanViewProps) => {
     }
 
     const instanceInfos = useAsyncRetry(async () => {
-        return await SystemService.getInstanceStatusForPlan(normalizeKapetaUri(props.systemId));
+        return SystemService.getInstanceStatusForPlan(normalizeKapetaUri(props.systemId));
     }, [props.systemId]);
 
     const instanceStatusMap = useMemo(() => {
@@ -52,7 +52,7 @@ export const PlanView = (props: PlanViewProps) => {
         );
     }, [instanceInfos, props.systemId]);
 
-    const { resourceAssets, blocks, loading, currentlyLoading } = useLoadedPlanContext(planData.data?.content);
+    const { blocks, loading, currentlyLoading } = useLoadedPlanContext(planData.data?.content);
 
     let loadingText = 'Loading plan...';
 
@@ -65,11 +65,10 @@ export const PlanView = (props: PlanViewProps) => {
 
     return (
         <SimpleLoader loading={planData.loading || loading} text={loadingText}>
-            {!planData.loading && !loading && planData.data && resourceAssets && blocks && (
+            {!planData.loading && !loading && planData.data && blocks && (
                 <PlanEditor
                     plan={planData.data.content}
                     asset={planData.data}
-                    resourceAssets={resourceAssets}
                     instanceInfos={instanceInfos.value}
                     instanceStates={instanceStatusMap}
                     mode={plannerMode}

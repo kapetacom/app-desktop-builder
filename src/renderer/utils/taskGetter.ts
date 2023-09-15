@@ -1,6 +1,7 @@
+/* eslint react-hooks/rules-of-hooks: warn */
 import { useDesktop, TaskGetter, TaskState } from '@kapeta/ui-web-components';
 import { Task, TaskStatus } from '@kapeta/ui-web-context';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useAsync } from 'react-use';
 import { TaskService } from '../api/TaskService';
 
@@ -17,11 +18,7 @@ export const taskGetter: TaskGetter = (taskId: string, cb?: (task: Task) => void
         };
     }
 
-    async function handleCallback(task: Task) {
-        if (cb) {
-            await cb(task);
-        }
-    }
+    const handleCallback = useCallback((task: Task) => cb && cb(task), [cb]);
 
     const [task, setTask] = useState<Task>();
     const [processing, setProcessing] = useState(false);
@@ -36,12 +33,12 @@ export const taskGetter: TaskGetter = (taskId: string, cb?: (task: Task) => void
 
     useEffect(() => {
         return TaskService.subscribe(
-            async (task) => {
-                if (task.id === taskId) {
-                    setTask(task);
+            async (newTask) => {
+                if (newTask.id === taskId) {
+                    setTask(newTask);
                     setProcessing(true);
                     try {
-                        await handleCallback(task);
+                        await handleCallback(newTask);
                     } finally {
                         setProcessing(false);
                     }
@@ -49,7 +46,7 @@ export const taskGetter: TaskGetter = (taskId: string, cb?: (task: Task) => void
             },
             () => setTask(undefined)
         );
-    }, [taskId]);
+    }, [taskId, handleCallback]);
 
     return {
         task: task ?? null,

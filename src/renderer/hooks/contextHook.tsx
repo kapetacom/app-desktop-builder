@@ -5,10 +5,10 @@ import { AssetDisplay } from '@kapeta/ui-web-components';
 import { Plan } from '@kapeta/schemas';
 
 import { AssetInfo } from '@kapeta/ui-web-plan-editor';
-import { IdentityService } from '../api/IdentityService';
-import { SocketService } from '../api/SocketService';
 import { readPostedMessage } from '@kapeta/web-microfrontend/src/browser/utils/helpers';
 import { FragmentMessageTypes } from '@kapeta/web-microfrontend/src/browser/definitions/types';
+import { IdentityService } from '../api/IdentityService';
+import { SocketService } from '../api/SocketService';
 
 const AUTH_CHANGED_EVENT = 'auth-change';
 export type BlockHubSelectionCallback = (selection: AssetDisplay[]) => void;
@@ -61,11 +61,9 @@ const useKapetaContextInternal = (): KapetaContextData => {
             current: string;
         };
 
-        const profile = await IdentityService.getCurrent();
-
         return {
             contexts,
-            profile,
+            profile: await IdentityService.getCurrent(),
         };
     }, []);
 
@@ -73,7 +71,7 @@ const useKapetaContextInternal = (): KapetaContextData => {
         const handler = (event) => {
             const msg = readPostedMessage(event);
             if (msg?.type === FragmentMessageTypes.CONTEXT_CHANGE) {
-                data.retry();
+                data.retry.call(null);
             }
         };
         window.addEventListener('message', handler);
@@ -84,13 +82,13 @@ const useKapetaContextInternal = (): KapetaContextData => {
 
     useEffect(() => {
         return window.electron.ipcRenderer.on('auth', () => {
-            data.retry();
+            data.retry.call(null);
         });
     }, [data.retry]);
 
     useEffect(() => {
         const handler = () => {
-            data.retry();
+            data.retry.call(null);
         };
         SocketService.on(AUTH_CHANGED_EVENT, handler);
         return () => {
@@ -175,8 +173,12 @@ export const KapetaContext = createContext<KapetaContextData>({
     loading: true,
     blockHub: {
         visible: false,
-        open: () => {},
-        close: () => {},
+        open: () => {
+            // do nothing
+        },
+        close: () => {
+            // do nothing
+        },
     },
 });
 

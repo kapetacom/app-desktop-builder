@@ -20,7 +20,7 @@ export const PlanForm = (props: Props) => {
                 readOnly={props.readOnly}
                 namespaces={namespaces}
                 defaultValue={context.activeContext?.identity?.handle ?? 'local'}
-                help={'Give your plan an identifier with your handle. E.g. myhandle/my-plan'}
+                help="Give your plan an identifier with your handle. E.g. myhandle/my-plan"
             />
 
             <FormField
