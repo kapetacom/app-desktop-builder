@@ -129,16 +129,18 @@ export const EditorTabs = () => {
                                     </Tooltip>
                                 </Box>
 
-                                <IconButton
-                                    type="button"
-                                    size="small"
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        mainTabs.close(tabInfo.path);
-                                    }}
-                                >
-                                    <CloseIcon />
-                                </IconButton>
+                                {tabInfo.closeable ? (
+                                    <IconButton
+                                        type="button"
+                                        size="small"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            mainTabs.close(tabInfo.path);
+                                        }}
+                                    >
+                                        <CloseIcon />
+                                    </IconButton>
+                                ) : null}
                             </Stack>
                         }
                     />

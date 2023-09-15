@@ -3,7 +3,7 @@ import { usePlans } from './assetHooks';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { MainTabs, TabInfo, TabOptions } from './types';
 import { MemberIdentity } from '@kapeta/ui-web-types';
-import { KapetaContext, useKapetaContext } from './contextHook';
+import { useKapetaContext } from './contextHook';
 
 const TAB_LOCAL_STORAGE = '$main_tabs';
 export const DEFAULT_TAB_PATH = '/edit';
@@ -100,6 +100,7 @@ const createMainTabsContext = (context?: MemberIdentity): MainTabs => {
                   {
                       title: DEFAULT_TITLE,
                       path: DEFAULT_TAB_PATH,
+                      closeable: false,
                   },
               ]
     );
@@ -134,6 +135,7 @@ const createMainTabsContext = (context?: MemberIdentity): MainTabs => {
                         path: normalizedPath,
                         title: opts.title,
                         contextId,
+                        closeable: true,
                     },
                 ];
             });
