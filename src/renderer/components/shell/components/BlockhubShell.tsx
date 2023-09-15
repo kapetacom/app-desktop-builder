@@ -23,47 +23,49 @@ export const BlockhubShell = (props: Props) => {
     const [currentCategory, setCurrentCategory] = useState<BlockhubCategory>(BlockhubCategory.INSTALLED);
     const [assetTypeFilter, setAssetTypeFilter] = useState<AssetType>('ALL');
 
-    const assets = useAsyncRetry(async () => {
-        switch (currentCategory) {
-            case BlockhubCategory.INSTALLED:
-                const all = await api.registry().list();
-                const installedAssets = await AssetService.list();
-                const latest: { [p: string]: AssetInfo<any> } = {};
+    const localAssets = useAsyncRetry(async () => {
+        const all = await api.registry().list();
+        const installedAssets = await AssetService.list();
+        const latest: { [p: string]: AssetInfo<any> } = {};
 
-                installedAssets.forEach((installedAsset) => {
-                    const uri = parseKapetaUri(installedAsset.ref);
-                    if (latest[uri.fullName]) {
-                        if (versionIsBigger(installedAsset.version, latest[uri.fullName].version)) {
-                            latest[uri.fullName] = fromAsset(installedAsset);
-                        }
-                        return;
-                    }
+        installedAssets.forEach((installedAsset) => {
+            const uri = parseKapetaUri(installedAsset.ref);
+            if (latest[uri.fullName]) {
+                if (versionIsBigger(installedAsset.version, latest[uri.fullName].version)) {
                     latest[uri.fullName] = fromAsset(installedAsset);
-                    return;
+                }
+                return;
+            }
+            latest[uri.fullName] = fromAsset(installedAsset);
+            return;
+        });
+
+        return [
+            ...Object.values(latest).map((installedAsset): AssetDisplay<any> => {
+                const installedUri = parseKapetaUri(installedAsset.ref);
+                const asset = all.find((asset) => {
+                    const assetUri = parseKapetaUri(asset.content.metadata.name + ':' + asset.version);
+                    return assetUri.equals(installedUri);
                 });
 
-                return [
-                    ...Object.values(latest).map((installedAsset): AssetDisplay<any> => {
-                        const installedUri = parseKapetaUri(installedAsset.ref);
-                        const asset = all.find((asset) => {
-                            const assetUri = parseKapetaUri(asset.content.metadata.name + ':' + asset.version);
-                            return assetUri.equals(installedUri);
-                        });
+                if (asset) {
+                    return asset;
+                }
 
-                        if (asset) {
-                            return asset;
-                        }
+                return {
+                    content: installedAsset.content,
+                    version: installedAsset.version,
+                    readme: {
+                        content: 'Local Asset',
+                        type: 'text/markdown',
+                    },
+                };
+            }),
+        ];
+    }, []);
 
-                        return {
-                            content: installedAsset.content,
-                            version: installedAsset.version,
-                            readme: {
-                                content: 'Local Asset',
-                                type: 'text/markdown',
-                            },
-                        };
-                    }),
-                ];
+    const assets = useAsyncRetry(async () => {
+        switch (currentCategory) {
             case BlockhubCategory.OWN:
                 if (!props.handle) {
                     // Not logged in
@@ -75,15 +77,10 @@ export const BlockhubShell = (props: Props) => {
         }
     }, [currentCategory, props.handle]);
 
-    useAssetsChanged(
-        (evt) => {
-            if (evt.sourceOfChange === 'user' || currentCategory !== BlockhubCategory.INSTALLED) {
-                return;
-            }
-            assets.retry();
-        },
-        [assets, currentCategory]
-    );
+    useAssetsChanged(() => {
+        // We only get notified of local changes
+        localAssets.retry();
+    }, []);
 
     useEffect(() => {
         if (kapetaContext.blockHub.visible) {
@@ -112,7 +109,7 @@ export const BlockhubShell = (props: Props) => {
                     : undefined
             }
             fetcher={assetFetcher}
-            assets={assets}
+            assets={currentCategory === BlockhubCategory.INSTALLED ? localAssets : assets}
             category={currentCategory}
             onCategoryChange={(category: BlockhubCategory) => {
                 setCurrentCategory(category);
