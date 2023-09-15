@@ -1,3 +1,10 @@
+## [0.36.6](https://github.com/kapetacom/app-desktop-builder/compare/v0.36.5...v0.36.6) (2023-09-15)
+
+
+### Bug Fixes
+
+* update shell design to handle collapsed state better [KAP-1242] ([#135](https://github.com/kapetacom/app-desktop-builder/issues/135)) ([fb9b798](https://github.com/kapetacom/app-desktop-builder/commit/fb9b7981a7cb8a59fda2fd31ec917a500f14ce9e))
+
 ## [0.36.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.36.4...v0.36.5) (2023-09-15)
 
 
