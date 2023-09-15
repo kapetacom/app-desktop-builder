@@ -180,6 +180,7 @@ export const TopBar = withTheme((props: TopBarProps) => {
                             style: {
                                 maxHeight: '558px',
                                 width: '450px',
+                                borderRadius: '4px',
                             },
                         },
                     }}
@@ -192,6 +193,10 @@ export const TopBar = withTheme((props: TopBarProps) => {
                                 flexDirection: 'column',
                                 div: {
                                     width: '100%',
+                                },
+                                // Make long notifications wrap
+                                '.MuiListItemText-root': {
+                                    whiteSpace: 'normal',
                                 },
                                 '.MuiTypography-body2': {
                                     fontSize: '12px',
