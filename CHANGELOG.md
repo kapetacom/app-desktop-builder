@@ -1,3 +1,10 @@
+## [0.36.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.36.4...v0.36.5) (2023-09-15)
+
+
+### Bug Fixes
+
+* reload local blockhub assets on change [KAP-1231] ([#134](https://github.com/kapetacom/app-desktop-builder/issues/134)) ([b572515](https://github.com/kapetacom/app-desktop-builder/commit/b572515bc541adbd85d5545fe98ea2773b72e068))
+
 ## [0.36.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.36.3...v0.36.4) (2023-09-15)
 
 
