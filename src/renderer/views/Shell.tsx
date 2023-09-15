@@ -4,18 +4,21 @@ import 'react-tabs/style/react-tabs.css';
 import { TopBar } from 'renderer/components/shell/TopBar';
 import { MainLayout } from 'renderer/components/shell/MainLayout';
 import { EditorTabs } from 'renderer/components/shell/EditorTabs';
-import { CustomIcon } from 'renderer/components/shell/components/CustomIcon';
 
 import './Shell.less';
 import { useKapetaContext } from 'renderer/hooks/contextHook';
 import { useBackgroundTasks } from './hooks/useBackgroundTasks';
 import { useNotifications } from '../hooks/useNotifications';
 import { useEffect } from 'react';
-import { KapetaNotification } from '../components/shell/types';
-import { SimpleLoader } from '@kapeta/ui-web-components';
+import { KindIcon, SimpleLoader } from '@kapeta/ui-web-components';
 import { LoginScreen } from './LoginScreen';
 import { MainTabsContextProvider } from '../hooks/mainTabs';
 import { usePrevious } from 'react-use';
+import { NavigationButtons } from 'renderer/components/shell/NavigationButtons';
+import { Stack } from '@mui/system';
+import { Box } from '@mui/system';
+import { SvgIcon } from '@mui/material';
+import DeployIcon from '../components/shell/components/icons/DeployIcon.svg';
 
 const BASE_TRACKING_URL = 'https://desktop.kapeta.com';
 
@@ -28,13 +31,24 @@ const InnerShell = (props: Props) => {
 
     return (
         <MainTabsContextProvider>
+            <TopBar notifications={notifications}>
+                <Stack
+                    direction={'row'}
+                    sx={{
+                        width: '240px',
+                        minWidth: '240px',
+                        borderBottom: '1px solid rgba(255, 255, 255, 0.12)',
+                        borderRight: '1px solid rgba(255, 255, 255, 0.12)',
+                    }}
+                >
+                    <Box sx={{ flexGrow: 1, '-webkit-app-region': 'drag', '-webkit-user-select': 'none' }} />
+                    <NavigationButtons />
+                </Stack>
+
+                <EditorTabs />
+            </TopBar>
             <MainLayout
                 location={location}
-                topBar={
-                    <TopBar notifications={notifications}>
-                        <EditorTabs />
-                    </TopBar>
-                }
                 menu={[
                     {
                         id: 'edit',
@@ -42,7 +56,7 @@ const InnerShell = (props: Props) => {
                         loading: false,
                         name: 'Edit',
                         open: false,
-                        icon: <CustomIcon icon="Plan" />,
+                        icon: <KindIcon kind="core/plan" size={24} />,
                         'data-kap-id': 'app-left-menu-edit-button',
                     },
                     {
@@ -51,7 +65,7 @@ const InnerShell = (props: Props) => {
                         loading: false,
                         name: 'Deploy',
                         open: false,
-                        icon: <CustomIcon icon="Deploy" />,
+                        icon: <SvgIcon component={DeployIcon} width={24} height={24} />,
                         'data-kap-id': 'app-left-menu-deploy-button',
                     },
                 ]}

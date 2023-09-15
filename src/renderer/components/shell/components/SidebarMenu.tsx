@@ -10,6 +10,7 @@ export const SidebarList = styled(List, {
     padding: theme.spacing[1],
     '& .MuiListItemIcon-root': {
         // alignContent: "center",
+        color: theme.palette.text.primary,
         justifyContent: 'center',
         width: '40px',
         minWidth: '40px',
@@ -17,12 +18,15 @@ export const SidebarList = styled(List, {
     },
     gap: '24px',
     '& .MuiListItemButton-root': {
-        padding: theme.spacing(1, isOpen ? 2 : 1.5),
+        padding: theme.spacing(1, isOpen ? 2 : 0.5),
     },
 }));
 
 export const SidebarListItem = styled(ListItem)(({ theme }) => ({
     padding: 0,
+    borderRadius: '6px',
 }));
 
-export const SidebarListItemButton = styled(ListItemButton)<{ href?: string }>({});
+export const SidebarListItemButton = styled(ListItemButton)<{ href?: string }>({
+    borderRadius: '6px',
+});

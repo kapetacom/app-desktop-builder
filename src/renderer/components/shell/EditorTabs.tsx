@@ -4,13 +4,15 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getAssetTitle } from '../plan-editor/helpers';
 import { KapetaTab, KapetaTabs, KapetaTabsType } from './components/KapetaTabs';
-import { CustomIcon } from './components/CustomIcon';
 import { Person } from '@mui/icons-material';
 import { useKapetaContext } from '../../hooks/contextHook';
 import { DEFAULT_TAB_PATH, normalizeUrl, useMainTabs } from '../../hooks/mainTabs';
 import { usePlans } from '../../hooks/assetHooks';
 import ApartmentIcon from '@mui/icons-material/Apartment';
-import { Tooltip } from '@kapeta/ui-web-components';
+import { KindIcon, Tooltip } from '@kapeta/ui-web-components';
+import { SvgIcon } from '@mui/material';
+import DeployIcon from './components/icons/DeployIcon.svg';
+import { Add } from '@mui/icons-material';
 
 export const EditorTabs = () => {
     const planAssets = usePlans();
@@ -32,7 +34,7 @@ export const EditorTabs = () => {
             {mainTabs.active.map((tabInfo) => {
                 let label: React.ReactNode = 'New tab';
                 let variant: KapetaTabsType = 'edit';
-                let icon = <CustomIcon icon="Plan" />;
+                let icon = <KindIcon kind="core/plan" size={16} />;
 
                 if (tabInfo.path.startsWith('/edit')) {
                     // If it is an editor tab:
@@ -45,13 +47,13 @@ export const EditorTabs = () => {
                             return null;
                         }
                         label = tabInfo.title ?? `${getAssetTitle(plan)} [${plan.version}]`;
-                        icon = <CustomIcon icon="Plan" />;
+                        icon = <KindIcon kind="core/plan" size={16} />;
                     } else {
-                        icon = <CustomIcon icon="Plan" />;
+                        icon = <KindIcon kind="core/plan" size={16} />;
                         label = 'My plans';
                     }
                 } else if (tabInfo.path.startsWith('/deployments')) {
-                    icon = <CustomIcon icon="Deploy" />;
+                    icon = <SvgIcon component={DeployIcon} width={16} height={16} />;
                     variant = 'deploy';
                     if (tabInfo.path === '/deployments') {
                         label = 'Deployments';
@@ -105,11 +107,14 @@ export const EditorTabs = () => {
                         variant={variant}
                         icon={icon}
                         iconPosition={'start'}
+                        sx={{
+                            pr: tabInfo.closeable ? 0 : 2,
+                        }}
                         label={
                             <Stack
                                 gap={'4px'}
                                 alignItems={'center'}
-                                width={'calc(100% - 32px)'}
+                                flexGrow={1}
                                 direction={'row'}
                                 justifyContent={'space-between'}
                             >
@@ -131,11 +136,15 @@ export const EditorTabs = () => {
 
                                 {tabInfo.closeable ? (
                                     <IconButton
+                                        className={'close-button'}
                                         type="button"
                                         size="small"
                                         onClick={(e) => {
                                             e.preventDefault();
                                             mainTabs.close(tabInfo.path);
+                                        }}
+                                        sx={{
+                                            '& .MuiSvgIcon-root': { fontSize: '13px' },
                                         }}
                                     >
                                         <CloseIcon />
@@ -146,8 +155,8 @@ export const EditorTabs = () => {
                     />
                 );
             })}
-            <Button onClick={() => mainTabs.open(DEFAULT_TAB_PATH, { navigate: true })}>
-                <i className="fa fa-plus add-plan" />
+            <Button onClick={() => mainTabs.open(DEFAULT_TAB_PATH, { navigate: true })} sx={{ color: 'white' }}>
+                <Add />
             </Button>
         </KapetaTabs>
     );

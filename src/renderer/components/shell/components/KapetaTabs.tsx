@@ -22,6 +22,7 @@ export const KapetaTab = styled(Tab, {
         maxWidth: '360px',
         textTransform: 'none',
         justifyContent: 'stretch',
+        borderRight: '1px solid rgba(255, 255, 255, 0.12)',
     },
     ({ variant, theme }: { variant?: 'deploy' | 'edit'; theme: any }) => {
         const bg =
@@ -37,6 +38,9 @@ export const KapetaTab = styled(Tab, {
             //     backgroundColor: bg?.enabled,
             //     color: theme.tabs.text.enabled,
             // },
+            '& .asset-icon': {
+                marginRight: '8px',
+            },
             '&.Mui-selected': {
                 backgroundColor: bg?.active,
                 color: theme.tabs.text.active,
