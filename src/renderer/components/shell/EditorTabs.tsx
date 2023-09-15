@@ -108,7 +108,7 @@ export const EditorTabs = () => {
                         icon={icon}
                         iconPosition={'start'}
                         sx={{
-                            pr: tabInfo.closeable ? 0 : 2,
+                            pr: tabInfo.closeable ? 0.5 : 2,
                         }}
                         label={
                             <Stack
