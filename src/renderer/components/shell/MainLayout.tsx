@@ -9,11 +9,11 @@ import { ContextPicker } from './components/ContextPicker';
 import { KapetaIcon } from './components/KapetaIcon';
 import { Logo } from './components/KapetaLogo';
 import { SidebarList, SidebarListItem, SidebarListItemButton } from './components/SidebarMenu';
-import { CustomIcon } from './components/CustomIcon';
 import { Identity, MemberIdentity } from '@kapeta/ui-web-types';
 import { BlockhubShell } from './components/BlockhubShell';
 import { useKapetaContext } from '../../hooks/contextHook';
-import { NavigationButtons } from './NavigationButtons';
+import BlockHubIcon from './components/icons/large/BlockHubIcon.svg';
+import { KindIcon } from '@kapeta/ui-web-components';
 
 interface ConsoleLocation {
     pathname: string;
@@ -54,8 +54,6 @@ export const MainLayout = (props: Props) => {
         <>
             <section className="main-layout">
                 <MiniDrawer variant="permanent" open={drawerIsOpen}>
-                    <NavigationButtons />
-
                     <ContextPicker
                         contexts={props.context?.contexts || []}
                         userHandle={props.context?.identity?.handle || ''}
@@ -74,7 +72,7 @@ export const MainLayout = (props: Props) => {
                                 let icon = item.error ? (
                                     <i className="fa fa-exclamation-triangle" />
                                 ) : (
-                                    item.icon || <CustomIcon icon="Block" />
+                                    item.icon || <KindIcon kind="core/block-type" />
                                 );
                                 icon = item.loading ? <i className="fa fa-circle-notch fa-spin" /> : icon;
 
@@ -99,7 +97,7 @@ export const MainLayout = (props: Props) => {
                                 data-kap-id="app-left-menu-block-hub-button"
                             >
                                 <ListItemIcon>
-                                    <CustomIcon icon="Block" />
+                                    <BlockHubIcon width={24} height={24} />
                                 </ListItemIcon>
                                 <ListItemText primary="Block Hub" />
                             </SidebarListItemButton>
@@ -108,11 +106,11 @@ export const MainLayout = (props: Props) => {
                     <IconButton
                         sx={{
                             display: 'block',
-                            p: drawerIsOpen ? 4 : 2,
+                            py: 2,
                             width: '100%',
                             '&:hover': { backgroundColor: 'inherit' },
-                            transition: 'padding',
                             marginTop: 'auto',
+                            color: 'white',
                         }}
                         onClick={toggleDrawer}
                     >
@@ -121,7 +119,6 @@ export const MainLayout = (props: Props) => {
                 </MiniDrawer>
 
                 <section style={{ flexGrow: 1 }}>
-                    {props.topBar}
                     <main>{props.children}</main>
                 </section>
             </section>

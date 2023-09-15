@@ -104,8 +104,11 @@ export const TopBar = withTheme((props: TopBarProps) => {
 
     return (
         <AppBar
-            position="static"
+            position="fixed"
             sx={{
+                // Make it be on top of the sidebar, and remove the gradient image
+                zIndex: 1300,
+                backgroundImage: 'none',
                 height: '40px',
                 '&>.MuiToolbar-root': {
                     height: '40px',

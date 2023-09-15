@@ -3,8 +3,9 @@ import { Box, IconButton, Stack } from '@mui/material';
 import { useLocation, useNavigate, Location, useNavigationType } from 'react-router-dom';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import ArrowForward from '@mui/icons-material/ArrowForward';
+import { History } from '@mui/icons-material';
 
-export const NavigationButtons = (props) => {
+export const NavigationButtons = () => {
     const location = useLocation();
     const navigationType = useNavigationType();
     const navigate = useNavigate();
@@ -52,16 +53,22 @@ export const NavigationButtons = (props) => {
             justifyContent={'end'}
             sx={{
                 height: '40px',
-                marginTop: '-40px',
+                padding: '0 16px',
+                '& .MuiSvgIcon-root': {
+                    fontSize: '16px',
+                },
             }}
         >
             {/* Make the empty space draggable */}
-            <Box sx={{ flexGrow: 1, '-webkit-app-region': 'drag', '-webkit-user-select': 'none' }} />
             <IconButton onClick={back} disabled={!hasPrevious} size="small">
                 <ArrowBack />
             </IconButton>
             <IconButton onClick={forward} disabled={!hasNext} size="small">
                 <ArrowForward />
+            </IconButton>
+
+            <IconButton disabled size="small" sx={{ ml: 2 }}>
+                <History />
             </IconButton>
         </Stack>
     );

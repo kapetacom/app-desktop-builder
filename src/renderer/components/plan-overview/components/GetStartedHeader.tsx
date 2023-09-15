@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button, CircularProgress, Stack, Typography } from '@mui/material';
-import { CustomIcon } from '../../shell/components/CustomIcon';
 import AddIcon from '../../shell/components/icons/large/AddIcon.svg';
 import ImportIcon from '../../shell/components/icons/large/ImportIcon.svg';
 import BlockHubIcon from '../../shell/components/icons/large/BlockHubIcon.svg';
