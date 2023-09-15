@@ -1,3 +1,10 @@
+## [0.36.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.36.3...v0.36.4) (2023-09-15)
+
+
+### Bug Fixes
+
+* notification UI tweaks ([#133](https://github.com/kapetacom/app-desktop-builder/issues/133)) ([3ff806b](https://github.com/kapetacom/app-desktop-builder/commit/3ff806b13ae980efdc451780918077e0974e4ae2))
+
 ## [0.36.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.36.2...v0.36.3) (2023-09-14)
 
 
