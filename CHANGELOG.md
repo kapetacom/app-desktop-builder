@@ -1,3 +1,10 @@
+## [0.36.7](https://github.com/kapetacom/app-desktop-builder/compare/v0.36.6...v0.36.7) (2023-09-16)
+
+
+### Bug Fixes
+
+* Adjust height of planner sidepanels ([#136](https://github.com/kapetacom/app-desktop-builder/issues/136)) ([097ff37](https://github.com/kapetacom/app-desktop-builder/commit/097ff37b0465abd44199f4f9fa2de330f7ba4201))
+
 ## [0.36.6](https://github.com/kapetacom/app-desktop-builder/compare/v0.36.5...v0.36.6) (2023-09-15)
 
 
