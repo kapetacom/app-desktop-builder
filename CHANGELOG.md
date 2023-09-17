@@ -1,3 +1,10 @@
+# [0.37.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.36.7...v0.37.0) (2023-09-17)
+
+
+### Features
+
+* Bump local cluster service to support default ports for block types ([#137](https://github.com/kapetacom/app-desktop-builder/issues/137)) ([3653fdd](https://github.com/kapetacom/app-desktop-builder/commit/3653fdd09f6233845fc0131587e40e78bb921fc9))
+
 ## [0.36.7](https://github.com/kapetacom/app-desktop-builder/compare/v0.36.6...v0.36.7) (2023-09-16)
 
 
