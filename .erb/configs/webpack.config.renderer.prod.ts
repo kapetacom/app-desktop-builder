@@ -138,9 +138,7 @@ const configuration: webpack.Configuration = {
         new webpack.EnvironmentPlugin({
             NODE_ENV: 'production',
             DEBUG_PROD: false,
-            RELEASE_VERSION: packageJson.version,
-
-
+            RELEASE_VERSION: `v${packageJson.version}`,
         }),
 
         new MiniCssExtractPlugin({
