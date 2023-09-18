@@ -5,7 +5,6 @@ export interface TabInfo {
     title?: string;
     loading?: boolean;
     contextId?: string;
-    closeable?: boolean;
 }
 
 export interface TabOptions {

@@ -100,7 +100,6 @@ const createMainTabsContext = (context?: MemberIdentity): MainTabs => {
                   {
                       title: DEFAULT_TITLE,
                       path: DEFAULT_TAB_PATH,
-                      closeable: false,
                   },
               ]
     );
@@ -135,7 +134,6 @@ const createMainTabsContext = (context?: MemberIdentity): MainTabs => {
                         path: normalizedPath,
                         title: opts.title,
                         contextId,
-                        closeable: true,
                     },
                 ];
             });
@@ -148,11 +146,6 @@ const createMainTabsContext = (context?: MemberIdentity): MainTabs => {
 
     const closeTab = useCallback(
         (path: string) => {
-            if (path === DEFAULT_TAB_PATH) {
-                // Can't close the default tab
-                return;
-            }
-
             // If the tab we're closing is the current tab, navigate to the previous tab, or default url if there is no previous tab
             setTabs((previous) => {
                 const newTabState = previous.filter((tab) => tab.path !== path);
