@@ -131,13 +131,18 @@ export const TopBar = withTheme((props: TopBarProps) => {
                     divider={<Divider orientation="vertical" flexItem />}
                     spacing={1}
                     marginRight={1}
+                    sx={{
+                        '& .MuiSvgIcon-root': {
+                            fontSize: '16px',
+                        },
+                    }}
                 >
                     <IconButton
                         size="small"
                         sx={{ width: '40px', height: '40px' }}
                         data-kap-id="app-top-bar-help-button"
                     >
-                        <QuestionMarkIcon fontSize="medium" />
+                        <QuestionMarkIcon />
                     </IconButton>
 
                     <IconButton
@@ -159,9 +164,9 @@ export const TopBar = withTheme((props: TopBarProps) => {
                         data-kap-id="app-top-bar-notifications-button"
                     >
                         {hasUnreadNotifications ? (
-                            <NotificationsActiveIcon fontSize="medium" color="inherit" />
+                            <NotificationsActiveIcon color="inherit" />
                         ) : (
-                            <NotificationsNoneIcon fontSize="medium" color="inherit" />
+                            <NotificationsNoneIcon color="inherit" />
                         )}
                         {notificationProgress && (
                             <CircularProgress size={36} sx={{ position: 'absolute' }} color="inherit" />

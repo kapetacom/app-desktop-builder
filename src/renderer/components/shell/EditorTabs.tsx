@@ -53,7 +53,7 @@ export const EditorTabs = () => {
                         label = 'My plans';
                     }
                 } else if (tabInfo.path.startsWith('/deployments')) {
-                    icon = <SvgIcon component={DeployIcon} width={16} height={16} />;
+                    icon = <SvgIcon component={DeployIcon} />;
                     variant = 'deploy';
                     if (tabInfo.path === '/deployments') {
                         label = 'Deployments';
@@ -100,6 +100,7 @@ export const EditorTabs = () => {
                 }
 
                 const value = normalizeUrl(tabInfo.path);
+                const isCloseable = mainTabs.active.length > 1;
                 return (
                     <KapetaTab
                         value={value}
@@ -108,7 +109,10 @@ export const EditorTabs = () => {
                         icon={icon}
                         iconPosition={'start'}
                         sx={{
-                            pr: tabInfo.closeable ? 0.5 : 2,
+                            pr: isCloseable ? 0.5 : 2,
+                            '& .MuiSvgIcon-root': {
+                                fontSize: '16px',
+                            },
                         }}
                         label={
                             <Stack
@@ -134,7 +138,7 @@ export const EditorTabs = () => {
                                     </Tooltip>
                                 </Box>
 
-                                {tabInfo.closeable ? (
+                                {isCloseable ? (
                                     <IconButton
                                         className={'close-button'}
                                         type="button"
