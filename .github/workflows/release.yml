@@ -12,22 +12,9 @@ jobs:
         uses: actions/checkout@v3
         with:
           token: ${{ secrets.BOT_TOKEN }}
-          fetch-depth: 0
 
       - name: Semantic Release
         id: semantic_release
         uses: cycjimmy/semantic-release-action@v3
         env:
           GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
-
-      - name: Create sentry release
-        if: steps.semantic_release.outputs.new_release_published == 'true'
-        uses: getsentry/action-release@v1
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
-          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
-        with:
-          environment: production
-          sourcemaps: './release/app/dist'
-          version: ${{ steps.semantic_release.outputs.new_release_version }}
