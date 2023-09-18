@@ -1,3 +1,10 @@
+## [0.37.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.37.1...v0.37.2) (2023-09-18)
+
+
+### Bug Fixes
+
+* allow closing all but the last tab and fix icons [KAP-1241] ([#139](https://github.com/kapetacom/app-desktop-builder/issues/139)) ([8bc3f95](https://github.com/kapetacom/app-desktop-builder/commit/8bc3f959e7ffad6161029269321523be1b9bd3da))
+
 ## [0.37.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.37.0...v0.37.1) (2023-09-18)
 
 
