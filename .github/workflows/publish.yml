@@ -35,7 +35,7 @@ jobs:
         with:
           environment: production
           sourcemaps: './release/app/dist'
-          version: ${GITHUB_REF#refs/tags/v}
+          version: ${{ github.ref }}
 
   publish_linux:
     runs-on: ubuntu-latest-m
