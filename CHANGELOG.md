@@ -1,3 +1,10 @@
+## [0.37.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.37.0...v0.37.1) (2023-09-18)
+
+
+### Bug Fixes
+
+* integrate sentry release tracking ([#138](https://github.com/kapetacom/app-desktop-builder/issues/138)) ([9654056](https://github.com/kapetacom/app-desktop-builder/commit/96540569cb6bdd40af335727a0ae26eceed285ba))
+
 # [0.37.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.36.7...v0.37.0) (2023-09-17)
 
 
