@@ -93,6 +93,7 @@ export const LoginScreen = (props: Props) => {
                                     '-webkit-app-region': 'no-drag',
                                 }}
                                 href={'https://app.kapeta.com/signup'}
+                                rel="noreferrer"
                             >
                                 Create one
                             </a>

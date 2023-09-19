@@ -15,8 +15,7 @@ import { LoginScreen } from './LoginScreen';
 import { MainTabsContextProvider } from '../hooks/mainTabs';
 import { usePrevious } from 'react-use';
 import { NavigationButtons } from 'renderer/components/shell/NavigationButtons';
-import { Stack } from '@mui/system';
-import { Box } from '@mui/system';
+import { Stack, Box } from '@mui/system';
 import { SvgIcon } from '@mui/material';
 import DeployIcon from '../components/shell/components/icons/DeployIcon.svg';
 
@@ -129,7 +128,7 @@ export function Shell() {
         window.analytics.page(location.pathname, {
             path: location.pathname,
             referrer,
-            url: url,
+            url,
         });
     }, [location.pathname]);
 

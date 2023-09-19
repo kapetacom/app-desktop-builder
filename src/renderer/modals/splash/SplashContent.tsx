@@ -4,6 +4,7 @@ import LogoSquareDark from '../../../../assets/logo_square_dark.svg';
 import LogoTextWhite from '../../../../assets/logo_text_white.svg';
 import ImageRocket from '../../../../assets/images/rocket.png';
 import { isMac } from '../../utils/osUtils';
+
 export enum SplashStatusCheck {
     LOADING = 'LOADING',
     OK = 'OK',

@@ -29,7 +29,8 @@
         "test": "jest",
         "format": "prettier --write .",
         "storybook": "start-storybook -s assets",
-        "build-storybook": "build-storybook"
+        "build-storybook": "build-storybook",
+        "recalculate-hash": "node src/scripts/recalculate-hash.js"
     },
     "lint-staged": {
         "*.{js,jsx,ts,tsx}": [

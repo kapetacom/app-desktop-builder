@@ -21,7 +21,7 @@ import { ResourceRole } from '@kapeta/ui-web-types';
 import { BlockDefinition, Resource, Connection, Entity, IconType, BlockInstance } from '@kapeta/schemas';
 
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
-import { cloneDeep } from 'lodash';
+import _, { cloneDeep } from 'lodash';
 import { PlannerContext, PlannerContextData, PlannerSidebar } from '@kapeta/ui-web-plan-editor';
 import { BlockInfo, DataEntityType, EditItemInfo } from '../../types';
 
@@ -31,7 +31,6 @@ import { Button } from '@mui/material';
 import { useKapetaContext } from '../../../../hooks/contextHook';
 import { useNamespacesForField } from '../../../../hooks/useNamespacesForField';
 import { fromTypeProviderToAssetType } from '../../../../utils/assetTypeConverters';
-import _ from 'lodash';
 import { updateBlockFromMapping } from '../../helpers';
 
 function getResourceVersions(dataKindUri) {

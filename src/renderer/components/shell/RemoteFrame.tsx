@@ -20,7 +20,7 @@ export const RemoteFrame = (props: Props) => {
     const location = useLocation();
     const [ready, setReady] = useState(false);
 
-    const normalizedPath = normalizeUrl('/' + props.path);
+    const normalizedPath = normalizeUrl(`/${props.path}`);
     const currentTab = mainTabs.active.find((tab) => tab.path === normalizedPath);
 
     const frameContext = useMemo<FrameContextInfo | undefined>(() => {

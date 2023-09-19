@@ -1,9 +1,8 @@
 let baseUrl;
 
-if (typeof window !== 'undefined' &&
-    window['KapetaDesktop']?.cluster_service?.url) {
+if (typeof window !== 'undefined' && window['KapetaDesktop']?.cluster_service?.url) {
     //We're inside the desktop app
-    baseUrl = window['KapetaDesktop']?.cluster_service?.url
+    baseUrl = window['KapetaDesktop']?.cluster_service?.url;
 } else if (typeof process !== 'undefined' && process.env) {
     //We're inside Node
     baseUrl = process.env.REACT_APP_CLUSTER_SERVICE;

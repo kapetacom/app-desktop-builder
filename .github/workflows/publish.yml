@@ -116,6 +116,9 @@ jobs:
         run: |
           cp release/build/latest.yml release/signed/latest.yml
           mv "release/signed/Kapeta Setup ${{steps.get_version.outputs.version-without-v}}.exe" release/signed/Kapeta-Setup-${{steps.get_version.outputs.version-without-v}}.exe
+      
+      - name: recalculate hash
+        run: npm run recalculate-hash release/signed/latest.yml
 
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2

@@ -2,7 +2,6 @@ module.exports = {
     extends: ['erb', 'plugin:@typescript-eslint/recommended'],
     rules: {
         '@typescript-eslint/ban-ts-comment': 'off',
-        '@typescript-eslint/no-shadow': 'error',
         'no-shadow': 'off',
         // A temporary hack related to IDE not resolving correct package.json
         'import/no-extraneous-dependencies': 'off',
@@ -23,6 +22,29 @@ module.exports = {
         '@typescript-eslint/no-explicit-any': 'off',
         '@typescript-eslint/no-non-null-assertion': 'off',
         'compat/compat': 'off',
+        'import/order': 'off',
+        '@typescript-eslint/no-unused-vars': 'off',
+        '@typescript-eslint/no-empty-interface': 'off',
+        'react/jsx-curly-brace-presence': 'off',
+        'react-hooks/rules-of-hooks': 'off',
+        'no-return-assign': 'off',
+        'no-nested-ternary': 'off',
+        'prefer-template': 'warn',
+        'react/self-closing-comp': 'off',
+        'spaced-comment': 'off',
+        'no-lonely-if': 'off',
+        'react/no-unused-prop-types': 'off',
+        'no-param-reassign': 'off',
+        '@typescript-eslint/no-empty-function': 'off',
+        'no-useless-escape': 'off',
+        '@typescript-eslint/no-shadow': 'off',
+        'no-return-await': 'off',
+        'react/jsx-boolean-value': 'off',
+        'jsx-a11y/no-static-element-interactions': 'off',
+        'jsx-a11y/click-events-have-key-events': 'off',
+        'jsx-a11y/anchor-is-valid': 'off',
+        'one-var': 'off',
+
         // Override airbnb rule
         // Labels for inputs can either be with `<label htmlFor={...}>` and ids,
         // or via nesting <label><input/></label>

@@ -71,7 +71,7 @@ const router = createHashRouter([
                     while (path && path.startsWith('/')) {
                         path = path.substr(1);
                     }
-                    path = 'deployments' + (path ? '/' + path : '');
+                    path = `deployments${path ? `/${path}` : ''}`;
 
                     return <RemoteFrame baseUrl={window.KapetaDesktop.urls.deployments} path={path} />;
                 },
@@ -91,12 +91,12 @@ const router = createHashRouter([
             {
                 path: 'organizations/:handle/*',
                 Component: () => {
-                    const { handle: handle } = useParams();
+                    const { handle } = useParams();
                     let { '*': path } = useParams();
                     return (
                         <RemoteFrame
                             baseUrl={window.KapetaDesktop.urls.settings}
-                            path={`organizations/${handle}${path ? '/' + path : '/settings/general'}`}
+                            path={`organizations/${handle}${path ? `/${path}` : '/settings/general'}`}
                         />
                     );
                 },
