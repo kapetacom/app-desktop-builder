@@ -236,7 +236,7 @@ export class MenuBuilder {
     }
 
     buildDefaultTemplate() {
-        const templateDefault = [
+        const templateDefault: MenuItemConstructorOptions[] = [
             {
                 label: '&File',
                 submenu: [
@@ -256,24 +256,24 @@ export class MenuBuilder {
             {
                 label: '&Edit',
                 submenu: [
-                    { label: '&Undo', accelerator: 'Ctrl+Z', selector: 'undo:' },
+                    { label: '&Undo', accelerator: 'Ctrl+Z', role: 'undo' },
                     {
                         label: '&Redo',
                         accelerator: 'Shift+Ctrl+Z',
-                        selector: 'redo:',
+                        role: 'redo',
                     },
                     { type: 'separator' },
-                    { label: '&Cut', accelerator: 'Ctrl+X', selector: 'cut:' },
-                    { label: '&Copy', accelerator: 'Ctrl+C', selector: 'copy:' },
+                    { label: '&Cut', accelerator: 'Ctrl+X', role: 'cut' },
+                    { label: '&Copy', accelerator: 'Ctrl+C', role: 'copy' },
                     {
                         label: '&Paste',
                         accelerator: 'Ctrl+V',
-                        selector: 'paste:',
+                        role: 'paste',
                     },
                     {
                         label: '&Select All',
                         accelerator: 'Ctrl+A',
-                        selector: 'selectAll:',
+                        role: 'selectAll',
                     },
                 ],
             },
