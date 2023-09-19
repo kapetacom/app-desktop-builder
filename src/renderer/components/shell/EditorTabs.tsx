@@ -1,18 +1,16 @@
 import React, { useEffect } from 'react';
-import { Box, Button, IconButton, Stack, Typography } from '@mui/material';
+import { Box, Button, IconButton, Stack, Typography, SvgIcon } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getAssetTitle } from '../plan-editor/helpers';
 import { KapetaTab, KapetaTabs, KapetaTabsType } from './components/KapetaTabs';
-import { Person } from '@mui/icons-material';
+import { Person, Add } from '@mui/icons-material';
 import { useKapetaContext } from '../../hooks/contextHook';
 import { DEFAULT_TAB_PATH, normalizeUrl, useMainTabs } from '../../hooks/mainTabs';
 import { usePlans } from '../../hooks/assetHooks';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import { KindIcon, Tooltip } from '@kapeta/ui-web-components';
-import { SvgIcon } from '@mui/material';
 import DeployIcon from './components/icons/DeployIcon.svg';
-import { Add } from '@mui/icons-material';
 
 export const EditorTabs = () => {
     const planAssets = usePlans();

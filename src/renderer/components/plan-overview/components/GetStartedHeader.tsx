@@ -5,6 +5,7 @@ import ImportIcon from '../../shell/components/icons/large/ImportIcon.svg';
 import BlockHubIcon from '../../shell/components/icons/large/BlockHubIcon.svg';
 import { useKapetaContext } from '../../../hooks/contextHook';
 import { AssetImporter } from '../../../utils/useAssetImporter';
+
 interface XLButtonProps {
     variant: 'edit' | 'blockhub' | 'import';
     label: string;
@@ -57,7 +58,7 @@ const XLButton = (props: XLButtonProps) => {
                 padding: '20px 16px',
                 height: '110px',
                 bgcolor: bgColor,
-                color: color,
+                color,
                 textAlign: 'center',
 
                 '&:hover': {

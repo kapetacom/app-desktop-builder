@@ -112,7 +112,7 @@ export const PlanEditor = withPlannerContext(
 
         const containerClass = toClass({
             'plan-editor': true,
-            readonly: readonly,
+            readonly,
         });
 
         const creatingNewBlock = !!(editInfo?.creating && editInfo.type === DataEntityType.BLOCK);
@@ -160,7 +160,7 @@ export const PlanEditor = withPlannerContext(
                         onShowMoreAssets={() => {
                             kapetaContext.blockHub.open(planner.asset!, (selection) => {
                                 selection.forEach((asset, i) => {
-                                    const ref = normalizeKapetaUri(asset.content.metadata.name + ':' + asset.version);
+                                    const ref = normalizeKapetaUri(`${asset.content.metadata.name}:${asset.version}`);
                                     planner.addBlockInstance({
                                         name: asset.content.metadata.title ?? parseKapetaUri(ref).name,
                                         id: randomUUID(),

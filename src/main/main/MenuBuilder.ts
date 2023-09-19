@@ -1,5 +1,6 @@
 import { app, Menu, shell, BrowserWindow, MenuItemConstructorOptions } from 'electron';
 import { AutoUpdateHelper } from './AutoUpdateHelper';
+import { appVersion } from '../helpers';
 
 interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
     selector?: string;
@@ -253,6 +254,30 @@ export class MenuBuilder {
                 ],
             },
             {
+                label: '&Edit',
+                submenu: [
+                    { label: '&Undo', accelerator: 'Ctrl+Z', selector: 'undo:' },
+                    {
+                        label: '&Redo',
+                        accelerator: 'Shift+Ctrl+Z',
+                        selector: 'redo:',
+                    },
+                    { type: 'separator' },
+                    { label: '&Cut', accelerator: 'Ctrl+X', selector: 'cut:' },
+                    { label: '&Copy', accelerator: 'Ctrl+C', selector: 'copy:' },
+                    {
+                        label: '&Paste',
+                        accelerator: 'Ctrl+V',
+                        selector: 'paste:',
+                    },
+                    {
+                        label: '&Select All',
+                        accelerator: 'Ctrl+A',
+                        selector: 'selectAll:',
+                    },
+                ],
+            },
+            {
                 label: '&View',
                 submenu:
                     process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true'
@@ -293,6 +318,10 @@ export class MenuBuilder {
             {
                 label: 'Help',
                 submenu: [
+                    {
+                        label: 'Version: ' + appVersion(),
+                        enabled: false,
+                    },
                     {
                         label: 'Learn More',
                         click() {

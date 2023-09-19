@@ -37,14 +37,13 @@ export const BlockhubShell = (props: Props) => {
                 return;
             }
             latest[uri.fullName] = fromAsset(installedAsset);
-            return;
         });
 
         return [
             ...Object.values(latest).map((installedAsset): AssetDisplay<any> => {
                 const installedUri = parseKapetaUri(installedAsset.ref);
                 const asset = all.find((asset) => {
-                    const assetUri = parseKapetaUri(asset.content.metadata.name + ':' + asset.version);
+                    const assetUri = parseKapetaUri(`${asset.content.metadata.name}:${asset.version}`);
                     return assetUri.equals(installedUri);
                 });
 

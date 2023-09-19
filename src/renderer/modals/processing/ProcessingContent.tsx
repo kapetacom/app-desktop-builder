@@ -1,6 +1,9 @@
 import React from 'react';
 import { Box, Button, CircularProgress, Paper, Stack, Typography } from '@mui/material';
 
+import './ProcessingContent.less';
+import { isMac } from '../../utils/osUtils';
+
 interface Props {
     title?: string | null;
     text: string | null;
@@ -9,9 +12,6 @@ interface Props {
     onLinkOpen?: (url) => void | Promise<void>;
     onCancel?: () => void;
 }
-
-import './ProcessingContent.less';
-import { isMac } from '../../utils/osUtils';
 
 export const ProcessingContent = (props: Props) => {
     const borderRadius = isMac() ? '10px' : '0px';
