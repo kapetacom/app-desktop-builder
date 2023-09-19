@@ -1,3 +1,10 @@
+## [0.37.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.37.4...v0.37.5) (2023-09-19)
+
+
+### Bug Fixes
+
+* Bump all to get latest styles and font ([#142](https://github.com/kapetacom/app-desktop-builder/issues/142)) ([90a6e3a](https://github.com/kapetacom/app-desktop-builder/commit/90a6e3a6fd4d05f95ef6941242ec08801b475c5c))
+
 ## [0.37.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.37.3...v0.37.4) (2023-09-19)
 
 
