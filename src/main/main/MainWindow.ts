@@ -53,9 +53,17 @@ export class MainWindow {
         }
 
         await this.dock.show();
+
+        let icon:string;
+        if (process.platform === 'win32') {
+            icon = getAssetPath('icon.ico');
+        } else {
+            icon = getAssetPath('icon.png');
+        }
+
         this._window = new BrowserWindow({
             show: false,
-            icon: getAssetPath('icon.png'),
+            icon,
             title: 'Kapeta',
             titleBarStyle: 'hiddenInset',
             webPreferences: {
