@@ -1,3 +1,10 @@
+## [0.37.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.37.3...v0.37.4) (2023-09-19)
+
+
+### Bug Fixes
+
+* Replaced Avenir Next with Montserrat ([#141](https://github.com/kapetacom/app-desktop-builder/issues/141)) ([54ff7d3](https://github.com/kapetacom/app-desktop-builder/commit/54ff7d35f4961f82a558372fa3d574599a386ba1))
+
 ## [0.37.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.37.2...v0.37.3) (2023-09-19)
 
 
