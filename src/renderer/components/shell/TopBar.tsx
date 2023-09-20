@@ -19,7 +19,7 @@ import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import { UserAvatar } from '@kapeta/ui-web-components';
-import { KapetaNotification, StateNotificationType } from './types';
+import { KapetaNotification, StateNotificationType, TOP_BAR_ICON_BUTTON_STYLE } from './types';
 import { withTheme } from '../../Theme';
 
 const noHoverSX = {
@@ -137,20 +137,15 @@ export const TopBar = withTheme((props: TopBarProps) => {
                         },
                     }}
                 >
-                    <IconButton
-                        size="small"
-                        sx={{ width: '40px', height: '40px' }}
-                        data-kap-id="app-top-bar-help-button"
-                    >
+                    <IconButton size="small" sx={TOP_BAR_ICON_BUTTON_STYLE} data-kap-id="app-top-bar-help-button">
                         <QuestionMarkIcon />
                     </IconButton>
 
                     <IconButton
                         size="small"
                         sx={{
+                            ...TOP_BAR_ICON_BUTTON_STYLE,
                             position: 'relative',
-                            width: '40px',
-                            height: '40px',
                             color: hasUnreadNotifications ? 'text.primary' : 'text.secondary',
                         }}
                         onClick={(e) => {

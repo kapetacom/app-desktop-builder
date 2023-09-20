@@ -1,3 +1,12 @@
+export const TOP_BAR_ICON_BUTTON_STYLE = {
+    width: '26px',
+    height: '26px',
+    cursor: 'pointer',
+    '& .MuiSvgIcon-root': {
+        fontSize: '16px',
+    },
+};
+
 export interface MenuSection {
     id: string;
     path?: string;

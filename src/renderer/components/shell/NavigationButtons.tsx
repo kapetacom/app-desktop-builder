@@ -4,6 +4,7 @@ import { useLocation, useNavigate, Location, useNavigationType } from 'react-rou
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import ArrowForward from '@mui/icons-material/ArrowForward';
 import { History } from '@mui/icons-material';
+import { TOP_BAR_ICON_BUTTON_STYLE } from './types';
 
 export const NavigationButtons = () => {
     const location = useLocation();
@@ -51,23 +52,21 @@ export const NavigationButtons = () => {
         <Stack
             direction={'row'}
             justifyContent={'end'}
+            alignItems={'center'}
             sx={{
                 height: '40px',
                 padding: '0 16px',
-                '& .MuiSvgIcon-root': {
-                    fontSize: '16px',
-                },
             }}
         >
             {/* Make the empty space draggable */}
-            <IconButton onClick={back} disabled={!hasPrevious} size="small">
+            <IconButton onClick={back} disabled={!hasPrevious} size="small" sx={TOP_BAR_ICON_BUTTON_STYLE}>
                 <ArrowBack />
             </IconButton>
-            <IconButton onClick={forward} disabled={!hasNext} size="small">
+            <IconButton onClick={forward} disabled={!hasNext} size="small" sx={TOP_BAR_ICON_BUTTON_STYLE}>
                 <ArrowForward />
             </IconButton>
 
-            <IconButton disabled size="small" sx={{ ml: 2 }}>
+            <IconButton disabled size="small" sx={{ ...TOP_BAR_ICON_BUTTON_STYLE, ml: 2 }}>
                 <History />
             </IconButton>
         </Stack>
