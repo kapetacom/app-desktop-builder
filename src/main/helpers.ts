@@ -1,23 +1,72 @@
 /* eslint import/prefer-default-export: off */
 import { URL } from 'url';
-import path from 'path';
-import { session, app, BrowserWindow, ipcMain, shell, dialog, nativeImage } from 'electron';
+import Path from 'path';
+import { session, app, BrowserWindow, ipcMain, shell, dialog } from 'electron';
 import packageJson from '../../package.json';
 
 import MessageBoxOptions = Electron.MessageBoxOptions;
+import FS from 'fs-extra';
+import ClusterConfiguration from '@kapeta/local-cluster-config';
 
 const ENABLE_EXTENSIONS = false; // Disabled because Electron doesn't support react extension currently
 
 export const RESOURCES_PATH = app.isPackaged
-    ? path.join(process.resourcesPath, 'assets')
-    : path.join(__dirname, '../../assets');
+    ? Path.join(process.resourcesPath, 'assets')
+    : Path.join(__dirname, '../../assets');
 
 export const isDebug = (): boolean => {
     return !!(process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true');
 };
 
 export const getAssetPath = (...paths: string[]): string => {
-    return path.join(RESOURCES_PATH, ...paths);
+    return Path.join(RESOURCES_PATH, ...paths);
+};
+
+export const installOutputCatcher = () => {
+    try {
+        const logStream = FS.createWriteStream(
+            Path.join(ClusterConfiguration.getKapetaBasedir(), 'kapeta-desktop.log'),
+            {
+                flags: 'w',
+            }
+        );
+        logStream.on('error', (e) => {
+            // Ignore
+        });
+
+        const writeChunk = (chunk: any) => {
+            try {
+                if (!logStream.closed) {
+                    logStream.write(chunk);
+                }
+            } catch (e) {}
+        };
+        process.on('exit', () => logStream.end());
+        const originalStdoutWrite = process.stdout.write.bind(process.stdout);
+        // @ts-ignore
+        process.stdout.write = (chunk: string | Uint8Array, encoding: BufferEncoding | undefined, callback: any) => {
+            if (process.stdout.closed) {
+                return;
+            }
+
+            writeChunk(chunk);
+            return originalStdoutWrite(chunk, encoding, callback);
+        };
+
+        const originalStderrWrite = process.stdout.write.bind(process.stderr);
+        // @ts-ignore
+        process.stderr.write = (chunk: string | Uint8Array, encoding: BufferEncoding | undefined, callback: any) => {
+            if (process.stderr.closed) {
+                return;
+            }
+            writeChunk(chunk);
+            return originalStderrWrite(chunk, encoding, callback);
+        };
+
+        console.log('Starting Kapeta in %s', app.getAppPath());
+    } catch (e) {
+        console.log('Failed to install output catcher', e);
+    }
 };
 
 export const appInit = async () => {
@@ -31,6 +80,14 @@ export const appInit = async () => {
     }
 
     await app.whenReady();
+
+    if (process.platform === 'darwin' && app.getAppPath().startsWith('/Volumes/')) {
+        // Looks like we're running from a DMG
+        // This can cause issues with the auto-updater and probably other things
+        showError(
+            `It looks like you're running Kapeta from a DMG. Please copy it to your Applications folder to avoid issues.`
+        );
+    }
 
     ensureUserAgent();
 
@@ -65,7 +122,7 @@ export const attachIPCListener = (
 };
 
 export const getPreloadScript = () => {
-    return app.isPackaged ? path.join(__dirname, 'preload.js') : path.join(__dirname, '../../.erb/dll/preload.js');
+    return app.isPackaged ? Path.join(__dirname, 'preload.js') : Path.join(__dirname, '../../.erb/dll/preload.js');
 };
 
 export const installExtensions = async () => {
@@ -98,7 +155,7 @@ export function resolveHtmlPath(htmlFileName: string) {
         url.pathname = htmlFileName;
         return url.href;
     }
-    return `file://${path.resolve(__dirname, '../renderer/', htmlFileName)}`;
+    return `file://${Path.resolve(__dirname, '../renderer/', htmlFileName)}`;
 }
 
 export function createFuture() {

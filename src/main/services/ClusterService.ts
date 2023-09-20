@@ -79,7 +79,13 @@ export class ClusterService extends EventEmitter {
 
         console.log('Starting cluster service from %s', SERVICE_FILE);
         return new Promise((resolve, reject) => {
-            const child = (this.child = fork(SERVICE_FILE));
+            const child = (this.child = fork(SERVICE_FILE, {
+                stdio: 'pipe',
+            }));
+
+            child.stdout?.pipe(process.stdout);
+            child.stderr?.pipe(process.stderr);
+
             console.log('Cluster service started with PID: %s', child.pid);
             child.on('message', (msg: ClusterInfo) => {
                 this.running = true;

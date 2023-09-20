@@ -28,7 +28,6 @@
     </style>
 
     <script>
-
       if (location.search && location.search.length > 1) {
         const keyValuePairs = new URLSearchParams(location.search);
 
@@ -40,20 +39,26 @@
             'https://*.googletagmanager.com',
             'https://*.pendo.io',
             'https://*.heapanalytics.com',
+            'http://cdn.heapanalytics.com',
+            'https://*.heap-api.com',
             'https://cdn.segment.com',
             'https://cdn.jsdelivr.net'
         ];
-        if (clusterBase && clusterBase.startsWith('http://localhost:')) {
+
+        if (clusterBase && (
+                clusterBase.startsWith('http://127.0.0.1:') ||
+                clusterBase.startsWith('http://localhost:') ||
+                clusterBase.startsWith('http://::1:')
+                )) {
             safeDomains.push(clusterBase);
         }
 
-          document.write(`
-    <meta
-            http-equiv="Content-Security-Policy"
-            content="script-src 'unsafe-eval' 'self' ${safeDomains.join(' ')};worker-src blob: 'self' ${safeDomains.join(' ')}"
-    />
-    `)
-        }
+        document.write(`
+            <meta
+                    http-equiv="Content-Security-Policy"
+                    content="script-src 'unsafe-eval' 'self' ${safeDomains.join(' ')};worker-src blob: 'self' ${safeDomains.join(' ')}"
+            />`
+        );
       }
     </script>
     <meta charset="utf-8"/>

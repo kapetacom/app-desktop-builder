@@ -13,11 +13,13 @@ import './sentry';
 import './shell/shell-helpers';
 
 import { app, dialog } from 'electron';
-import { appInit } from './helpers';
+import { appInit, installOutputCatcher } from './helpers';
 import { MainWindow } from './main/MainWindow';
 import { ClusterService } from './services/ClusterService';
-import { SplashScreen } from './modals/SplashScreen';
+import { SPLASH_SCREEN_CANCEL, SplashScreen } from './modals/SplashScreen';
 import { attachHandlers } from './services/IPCService';
+
+installOutputCatcher();
 
 const clusterService = new ClusterService();
 const splashScreen = new SplashScreen(clusterService);
@@ -56,6 +58,11 @@ appInit()
         }
     })
     .catch((err) => {
+        if (err.name === SPLASH_SCREEN_CANCEL) {
+            // User or app cancelled the splash screen - just exit
+            app.exit(1);
+            return;
+        }
         console.error(err);
         // Show a blocking error popup before exiting
         app.focus();
