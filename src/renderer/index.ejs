@@ -28,6 +28,7 @@
     </style>
 
     <script>
+
       if (location.search && location.search.length > 1) {
         const keyValuePairs = new URLSearchParams(location.search);
 
@@ -35,11 +36,21 @@
           window.Kapeta.config[key] = value;
         }
         const clusterBase = keyValuePairs.get('cluster_service');
-        if (clusterBase) {
+        const safeDomains = [
+            'https://*.googletagmanager.com',
+            'https://*.pendo.io',
+            'https://*.heapanalytics.com',
+            'https://cdn.segment.com',
+            'https://cdn.jsdelivr.net'
+        ];
+        if (clusterBase && clusterBase.startsWith('http://localhost:')) {
+            safeDomains.push(clusterBase);
+        }
+
           document.write(`
     <meta
             http-equiv="Content-Security-Policy"
-            content="script-src 'unsafe-eval' 'self' https://*.pendo.io https://*.heapanalytics.com https://cdn.segment.com https://cdn.jsdelivr.net ${clusterBase};worker-src blob: 'self' https://*.pendo.io https://*.heapanalytics.com https://cdn.jsdelivr.net https://cdn.segment.com ${clusterBase}"
+            content="script-src 'unsafe-eval' 'self' ${safeDomains.join(' ')};worker-src blob: 'self' ${safeDomains.join(' ')}"
     />
     `)
         }
