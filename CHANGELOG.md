@@ -1,3 +1,10 @@
+# [0.38.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.37.8...v0.38.0) (2023-09-20)
+
+
+### Features
+
+* Add syntax corrections for Go-style arrays ([#146](https://github.com/kapetacom/app-desktop-builder/issues/146)) ([4d1ab52](https://github.com/kapetacom/app-desktop-builder/commit/4d1ab5242b858edd0c311799ea904bf72132756d))
+
 ## [0.37.8](https://github.com/kapetacom/app-desktop-builder/compare/v0.37.7...v0.37.8) (2023-09-20)
 
 
