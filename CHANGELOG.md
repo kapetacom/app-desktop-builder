@@ -1,3 +1,10 @@
+## [0.37.6](https://github.com/kapetacom/app-desktop-builder/compare/v0.37.5...v0.37.6) (2023-09-20)
+
+
+### Bug Fixes
+
+* Adds GA to list of domains and makes it simpler to manage domains ([#143](https://github.com/kapetacom/app-desktop-builder/issues/143)) ([bc22b99](https://github.com/kapetacom/app-desktop-builder/commit/bc22b99bc2067a96b312dcd8cea757e74baba38b))
+
 ## [0.37.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.37.4...v0.37.5) (2023-09-19)
 
 
