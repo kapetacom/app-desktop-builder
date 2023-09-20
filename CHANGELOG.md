@@ -1,3 +1,10 @@
+## [0.38.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.38.0...v0.38.1) (2023-09-20)
+
+
+### Bug Fixes
+
+* Make top bar icons same size ([#147](https://github.com/kapetacom/app-desktop-builder/issues/147)) ([0f0b4de](https://github.com/kapetacom/app-desktop-builder/commit/0f0b4de330e0e363291efd8d9fa35be2434a508d))
+
 # [0.38.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.37.8...v0.38.0) (2023-09-20)
 
 
