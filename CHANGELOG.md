@@ -1,3 +1,10 @@
+## [0.38.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.38.2...v0.38.3) (2023-09-20)
+
+
+### Bug Fixes
+
+* Delete empty folders after codegen ([#149](https://github.com/kapetacom/app-desktop-builder/issues/149)) ([3f3e3f4](https://github.com/kapetacom/app-desktop-builder/commit/3f3e3f42267be95285b157ed5adf9141c91b23f3))
+
 ## [0.38.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.38.1...v0.38.2) (2023-09-20)
 
 
