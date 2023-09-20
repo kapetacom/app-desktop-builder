@@ -24,6 +24,10 @@ export const replaceBase64IconWithUrl = async (blockData: SchemaKind) => {
                 data,
             });
 
+            if (!result?.url) {
+                throw new Error('Failed to upload icon - result was invalid');
+            }
+
             // Add a cache buster since we might be overwriting an existing icon
             if (result.url.includes('?')) {
                 result.url += '&v=' + Date.now();
