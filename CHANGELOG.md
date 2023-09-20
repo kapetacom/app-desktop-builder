@@ -1,3 +1,10 @@
+## [0.37.8](https://github.com/kapetacom/app-desktop-builder/compare/v0.37.7...v0.37.8) (2023-09-20)
+
+
+### Bug Fixes
+
+* Show error message if icon upload fails ([#145](https://github.com/kapetacom/app-desktop-builder/issues/145)) ([1f46fb6](https://github.com/kapetacom/app-desktop-builder/commit/1f46fb6c746458e3ba6c3508e2323322c90a5518))
+
 ## [0.37.7](https://github.com/kapetacom/app-desktop-builder/compare/v0.37.6...v0.37.7) (2023-09-20)
 
 
