@@ -9,6 +9,8 @@ import {
     FormContainer,
     FormField,
     FormFieldType,
+    showToasty,
+    ToastType,
     useFormContextField,
 } from '@kapeta/ui-web-components';
 
@@ -308,7 +310,19 @@ export const EditorPanels: React.FC<Props> = (props) => {
             case DataEntityType.BLOCK: {
                 const blockData = data as BlockDefinition;
 
-                await replaceBase64IconWithUrl(blockData);
+                try {
+                    await replaceBase64IconWithUrl(blockData);
+                } catch (e: any) {
+                    if (e.stack) {
+                        console.error('Upload failed', e.stack);
+                    }
+                    showToasty({
+                        type: ToastType.ALERT,
+                        message: e.error ?? e.message,
+                        title: 'Upload failed',
+                    });
+                    return;
+                }
 
                 planner.updateBlockDefinition(props.info.item.instance.block.ref, blockData);
                 break;
