@@ -1,3 +1,10 @@
+## [0.37.7](https://github.com/kapetacom/app-desktop-builder/compare/v0.37.6...v0.37.7) (2023-09-20)
+
+
+### Bug Fixes
+
+* Align planner area and focus panel to fit the screen ([#144](https://github.com/kapetacom/app-desktop-builder/issues/144)) ([0417df3](https://github.com/kapetacom/app-desktop-builder/commit/0417df3ee7239162be26d35ec3e98070754a1744))
+
 ## [0.37.6](https://github.com/kapetacom/app-desktop-builder/compare/v0.37.5...v0.37.6) (2023-09-20)
 
 
