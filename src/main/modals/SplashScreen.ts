@@ -3,6 +3,8 @@ import { attachIPCListener, getPreloadScript, resolveHtmlPath } from '../helpers
 import { ClusterService } from '../services/ClusterService';
 import { hasApp } from '@kapeta/nodejs-process';
 
+export const SPLASH_SCREEN_CANCEL = 'SplashScreenCancelled';
+
 export class SplashScreen {
     private win: BrowserWindow | null = null;
     private clusterService: ClusterService;
@@ -75,6 +77,7 @@ export class SplashScreen {
                 transparent: process.platform === 'darwin',
                 center: true,
                 modal: true,
+                show: false,
                 width: 516,
                 height: 316,
                 hiddenInMissionControl: true,
@@ -88,7 +91,16 @@ export class SplashScreen {
             });
             try {
                 await this.win.loadURL(resolveHtmlPath('splash.html'));
+            } catch (e) {
+                console.error('Failed to load splash screen', e);
+                const error = new Error('Failed to load splash screen');
+                error.name = SPLASH_SCREEN_CANCEL;
+                reject(error);
+                return;
+            }
+            try {
                 this.win.center();
+                this.win.show();
 
                 attachIPCListener(this.win, 'splash', async (event, [type]) => {
                     switch (type) {
