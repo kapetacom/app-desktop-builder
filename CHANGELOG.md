@@ -1,3 +1,10 @@
+## [0.38.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.38.1...v0.38.2) (2023-09-20)
+
+
+### Bug Fixes
+
+* Ignore exiting during startup ([#148](https://github.com/kapetacom/app-desktop-builder/issues/148)) ([d83a58a](https://github.com/kapetacom/app-desktop-builder/commit/d83a58a88d04c4bb4e78c417a77d063ce476750a))
+
 ## [0.38.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.38.0...v0.38.1) (2023-09-20)
 
 
