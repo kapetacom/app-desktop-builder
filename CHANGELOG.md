@@ -1,3 +1,10 @@
+## [0.38.6](https://github.com/kapetacom/app-desktop-builder/compare/v0.38.5...v0.38.6) (2023-09-21)
+
+
+### Bug Fixes
+
+* Make local sample private ([44b5334](https://github.com/kapetacom/app-desktop-builder/commit/44b53343953c85ad0ec34a922cbe4a2527484084))
+
 ## [0.38.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.38.4...v0.38.5) (2023-09-21)
 
 
