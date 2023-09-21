@@ -122,20 +122,17 @@ export const TopBar = withTheme((props: TopBarProps) => {
                 <Box
                     flexGrow={1}
                     sx={{
-                        '-webkit-app-region': 'drag',
                         height: '100%',
                     }}
+                    className="allow-drag-app"
                 />
                 <Stack
                     direction="row"
                     divider={<Divider orientation="vertical" flexItem />}
                     spacing={1}
                     marginRight={1}
-                    sx={{
-                        '& .MuiSvgIcon-root': {
-                            fontSize: '16px',
-                        },
-                    }}
+                    height="100%"
+                    alignItems="center"
                 >
                     <IconButton size="small" sx={TOP_BAR_ICON_BUTTON_STYLE} data-kap-id="app-top-bar-help-button">
                         <QuestionMarkIcon />

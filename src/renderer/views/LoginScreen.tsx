@@ -21,9 +21,9 @@ export const LoginScreen = (props: Props) => {
         <Stack
             direction={'row'}
             sx={{
-                '-webkit-app-region': 'drag',
                 cursor: 'move',
             }}
+            className="allow-drag-app"
             justifyContent={'center'}
             width={'100%'}
             height={'100%'}
@@ -44,9 +44,7 @@ export const LoginScreen = (props: Props) => {
                         </Typography>
                         <Box position={'relative'}>
                             <Button
-                                sx={{
-                                    '-webkit-app-region': 'no-drag',
-                                }}
+                                className="disallow-drag-app"
                                 variant={loggingIn ? 'outlined' : 'contained'}
                                 size={'large'}
                                 onClick={async () => {
@@ -88,10 +86,7 @@ export const LoginScreen = (props: Props) => {
                             No account?{' '}
                             <a
                                 target={'_blank'}
-                                style={{
-                                    //@ts-ignore
-                                    '-webkit-app-region': 'no-drag',
-                                }}
+                                className="disallow-drag-app"
                                 href={'https://app.kapeta.com/signup'}
                                 rel="noreferrer"
                             >

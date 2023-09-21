@@ -40,7 +40,7 @@ const InnerShell = (props: Props) => {
                         borderRight: '1px solid rgba(255, 255, 255, 0.12)',
                     }}
                 >
-                    <Box sx={{ flexGrow: 1, '-webkit-app-region': 'drag', '-webkit-user-select': 'none' }} />
+                    <Box sx={{ flexGrow: 1 }} className="allow-drag-app" />
                     <NavigationButtons />
                 </Stack>
 
