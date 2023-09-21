@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
-import { Box, Button, IconButton, Stack, Typography, SvgIcon } from '@mui/material';
+import { Box, IconButton, Stack, Typography, SvgIcon } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getAssetTitle } from '../plan-editor/helpers';
 import { KapetaTab, KapetaTabs, KapetaTabsType } from './components/KapetaTabs';
-import { Person, Add } from '@mui/icons-material';
+import PersonIcon from '@mui/icons-material/Person';
 import { useKapetaContext } from '../../hooks/contextHook';
 import { DEFAULT_TAB_PATH, normalizeUrl, useMainTabs } from '../../hooks/mainTabs';
 import { usePlans } from '../../hooks/assetHooks';
@@ -25,7 +25,7 @@ export const EditorTabs = () => {
             return;
         }
         mainTabs.open(location.pathname, { navigate: false });
-    }, [location.pathname, mainTabs.open]);
+    }, [location.pathname, mainTabs, mainTabs.open, navigate]);
 
     return (
         <KapetaTabs value={normalizeUrl(location.pathname)} variant={'scrollable'}>
@@ -67,7 +67,7 @@ export const EditorTabs = () => {
                 } else if (tabInfo.path.startsWith('/settings')) {
                     variant = 'deploy';
                     label = tabInfo.title ?? 'Profile';
-                    icon = <Person />;
+                    icon = <PersonIcon />;
                 } else if (tabInfo.path.startsWith('/organizations')) {
                     const [, , handle] = tabInfo.path.split(/\//g);
                     variant = 'deploy';
@@ -158,9 +158,6 @@ export const EditorTabs = () => {
                     />
                 );
             })}
-            <Button onClick={() => mainTabs.open(DEFAULT_TAB_PATH, { navigate: true })} sx={{ color: 'white' }}>
-                <Add />
-            </Button>
         </KapetaTabs>
     );
 };

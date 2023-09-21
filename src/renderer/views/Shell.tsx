@@ -12,11 +12,12 @@ import { useNotifications } from '../hooks/useNotifications';
 import { useEffect } from 'react';
 import { KindIcon, SimpleLoader } from '@kapeta/ui-web-components';
 import { LoginScreen } from './LoginScreen';
-import { MainTabsContextProvider } from '../hooks/mainTabs';
+import { DEFAULT_TAB_PATH, MainTabsContextProvider, useMainTabs } from '../hooks/mainTabs';
 import { usePrevious } from 'react-use';
 import { NavigationButtons } from 'renderer/components/shell/NavigationButtons';
 import { Stack, Box } from '@mui/system';
-import { SvgIcon } from '@mui/material';
+import { Button, SvgIcon } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 import DeployIcon from '../components/shell/components/icons/DeployIcon.svg';
 
 const BASE_TRACKING_URL = 'https://desktop.kapeta.com';
@@ -27,6 +28,7 @@ const InnerShell = (props: Props) => {
     const contexts = useKapetaContext();
     const [notifications, notificationsHandler] = useNotifications();
     useBackgroundTasks(notificationsHandler);
+    const mainTabs = useMainTabs();
 
     return (
         <MainTabsContextProvider>
@@ -45,6 +47,13 @@ const InnerShell = (props: Props) => {
                 </Stack>
 
                 <EditorTabs />
+
+                <Button
+                    onClick={() => mainTabs.open(DEFAULT_TAB_PATH, { navigate: true })}
+                    sx={{ color: 'white', height: '100%' }}
+                >
+                    <AddIcon />
+                </Button>
             </TopBar>
             <MainLayout
                 location={location}
@@ -115,7 +124,7 @@ export function Shell() {
                 handle: contexts.activeContext.identity.handle,
             });
         }
-    }, [contexts.profile?.id, contexts.activeContext?.identity.id]);
+    }, [contexts.activeContext, contexts.profile]);
 
     const previousPath = usePrevious(location.pathname);
 
@@ -130,7 +139,7 @@ export function Shell() {
             referrer,
             url,
         });
-    }, [location.pathname]);
+    }, [location.pathname, previousPath]);
 
     return (
         <SimpleLoader text="Initialising application..." loading={contexts.loading}>

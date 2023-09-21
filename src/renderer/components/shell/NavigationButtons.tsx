@@ -3,7 +3,7 @@ import { Box, IconButton, Stack } from '@mui/material';
 import { useLocation, useNavigate, Location, useNavigationType } from 'react-router-dom';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import ArrowForward from '@mui/icons-material/ArrowForward';
-import { History } from '@mui/icons-material';
+import HistoryIcon from '@mui/icons-material/History';
 import { TOP_BAR_ICON_BUTTON_STYLE } from './types';
 
 export const NavigationButtons = () => {
@@ -57,18 +57,35 @@ export const NavigationButtons = () => {
                 height: '40px',
                 padding: '0 16px',
             }}
+            className="allow-drag-app"
         >
-            {/* Make the empty space draggable */}
-            <IconButton onClick={back} disabled={!hasPrevious} size="small" sx={TOP_BAR_ICON_BUTTON_STYLE}>
+            <IconButton
+                onClick={back}
+                disabled={!hasPrevious}
+                className={hasPrevious ? 'disallow-drag-app' : ''}
+                size="small"
+                sx={TOP_BAR_ICON_BUTTON_STYLE}
+            >
                 <ArrowBack />
             </IconButton>
-            <IconButton onClick={forward} disabled={!hasNext} size="small" sx={TOP_BAR_ICON_BUTTON_STYLE}>
+            <IconButton
+                onClick={forward}
+                disabled={!hasNext}
+                className={hasNext ? 'disallow-drag-app' : ''}
+                size="small"
+                sx={TOP_BAR_ICON_BUTTON_STYLE}
+            >
                 <ArrowForward />
             </IconButton>
 
-            <IconButton disabled size="small" sx={{ ...TOP_BAR_ICON_BUTTON_STYLE, ml: 2 }}>
-                <History />
-            </IconButton>
+            {/* <IconButton
+                disabled
+                // TODO: disallow dragging when button is active
+                size="small"
+                sx={{ ...TOP_BAR_ICON_BUTTON_STYLE, ml: 2 }}
+            >
+                <HistoryIcon />
+            </IconButton> */}
         </Stack>
     );
 };

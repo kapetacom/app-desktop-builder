@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Button, Slide, Stack, Typography } from '@mui/material';
 import { Plan } from '@kapeta/schemas';
-import { Image } from '@mui/icons-material';
+import ImageIcon from '@mui/icons-material/Image';
 import { toClass } from '@kapeta/ui-web-utils';
 
 import { useKapetaContext } from '../../../hooks/contextHook';
@@ -104,8 +104,7 @@ const YourPlansListInner = (props: Props) => {
                         fontSize: '100px',
                     }}
                 >
-                    {/* @ts-ignore */}
-                    <Image fontSize={'100px'} opacity={0.2} />
+                    <ImageIcon opacity={0.2} sx={{ fontSize: '100px' }} />
                 </Box>
             </Stack>
         );
