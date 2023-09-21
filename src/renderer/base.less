@@ -4,5 +4,15 @@
 body,
 input,
 select {
-    font-family: "Montserrat", Verdana, serif;
+    font-family: 'Montserrat', Verdana, serif;
+}
+
+.allow-drag-app {
+    -webkit-app-region: drag;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.disallow-drag-app {
+    -webkit-app-region: no-drag;
 }
