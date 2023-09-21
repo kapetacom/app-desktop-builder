@@ -1,3 +1,14 @@
+## [0.38.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.38.3...v0.38.4) (2023-09-21)
+
+
+### Bug Fixes
+
+* Add key to EditorTabs ([6753189](https://github.com/kapetacom/app-desktop-builder/commit/67531891920b2832fc08705f97ffed0a0d145fa7))
+* Add lang attribute and format ([f894b2b](https://github.com/kapetacom/app-desktop-builder/commit/f894b2b0b65ad9544b7ac3f62a3bf369b9b7a0a2))
+* Avoid console errors about -webkit-app-region ([7b7c912](https://github.com/kapetacom/app-desktop-builder/commit/7b7c912fe81706c31df6456c538d8bca88163ffd))
+* Move add icon outside of Tabs ([1c17cb9](https://github.com/kapetacom/app-desktop-builder/commit/1c17cb957392447666ef4108d1d9dc376c5207fe))
+* Remove wrong default props related to ripple effect ([3ad32b4](https://github.com/kapetacom/app-desktop-builder/commit/3ad32b4eda87f7191ebf627152b2197e6eec1abb))
+
 ## [0.38.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.38.2...v0.38.3) (2023-09-20)
 
 
