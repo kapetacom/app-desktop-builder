@@ -1,3 +1,10 @@
+## [0.38.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.38.4...v0.38.5) (2023-09-21)
+
+
+### Bug Fixes
+
+* Bump to fix ref and new state checks when adding blocks ([#151](https://github.com/kapetacom/app-desktop-builder/issues/151)) ([79ce60c](https://github.com/kapetacom/app-desktop-builder/commit/79ce60caae8b53babab8c81ad3c5b772fbc18513))
+
 ## [0.38.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.38.3...v0.38.4) (2023-09-21)
 
 
