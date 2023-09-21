@@ -30,8 +30,6 @@ export const kapetaDark = createTheme(
                 defaultProps: {
                     LinkComponent: LinkBehavior,
                     disableRipple: true,
-                    disableTouchRipple: true,
-                    disableFocusRipple: true,
                 },
             },
         },
@@ -56,8 +54,6 @@ export const kapetaLight = createTheme(
                 defaultProps: {
                     LinkComponent: LinkBehavior,
                     disableRipple: true,
-                    disableTouchRipple: true,
-                    disableFocusRipple: true,
                 },
             },
         },
