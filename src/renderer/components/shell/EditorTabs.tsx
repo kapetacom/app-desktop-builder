@@ -101,6 +101,7 @@ export const EditorTabs = () => {
                 const isCloseable = mainTabs.active.length > 1;
                 return (
                     <KapetaTab
+                        key={value}
                         value={value}
                         href={value}
                         variant={variant}
