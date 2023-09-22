@@ -27,7 +27,8 @@ export const createNewBlock = (): BlockDefinition => {
         kind: BlockTypeProvider.getDefaultKind(),
         metadata: {
             name: '',
-            version: '0.0.1',
+            visibility: 'private',
+            description: '',
         },
         spec: {
             consumers: [],

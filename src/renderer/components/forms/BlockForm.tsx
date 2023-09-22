@@ -85,10 +85,23 @@ export const BlockForm = (props: Props) => {
             <AssetNameInput
                 name="metadata.name"
                 label="Name"
+                validation={['required']}
                 namespaces={namespaces}
                 defaultValue={context.activeContext?.identity?.handle ?? 'local'}
                 help={'The name of this block - e.g. "myhandle/my-block"'}
                 readOnly={props.readOnly}
+            />
+
+            <FormField
+                name="metadata.visibility"
+                type={FormFieldType.ENUM}
+                validation={['required']}
+                options={{
+                    public: 'Public',
+                    private: 'Private',
+                }}
+                label="Visiblity"
+                help="Determine if your block is publically available on Kapeta"
             />
 
             <FormField
@@ -97,6 +110,13 @@ export const BlockForm = (props: Props) => {
                 label="Title"
                 help="Give your block a human-friendly title"
                 readOnly={props.readOnly}
+            />
+
+            <FormField
+                name="metadata.description"
+                type={FormFieldType.TEXT}
+                label="Description"
+                help="Give your block a longer description"
             />
 
             <InnerBlockType block={props.asset} kind={kindField.get()} creating={props.creating ?? false} />

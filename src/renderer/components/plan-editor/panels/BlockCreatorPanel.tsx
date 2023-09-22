@@ -34,7 +34,11 @@ export const BlockCreatorPanel = (props: Props) => {
                     return createNewBlock();
                 }
 
-                return props.info.item.asset.content ? { ...props.info?.item.asset.content } : createNewBlock();
+                const out = props.info.item.asset.content ? { ...props.info?.item.asset.content } : createNewBlock();
+                if (!out.metadata.visibility) {
+                    out.metadata.visibility = 'private';
+                }
+                return out;
             }}
             onDone={() => {
                 props.onClosed();

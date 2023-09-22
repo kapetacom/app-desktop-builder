@@ -20,6 +20,8 @@ const createNewPlan = (): Plan => {
         kind: 'core/plan',
         metadata: {
             name: '',
+            visibility: 'private',
+            description: '',
         },
         spec: {
             blocks: [],
