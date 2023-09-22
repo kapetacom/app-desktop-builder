@@ -73,12 +73,32 @@ const BlockFields = ({ data }: BlockFieldsProps) => {
             <AssetNameInput
                 name="metadata.name"
                 label="Name"
+                validation={['required']}
                 namespaces={namespaces}
                 defaultValue={context.activeContext?.identity?.handle ?? 'local'}
                 help={'The name of this block - e.g. "myhandle/my-block"'}
             />
 
+            <FormField
+                name="metadata.visibility"
+                type={FormFieldType.ENUM}
+                validation={['required']}
+                options={{
+                    public: 'Public',
+                    private: 'Private',
+                }}
+                label="Visiblity"
+                help="Determine if your block is publically available on Kapeta"
+            />
+
             <FormField name="metadata.title" label="Title" help="This blocks human-friendly title" />
+
+            <FormField
+                name="metadata.description"
+                type={FormFieldType.TEXT}
+                label="Description"
+                help="Give your block a longer description"
+            />
         </>
     );
 };
@@ -365,13 +385,22 @@ export const EditorPanels: React.FC<Props> = (props) => {
     };
 
     const initialValue = useMemo(() => {
+        let block: BlockDefinition;
         switch (props.info?.type) {
             case DataEntityType.CONNECTION:
                 return cloneDeep(props.info.item);
             case DataEntityType.INSTANCE:
-                return cloneDeep(props.info.item.block);
+                block = cloneDeep(props.info.item.block);
+                if (!block.metadata.visibility) {
+                    block.metadata.visibility = 'private';
+                }
+                return block;
             case DataEntityType.BLOCK:
-                return cloneDeep(props.info.item.asset.content);
+                block = cloneDeep(props.info.item.asset.content);
+                if (!block.metadata.visibility) {
+                    block.metadata.visibility = 'private';
+                }
+                return block;
             case DataEntityType.RESOURCE:
                 return cloneDeep(props.info.item.resource);
         }
