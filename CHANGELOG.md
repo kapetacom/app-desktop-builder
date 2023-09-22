@@ -1,3 +1,10 @@
+## [0.38.7](https://github.com/kapetacom/app-desktop-builder/compare/v0.38.6...v0.38.7) (2023-09-22)
+
+
+### Bug Fixes
+
+* Adds visibility and description fields to asset forms ([#152](https://github.com/kapetacom/app-desktop-builder/issues/152)) ([da4e8d7](https://github.com/kapetacom/app-desktop-builder/commit/da4e8d77e4b079e7e12a4d99a98f091dcdb6d94b))
+
 ## [0.38.6](https://github.com/kapetacom/app-desktop-builder/compare/v0.38.5...v0.38.6) (2023-09-21)
 
 
