@@ -12,12 +12,11 @@ import { useNotifications } from '../hooks/useNotifications';
 import { useEffect } from 'react';
 import { KindIcon, SimpleLoader } from '@kapeta/ui-web-components';
 import { LoginScreen } from './LoginScreen';
-import { DEFAULT_TAB_PATH, MainTabsContextProvider, useMainTabs } from '../hooks/mainTabs';
+import { MainTabsContextProvider, useMainTabs } from '../hooks/mainTabs';
 import { usePrevious } from 'react-use';
 import { NavigationButtons } from 'renderer/components/shell/NavigationButtons';
 import { Stack, Box } from '@mui/system';
-import { Button, SvgIcon } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import { SvgIcon } from '@mui/material';
 import DeployIcon from '../components/shell/components/icons/DeployIcon.svg';
 
 const BASE_TRACKING_URL = 'https://desktop.kapeta.com';
@@ -28,7 +27,6 @@ const InnerShell = (props: Props) => {
     const contexts = useKapetaContext();
     const [notifications, notificationsHandler] = useNotifications();
     useBackgroundTasks(notificationsHandler);
-    const mainTabs = useMainTabs();
 
     return (
         <MainTabsContextProvider>
@@ -47,13 +45,6 @@ const InnerShell = (props: Props) => {
                 </Stack>
 
                 <EditorTabs />
-
-                <Button
-                    onClick={() => mainTabs.open(DEFAULT_TAB_PATH, { navigate: true })}
-                    sx={{ color: 'white', height: '100%' }}
-                >
-                    <AddIcon />
-                </Button>
             </TopBar>
             <MainLayout
                 location={location}
