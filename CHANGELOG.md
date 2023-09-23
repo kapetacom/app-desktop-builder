@@ -1,3 +1,10 @@
+## [0.38.8](https://github.com/kapetacom/app-desktop-builder/compare/v0.38.7...v0.38.8) (2023-09-23)
+
+
+### Bug Fixes
+
+* Fix broken plus button in top bar ([565b14c](https://github.com/kapetacom/app-desktop-builder/commit/565b14c81491bb596d71044a912c3ff2d3e8d2ea))
+
 ## [0.38.7](https://github.com/kapetacom/app-desktop-builder/compare/v0.38.6...v0.38.7) (2023-09-22)
 
 
