@@ -1,3 +1,10 @@
+## [0.38.9](https://github.com/kapetacom/app-desktop-builder/compare/v0.38.8...v0.38.9) (2023-09-27)
+
+
+### Bug Fixes
+
+* invalid auth tokens should redirect to login ([#154](https://github.com/kapetacom/app-desktop-builder/issues/154)) ([cbebdd3](https://github.com/kapetacom/app-desktop-builder/commit/cbebdd3e6823bb573e898894fdedcd5cf5de4b1d))
+
 ## [0.38.8](https://github.com/kapetacom/app-desktop-builder/compare/v0.38.7...v0.38.8) (2023-09-23)
 
 
