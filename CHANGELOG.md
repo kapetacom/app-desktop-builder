@@ -1,3 +1,10 @@
+# [0.39.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.38.10...v0.39.0) (2023-10-04)
+
+
+### Features
+
+* Handle tab close message ([#156](https://github.com/kapetacom/app-desktop-builder/issues/156)) ([9f7ad58](https://github.com/kapetacom/app-desktop-builder/commit/9f7ad58197568da8d5963a746877fd6d808630a3))
+
 ## [0.38.10](https://github.com/kapetacom/app-desktop-builder/compare/v0.38.9...v0.38.10) (2023-10-04)
 
 
