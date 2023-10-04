@@ -26,7 +26,9 @@ export const EditorTabs = () => {
             return;
         }
         mainTabs.open(location.pathname, { navigate: false });
-    }, [location.pathname, mainTabs, mainTabs.open, navigate]);
+    }, [location.pathname, mainTabs.open, navigate]);
+
+    const defaultTabOpen = mainTabs.active.some((tab) => tab.path === DEFAULT_TAB_PATH);
 
     return (
         <>
@@ -60,8 +62,8 @@ export const EditorTabs = () => {
                         } else {
                             const ref = decodeURIComponent(/\/deployments\/(.+)/.exec(tabInfo.path)?.[1] ?? '');
                             if (ref.includes('/')) {
-                                const [handle, name, version] = ref.split(/\//);
-                                label = tabInfo.title ?? `${name} [${version}]`;
+                                const [handle, name] = ref.split(/\//);
+                                label = tabInfo.title ?? name;
                             } else {
                                 label = tabInfo.title ?? ref;
                             }
@@ -161,12 +163,14 @@ export const EditorTabs = () => {
                     );
                 })}
             </KapetaTabs>
-            <Button
-                onClick={() => mainTabs.open(DEFAULT_TAB_PATH, { navigate: true })}
-                sx={{ color: 'white', height: '100%' }}
-            >
-                <AddIcon />
-            </Button>
+            {!defaultTabOpen && (
+                <Button
+                    onClick={() => mainTabs.open(DEFAULT_TAB_PATH, { navigate: true })}
+                    sx={{ color: 'white', height: '100%' }}
+                >
+                    <AddIcon />
+                </Button>
+            )}
         </>
     );
 };

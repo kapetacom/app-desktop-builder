@@ -108,6 +108,9 @@ export const RemoteFrame = (props: Props) => {
                             mainTabs.open(toPath, { contextId: frameContext?.id, navigate: true });
                         }
                     }}
+                    onCloseTab={() => {
+                        mainTabs.close(mainTabs.current.path);
+                    }}
                 />
             )}
         </Box>
