@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { usePlans } from './assetHooks';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { MainTabs, TabInfo, TabOptions } from './types';
@@ -59,39 +59,42 @@ const createMainTabsContext = (context?: MemberIdentity): MainTabs => {
     const navigate = useNavigate();
     const planAssets = usePlans();
 
-    const tabFilter = (tabInfo: TabInfo) => {
-        if (tabInfo.path.startsWith('/edit')) {
-            // If it is an editor tab:
-            if (/\/edit\/(.+)/.test(tabInfo.path)) {
-                // Open plan
-                if (planAssets.loading) {
-                    // We dont know yet if the plan exists, so we'll keep the tab open
+    const tabFilter = useCallback(
+        (tabInfo: TabInfo) => {
+            if (tabInfo.path.startsWith('/edit')) {
+                // If it is an editor tab:
+                if (/\/edit\/(.+)/.test(tabInfo.path)) {
+                    // Open plan
+                    if (planAssets.loading) {
+                        // We dont know yet if the plan exists, so we'll keep the tab open
+                        return true;
+                    }
+                    const ref = decodeURIComponent(/\/edit\/(.+)/.exec(tabInfo.path)?.[1] ?? '');
+                    const plan = planAssets.data?.find((a) => a.ref === ref);
+                    if (!plan) {
+                        return false;
+                    }
                     return true;
-                }
-                const ref = decodeURIComponent(/\/edit\/(.+)/.exec(tabInfo.path)?.[1] ?? '');
-                const plan = planAssets.data?.find((a) => a.ref === ref);
-                if (!plan) {
-                    return false;
                 }
                 return true;
             }
-            return true;
-        }
 
-        if (tabInfo.path.startsWith('/deployments')) {
-            return true;
-        }
+            if (tabInfo.path.startsWith('/deployments')) {
+                return true;
+            }
 
-        if (tabInfo.path.startsWith('/settings')) {
-            return true;
-        }
+            if (tabInfo.path.startsWith('/settings')) {
+                return true;
+            }
 
-        if (tabInfo.path.startsWith('/organizations')) {
-            return true;
-        }
+            if (tabInfo.path.startsWith('/organizations')) {
+                return true;
+            }
 
-        return false;
-    };
+            return false;
+        },
+        [planAssets.loading, planAssets.data]
+    );
 
     const [tabs, setTabs] = useState<TabInfo[]>(
         localStorage.getItem(TAB_LOCAL_STORAGE)
@@ -141,7 +144,7 @@ const createMainTabsContext = (context?: MemberIdentity): MainTabs => {
                 navigate(path);
             }
         },
-        [setTabs, navigate, context, DEFAULT_TAB_PATH]
+        [setTabs, navigate, context, DEFAULT_TAB_PATH, DEFAULT_TITLE]
     );
 
     const closeTab = useCallback(
@@ -169,7 +172,7 @@ const createMainTabsContext = (context?: MemberIdentity): MainTabs => {
                 return newTabState;
             });
         },
-        [location.pathname, tabs]
+        [location.pathname, tabs, navigate, setTabs, DEFAULT_TAB_PATH, DEFAULT_TITLE]
     );
 
     // listen for tab events from main process
@@ -220,32 +223,35 @@ const createMainTabsContext = (context?: MemberIdentity): MainTabs => {
         );
     }, [openTab, closeTab, navigate, tabs, location.pathname]);
 
-    return {
-        current: tabs.find((t) => t.path === location.pathname) ?? tabs[0],
-        active: tabs.filter(tabFilter),
-        open: openTab,
-        close: closeTab,
-        setContext: (path: string, contextId: string | undefined) => {
-            path = normalizeUrl(path);
-            setTabs((tabState) => {
-                const i = tabState.findIndex((tab) => tab.path === path);
-                if (i > -1) {
-                    tabState[i] = { ...tabState[i], contextId };
-                    return [...tabState];
-                }
-                return tabState;
-            });
-        },
-        setTitle: (path: string, title: string) => {
-            path = normalizeUrl(path);
-            setTabs((tabState) => {
-                const i = tabState.findIndex((tab) => tab.path === path);
-                if (i > -1) {
-                    tabState[i] = { ...tabState[i], title };
-                    return [...tabState];
-                }
-                return tabState;
-            });
-        },
-    };
+    return useMemo(
+        () => ({
+            current: tabs.find((t) => t.path === location.pathname) ?? tabs[0],
+            active: tabs.filter(tabFilter),
+            open: openTab,
+            close: closeTab,
+            setContext: (path: string, contextId: string | undefined) => {
+                path = normalizeUrl(path);
+                setTabs((tabState) => {
+                    const i = tabState.findIndex((tab) => tab.path === path);
+                    if (i > -1) {
+                        tabState[i] = { ...tabState[i], contextId };
+                        return [...tabState];
+                    }
+                    return tabState;
+                });
+            },
+            setTitle: (path: string, title: string) => {
+                path = normalizeUrl(path);
+                setTabs((tabState) => {
+                    const i = tabState.findIndex((tab) => tab.path === path);
+                    if (i > -1) {
+                        tabState[i] = { ...tabState[i], title };
+                        return [...tabState];
+                    }
+                    return tabState;
+                });
+            },
+        }),
+        [tabs, openTab, closeTab, location.pathname, setTabs, tabFilter]
+    );
 };
