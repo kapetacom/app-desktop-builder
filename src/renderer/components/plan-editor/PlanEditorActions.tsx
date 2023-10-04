@@ -106,6 +106,7 @@ export const usePlanEditorActions = (
                     buttonStyle: ButtonStyle.PRIMARY,
                     icon: 'fa fa-search',
                     label: 'Inspect',
+                    warningInspector: true,
                 },
                 {
                     enabled(context): boolean {
