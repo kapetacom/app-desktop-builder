@@ -1,3 +1,10 @@
+## [0.38.10](https://github.com/kapetacom/app-desktop-builder/compare/v0.38.9...v0.38.10) (2023-10-04)
+
+
+### Bug Fixes
+
+* Make warning tags clickable ([#155](https://github.com/kapetacom/app-desktop-builder/issues/155)) ([a9a67ac](https://github.com/kapetacom/app-desktop-builder/commit/a9a67acede37afee4ee23848ba7512cdb1c4a31d))
+
 ## [0.38.9](https://github.com/kapetacom/app-desktop-builder/compare/v0.38.8...v0.38.9) (2023-09-27)
 
 
