@@ -1,12 +1,13 @@
 import { Connection } from '@kapeta/schemas';
 import React from 'react';
 import { EditorBlockInspectorPanel } from './block-inspector/EditorBlockInspectorPanel';
-import { DataEntityType, InspectItemInfo } from '../types';
+import { DataEntityType, InspectItemInfo, InstanceInfo } from '../types';
 import { ConnectionInspectorPanel } from './connection-inspector/ConnectionInspectorPanel';
 
 interface Props {
     systemId: string;
     info: InspectItemInfo | null;
+    instanceInfo?: InstanceInfo;
     onClosed: () => void;
 }
 
@@ -19,6 +20,7 @@ export const InspectorPanels = (props: Props) => {
                 systemId={props.systemId}
                 instance={inspectInfo?.type === DataEntityType.INSTANCE ? inspectInfo?.item.instance : null}
                 open={inspectInfo?.type === DataEntityType.INSTANCE}
+                instanceInfo={props.instanceInfo}
                 onClosed={props.onClosed}
             />
 
