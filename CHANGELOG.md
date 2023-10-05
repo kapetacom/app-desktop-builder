@@ -1,3 +1,10 @@
+# [0.40.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.39.1...v0.40.0) (2023-10-05)
+
+
+### Features
+
+* Adds publish button with info on publishing ([#158](https://github.com/kapetacom/app-desktop-builder/issues/158)) ([211d4bf](https://github.com/kapetacom/app-desktop-builder/commit/211d4bffb04c04012b9c2fd11f5f76d796fef91d))
+
 ## [0.39.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.39.0...v0.39.1) (2023-10-05)
 
 
