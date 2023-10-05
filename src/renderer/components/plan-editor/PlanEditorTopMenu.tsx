@@ -24,10 +24,23 @@ import {
 import { useAsync, useAsyncFn } from 'react-use';
 import { PlanForm } from '../forms/PlanForm';
 import { getPlanConfig, setPlanConfig } from '../../api/LocalConfigService';
-import { Box, Button, Chip, CircularProgress, Paper, Stack, Tab, Tabs } from '@mui/material';
+import {
+    Box,
+    Button,
+    Chip,
+    CircularProgress,
+    Modal,
+    Paper,
+    Popover,
+    Stack,
+    Tab,
+    Tabs,
+    Typography,
+} from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { TaskService } from 'renderer/api/TaskService';
 import { SystemService } from 'renderer/api/SystemService';
+import PublishIcon from '@mui/icons-material/Publish';
 
 const ConfigSchemaEditor = () => {
     const configurationField = useFormContextField('spec.configuration');
@@ -95,6 +108,7 @@ export const PlanEditorTopMenu = (props: Props) => {
     const [stopping, setStopping] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
     const [settingsTab, setSettingsTab] = useState('general');
+    const [publishButton, setPublishButton] = useState<HTMLButtonElement | null>(null);
 
     const startPlanJobId = `plan:start:${props.systemId}`;
     const stopPlanJobId = `plan:stop:${props.systemId}`;
@@ -301,6 +315,21 @@ export const PlanEditorTopMenu = (props: Props) => {
                     >
                         Settings
                     </Button>
+
+                    {!props.readonly && (
+                        <Tooltip title={'Publish to Kapeta'}>
+                            <Button
+                                variant="outlined"
+                                color={'secondary'}
+                                startIcon={<PublishIcon />}
+                                onClick={(evt) => {
+                                    setPublishButton(evt.currentTarget);
+                                }}
+                            >
+                                Publish
+                            </Button>
+                        </Tooltip>
+                    )}
                 </Stack>
                 {props.readonly && (
                     <Tooltip
@@ -401,6 +430,64 @@ export const PlanEditorTopMenu = (props: Props) => {
                     </FormContainer>
                 </KapDialog.Content>
             </KapDialog>
+
+            <Popover
+                open={Boolean(publishButton)}
+                anchorEl={publishButton}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                }}
+                onClose={() => setPublishButton(null)}
+            >
+                <Box
+                    sx={{
+                        width: 400,
+                        pt: 2,
+                        px: 4,
+                        pb: 3,
+                    }}
+                >
+                    <Typography variant="h5">Publish to Kapeta</Typography>
+                    <Typography variant="body2">
+                        Publish your plan to Kapeta to be able to run this plan in a cloud environment and/or share it
+                        with others.
+                    </Typography>
+
+                    <Typography
+                        variant="body2"
+                        sx={{
+                            mt: 1,
+                            fontWeight: 600,
+                        }}
+                    >
+                        Note: You can also publish via CI/CD -{' '}
+                        <a href="https://docs.kapeta.com/docs/working-with-cicd" target={'_blank'}>
+                            see the docs
+                        </a>{' '}
+                        for more info.
+                    </Typography>
+
+                    <Typography
+                        variant="body2"
+                        sx={{
+                            mt: 1,
+                            pre: {
+                                backgroundColor: grey[800],
+                                p: 1,
+                                borderRadius: 1,
+                                fontSize: '0.8rem',
+                                fontFamily: 'monospace',
+                                color: grey[100],
+                                overflowX: 'auto',
+                            },
+                        }}
+                    >
+                        To publish now run the following command in your terminal:
+                        <pre>{[`cd ${planner.asset!.path}`, `kap registry push`].join('\n')}</pre>
+                    </Typography>
+                </Box>
+            </Popover>
         </Paper>
     );
 };
