@@ -1,3 +1,10 @@
+## [0.39.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.39.0...v0.39.1) (2023-10-05)
+
+
+### Bug Fixes
+
+* Always write a meaningful log message for instances ([#157](https://github.com/kapetacom/app-desktop-builder/issues/157)) ([f50d1a0](https://github.com/kapetacom/app-desktop-builder/commit/f50d1a05ec67615e0ca4f502d88277c8a97c6ac9))
+
 # [0.39.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.38.10...v0.39.0) (2023-10-04)
 
 
