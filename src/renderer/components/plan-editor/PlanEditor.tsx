@@ -1,14 +1,14 @@
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import {
+    AssetInfo,
     getLocalRefForBlockDefinition,
     Planner,
     PlannerContext,
     PlannerMode,
     PlannerResourceDrawer,
-    withPlannerContext,
     randomUUID,
-    AssetInfo,
     resolveConfigurationFromDefinition,
+    withPlannerContext,
 } from '@kapeta/ui-web-plan-editor';
 import React, { ForwardedRef, forwardRef, useContext, useMemo, useState } from 'react';
 import { IResourceTypeProvider } from '@kapeta/ui-web-types';
@@ -117,6 +117,13 @@ export const PlanEditor = withPlannerContext(
 
         const creatingNewBlock = !!(editInfo?.creating && editInfo.type === DataEntityType.BLOCK);
 
+        const inspectInstanceInfo =
+            (props.instanceInfos &&
+                inspectInfo &&
+                inspectInfo.type === DataEntityType.INSTANCE &&
+                props.instanceInfos?.find((instance) => instance.instanceId === inspectInfo.item.instance.id)) ||
+            undefined;
+
         return (
             <div className={containerClass} ref={ref}>
                 <PlanEditorTopMenu readonly={readonly} version={uri.version} systemId={props.systemId} />
@@ -134,6 +141,7 @@ export const PlanEditor = withPlannerContext(
                 <InspectorPanels
                     systemId={props.systemId}
                     info={inspectInfo}
+                    instanceInfo={inspectInstanceInfo}
                     onClosed={() => {
                         setInspectInfo(null);
                     }}
