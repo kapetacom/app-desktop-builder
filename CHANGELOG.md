@@ -1,3 +1,10 @@
+## [0.40.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.40.0...v0.40.1) (2023-10-06)
+
+
+### Bug Fixes
+
+* normalize paths for closeTab [KAP-1306] ([#159](https://github.com/kapetacom/app-desktop-builder/issues/159)) ([99dd4af](https://github.com/kapetacom/app-desktop-builder/commit/99dd4af27e842210118a98d25cf2f5b64cd37e11))
+
 # [0.40.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.39.1...v0.40.0) (2023-10-05)
 
 
