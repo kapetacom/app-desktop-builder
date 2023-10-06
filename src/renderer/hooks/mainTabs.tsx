@@ -149,13 +149,14 @@ const createMainTabsContext = (context?: MemberIdentity): MainTabs => {
 
     const closeTab = useCallback(
         (path: string) => {
+            const normalizedPath = normalizeUrl(path);
             // If the tab we're closing is the current tab, navigate to the previous tab, or default url if there is no previous tab
             setTabs((previous) => {
-                const newTabState = previous.filter((tab) => tab.path !== path);
-                if (normalizeUrl(location.pathname) === path) {
+                const newTabState = previous.filter((tab) => tab.path !== normalizedPath);
+                if (normalizeUrl(location.pathname) === normalizedPath) {
                     // Closing current tab
 
-                    const i = previous.findIndex((tab) => tab.path === path) ?? -1;
+                    const i = previous.findIndex((tab) => tab.path === normalizedPath) ?? -1;
                     const nextTab = i > -1 ? previous[i - 1] || previous[i + 1] : previous[0];
                     if (nextTab) {
                         navigate(nextTab.path);
