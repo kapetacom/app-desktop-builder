@@ -1,3 +1,10 @@
+## [0.40.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.40.1...v0.40.2) (2023-10-16)
+
+
+### Bug Fixes
+
+* adding pendo google bucket to whitelist ([17bf5c6](https://github.com/kapetacom/app-desktop-builder/commit/17bf5c6daa5a4d8854770d33a3fcb3cd987a11bd))
+
 ## [0.40.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.40.0...v0.40.1) (2023-10-06)
 
 
