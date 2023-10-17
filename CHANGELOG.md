@@ -1,3 +1,10 @@
+## [0.40.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.40.2...v0.40.3) (2023-10-17)
+
+
+### Bug Fixes
+
+* Improve local container options ([fa72587](https://github.com/kapetacom/app-desktop-builder/commit/fa7258710278e05611367bf0daa7ef6a4af24b9e))
+
 ## [0.40.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.40.1...v0.40.2) (2023-10-16)
 
 
