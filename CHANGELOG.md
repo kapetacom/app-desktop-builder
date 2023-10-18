@@ -1,3 +1,10 @@
+# [0.41.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.40.3...v0.41.0) (2023-10-18)
+
+
+### Features
+
+* Add copyable code block ([#161](https://github.com/kapetacom/app-desktop-builder/issues/161)) ([ad3ebbf](https://github.com/kapetacom/app-desktop-builder/commit/ad3ebbf05e79558199dbeb5e40d0b6764003127d))
+
 ## [0.40.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.40.2...v0.40.3) (2023-10-17)
 
 
