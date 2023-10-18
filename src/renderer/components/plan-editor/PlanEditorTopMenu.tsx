@@ -41,6 +41,7 @@ import { grey } from '@mui/material/colors';
 import { TaskService } from 'renderer/api/TaskService';
 import { SystemService } from 'renderer/api/SystemService';
 import PublishIcon from '@mui/icons-material/Publish';
+import { CodeBlock } from '../general/CodeBlock';
 
 const ConfigSchemaEditor = () => {
     const configurationField = useFormContextField('spec.configuration');
@@ -472,19 +473,14 @@ export const PlanEditorTopMenu = (props: Props) => {
                         variant="body2"
                         sx={{
                             mt: 1,
-                            pre: {
-                                backgroundColor: grey[800],
-                                p: 1,
-                                borderRadius: 1,
-                                fontSize: '0.8rem',
-                                fontFamily: 'monospace',
-                                color: grey[100],
-                                overflowX: 'auto',
-                            },
                         }}
                     >
                         To publish now run the following command in your terminal:
-                        <pre>{[`cd ${planner.asset!.path}`, `kap registry push`].join('\n')}</pre>
+                        <CodeBlock
+                            language={'bash'}
+                            copyable={true}
+                            code={[`cd ${planner.asset!.path}`, `kap registry push`].join('\n')}
+                        />
                     </Typography>
                 </Box>
             </Popover>
