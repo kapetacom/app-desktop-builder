@@ -195,6 +195,10 @@ export const PlanEditor = withPlannerContext(
                             backgroundColor: 'background.default',
                             zIndex: 10,
                             borderBottom: '1px solid #0000001f',
+                            '& .MuiTabs-indicator': {
+                                // test
+                                backgroundColor: 'tertiary.main',
+                            },
                         }}
                     >
                         {!readonly ? <StyledTab value={'resources'} label="Resources" /> : null}
