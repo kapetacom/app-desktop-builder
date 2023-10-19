@@ -1,3 +1,11 @@
+## [0.42.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.42.0...v0.42.1) (2023-10-19)
+
+
+### Bug Fixes
+
+* styling tweaks to editor drawer tabs ([10571ac](https://github.com/kapetacom/app-desktop-builder/commit/10571ac38ee8bc56b9a13e445b97c902247a3a92))
+* use status dot instead of badge ([0f79970](https://github.com/kapetacom/app-desktop-builder/commit/0f79970f7841c298eb85feaa4180b0d912eb26f9))
+
 # [0.42.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.41.0...v0.42.0) (2023-10-19)
 
 
