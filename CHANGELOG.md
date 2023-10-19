@@ -1,3 +1,10 @@
+# [0.42.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.41.0...v0.42.0) (2023-10-19)
+
+
+### Features
+
+* add public URL tab in editor sidebar [KAP-1431] ([d2dc5a7](https://github.com/kapetacom/app-desktop-builder/commit/d2dc5a7cdfcb8fa37f1c56049773457e456645c2))
+
 # [0.41.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.40.3...v0.41.0) (2023-10-18)
 
 
