@@ -28,8 +28,10 @@ import { BlockCreatorPanel } from './panels/BlockCreatorPanel';
 import { BlockDefinition } from '@kapeta/schemas';
 import { normalizeKapetaUri } from '../../utils/planContextLoader';
 import { BlockTypeProvider } from '@kapeta/ui-web-context';
-import { Tab, Tabs } from '@mui/material';
+import { Badge, Tab, Tabs, styled } from '@mui/material';
 import { PlannerGatewaysList } from './panels/GatewaysList';
+import { Box } from '@mui/system';
+import { getStatusDot, getStatusForGroup } from '../../utils/statusDot';
 
 interface Props {
     systemId: string;
@@ -37,6 +39,20 @@ interface Props {
     instanceInfos?: InstanceInfo[];
     ref: ForwardedRef<HTMLDivElement>;
 }
+export const StyledTab = styled(Tab, {
+    name: 'Tab',
+    slot: 'root',
+})({
+    textTransform: 'none',
+    color: '#000',
+    '&.MuiTab-root': {
+        paddingLeft: '24px',
+        paddingRight: '24px',
+    },
+    '&.Mui-selected': {
+        color: 'inherit',
+    },
+});
 
 export const PlanEditor = withPlannerContext(
     forwardRef((props: Props, ref: ForwardedRef<HTMLDivElement>) => {
@@ -127,6 +143,7 @@ export const PlanEditor = withPlannerContext(
             undefined;
 
         const [currentTab, setCurrentTab] = useState(readonly ? 'urls' : 'resources');
+        const statusDot = getStatusDot(getStatusForGroup(Object.values(planner.instanceStates || {})));
 
         return (
             <div className={containerClass} ref={ref}>
@@ -168,11 +185,31 @@ export const PlanEditor = withPlannerContext(
                 />
 
                 <PlannerDrawer>
-                    <Tabs value={currentTab} onChange={(_evt, value) => setCurrentTab(value)} sx={{ mt: -2 }}>
-                        {!readonly ? <Tab value={'resources'} label="Resources" /> : null}
-                        {/* TODO: add dot w/ URL count(s) */}
-                        {/* Maybe blink when state is starting */}
-                        <Tab value={'urls'} label="Public URLs" />
+                    <Tabs
+                        value={currentTab}
+                        onChange={(_evt, value) => setCurrentTab(value)}
+                        sx={{
+                            mt: '-16px',
+                            position: 'sticky',
+                            top: '-16px',
+                            backgroundColor: 'background.default',
+                            zIndex: 10,
+                            borderBottom: '1px solid #0000001f',
+                        }}
+                    >
+                        {!readonly ? <StyledTab value={'resources'} label="Resources" /> : null}
+                        <StyledTab
+                            value={'urls'}
+                            label={
+                                <Badge
+                                    variant="dot"
+                                    sx={{ '& .MuiBadge-badge': statusDot.styles || {} }}
+                                    title={statusDot.title}
+                                >
+                                    <Box sx={{ px: 2 }}>URLs</Box>
+                                </Badge>
+                            }
+                        />
                     </Tabs>
                     {currentTab === 'resources' && (
                         <PlannerResourcesList

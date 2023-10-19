@@ -1,5 +1,5 @@
 import { GatewayCard, PlannerContext } from '@kapeta/ui-web-plan-editor';
-import { Typography } from '@mui/material';
+import { Badge, Chip, Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import { withErrorBoundary } from 'react-error-boundary';
 import { Tooltip as KapTooltip } from '@kapeta/ui-web-components';
@@ -72,20 +72,26 @@ export const PlannerGatewaysList = withErrorBoundary(
         const internal = blocks.filter((block) => !block.public);
 
         return (
-            <Stack gap={3} sx={{ py: 2 }}>
-                <Stack gap={2} sx={{ py: 2 }}>
+            <Stack gap={3} sx={{ py: 1 }}>
+                <Stack gap={1.5} sx={{ py: 2 }}>
                     <Stack direction={'row'} alignItems={'center'} gap={1}>
                         <Typography variant={'h3'} fontSize={'14px'} fontWeight={700}>
                             Public URLs
                         </Typography>
-                        <KapTooltip title={'Public URLs are available on gateways in your plan'}>
-                            <InfoOutlined fontSize={'small'} sx={{ ml: 1 }} />
+                        <KapTooltip
+                            title={
+                                <>
+                                    Public URLs for Gateways in your plan. Gateways will get a <b>Kapeta.dev URL</b> in
+                                    cloud environments.
+                                    <br />
+                                    <br />
+                                    Public URLs can be configured for <b>custom domains in the gateway settings</b>.
+                                </>
+                            }
+                        >
+                            <InfoOutlined fontSize={'small'} sx={{ ml: 0.5 }} color="primary" />
                         </KapTooltip>
                     </Stack>
-
-                    <Typography variant={'body2'}>
-                        Public URLs for Gateways in your plan. Gateways will get a Kapeta.dev URL in cloud environments.
-                    </Typography>
 
                     {gateways
                         .filter((block) => block.public)
@@ -106,24 +112,26 @@ export const PlannerGatewaysList = withErrorBoundary(
                         })}
                 </Stack>
 
-                <Stack gap={2}>
+                <Stack gap={1.5}>
                     <Stack direction={'row'} alignItems={'center'} gap={1}>
                         <Typography variant={'h3'} fontSize={'14px'} fontWeight={700}>
                             Internal URLs
                         </Typography>
                         <KapTooltip
                             title={
-                                'Internal URLs are only available in local mode, and usually point to a local container port.'
+                                <>
+                                    Internal URLs will show for running blocks during local development, and are{' '}
+                                    <b>not available in cloud environments</b>. <br />
+                                    <br />
+                                    Internal URLs usually point to a local container port.
+                                </>
                             }
                         >
-                            <InfoOutlined fontSize={'small'} sx={{ ml: 1 }} />
+                            <InfoOutlined fontSize={'small'} sx={{ ml: 0.5 }} />
                         </KapTooltip>
                     </Stack>
 
-                    <Typography variant={'body2'}>
-                        Internal URLs will show for running blocks during local development, and are not available in
-                        cloud environments.
-                    </Typography>
+                    <Typography variant={'body2'}></Typography>
 
                     {internal.map(({ id: blockId, definition, status, instance, url }) => {
                         return (
