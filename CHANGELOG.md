@@ -1,3 +1,10 @@
+## [0.42.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.42.1...v0.42.2) (2023-10-19)
+
+
+### Bug Fixes
+
+* tab indicator color ([e27e704](https://github.com/kapetacom/app-desktop-builder/commit/e27e7040d45dafd510c5cc15406efe65fa070094))
+
 ## [0.42.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.42.0...v0.42.1) (2023-10-19)
 
 
