@@ -220,7 +220,7 @@ export const PlanEditorTopMenu = (props: Props) => {
                 position: 'absolute',
                 borderRadius: 0,
                 top: 0,
-                left: props.readonly ? 0 : 284,
+                left: 284,
                 borderLeft: `1px solid ${grey[200]}`,
                 right: 0,
                 height: 52,

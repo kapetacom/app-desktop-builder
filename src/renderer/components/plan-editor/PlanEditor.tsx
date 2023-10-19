@@ -5,7 +5,8 @@ import {
     Planner,
     PlannerContext,
     PlannerMode,
-    PlannerResourceDrawer,
+    PlannerDrawer,
+    PlannerResourcesList,
     randomUUID,
     resolveConfigurationFromDefinition,
     withPlannerContext,
@@ -27,6 +28,8 @@ import { BlockCreatorPanel } from './panels/BlockCreatorPanel';
 import { BlockDefinition } from '@kapeta/schemas';
 import { normalizeKapetaUri } from '../../utils/planContextLoader';
 import { BlockTypeProvider } from '@kapeta/ui-web-context';
+import { Tab, Tabs } from '@mui/material';
+import { PlannerGatewaysList } from './panels/GatewaysList';
 
 interface Props {
     systemId: string;
@@ -112,7 +115,6 @@ export const PlanEditor = withPlannerContext(
 
         const containerClass = toClass({
             'plan-editor': true,
-            readonly,
         });
 
         const creatingNewBlock = !!(editInfo?.creating && editInfo.type === DataEntityType.BLOCK);
@@ -123,6 +125,8 @@ export const PlanEditor = withPlannerContext(
                 inspectInfo.type === DataEntityType.INSTANCE &&
                 props.instanceInfos?.find((instance) => instance.instanceId === inspectInfo.item.instance.id)) ||
             undefined;
+
+        const [currentTab, setCurrentTab] = useState(readonly ? 'urls' : 'resources');
 
         return (
             <div className={containerClass} ref={ref}>
@@ -163,30 +167,46 @@ export const PlanEditor = withPlannerContext(
                     }}
                 />
 
-                {!readonly && (
-                    <PlannerResourceDrawer
-                        onShowMoreAssets={() => {
-                            kapetaContext.blockHub.open(planner.asset!, (selection) => {
-                                selection.forEach((asset, i) => {
-                                    const ref = normalizeKapetaUri(`${asset.content.metadata.name}:${asset.version}`);
-                                    planner.addBlockInstance({
-                                        name: asset.content.metadata.title ?? parseKapetaUri(ref).name,
-                                        id: randomUUID(),
-                                        block: {
-                                            ref,
-                                        },
-                                        dimensions: {
-                                            top: 50 + i * 150,
-                                            left: 50,
-                                            width: 0,
-                                            height: 0,
-                                        },
+                <PlannerDrawer>
+                    <Tabs value={currentTab} onChange={(_evt, value) => setCurrentTab(value)} sx={{ mt: -2 }}>
+                        {!readonly ? <Tab value={'resources'} label="Resources" /> : null}
+                        {/* TODO: add dot w/ URL count(s) */}
+                        {/* Maybe blink when state is starting */}
+                        <Tab value={'urls'} label="Public URLs" />
+                    </Tabs>
+                    {currentTab === 'resources' && (
+                        <PlannerResourcesList
+                            onShowMoreAssets={() => {
+                                kapetaContext.blockHub.open(planner.asset!, (selection) => {
+                                    selection.forEach((asset, i) => {
+                                        const ref = normalizeKapetaUri(
+                                            `${asset.content.metadata.name}:${asset.version}`
+                                        );
+                                        planner.addBlockInstance({
+                                            name: asset.content.metadata.title ?? parseKapetaUri(ref).name,
+                                            id: randomUUID(),
+                                            block: {
+                                                ref,
+                                            },
+                                            dimensions: {
+                                                top: 50 + i * 150,
+                                                left: 50,
+                                                width: 0,
+                                                height: 0,
+                                            },
+                                        });
                                     });
                                 });
-                            });
-                        }}
-                    />
-                )}
+                            }}
+                        />
+                    )}
+                    {currentTab === 'urls' && (
+                        <PlannerGatewaysList
+                            systemId={props.systemId}
+                            onConfigure={(info) => setConfigInfo({ type: DataEntityType.INSTANCE, item: info })}
+                        />
+                    )}
+                </PlannerDrawer>
 
                 <Planner
                     actions={actions}

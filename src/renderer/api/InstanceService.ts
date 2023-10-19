@@ -1,6 +1,12 @@
 import { SocketService } from './SocketService';
 import { clusterPath } from './ClusterConfig';
-import { BlockStatusListener, InstanceEventType, PlanStatusListener, simpleFetch } from '@kapeta/ui-web-context';
+import {
+    BlockStatusListener,
+    InstanceEventType,
+    InstanceStatus,
+    PlanStatusListener,
+    simpleFetch,
+} from '@kapeta/ui-web-context';
 
 class InstanceServiceImpl {
     public subscribeForLogs(
@@ -24,6 +30,20 @@ class InstanceServiceImpl {
             SocketService.leaveRoom(contextId);
             SocketService.off(eventType, contextHandler);
         };
+    }
+
+    async getInstanceStatusForSystem(systemId: string) {
+        return simpleFetch(clusterPath(`/instances/${encodeURIComponent(systemId)}/instances`), {
+            method: 'GET',
+        }) as Promise<
+            Array<{
+                address: string;
+                systemId: string;
+                instanceId: string;
+                status: InstanceStatus;
+                portType: string;
+            }>
+        >;
     }
 
     async getInstanceStatusForInstance(systemId, instanceId) {
