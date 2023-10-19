@@ -31,6 +31,7 @@ import { BlockTypeProvider } from '@kapeta/ui-web-context';
 import { Badge, Tab, Tabs, styled } from '@mui/material';
 import { PlannerGatewaysList } from './panels/GatewaysList';
 import { Box } from '@mui/system';
+import { getStatusDot, getStatusForGroup } from '../../utils/statusDot';
 
 interface Props {
     systemId: string;
@@ -142,6 +143,7 @@ export const PlanEditor = withPlannerContext(
             undefined;
 
         const [currentTab, setCurrentTab] = useState(readonly ? 'urls' : 'resources');
+        const statusDot = getStatusDot(getStatusForGroup(Object.values(planner.instanceStates || {})));
 
         return (
             <div className={containerClass} ref={ref}>
@@ -196,22 +198,13 @@ export const PlanEditor = withPlannerContext(
                         }}
                     >
                         {!readonly ? <StyledTab value={'resources'} label="Resources" /> : null}
-                        {/* TODO: add dot w/ URL count(s) */}
-                        {/* Maybe blink when state is starting */}
                         <StyledTab
                             value={'urls'}
                             label={
                                 <Badge
-                                    badgeContent={
-                                        planner.plan?.spec.blocks.filter(
-                                            (block) =>
-                                                parseKapetaUri(planner.getBlockById(block.id)?.kind || 'nothing/here')
-                                                    .fullName === 'kapeta/block-type-gateway-http'
-                                        ).length
-                                    }
-                                    color="primary"
-                                    showZero
-                                    max={10}
+                                    variant="dot"
+                                    sx={{ '& .MuiBadge-badge': statusDot.styles || {} }}
+                                    title={statusDot.title}
                                 >
                                     <Box sx={{ px: 2 }}>URLs</Box>
                                 </Badge>
