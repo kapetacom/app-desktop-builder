@@ -56,6 +56,9 @@ declare global {
             page: (name: string, properties?: PageProperties) => void;
             group: (groupId: string, traits?: GroupTraits) => void;
         };
+        pendo?: {
+            initialize: (opts: any) => void;
+        };
     }
 }
 
