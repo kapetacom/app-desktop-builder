@@ -121,7 +121,10 @@ export function Shell() {
         if (!window.pendo) {
             return;
         }
-        if (contexts.activeContext.identity.id && contexts.profile.id) {
+        if (
+            contexts.profile?.id && 
+            contexts.activeContext 
+        ) {
             window.pendo.initialize({
                 visitor: {
                     id: contexts.profile.id,
@@ -139,7 +142,7 @@ export function Shell() {
             });
                            
         }
-    }, [userProfile.id, currentContext?.id]);
+    }, [contexts.profile?.id, contexts.activeContext?.identity?.id]);
 
     const previousPath = usePrevious(location.pathname);
 
