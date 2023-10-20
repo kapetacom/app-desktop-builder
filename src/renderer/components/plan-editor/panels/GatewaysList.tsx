@@ -89,7 +89,7 @@ export const PlannerGatewaysList = withErrorBoundary(
                                 </>
                             }
                         >
-                            <InfoOutlined fontSize={'small'} sx={{ ml: 0.5 }} color="primary" />
+                            <InfoOutlined fontSize={'small'} sx={{ ml: 0.5 }} />
                         </KapTooltip>
                     </Stack>
 
