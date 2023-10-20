@@ -45,6 +45,8 @@ export const StyledTab = styled(Tab, {
 })({
     textTransform: 'none',
     color: '#000',
+    flexGrow: 1,
+    maxWidth: '50%',
     '&.MuiTab-root': {
         paddingLeft: '24px',
         paddingRight: '24px',
@@ -199,6 +201,8 @@ export const PlanEditor = withPlannerContext(
                                 // test
                                 backgroundColor: 'tertiary.main',
                             },
+                            display: 'flex',
+                            justifyContent: 'stretch',
                         }}
                     >
                         {!readonly ? <StyledTab value={'resources'} label="Resources" /> : null}
