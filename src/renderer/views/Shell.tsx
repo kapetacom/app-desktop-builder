@@ -116,6 +116,33 @@ export function Shell() {
             });
         }
     }, [contexts.activeContext, contexts.profile]);
+    
+    useEffect(() => {
+        if (!window.pendo) {
+            return;
+        }
+        if (
+            contexts.profile?.id && 
+            contexts.activeContext 
+        ) {
+            window.pendo.initialize({
+                visitor: {
+                    id: contexts.profile.id,
+                    //email: userProfile.email,
+                    full_name: contexts.profile.name,
+                    handle: contexts.profile.handle,
+                },
+                account: {
+                    id: contexts.activeContext.identity.id,
+                    //email: currentContext.,
+                    name: contexts.activeContext.identity.name,
+                    handle: contexts.activeContext.identity.handle,
+                }
+
+            });
+                           
+        }
+    }, [contexts.profile?.id, contexts.activeContext?.identity?.id]);
 
     const previousPath = usePrevious(location.pathname);
 
