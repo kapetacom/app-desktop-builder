@@ -1,3 +1,10 @@
+## [0.42.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.42.2...v0.42.3) (2023-10-20)
+
+
+### Bug Fixes
+
+* tweak drawer tabs and tooltip style ([#164](https://github.com/kapetacom/app-desktop-builder/issues/164)) ([18472b7](https://github.com/kapetacom/app-desktop-builder/commit/18472b7b8774f26949d53e2f45c0c39a397c50f4))
+
 ## [0.42.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.42.1...v0.42.2) (2023-10-19)
 
 
