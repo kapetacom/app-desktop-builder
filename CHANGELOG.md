@@ -1,3 +1,10 @@
+## [0.42.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.42.4...v0.42.5) (2023-10-22)
+
+
+### Bug Fixes
+
+* Copy fixes and use Quick Chat sample ([9ba9e12](https://github.com/kapetacom/app-desktop-builder/commit/9ba9e126b2b4ee3ae4e73f05f4f474db331e0c38))
+
 ## [0.42.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.42.3...v0.42.4) (2023-10-22)
 
 
