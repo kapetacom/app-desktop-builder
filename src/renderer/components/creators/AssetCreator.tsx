@@ -2,14 +2,18 @@ import Path from 'path';
 import React, { useEffect, useState } from 'react';
 import { FileInfo, SchemaKind } from '@kapeta/ui-web-types';
 import { AssetStore } from '@kapeta/ui-web-context';
-import { FormButtons, FormContainer, showToasty, ToastType } from '@kapeta/ui-web-components';
+import {
+    FormButtons,
+    FormContainer,
+    showToasty,
+    ToastType,
+    createVerticalScrollShadow,
+} from '@kapeta/ui-web-components';
 import { ProjectHomeFolderInput } from '../fields/ProjectHomeFolderInput';
 import { replaceBase64IconWithUrl } from '../../utils/iconHelpers';
 import { AssetInfo, fromAsset, PlannerSidebar } from '@kapeta/ui-web-plan-editor';
-import { kapetaLight } from '../../Theme';
-import { Button, ThemeProvider } from '@mui/material';
+import { Box, Button, Stack } from '@mui/material';
 import { showFilePickerOne } from '../../utils/showFilePicker';
-import './AssetCreator.less';
 
 export interface CreatingFormProps {
     creating?: boolean;
@@ -124,35 +128,61 @@ export const AssetCreator = (props: Props) => {
             }}
             title={props.title}
         >
-            <div className="asset-creator-form">
+            <Box
+                sx={{
+                    height: '100%',
+                    overflow: 'hidden',
+                    '& > .form-container': {
+                        height: '100%',
+                        overflow: 'hidden',
+                    },
+                }}
+            >
                 <FormContainer initialValue={newEntity} onSubmitData={(data: any) => onSubmit(data)}>
-                    <InnerFormRenderer asset={newEntity} creating />
-
-                    <ProjectHomeFolderInput
-                        onChange={(newUseProjectHome, newProjectHome) => {
-                            setUseProjectHome(newUseProjectHome);
-                            setProjectHome(newProjectHome);
+                    <Stack
+                        direction={'column'}
+                        className="asset-creator-form"
+                        sx={{
+                            height: '100%',
+                            overflow: 'hidden',
                         }}
-                    />
-
-                    <FormButtons>
-                        <Button
-                            color={'error'}
-                            variant={'contained'}
-                            onClick={() => {
-                                if (props.onCancel) {
-                                    props.onCancel();
-                                }
+                    >
+                        <Stack
+                            direction={'column'}
+                            sx={{
+                                height: '100%',
+                                ...createVerticalScrollShadow(0.1),
                             }}
                         >
-                            Cancel
-                        </Button>
-                        <Button color={'primary'} type={'submit'} variant={'contained'}>
-                            Create
-                        </Button>
-                    </FormButtons>
+                            <InnerFormRenderer asset={newEntity} creating />
+
+                            <ProjectHomeFolderInput
+                                onChange={(newUseProjectHome, newProjectHome) => {
+                                    setUseProjectHome(newUseProjectHome);
+                                    setProjectHome(newProjectHome);
+                                }}
+                            />
+                        </Stack>
+
+                        <FormButtons>
+                            <Button
+                                color={'error'}
+                                variant={'contained'}
+                                onClick={() => {
+                                    if (props.onCancel) {
+                                        props.onCancel();
+                                    }
+                                }}
+                            >
+                                Cancel
+                            </Button>
+                            <Button color={'primary'} type={'submit'} variant={'contained'}>
+                                Create
+                            </Button>
+                        </FormButtons>
+                    </Stack>
                 </FormContainer>
-            </div>
+            </Box>
         </PlannerSidebar>
     );
 };

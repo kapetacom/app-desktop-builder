@@ -29,11 +29,22 @@ import { BlockInfo, DataEntityType, EditItemInfo } from '../../types';
 
 import './ItemEditorPanel.less';
 import { replaceBase64IconWithUrl } from '../../../../utils/iconHelpers';
-import { Button } from '@mui/material';
+import {
+    Accordion,
+    AccordionDetails,
+    AccordionSummary,
+    Box,
+    Button,
+    Stack,
+    Tab,
+    Tabs,
+    Typography,
+} from '@mui/material';
 import { useKapetaContext } from '../../../../hooks/contextHook';
 import { useNamespacesForField } from '../../../../hooks/useNamespacesForField';
 import { fromTypeProviderToAssetType } from '../../../../utils/assetTypeConverters';
 import { updateBlockFromMapping } from '../../helpers';
+import { InstanceEditor } from './inner/InstanceEditor';
 
 function getResourceVersions(dataKindUri) {
     const allVersions = ResourceTypeProvider.getVersionsFor(dataKindUri.fullName);
@@ -41,67 +52,6 @@ function getResourceVersions(dataKindUri) {
         return fromTypeProviderToAssetType(ResourceTypeProvider.get(`${dataKindUri.fullName}:${version}`));
     });
 }
-
-interface BlockFieldsProps {
-    data: SchemaKind;
-}
-
-const BlockFields = ({ data }: BlockFieldsProps) => {
-    const context = useKapetaContext();
-    const namespaces = useNamespacesForField('metadata.name');
-    const kindUri = parseKapetaUri(data.kind);
-
-    const assetTypes = useMemo(() => {
-        const versions = BlockTypeProvider.getVersionsFor(kindUri.fullName);
-        return versions.map((version) => {
-            const id = `${kindUri.fullName}:${version}`;
-            const typeProvider = BlockTypeProvider.get(id);
-            return fromTypeProviderToAssetType(typeProvider);
-        });
-    }, [kindUri.fullName]);
-
-    return (
-        <>
-            <AssetVersionSelector
-                name="kind"
-                label="Type"
-                validation={['required']}
-                help="The block type and version"
-                assetTypes={assetTypes}
-            />
-
-            <AssetNameInput
-                name="metadata.name"
-                label="Name"
-                validation={['required']}
-                namespaces={namespaces}
-                defaultValue={context.activeContext?.identity?.handle ?? 'local'}
-                help={'The name of this block - e.g. "myhandle/my-block"'}
-            />
-
-            <FormField
-                name="metadata.visibility"
-                type={FormFieldType.ENUM}
-                validation={['required']}
-                options={{
-                    public: 'Public',
-                    private: 'Private',
-                }}
-                label="Visiblity"
-                help="Determine if your block is publically available on Kapeta"
-            />
-
-            <FormField name="metadata.title" label="Title" help="This blocks human-friendly title" />
-
-            <FormField
-                name="metadata.description"
-                type={FormFieldType.TEXT}
-                label="Description"
-                help="Give your block a longer description"
-            />
-        </>
-    );
-};
 
 interface InnerFormProps {
     planner: PlannerContextData;
@@ -219,23 +169,7 @@ const InnerForm = ({ planner, info, onContextDataChanged }: InnerFormProps) => {
         const kind = kindField.get(data.block.kind);
         const BlockTypeConfig = BlockTypeProvider.get(kind);
 
-        if (!BlockTypeConfig.editorComponent) {
-            return (
-                <div key={data.instance.block.ref}>
-                    <BlockFields data={data.block} />
-                </div>
-            );
-        }
-        const EditorComponent = BlockTypeConfig.editorComponent;
-
-        return (
-            <div key={kind}>
-                <BlockFields data={data.block} />
-                <ErrorBoundary fallbackRender={getErrorFallback(kind)}>
-                    <EditorComponent block={data.block} creating={info.creating} />
-                </ErrorBoundary>
-            </div>
-        );
+        return <InstanceEditor creating={info.creating} data={data} kind={kind} blockTypeConfig={BlockTypeConfig} />;
     }
 
     if (info.type === DataEntityType.RESOURCE) {
