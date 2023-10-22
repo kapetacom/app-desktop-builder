@@ -31,7 +31,7 @@ const router = createHashRouter([
                             const plans = usePlans();
                             const context = useKapetaContext();
 
-                            const samplePlanName = `${context.profile?.handle}/sample-nodejs-plan`;
+                            const samplePlanName = `${context.profile?.handle}/sample-java-chat-plan`;
 
                             return (
                                 <SimpleLoader loading={plans.loading || context.loading}>
