@@ -201,8 +201,6 @@ export const InstanceEditor = (props: Props) => {
                 height: '100%',
                 overflow: 'hidden',
                 '& > .editor-tab-page': {
-                    overflowY: 'auto',
-                    overflowX: 'hidden',
                     flex: 1,
                     ...createVerticalScrollShadow(0.1),
                 },
