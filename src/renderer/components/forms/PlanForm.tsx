@@ -33,7 +33,7 @@ export const PlanForm = (props: Props) => {
                     private: 'Private',
                 }}
                 label="Visiblity"
-                help="Determine if your plan is publically available on Kapeta"
+                help="Determine if your Plan is available on Block Hub, The Kapeta Market Place"
             />
 
             <FormField

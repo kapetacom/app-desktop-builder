@@ -4,7 +4,7 @@ import { Plan } from '@kapeta/schemas';
 import { AssetInfo, AssetThumbnail } from '@kapeta/ui-web-plan-editor';
 import { useLoadedPlanContext } from '../../../utils/planContextLoader';
 import { grey } from '@mui/material/colors';
-import SampleChecklist from '../../../../../assets/images/sample-checklist.svg';
+import SampleChatApp from '../../../../../assets/images/chat-app.svg';
 
 interface Props {
     onOpenSample?: (plan: AssetInfo<Plan>) => void;
@@ -12,7 +12,6 @@ interface Props {
 }
 
 export const SamplePlanSection = (props: Props) => {
-    const title = props.sample.content.metadata.title ?? props.sample.content.metadata.name;
     return (
         <Box className={'sample-plan-section'}>
             <Typography variant={'h6'} pb={2} pt={2}>
@@ -35,7 +34,7 @@ export const SamplePlanSection = (props: Props) => {
                         },
                     }}
                 >
-                    <SampleChecklist />
+                    <SampleChatApp />
 
                     <AssetThumbnail
                         asset={props.sample}
@@ -53,7 +52,7 @@ export const SamplePlanSection = (props: Props) => {
                     }}
                 >
                     <Typography variant={'h6'} mb={2}>
-                        {title}
+                        Quick Chat
                     </Typography>
                     <Typography mb={3}>
                         Try this sample plan to get a quick introduction to the Kapeta platform and what it can do to
