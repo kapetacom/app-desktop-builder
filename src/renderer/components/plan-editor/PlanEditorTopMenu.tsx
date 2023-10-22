@@ -14,6 +14,7 @@ import {
     ToastType,
     Tooltip,
     useFormContextField,
+    InfoBox,
 } from '@kapeta/ui-web-components';
 import './PlanEditorTopMenu.less';
 import {
@@ -363,11 +364,7 @@ export const PlanEditorTopMenu = (props: Props) => {
 
             <KapDialog open={showSettings} className="modal-plan-settings" onClose={() => setShowSettings(false)}>
                 <KapDialog.Title>Settings</KapDialog.Title>
-                <KapDialog.Content
-                    sx={{
-                        height: '420px',
-                    }}
-                >
+                <KapDialog.Content>
                     <FormContainer
                         initialValue={formData}
                         onSubmitData={async (data) => {
@@ -398,19 +395,28 @@ export const PlanEditorTopMenu = (props: Props) => {
                                     {!props.readonly && <Tab value="config-schema" label="Configuration Schema" />}
                                 </Tabs>
                             </Box>
-                            <Box flex={1} minHeight={'300px'} minWidth={'500px'}>
+                            <Box
+                                flex={1}
+                                minHeight={'300px'}
+                                minWidth={'500px'}
+                                sx={{
+                                    '.dsl-editor': {
+                                        height: '298px',
+                                    },
+                                }}
+                            >
                                 {settingsTab === 'general' && <PlanForm readOnly={props.readonly} />}
                                 {settingsTab === 'configuration' && (
-                                    <div className="configuration-editor">
-                                        <p className="info">Define configuration locally for this plan</p>
+                                    <Box>
+                                        <InfoBox>Define configuration locally for this plan</InfoBox>
                                         <ConfigValueEditor systemId={props.systemId} />
-                                    </div>
+                                    </Box>
                                 )}
                                 {settingsTab === 'config-schema' && !props.readonly && (
-                                    <div className="configuration-schema-editor">
-                                        <p className="info">Define configuration data types for this plan</p>
+                                    <Box>
+                                        <InfoBox>Define configuration data types for this plan</InfoBox>
                                         <ConfigSchemaEditor />
-                                    </div>
+                                    </Box>
                                 )}
                             </Box>
                         </Stack>
