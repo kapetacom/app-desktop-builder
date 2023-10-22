@@ -101,7 +101,7 @@ export const BlockForm = (props: Props) => {
                     private: 'Private',
                 }}
                 label="Visiblity"
-                help="Determine if your block is publically available on Kapeta"
+                help="Determine if your Block is available on Block Hub, The Kapeta Market Place"
             />
 
             <FormField

@@ -44,7 +44,7 @@ import { SystemService } from 'renderer/api/SystemService';
 import PublishIcon from '@mui/icons-material/Publish';
 import { CodeBlock } from '../general/CodeBlock';
 
-const ConfigSchemaEditor = () => {
+const ConfigSchemaEditor = (props: { systemId: string }) => {
     const configurationField = useFormContextField('spec.configuration');
     const configuration = configurationField.get();
     const result = {
@@ -66,6 +66,7 @@ const ConfigSchemaEditor = () => {
 
     return (
         <ConfigurationEditor
+            key={props.systemId}
             value={result}
             onChange={(newResult) => {
                 newResult.entities && setConfiguration(newResult.code, newResult.entities);
@@ -86,6 +87,7 @@ const ConfigValueEditor = (props: ConfigValueProps) => {
 
     return (
         <EntityEditor
+            key={props.systemId}
             entities={configurationSchema.types ?? []}
             value={configurationField.get({})}
             onChange={async (value) => {
@@ -363,7 +365,7 @@ export const PlanEditorTopMenu = (props: Props) => {
             </Stack>
 
             <KapDialog open={showSettings} className="modal-plan-settings" onClose={() => setShowSettings(false)}>
-                <KapDialog.Title>Settings</KapDialog.Title>
+                <KapDialog.Title>Plan settings</KapDialog.Title>
                 <KapDialog.Content>
                     <FormContainer
                         initialValue={formData}
@@ -408,14 +410,22 @@ export const PlanEditorTopMenu = (props: Props) => {
                                 {settingsTab === 'general' && <PlanForm readOnly={props.readonly} />}
                                 {settingsTab === 'configuration' && (
                                     <Box>
-                                        <InfoBox>Define configuration locally for this plan</InfoBox>
+                                        <InfoBox>
+                                            Define the local configuration values for this Plan. Will be used when you
+                                            run it locally.
+                                        </InfoBox>
                                         <ConfigValueEditor systemId={props.systemId} />
                                     </Box>
                                 )}
                                 {settingsTab === 'config-schema' && !props.readonly && (
                                     <Box>
-                                        <InfoBox>Define configuration data types for this plan</InfoBox>
-                                        <ConfigSchemaEditor />
+                                        <InfoBox>
+                                            Define the configuration schema for this Plan.{' '}
+                                            <a href={'https://docs.kapeta.com/v1/docs/configuration'} target={'_blank'}>
+                                                <i className="fal fa-info-circle" /> Read more
+                                            </a>
+                                        </InfoBox>
+                                        <ConfigSchemaEditor systemId={props.systemId} />
                                     </Box>
                                 )}
                             </Box>

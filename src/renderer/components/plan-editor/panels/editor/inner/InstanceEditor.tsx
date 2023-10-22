@@ -74,7 +74,7 @@ const BlockFields = ({ data }: BlockFieldsProps) => {
                     private: 'Private',
                 }}
                 label="Visiblity"
-                help="Determine if your block is publically available on Kapeta"
+                help="Determine if your Block is available on Block Hub, The Kapeta Market Place"
             />
 
             <FormField name="metadata.title" label="Title" help="This blocks human-friendly title" />
