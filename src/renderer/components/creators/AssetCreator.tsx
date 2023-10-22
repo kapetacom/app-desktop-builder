@@ -150,8 +150,6 @@ export const AssetCreator = (props: Props) => {
                         <Stack
                             direction={'column'}
                             sx={{
-                                overflowY: 'auto',
-                                overflowX: 'hidden',
                                 height: '100%',
                                 ...createVerticalScrollShadow(0.1),
                             }}
