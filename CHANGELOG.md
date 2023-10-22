@@ -1,3 +1,10 @@
+## [0.42.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.42.3...v0.42.4) (2023-10-22)
+
+
+### Bug Fixes
+
+* Scrolling for plan sidepanel forms ([#166](https://github.com/kapetacom/app-desktop-builder/issues/166)) ([c18295e](https://github.com/kapetacom/app-desktop-builder/commit/c18295e38f77308fcf2d4a6f1259e2ede5681623))
+
 ## [0.42.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.42.2...v0.42.3) (2023-10-20)
 
 
