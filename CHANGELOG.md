@@ -1,3 +1,11 @@
+## [0.42.6](https://github.com/kapetacom/app-desktop-builder/compare/v0.42.5...v0.42.6) (2023-10-23)
+
+
+### Bug Fixes
+
+* add kapeta.com to whitelist ([4104536](https://github.com/kapetacom/app-desktop-builder/commit/4104536c2f79c2ebab09ab3101b8137d1a5dd8e4))
+* add kapeta.com to whitelist for real ([4bdf1f1](https://github.com/kapetacom/app-desktop-builder/commit/4bdf1f137b064ed24826c5884127ca856ce5bfb2))
+
 ## [0.42.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.42.4...v0.42.5) (2023-10-22)
 
 
