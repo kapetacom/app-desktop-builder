@@ -1,3 +1,11 @@
+## [0.43.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.43.0...v0.43.1) (2023-10-24)
+
+
+### Bug Fixes
+
+* better status messages for combined status dot ([857d602](https://github.com/kapetacom/app-desktop-builder/commit/857d6024d4b28a565345439dfb168442de32f8f8))
+* update block status colors in planner views ([05784a2](https://github.com/kapetacom/app-desktop-builder/commit/05784a234b10591702fa8340546d5ee82b7e3a43))
+
 # [0.43.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.42.6...v0.43.0) (2023-10-24)
 
 
