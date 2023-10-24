@@ -4,11 +4,10 @@ import { Plan } from '@kapeta/schemas';
 import { toClass } from '@kapeta/ui-web-utils';
 
 import { useKapetaContext } from '../../../hooks/contextHook';
-import { AssetInfo, AssetThumbnail, MissingReference, ReferenceResolverModal } from '@kapeta/ui-web-plan-editor';
+import { AssetInfo, AssetThumbnail, MissingReference } from '@kapeta/ui-web-plan-editor';
 import { useLoadedPlanContext } from '../../../utils/planContextLoader';
 import { installerService } from '../../../api/installerService';
 import { EmptyStateBox } from '@kapeta/ui-web-components';
-import { AssetService } from '../../../api/AssetService';
 import { DesktopReferenceResolutionHandler } from '../../general/DesktopReferenceResolutionHandler';
 
 interface Props {
