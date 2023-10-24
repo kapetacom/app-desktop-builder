@@ -1,3 +1,10 @@
+# [0.43.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.42.6...v0.43.0) (2023-10-24)
+
+
+### Features
+
+* empty state launchpad graphics [KAP-1569] ([#168](https://github.com/kapetacom/app-desktop-builder/issues/168)) ([e381b06](https://github.com/kapetacom/app-desktop-builder/commit/e381b062e6151938133166be9a37274092391fd8))
+
 ## [0.42.6](https://github.com/kapetacom/app-desktop-builder/compare/v0.42.5...v0.42.6) (2023-10-23)
 
 
