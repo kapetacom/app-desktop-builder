@@ -10,6 +10,7 @@ import {
     randomUUID,
     resolveConfigurationFromDefinition,
     withPlannerContext,
+    usePlanValidation,
 } from '@kapeta/ui-web-plan-editor';
 import React, { ForwardedRef, forwardRef, useContext, useMemo, useState } from 'react';
 import { IResourceTypeProvider } from '@kapeta/ui-web-types';
@@ -28,10 +29,10 @@ import { BlockCreatorPanel } from './panels/BlockCreatorPanel';
 import { BlockDefinition } from '@kapeta/schemas';
 import { normalizeKapetaUri } from '../../utils/planContextLoader';
 import { BlockTypeProvider } from '@kapeta/ui-web-context';
-import { Badge, Tab, Tabs, styled } from '@mui/material';
+import { Box, Badge, Tab, Tabs, styled } from '@mui/material';
 import { PlannerGatewaysList } from './panels/GatewaysList';
-import { Box } from '@mui/system';
 import { getStatusDotForGroup } from '../../utils/statusDot';
+import { DesktopReferenceResolutionHandler } from '../general/DesktopReferenceResolutionHandler';
 
 interface Props {
     systemId: string;
@@ -146,6 +147,27 @@ export const PlanEditor = withPlannerContext(
 
         const [currentTab, setCurrentTab] = useState(readonly ? 'urls' : 'resources');
         const statusDot = getStatusDotForGroup(Object.values(planner.instanceStates || {}));
+
+        const missingReferences = usePlanValidation(planner.plan, planner.blockAssets);
+
+        if (missingReferences.length > 0) {
+            return (
+                <Box
+                    ref={ref}
+                    sx={{
+                        p: 4,
+                    }}
+                >
+                    <DesktopReferenceResolutionHandler
+                        inline={true}
+                        plan={planner.plan!}
+                        planRef={props.systemId}
+                        blockAssets={planner.blockAssets}
+                        missingReferences={missingReferences}
+                    />
+                </Box>
+            );
+        }
 
         return (
             <div className={containerClass} ref={ref}>

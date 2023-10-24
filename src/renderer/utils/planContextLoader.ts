@@ -218,7 +218,9 @@ export const useLoadedPlanContext = (plan: Plan | undefined) => {
     return {
         missingData,
         resourceAssets: results.value?.providers ?? [],
-
+        reload: async () => {
+            await localAssetsResult.refresh();
+        },
         currentlyLoading,
         blocks: results.value?.blocks ?? [],
         loading: loading || missingData || !results.value?.blocks,

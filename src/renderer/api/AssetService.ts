@@ -64,8 +64,13 @@ class AssetServiceImpl extends EventEmitter implements AssetStore {
      *
      * @returns A list of task ids
      */
-    async install(ref: string): Promise<string[]> {
-        const result = await simpleFetch(clusterPath(`/assets/install`, { ref }), {
+    async install(ref: string, wait: boolean = false): Promise<string[]> {
+        const query: any = { ref };
+        if (wait) {
+            query.wait = 'true';
+        }
+
+        const result = await simpleFetch(clusterPath(`/assets/install`, query), {
             method: 'PUT',
         });
 
