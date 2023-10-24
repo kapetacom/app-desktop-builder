@@ -31,7 +31,7 @@ import { BlockTypeProvider } from '@kapeta/ui-web-context';
 import { Badge, Tab, Tabs, styled } from '@mui/material';
 import { PlannerGatewaysList } from './panels/GatewaysList';
 import { Box } from '@mui/system';
-import { getStatusDot, getStatusForGroup } from '../../utils/statusDot';
+import { getStatusDotForGroup } from '../../utils/statusDot';
 
 interface Props {
     systemId: string;
@@ -145,7 +145,7 @@ export const PlanEditor = withPlannerContext(
             undefined;
 
         const [currentTab, setCurrentTab] = useState(readonly ? 'urls' : 'resources');
-        const statusDot = getStatusDot(getStatusForGroup(Object.values(planner.instanceStates || {})));
+        const statusDot = getStatusDotForGroup(Object.values(planner.instanceStates || {}));
 
         return (
             <div className={containerClass} ref={ref}>
