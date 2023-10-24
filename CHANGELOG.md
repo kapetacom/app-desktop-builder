@@ -1,3 +1,10 @@
+# [0.44.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.43.1...v0.44.0) (2023-10-24)
+
+
+### Features
+
+* Integrates missing reference resolving UI into Desktop app ([#171](https://github.com/kapetacom/app-desktop-builder/issues/171)) ([8932859](https://github.com/kapetacom/app-desktop-builder/commit/8932859a2a2050935c55f19b12696e2af9ddb76a))
+
 ## [0.43.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.43.0...v0.43.1) (2023-10-24)
 
 
