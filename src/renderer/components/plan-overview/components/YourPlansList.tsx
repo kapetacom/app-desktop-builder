@@ -1,16 +1,14 @@
 import React from 'react';
 import { Box, Button, Slide, Stack, Typography } from '@mui/material';
 import { Plan } from '@kapeta/schemas';
-import ImageIcon from '@mui/icons-material/Image';
 import { toClass } from '@kapeta/ui-web-utils';
 
 import { useKapetaContext } from '../../../hooks/contextHook';
-import { TransitionGroup } from 'react-transition-group';
-import { AssetInfo, AssetThumbnail } from '@kapeta/ui-web-plan-editor';
+import { AssetInfo, AssetThumbnail, MissingReference } from '@kapeta/ui-web-plan-editor';
 import { useLoadedPlanContext } from '../../../utils/planContextLoader';
 import { installerService } from '../../../api/installerService';
-import { grey } from '@mui/material/colors';
 import { EmptyStateBox } from '@kapeta/ui-web-components';
+import { DesktopReferenceResolutionHandler } from '../../general/DesktopReferenceResolutionHandler';
 
 interface Props {
     plans: AssetInfo<Plan>[];
@@ -99,26 +97,51 @@ const YourPlansListInner = (props: Props) => {
 
     return (
         <Stack direction={'row'} flexWrap={'wrap'} alignItems={'flex-start'} alignContent={'flex-start'} gap={3}>
-            <TransitionGroup component={null} enter={true} exit={true} appear={true}>
-                {props.plans.map((plan, index) => {
-                    return (
-                        <Slide key={`plan_${plan.ref}`} direction={'right'} unmountOnExit={true} mountOnEnter={true}>
-                            <AssetThumbnail
-                                key={`plan_${plan.ref}`}
-                                width={366}
-                                height={262}
-                                asset={plan}
-                                installerService={installerService}
-                                onClick={props.onPlanOpen}
-                                loadPlanContext={(plan) => {
-                                    return useLoadedPlanContext(plan.content);
-                                }}
-                            />
-                        </Slide>
-                    );
-                })}
-            </TransitionGroup>
+            {props.plans.map((plan) => {
+                return <PlanTile key={`plan_${plan.ref}`} plan={plan} onPlanOpen={props.onPlanOpen} />;
+            })}
         </Stack>
+    );
+};
+
+const PlanTile = ({ plan, onPlanOpen }: { plan: AssetInfo<Plan>; onPlanOpen?: (plan: AssetInfo<Plan>) => void }) => {
+    const planContext = useLoadedPlanContext(plan.content);
+    const [resolverOpen, setResolverOpen] = React.useState(false);
+    const [missingReferences, setMissingReferences] = React.useState<MissingReference[]>([]);
+
+    return (
+        <Box>
+            <DesktopReferenceResolutionHandler
+                open={resolverOpen}
+                plan={plan.content}
+                planRef={plan.ref}
+                blockAssets={planContext.blocks}
+                missingReferences={missingReferences}
+                onClose={() => setResolverOpen(false)}
+            />
+            <AssetThumbnail
+                width={366}
+                height={262}
+                asset={plan}
+                onMissingReferences={(missingReferences) => {
+                    if (resolverOpen && missingReferences.length < 1) {
+                        setResolverOpen(false);
+                    }
+                    setMissingReferences(missingReferences);
+                }}
+                installerService={installerService}
+                onClick={() => {
+                    if (missingReferences.length > 0) {
+                        setResolverOpen(true);
+                    } else {
+                        onPlanOpen && onPlanOpen(plan);
+                    }
+                }}
+                loadPlanContext={() => {
+                    return planContext;
+                }}
+            />
+        </Box>
     );
 };
 
