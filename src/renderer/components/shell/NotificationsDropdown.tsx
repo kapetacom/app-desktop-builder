@@ -94,7 +94,7 @@ const NotificationsList = ({
     return (
         <List
             sx={{
-                maxHeight: '200px',
+                maxHeight: '550px',
                 width: '450px',
                 overflow: 'auto',
             }}
