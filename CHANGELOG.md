@@ -1,3 +1,10 @@
+## [0.44.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.44.0...v0.44.1) (2023-10-25)
+
+
+### Bug Fixes
+
+* capitalization of Plan in empty state view ([#172](https://github.com/kapetacom/app-desktop-builder/issues/172)) ([6b59466](https://github.com/kapetacom/app-desktop-builder/commit/6b59466ccfcceabc8fb9d51988942f24ecabc811))
+
 # [0.44.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.43.1...v0.44.0) (2023-10-24)
 
 
