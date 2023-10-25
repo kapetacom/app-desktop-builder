@@ -81,13 +81,14 @@ export const PlannerGatewaysList = withErrorBoundary(
                         <KapTooltip
                             title={
                                 <>
-                                    Public URLs for Gateways in your plan. Gateways will get a <b>Kapeta.dev URL</b> in
+                                    Public URLs for Gateways in your plan. Gateways will get a <b>kapeta.dev</b> URL in
                                     cloud environments.
                                     <br />
                                     <br />
                                     Public URLs can be configured for <b>custom domains in the gateway settings</b>.
                                 </>
                             }
+                            placement="top-start"
                         >
                             <InfoOutlined fontSize={'small'} sx={{ ml: 0.5 }} />
                         </KapTooltip>
@@ -126,6 +127,7 @@ export const PlannerGatewaysList = withErrorBoundary(
                                     Internal URLs usually point to a local container port.
                                 </>
                             }
+                            placement="top-start"
                         >
                             <InfoOutlined fontSize={'small'} sx={{ ml: 0.5 }} />
                         </KapTooltip>
