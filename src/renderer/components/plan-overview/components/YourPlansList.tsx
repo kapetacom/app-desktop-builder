@@ -38,7 +38,7 @@ const YourPlansListInner = (props: Props) => {
                     }}
                     gap={2}
                 >
-                    <Typography variant="h6">Your plans will appear here</Typography>
+                    <Typography variant="h6">Your Plans will appear here</Typography>
                     <Typography
                         sx={{
                             '.MuiButtonBase-root': {
@@ -47,7 +47,7 @@ const YourPlansListInner = (props: Props) => {
                             },
                         }}
                     >
-                        You don't have any plans yet.
+                        You don't have any Plans yet.
                         <br />
                         <Button variant="text" onClick={props.onPlanCreate}>
                             Create
@@ -79,7 +79,7 @@ const YourPlansListInner = (props: Props) => {
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            More about plans
+                            More about Plans
                         </Button>
                     }
                     sx={{
