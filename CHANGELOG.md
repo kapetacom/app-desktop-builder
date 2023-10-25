@@ -1,3 +1,10 @@
+## [0.44.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.44.1...v0.44.2) (2023-10-25)
+
+
+### Bug Fixes
+
+* use en-US locale for relative dates ([#173](https://github.com/kapetacom/app-desktop-builder/issues/173)) ([e0c8e31](https://github.com/kapetacom/app-desktop-builder/commit/e0c8e313b310c24620efda8736254246607061f1))
+
 ## [0.44.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.44.0...v0.44.1) (2023-10-25)
 
 
