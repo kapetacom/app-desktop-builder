@@ -1,3 +1,18 @@
+# [0.45.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.44.2...v0.45.0) (2023-10-26)
+
+
+### Bug Fixes
+
+* Bump maxHeight back to 550px ([a735e15](https://github.com/kapetacom/app-desktop-builder/commit/a735e15d169d1b6021e8e6812e4f7bfbb1954025))
+* Bump maxHeight back to 550px ([d5c7bb3](https://github.com/kapetacom/app-desktop-builder/commit/d5c7bb329bf401e1273752c9d5debc4bd6ebd6ef))
+* Specify tooltip placement ([34ea09a](https://github.com/kapetacom/app-desktop-builder/commit/34ea09a25f87ab60450ae4add49c03ad9fe85793))
+* Use reusable shadow instead ([33ace66](https://github.com/kapetacom/app-desktop-builder/commit/33ace662a23001378e98482c57295d40ab8dd36b))
+
+
+### Features
+
+* Update notification dropdown to light mode ([2d86635](https://github.com/kapetacom/app-desktop-builder/commit/2d866356dc2fbe1e870c9930d0c846b842ed4e2c))
+
 ## [0.44.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.44.1...v0.44.2) (2023-10-25)
 
 
