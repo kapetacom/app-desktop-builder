@@ -76,7 +76,7 @@ const NotificationsList = ({ notifications = [] }: { notifications?: KapetaNotif
     return (
         <List
             sx={{
-                maxHeight: '200px',
+                maxHeight: '550px',
                 width: '450px',
                 ...createVerticalScrollShadow(0.1),
             }}
