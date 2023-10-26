@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode } from 'react';
 import {
     Box,
     CircularProgress,
@@ -12,12 +12,10 @@ import {
     ClickAwayListener,
     Paper,
     Grow,
-    Fade,
 } from '@mui/material';
 import { KapetaNotification, StateNotificationType } from './types';
 import { withTheme } from '../../Theme';
-import { useIntersection } from 'react-use';
-import { UserAvatar } from '@kapeta/ui-web-components';
+import { UserAvatar, createVerticalScrollShadow } from '@kapeta/ui-web-components';
 import ExclamationCircleIcon from '@mui/icons-material/Error';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -74,29 +72,13 @@ function getIconForStateNotification(notificationType: StateNotificationType): R
     return null;
 }
 
-const NotificationsList = ({
-    notifications = [],
-    onScrollToBottom,
-}: {
-    notifications?: KapetaNotification[];
-    onScrollToBottom: (atBottom: boolean) => void;
-}) => {
-    const atBottomRef = React.useRef(null);
-    const intersection = useIntersection(atBottomRef, {
-        root: null,
-        rootMargin: '0px',
-        threshold: 1,
-    });
-    useEffect(() => {
-        onScrollToBottom(intersection && intersection.intersectionRatio < 1 ? false : true);
-    }, [intersection]);
-
+const NotificationsList = ({ notifications = [] }: { notifications?: KapetaNotification[] }) => {
     return (
         <List
             sx={{
-                maxHeight: '550px',
+                maxHeight: '200px',
                 width: '450px',
-                overflow: 'auto',
+                ...createVerticalScrollShadow(0.1),
             }}
         >
             {notifications?.length ? (
@@ -110,9 +92,6 @@ const NotificationsList = ({
                     <ListItemText>No notifications</ListItemText>
                 </ListItem>
             )}
-
-            {/* When this element is visible we know the user is at the bottom */}
-            <Box ref={atBottomRef} />
         </List>
     );
 };
@@ -174,8 +153,6 @@ export const NotificationsDropdown = withTheme((props: NotificationsDropdownProp
 
     const isOpen = Boolean(anchorEl);
 
-    const [atBottom, setAtBottom] = useState(true);
-
     return (
         <Popper
             anchorEl={anchorEl}
@@ -205,26 +182,7 @@ export const NotificationsDropdown = withTheme((props: NotificationsDropdownProp
                     >
                         <ClickAwayListener onClickAway={() => onClose?.()}>
                             <Box>
-                                <NotificationsList
-                                    notifications={notifications}
-                                    onScrollToBottom={(atBottom) => setAtBottom(atBottom)}
-                                />
-
-                                {/* Linear Gradient Fading Effect */}
-                                <Box
-                                    sx={{
-                                        position: 'absolute',
-                                        pointerEvents: 'none',
-                                        bottom: 0,
-                                        left: 0,
-                                        right: 0,
-                                        height: '50px',
-                                        background: 'linear-gradient(transparent, white 80%)',
-                                        borderRadius: 1,
-                                        transition: 'opacity 150ms ease-in-out',
-                                        opacity: atBottom ? 0 : 1,
-                                    }}
-                                />
+                                <NotificationsList notifications={notifications} />
                             </Box>
                         </ClickAwayListener>
                     </Paper>
