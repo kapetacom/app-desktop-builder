@@ -1,3 +1,10 @@
+# [0.46.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.45.2...v0.46.0) (2023-10-27)
+
+
+### Features
+
+* Add BETA button to left menu ([3d59d7d](https://github.com/kapetacom/app-desktop-builder/commit/3d59d7daa333b585f9af169598506afd98461672))
+
 ## [0.45.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.45.1...v0.45.2) (2023-10-27)
 
 
