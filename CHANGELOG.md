@@ -1,3 +1,10 @@
+## [0.45.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.45.1...v0.45.2) (2023-10-27)
+
+
+### Bug Fixes
+
+* Add missing resolution ui fixes to handle non-resolvable scenario ([757dd27](https://github.com/kapetacom/app-desktop-builder/commit/757dd2713e91b3f58064f6c5936ce7c4495574f2))
+
 ## [0.45.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.45.0...v0.45.1) (2023-10-27)
 
 
