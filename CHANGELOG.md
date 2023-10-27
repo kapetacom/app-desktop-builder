@@ -1,3 +1,10 @@
+## [0.45.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.45.0...v0.45.1) (2023-10-27)
+
+
+### Bug Fixes
+
+* Bump ui-web-components to get new blockhub design ([6276cef](https://github.com/kapetacom/app-desktop-builder/commit/6276cefe1e8d29245560411d02995a5c2d98d664))
+
 # [0.45.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.44.2...v0.45.0) (2023-10-26)
 
 
