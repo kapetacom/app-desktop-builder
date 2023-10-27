@@ -6,8 +6,8 @@ import { toClass } from '@kapeta/ui-web-utils';
 import { useKapetaContext } from '../../../hooks/contextHook';
 import { AssetInfo, AssetThumbnail, MissingReference } from '@kapeta/ui-web-plan-editor';
 import { useLoadedPlanContext } from '../../../utils/planContextLoader';
-import { installerService } from '../../../api/installerService';
-import { EmptyStateBox } from '@kapeta/ui-web-components';
+import { useInstallerService } from '../../../api/installerService';
+import { EmptyStateBox, InstallerService } from '@kapeta/ui-web-components';
 import { DesktopReferenceResolutionHandler } from '../../general/DesktopReferenceResolutionHandler';
 
 interface Props {
@@ -19,6 +19,7 @@ interface Props {
 
 const YourPlansListInner = (props: Props) => {
     const kapetaContext = useKapetaContext();
+    const installerService = useInstallerService();
 
     if (props.plans.length < 1) {
         return (
@@ -98,13 +99,28 @@ const YourPlansListInner = (props: Props) => {
     return (
         <Stack direction={'row'} flexWrap={'wrap'} alignItems={'flex-start'} alignContent={'flex-start'} gap={3}>
             {props.plans.map((plan) => {
-                return <PlanTile key={`plan_${plan.ref}`} plan={plan} onPlanOpen={props.onPlanOpen} />;
+                return (
+                    <PlanTile
+                        key={`plan_${plan.ref}`}
+                        plan={plan}
+                        installerService={installerService}
+                        onPlanOpen={props.onPlanOpen}
+                    />
+                );
             })}
         </Stack>
     );
 };
 
-const PlanTile = ({ plan, onPlanOpen }: { plan: AssetInfo<Plan>; onPlanOpen?: (plan: AssetInfo<Plan>) => void }) => {
+const PlanTile = ({
+    plan,
+    onPlanOpen,
+    installerService,
+}: {
+    plan: AssetInfo<Plan>;
+    installerService: InstallerService;
+    onPlanOpen?: (plan: AssetInfo<Plan>) => void;
+}) => {
     const planContext = useLoadedPlanContext(plan.content);
     const [resolverOpen, setResolverOpen] = React.useState(false);
     const [missingReferences, setMissingReferences] = React.useState<MissingReference[]>([]);

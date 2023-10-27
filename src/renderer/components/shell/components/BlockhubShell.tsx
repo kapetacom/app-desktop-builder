@@ -1,7 +1,6 @@
-import { installerService } from '../../../api/installerService';
+import { useInstallerService } from '../../../api/installerService';
 import { api, assetFetcher } from '../../../api/APIService';
-import { ThemeProvider } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { AssetDisplay, AssetType, BlockhubCategory, BlockhubModal } from '@kapeta/ui-web-components';
 import { useAsyncRetry } from 'react-use';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
@@ -9,7 +8,7 @@ import { useKapetaContext } from '../../../hooks/contextHook';
 import { versionIsBigger } from '../../../utils/versionHelpers';
 
 import { normalizeKapetaUri, useLoadedPlanContext } from '../../../utils/planContextLoader';
-import { useAssetsChanged } from '../../../hooks/assetHooks';
+import { useAssetsChanged, useLocalAssets } from '../../../hooks/assetHooks';
 import { AssetInfo, AssetThumbnail, fromAsset, fromAssetDisplay } from '@kapeta/ui-web-plan-editor';
 import { AssetService } from 'renderer/api/AssetService';
 
@@ -86,6 +85,8 @@ export const BlockhubShell = (props: Props) => {
             setCurrentCategory(BlockhubCategory.INSTALLED);
         }
     }, [kapetaContext.blockHub.visible]);
+
+    const installerService = useInstallerService();
 
     return (
         <BlockhubModal
