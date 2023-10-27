@@ -14,6 +14,7 @@ import { BlockhubShell } from './components/BlockhubShell';
 import { useKapetaContext } from '../../hooks/contextHook';
 import BlockHubIcon from './components/icons/large/BlockHubIcon.svg';
 import { KindIcon } from '@kapeta/ui-web-components';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 
 interface ConsoleLocation {
     pathname: string;
@@ -103,13 +104,38 @@ export const MainLayout = (props: Props) => {
                             </SidebarListItemButton>
                         </SidebarListItem>
                     </SidebarList>
+                    <Box
+                        sx={{
+                            mt: 'auto',
+                            height: '96px',
+                            ml: drawerIsOpen ? '0px' : '6px',
+                            transition: 'margin-left 225ms cubic-bezier(0.4, 0, 0.6, 1)',
+                        }}
+                    >
+                        <Box
+                            sx={{
+                                width: '96px',
+                                transform: 'rotate(-90deg) translateX(-100%)',
+                                transformOrigin: 'top left',
+                            }}
+                        >
+                            <Button
+                                variant="outlined"
+                                color="inherit"
+                                endIcon={<HelpOutlineIcon fontSize="inherit" />}
+                                data-kap-id="app-left-menu-beta-button"
+                            >
+                                BETA
+                            </Button>
+                        </Box>
+                    </Box>
                     <IconButton
                         sx={{
                             display: 'block',
                             py: 2,
                             width: '100%',
                             '&:hover': { backgroundColor: 'inherit' },
-                            marginTop: 'auto',
+                            mt: 'auto',
                             color: 'white',
                         }}
                         onClick={toggleDrawer}
