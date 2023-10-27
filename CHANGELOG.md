@@ -1,3 +1,10 @@
+# [0.47.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.46.0...v0.47.0) (2023-10-27)
+
+
+### Features
+
+* Adjusts installer service to support upgrade indicator ([#178](https://github.com/kapetacom/app-desktop-builder/issues/178)) ([6209d1a](https://github.com/kapetacom/app-desktop-builder/commit/6209d1a9b1644ca9ac3ef8127556a2e962307d1e))
+
 # [0.46.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.45.2...v0.46.0) (2023-10-27)
 
 
