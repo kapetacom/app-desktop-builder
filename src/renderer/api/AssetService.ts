@@ -6,6 +6,7 @@ import { Asset, SchemaKind } from '@kapeta/ui-web-types';
 import { clusterPath } from './ClusterConfig';
 import YAML from 'yaml';
 import { AssetListener, AssetStore, asSingleton, simpleFetch } from '@kapeta/ui-web-context';
+import { DefinitionInfo } from '@kapeta/local-cluster-config';
 
 class AssetServiceImpl extends EventEmitter implements AssetStore {
     async list(): Promise<Asset[]> {
@@ -14,6 +15,10 @@ class AssetServiceImpl extends EventEmitter implements AssetStore {
 
     async get(ref: string, ensure: boolean = true): Promise<Asset> {
         return simpleFetch(clusterPath(`/assets/read`, { ref, ensure: String(ensure) }));
+    }
+
+    async getVersions(ref: string): Promise<DefinitionInfo[]> {
+        return simpleFetch(clusterPath(`/assets/versions`, { ref }));
     }
 
     async import(ref: string): Promise<Asset[]> {
