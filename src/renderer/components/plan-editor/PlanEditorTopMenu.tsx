@@ -399,14 +399,61 @@ export const PlanEditorTopMenu = (props: Props) => {
                     <FormContainer
                         initialValue={formData}
                         onSubmitData={async (data) => {
-                            if (planner.plan && planner.plan.metadata.name !== data.metadata.name) {
-                                const oldPlanUri = parseKapetaUri(planner.plan.metadata.name);
+                            if (planner.plan && planner.plan.spec.blocks && planner.plan.spec.blocks.length > 0) {
                                 const newPlanUri = parseKapetaUri(data.metadata.name);
+                                const oldPlanUri = parseKapetaUri(planner.plan.metadata.name);
+                                const blockDefinitionRefs: BlockDefinitionReference[] = [];
+
                                 if (
-                                    oldPlanUri.handle !== newPlanUri.handle &&
-                                    planner.plan.spec.blocks &&
-                                    planner.plan.spec.blocks.length > 0
+                                    planner.plan.metadata.visibility !== data.metadata.visibility &&
+                                    data.metadata.visibility === 'public'
                                 ) {
+                                    const changeVisibility = await confirm({
+                                        title: 'Visibility change',
+                                        cancellationText: 'No, Cancel change',
+                                        confirmationText: 'Yes, Change all blocks to public',
+                                        content:
+                                            'You are about to change the plan to public. All blocks must also be public to be able to publish the plan. Do you want to change the visibility of all blocks?',
+                                    });
+
+                                    if (!changeVisibility) {
+                                        return;
+                                    }
+
+                                    planner.plan.spec.blocks.forEach((instance) => {
+                                        const blockUri = parseKapetaUri(instance.block.ref);
+                                        if (blockUri.version !== 'local') {
+                                            return;
+                                        }
+
+                                        const block = planner.getBlockByRef(instance.block.ref);
+                                        if (!block) {
+                                            return;
+                                        }
+
+                                        if (block.metadata.visibility === 'public') {
+                                            return;
+                                        }
+
+                                        if (blockDefinitionRefs.some((b) => b.ref === instance.block.ref)) {
+                                            return;
+                                        }
+
+                                        blockDefinitionRefs.push({
+                                            ref: instance.block.ref,
+                                            update: {
+                                                ...block,
+                                                metadata: {
+                                                    ...block.metadata,
+                                                    visibility: 'public',
+                                                },
+                                            },
+                                        });
+                                    });
+                                }
+
+                                if (oldPlanUri.handle !== newPlanUri.handle) {
+                                    // Ask if we should change the block refs
                                     const changeBlockRefs = await confirm({
                                         title: 'Confirm ownership change',
                                         cancellationText: 'No, Keep handles on blocks',
@@ -416,8 +463,6 @@ export const PlanEditorTopMenu = (props: Props) => {
                                     });
 
                                     if (changeBlockRefs) {
-                                        const blockDefinitionRefs: BlockDefinitionReference[] = [];
-
                                         for (const instance of planner.plan.spec.blocks) {
                                             const blockUri = parseKapetaUri(instance.block.ref);
 
@@ -430,19 +475,25 @@ export const PlanEditorTopMenu = (props: Props) => {
                                                 continue;
                                             }
 
-                                            blockUri.handle = newPlanUri.handle;
-                                            const blockCopy = _.cloneDeep(block);
-                                            blockCopy.metadata.name = blockUri.fullName;
-                                            blockDefinitionRefs.push({
-                                                ref: instance.block.ref,
-                                                update: blockCopy,
-                                            });
-                                        }
+                                            let blockDefinitionRef = blockDefinitionRefs.find(
+                                                (b) => b.ref === instance.block.ref
+                                            );
+                                            if (!blockDefinitionRef) {
+                                                blockDefinitionRef = {
+                                                    ref: instance.block.ref,
+                                                    update: _.cloneDeep(block),
+                                                };
+                                                blockDefinitionRefs.push(blockDefinitionRef);
+                                            }
 
-                                        if (blockDefinitionRefs.length > 0) {
-                                            planner.updateBlockDefinitions(blockDefinitionRefs);
+                                            blockUri.handle = newPlanUri.handle;
+                                            blockDefinitionRef.update.metadata.name = blockUri.fullName;
                                         }
                                     }
+                                }
+
+                                if (blockDefinitionRefs.length > 0) {
+                                    planner.updateBlockDefinitions(blockDefinitionRefs);
                                 }
                             }
 
