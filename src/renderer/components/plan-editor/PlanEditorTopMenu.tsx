@@ -43,6 +43,8 @@ import { TaskService } from 'renderer/api/TaskService';
 import { SystemService } from 'renderer/api/SystemService';
 import PublishIcon from '@mui/icons-material/Publish';
 import { CodeBlock } from '../general/CodeBlock';
+import CoffeeIcon from '../../../../assets/images/coffee.svg';
+import { TipBox } from '../general/TipBox';
 
 const ConfigSchemaEditor = (props: { systemId: string }) => {
     const configurationField = useFormContextField('spec.configuration');
@@ -111,6 +113,7 @@ export const PlanEditorTopMenu = (props: Props) => {
     const [starting, setStarting] = useState(false);
     const [stopping, setStopping] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
+    const [showPlanTakesTimeTip, setShowPlanTakesTimeTip] = useState(false);
     const [settingsTab, setSettingsTab] = useState('general');
     const [publishButton, setPublishButton] = useState<HTMLButtonElement | null>(null);
 
@@ -209,6 +212,21 @@ export const PlanEditorTopMenu = (props: Props) => {
             reloadConfig();
         }
     }, [props.systemId, planner.plan, showSettings, reloadConfig]);
+
+    useEffect(() => {
+        if (!starting) {
+            return () => {};
+        }
+
+        // Show tip after 30 seconds
+        const timeout = setTimeout(() => {
+            setShowPlanTakesTimeTip(true);
+        }, 30000);
+
+        return () => {
+            clearTimeout(timeout);
+        };
+    }, [starting]);
 
     const hasConfig = !!(
         planner.plan?.spec?.configuration?.types && planner.plan?.spec?.configuration?.types.length > 0
@@ -500,6 +518,15 @@ export const PlanEditorTopMenu = (props: Props) => {
                     </Typography>
                 </Box>
             </Popover>
+
+            {showPlanTakesTimeTip && (
+                <TipBox
+                    id={'starting-your-plan'}
+                    title={'Starting your Plan'}
+                    icon={<CoffeeIcon />}
+                    description={`Kapeta is pulling docker images and spinning up databases - the first time you start a Plan or a new Block this could take several minutes. Now might be a good time to get that fresh cup of coffee.`}
+                />
+            )}
         </Paper>
     );
 };
