@@ -15,9 +15,11 @@ import {
     Tooltip,
     useFormContextField,
     InfoBox,
+    useConfirm,
 } from '@kapeta/ui-web-components';
 import './PlanEditorTopMenu.less';
 import {
+    BlockDefinitionReference,
     createGlobalConfigurationFromEntities,
     PlannerContext,
     resolveConfigurationFromDefinition,
@@ -45,6 +47,8 @@ import PublishIcon from '@mui/icons-material/Publish';
 import { CodeBlock } from '../general/CodeBlock';
 import CoffeeIcon from '../../../../assets/images/coffee.svg';
 import { TipBox } from '../general/TipBox';
+import { parseKapetaUri } from '@kapeta/nodejs-utils';
+import _ from 'lodash';
 
 const ConfigSchemaEditor = (props: { systemId: string }) => {
     const configurationField = useFormContextField('spec.configuration');
@@ -107,6 +111,7 @@ interface Props {
 
 export const PlanEditorTopMenu = (props: Props) => {
     const planner = useContext(PlannerContext);
+    const confirm = useConfirm();
     const [allPlaying, setAllPlaying] = useState(false);
     const [anyPlaying, setAnyPlaying] = useState(false);
     const [processing, setProcessing] = useState(false);
@@ -394,6 +399,104 @@ export const PlanEditorTopMenu = (props: Props) => {
                     <FormContainer
                         initialValue={formData}
                         onSubmitData={async (data) => {
+                            if (planner.plan && planner.plan.spec.blocks && planner.plan.spec.blocks.length > 0) {
+                                const newPlanUri = parseKapetaUri(data.metadata.name);
+                                const oldPlanUri = parseKapetaUri(planner.plan.metadata.name);
+                                const blockDefinitionRefs: BlockDefinitionReference[] = [];
+
+                                if (
+                                    planner.plan.metadata.visibility !== data.metadata.visibility &&
+                                    data.metadata.visibility === 'public'
+                                ) {
+                                    const changeVisibility = await confirm({
+                                        title: 'Visibility change',
+                                        cancellationText: 'No, Cancel change',
+                                        confirmationText: 'Yes, Change all blocks to public',
+                                        content:
+                                            'You are about to change the plan to public. All blocks must also be public to be able to publish the plan. Do you want to change the visibility of all blocks?',
+                                    });
+
+                                    if (!changeVisibility) {
+                                        return;
+                                    }
+
+                                    planner.plan.spec.blocks.forEach((instance) => {
+                                        const blockUri = parseKapetaUri(instance.block.ref);
+                                        if (blockUri.version !== 'local') {
+                                            return;
+                                        }
+
+                                        const block = planner.getBlockByRef(instance.block.ref);
+                                        if (!block) {
+                                            return;
+                                        }
+
+                                        if (block.metadata.visibility === 'public') {
+                                            return;
+                                        }
+
+                                        if (blockDefinitionRefs.some((b) => b.ref === instance.block.ref)) {
+                                            return;
+                                        }
+
+                                        blockDefinitionRefs.push({
+                                            ref: instance.block.ref,
+                                            update: {
+                                                ...block,
+                                                metadata: {
+                                                    ...block.metadata,
+                                                    visibility: 'public',
+                                                },
+                                            },
+                                        });
+                                    });
+                                }
+
+                                if (oldPlanUri.handle !== newPlanUri.handle) {
+                                    // Ask if we should change the block refs
+                                    const changeBlockRefs = await confirm({
+                                        title: 'Confirm ownership change',
+                                        cancellationText: 'No, Keep handles on blocks',
+                                        confirmationText: 'Yes, Change handles on blocks',
+                                        content:
+                                            'You are about to change the handle of this plan. Do you also want to change the same handle of blocks in this plan?',
+                                    });
+
+                                    if (changeBlockRefs) {
+                                        for (const instance of planner.plan.spec.blocks) {
+                                            const blockUri = parseKapetaUri(instance.block.ref);
+
+                                            if (blockUri.handle !== oldPlanUri.handle || blockUri.version !== 'local') {
+                                                continue;
+                                            }
+
+                                            const block = planner.getBlockById(instance.id);
+                                            if (!block) {
+                                                continue;
+                                            }
+
+                                            let blockDefinitionRef = blockDefinitionRefs.find(
+                                                (b) => b.ref === instance.block.ref
+                                            );
+                                            if (!blockDefinitionRef) {
+                                                blockDefinitionRef = {
+                                                    ref: instance.block.ref,
+                                                    update: _.cloneDeep(block),
+                                                };
+                                                blockDefinitionRefs.push(blockDefinitionRef);
+                                            }
+
+                                            blockUri.handle = newPlanUri.handle;
+                                            blockDefinitionRef.update.metadata.name = blockUri.fullName;
+                                        }
+                                    }
+                                }
+
+                                if (blockDefinitionRefs.length > 0) {
+                                    planner.updateBlockDefinitions(blockDefinitionRefs);
+                                }
+                            }
+
                             const defaultConfig = createGlobalConfigurationFromEntities(
                                 data.spec.configuration,
                                 data.configuration
