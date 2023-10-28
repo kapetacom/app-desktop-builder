@@ -1,3 +1,10 @@
+# [0.48.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.47.0...v0.48.0) (2023-10-28)
+
+
+### Features
+
+* Adds tip box for plans that take longer than 30 secs to start ([#179](https://github.com/kapetacom/app-desktop-builder/issues/179)) ([2126c89](https://github.com/kapetacom/app-desktop-builder/commit/2126c89dec3cfac4cddbd13f077e75ae05cb4d0d))
+
 # [0.47.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.46.0...v0.47.0) (2023-10-27)
 
 
