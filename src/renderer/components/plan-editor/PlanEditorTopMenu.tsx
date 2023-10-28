@@ -234,6 +234,7 @@ export const PlanEditorTopMenu = (props: Props) => {
 
     return (
         <Paper
+            data-kap-id={'plan-editor-top-menu'}
             className="planner-top-menu"
             elevation={0}
             sx={{
@@ -254,6 +255,7 @@ export const PlanEditorTopMenu = (props: Props) => {
                 <Stack spacing={2} direction="row">
                     <Tooltip title={'Start all blocks'}>
                         <Button
+                            data-kap-id={'plan-editor-top-menu-play'}
                             disabled={allPlaying || processing}
                             variant={'contained'}
                             color={'primary'}
@@ -291,6 +293,7 @@ export const PlanEditorTopMenu = (props: Props) => {
                     </Tooltip>
                     <Tooltip title={'Stop all blocks'}>
                         <Button
+                            data-kap-id={'plan-editor-top-menu-stop'}
                             disabled={!anyPlaying || processing}
                             variant="outlined"
                             color={'warning'}
@@ -328,6 +331,7 @@ export const PlanEditorTopMenu = (props: Props) => {
                     </Tooltip>
 
                     <Button
+                        data-kap-id={'plan-editor-top-menu-settings'}
                         startIcon={<i className="fa fa-gear" />}
                         variant="outlined"
                         color={'secondary'}
@@ -341,6 +345,7 @@ export const PlanEditorTopMenu = (props: Props) => {
                     {!props.readonly && (
                         <Tooltip title={'Publish to Kapeta'}>
                             <Button
+                                data-kap-id={'plan-editor-top-menu-publish'}
                                 variant="outlined"
                                 color={'secondary'}
                                 startIcon={<PublishIcon />}
@@ -372,6 +377,7 @@ export const PlanEditorTopMenu = (props: Props) => {
 
                 {!props.readonly && planner.asset?.path ? (
                     <Button
+                        data-kap-id={'plan-editor-top-menu-open-folder'}
                         title={`Open ${planner.asset!.path}`}
                         onClick={() => {
                             window.electron.ipcRenderer.invoke('open-path', planner.asset!.path);

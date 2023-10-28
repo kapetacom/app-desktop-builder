@@ -170,7 +170,7 @@ export const PlanEditor = withPlannerContext(
         }
 
         return (
-            <div className={containerClass} ref={ref}>
+            <div className={containerClass} ref={ref} data-kap-id={'plan-editor'}>
                 <PlanEditorTopMenu readonly={readonly} version={uri.version} systemId={props.systemId} />
 
                 <BlockConfigurationPanel
