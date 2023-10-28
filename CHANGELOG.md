@@ -1,3 +1,10 @@
+# [0.49.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.48.0...v0.49.0) (2023-10-28)
+
+
+### Features
+
+* Adds icon tips and data-kap-ids ([#180](https://github.com/kapetacom/app-desktop-builder/issues/180)) ([ad5e378](https://github.com/kapetacom/app-desktop-builder/commit/ad5e378028cc40a8c0d3ba85c4a138c78feb47d7))
+
 # [0.48.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.47.0...v0.48.0) (2023-10-28)
 
 
