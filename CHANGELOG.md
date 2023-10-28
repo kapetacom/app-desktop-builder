@@ -1,3 +1,10 @@
+# [0.50.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.49.0...v0.50.0) (2023-10-28)
+
+
+### Features
+
+* Handle renaming of plan names and changing handle ([#181](https://github.com/kapetacom/app-desktop-builder/issues/181)) ([0db3660](https://github.com/kapetacom/app-desktop-builder/commit/0db3660d7927bd69a571bc528a8098c797393a97))
+
 # [0.49.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.48.0...v0.49.0) (2023-10-28)
 
 
