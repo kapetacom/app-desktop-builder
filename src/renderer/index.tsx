@@ -56,8 +56,16 @@ const router = createHashRouter([
                     {
                         path: ':systemId',
                         Component: () => {
+                            const navigateTo = useNavigate();
                             const params = useParams();
-                            return <PlanView systemId={params.systemId!} />;
+                            return (
+                                <PlanView
+                                    systemId={params.systemId!}
+                                    onSystemIdChange={(systemId) => {
+                                        navigateTo(`/edit/${encodeURIComponent(systemId)}`, { replace: true });
+                                    }}
+                                />
+                            );
                         },
                     },
                 ],

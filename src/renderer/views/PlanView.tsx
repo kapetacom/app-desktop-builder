@@ -14,6 +14,7 @@ import './PlanView.less';
 
 interface PlanViewProps {
     systemId: string;
+    onSystemIdChange: (systemId: string) => void;
 }
 
 export const PlanView = (props: PlanViewProps) => {
@@ -21,9 +22,9 @@ export const PlanView = (props: PlanViewProps) => {
 
     let plannerMode: PlannerMode = PlannerMode.EDIT;
 
-    const uri = parseKapetaUri(props.systemId);
+    const systemUri = parseKapetaUri(props.systemId);
 
-    if (uri.version !== 'local') {
+    if (systemUri.version !== 'local') {
         // We can only edit local versions
         plannerMode = PlannerMode.CONFIGURATION;
     }
@@ -73,10 +74,14 @@ export const PlanView = (props: PlanViewProps) => {
                     instanceInfos={instanceInfos.value}
                     instanceStates={instanceStatusMap}
                     mode={plannerMode}
-                    systemId={normalizeKapetaUri(props.systemId)}
+                    systemId={systemUri.toNormalizedString()}
                     onChange={async (plan) => {
                         try {
-                            await AssetService.update(normalizeKapetaUri(props.systemId), plan);
+                            await AssetService.update(systemUri.toNormalizedString(), plan);
+                            const newPlanUri = parseKapetaUri(plan.metadata.name + ':local');
+                            if (newPlanUri.fullName !== systemUri.fullName) {
+                                props.onSystemIdChange(newPlanUri.toNormalizedString());
+                            }
                         } catch (e) {
                             console.error('Failed to update plan', e);
                         }

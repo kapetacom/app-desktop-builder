@@ -15,9 +15,11 @@ import {
     Tooltip,
     useFormContextField,
     InfoBox,
+    useConfirm,
 } from '@kapeta/ui-web-components';
 import './PlanEditorTopMenu.less';
 import {
+    BlockDefinitionReference,
     createGlobalConfigurationFromEntities,
     PlannerContext,
     resolveConfigurationFromDefinition,
@@ -45,6 +47,8 @@ import PublishIcon from '@mui/icons-material/Publish';
 import { CodeBlock } from '../general/CodeBlock';
 import CoffeeIcon from '../../../../assets/images/coffee.svg';
 import { TipBox } from '../general/TipBox';
+import { parseKapetaUri } from '@kapeta/nodejs-utils';
+import _ from 'lodash';
 
 const ConfigSchemaEditor = (props: { systemId: string }) => {
     const configurationField = useFormContextField('spec.configuration');
@@ -107,6 +111,7 @@ interface Props {
 
 export const PlanEditorTopMenu = (props: Props) => {
     const planner = useContext(PlannerContext);
+    const confirm = useConfirm();
     const [allPlaying, setAllPlaying] = useState(false);
     const [anyPlaying, setAnyPlaying] = useState(false);
     const [processing, setProcessing] = useState(false);
@@ -394,6 +399,53 @@ export const PlanEditorTopMenu = (props: Props) => {
                     <FormContainer
                         initialValue={formData}
                         onSubmitData={async (data) => {
+                            if (planner.plan && planner.plan.metadata.name !== data.metadata.name) {
+                                const oldPlanUri = parseKapetaUri(planner.plan.metadata.name);
+                                const newPlanUri = parseKapetaUri(data.metadata.name);
+                                if (
+                                    oldPlanUri.handle !== newPlanUri.handle &&
+                                    planner.plan.spec.blocks &&
+                                    planner.plan.spec.blocks.length > 0
+                                ) {
+                                    const changeBlockRefs = await confirm({
+                                        title: 'Confirm ownership change',
+                                        cancellationText: 'No, Keep handles on blocks',
+                                        confirmationText: 'Yes, Change handles on blocks',
+                                        content:
+                                            'You are about to change the handle of this plan. Do you also want to change the same handle of blocks in this plan?',
+                                    });
+
+                                    if (changeBlockRefs) {
+                                        const blockDefinitionRefs: BlockDefinitionReference[] = [];
+
+                                        for (const instance of planner.plan.spec.blocks) {
+                                            const blockUri = parseKapetaUri(instance.block.ref);
+
+                                            if (blockUri.handle !== oldPlanUri.handle || blockUri.version !== 'local') {
+                                                continue;
+                                            }
+
+                                            const block = planner.getBlockById(instance.id);
+                                            if (!block) {
+                                                continue;
+                                            }
+
+                                            blockUri.handle = newPlanUri.handle;
+                                            const blockCopy = _.cloneDeep(block);
+                                            blockCopy.metadata.name = blockUri.fullName;
+                                            blockDefinitionRefs.push({
+                                                ref: instance.block.ref,
+                                                update: blockCopy,
+                                            });
+                                        }
+
+                                        if (blockDefinitionRefs.length > 0) {
+                                            planner.updateBlockDefinitions(blockDefinitionRefs);
+                                        }
+                                    }
+                                }
+                            }
+
                             const defaultConfig = createGlobalConfigurationFromEntities(
                                 data.spec.configuration,
                                 data.configuration
