@@ -74,6 +74,7 @@ export const LoginScreen = (props: Props) => {
                                 <Typography
                                     textAlign={'center'}
                                     component={'p'}
+                                    fontWeight={400}
                                     variant={'caption'}
                                     color={'error.main'}
                                     mt={1}
@@ -82,7 +83,7 @@ export const LoginScreen = (props: Props) => {
                                 </Typography>
                             )}
                         </Box>
-                        <Typography variant={'caption'}>
+                        <Typography variant={'caption'} fontWeight={400}>
                             No account?{' '}
                             <a
                                 target={'_blank'}
