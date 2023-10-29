@@ -1,3 +1,10 @@
+## [0.50.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.50.0...v0.50.1) (2023-10-29)
+
+
+### Bug Fixes
+
+* Rename push to publish ([#182](https://github.com/kapetacom/app-desktop-builder/issues/182)) ([2a085e8](https://github.com/kapetacom/app-desktop-builder/commit/2a085e8dd813547f6fb7113f06dd62bf3ade9031))
+
 # [0.50.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.49.0...v0.50.0) (2023-10-28)
 
 
