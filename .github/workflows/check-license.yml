@@ -1,0 +1,19 @@
+name: Lint
+
+on: [pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v3
+
+      - name: Check License Headers
+        uses: kapetacom/check-license-action@master
+        with:
+            holder: Kapeta Inc.
+            license: BUSL-1.1
+            sources: {src,stories}/**/*
+
