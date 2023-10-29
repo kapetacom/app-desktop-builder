@@ -622,7 +622,7 @@ export const PlanEditorTopMenu = (props: Props) => {
                         <CodeBlock
                             language={'bash'}
                             copyable={true}
-                            code={[`cd ${planner.asset!.path}`, `kap registry push`].join('\n')}
+                            code={[`cd ${planner.asset!.path}`, `kap registry publish`].join('\n')}
                         />
                     </Typography>
                 </Box>
