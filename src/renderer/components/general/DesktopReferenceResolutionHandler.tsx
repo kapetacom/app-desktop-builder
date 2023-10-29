@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import { AssetService } from '../../api/AssetService';
 import { AssetInfo, MissingReference, ReferenceResolutionHandler } from '@kapeta/ui-web-plan-editor';
 import React, { useMemo } from 'react';

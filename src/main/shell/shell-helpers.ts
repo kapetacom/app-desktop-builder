@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import process from 'node:process';
 import { userInfo } from 'os';
 import { spawnSync } from 'child_process';

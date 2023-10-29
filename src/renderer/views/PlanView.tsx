@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import React, { useEffect, useMemo } from 'react';
 import { useAsyncRetry } from 'react-use';
 import { PlannerMode } from '@kapeta/ui-web-plan-editor';

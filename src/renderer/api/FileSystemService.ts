@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import * as Path from 'path';
 
 import { FileInfo } from '@kapeta/ui-web-types';

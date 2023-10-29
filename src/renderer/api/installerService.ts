@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import { InstallerService, AssetInstallStatus, AssetDisplay } from '@kapeta/ui-web-components';
 import { onAssetChanged } from '../hooks/assetHooks';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';

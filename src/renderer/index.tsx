@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import { createRoot } from 'react-dom/client';
 import { ThemeProvider } from '@mui/material';
 import { RouterProvider, useParams, useNavigate, Navigate, createHashRouter } from 'react-router-dom';

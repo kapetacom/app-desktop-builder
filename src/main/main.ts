@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint global-require: off, no-console: off, promise/always-return: off */
 

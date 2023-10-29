@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import { Avatar, Divider, ListItemButton, ListItemIcon, ListItemText, Menu, Typography } from '@mui/material';
 import React, { useCallback } from 'react';
 import Check from '@mui/icons-material/Check';

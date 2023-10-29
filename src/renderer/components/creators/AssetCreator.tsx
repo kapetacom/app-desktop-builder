@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import Path from 'path';
 import React, { useEffect, useState } from 'react';
 import { FileInfo, SchemaKind } from '@kapeta/ui-web-types';

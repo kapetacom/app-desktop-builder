@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import { GatewayCard, PlannerContext } from '@kapeta/ui-web-plan-editor';
 import { Typography } from '@mui/material';
 import { Stack } from '@mui/system';

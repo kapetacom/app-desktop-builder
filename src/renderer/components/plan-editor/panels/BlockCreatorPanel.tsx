@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import React, { useContext, useEffect, useState } from 'react';
 import { BlockCreator, createNewBlock } from '../../creators/BlockCreator';
 import { AssetCreatorState } from '../../creators/AssetCreator';

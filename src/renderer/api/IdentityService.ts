@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import { clusterPath } from './ClusterConfig';
 import { Identity, MemberIdentity } from '@kapeta/ui-web-types';
 import { IdentityStore, simpleFetch } from '@kapeta/ui-web-context';

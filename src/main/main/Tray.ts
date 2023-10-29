@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import { app, Menu, MenuItemConstructorOptions, shell, Tray, nativeTheme } from 'electron';
 import { ExtendedIdentity, KapetaAPI, Membership } from '@kapeta/nodejs-api-client';
 import { createFuture, getAssetPath, showError, showInfo, appVersion } from '../helpers';

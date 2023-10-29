@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 let baseUrl;
 
 if (typeof window !== 'undefined' && window['KapetaDesktop']?.cluster_service?.url) {

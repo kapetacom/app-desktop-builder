@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import { RESTService } from '@kapeta/web-microfrontend/browser';
 import { showToasty, ToastType, AssetDisplay } from '@kapeta/ui-web-components';
 import { clusterPath } from './ClusterConfig';

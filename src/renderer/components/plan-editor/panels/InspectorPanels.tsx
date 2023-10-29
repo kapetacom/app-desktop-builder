@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import { Connection } from '@kapeta/schemas';
 import React from 'react';
 import { EditorBlockInspectorPanel } from './block-inspector/EditorBlockInspectorPanel';

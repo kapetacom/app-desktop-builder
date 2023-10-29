@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import { ResourceConnectionMappingChange, ResourceRole, SchemaKind } from '@kapeta/ui-web-types';
 import { AssetInfo } from '@kapeta/ui-web-plan-editor';
 import _ from 'lodash';

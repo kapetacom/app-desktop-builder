@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import React from 'react';
 
 export const Logo = (props: { width: number } = { width: 119 }) => {

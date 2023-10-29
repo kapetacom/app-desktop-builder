@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import { ChildProcess, fork } from 'node:child_process';
 import { EventEmitter } from 'node:events';
 import ClusterConfiguration from '@kapeta/local-cluster-config';

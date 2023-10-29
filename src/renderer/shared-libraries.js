@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 /*
 
 Shared libraries to avoid all components pulling in the same code - and also to ensure state and versions

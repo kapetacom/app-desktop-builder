@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import React from 'react';
 import { toClass, createHexagonPath, Orientation } from '@kapeta/ui-web-utils';
 import { SVGText } from '@kapeta/ui-web-components';

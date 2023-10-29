@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import { MemberIdentity } from '@kapeta/ui-web-types';
 
 export interface TabInfo {

@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import { IconType, IconValue } from '@kapeta/schemas';
 import { uploadAttachment } from '../api/AttachmentService';
 import { SchemaKind } from '@kapeta/ui-web-types';

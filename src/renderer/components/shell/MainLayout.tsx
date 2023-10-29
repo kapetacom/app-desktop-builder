@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import React, { useState } from 'react';
 
 import { ListItemIcon, ListItemText, styled, Divider, IconButton, Box, Stack, Button } from '@mui/material';

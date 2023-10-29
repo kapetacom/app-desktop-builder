@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { usePlans } from './assetHooks';
 import { useNavigate, useLocation } from 'react-router-dom';

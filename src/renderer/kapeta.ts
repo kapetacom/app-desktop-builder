@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 type TypeModules = { [key: string]: any };
 
 export interface KapetaBrowserAPI {

@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import { Outlet, useLocation } from 'react-router-dom';
 import 'react-tabs/style/react-tabs.css';
 

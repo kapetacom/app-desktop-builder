@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import { Box, Button, Stack, Typography } from '@mui/material';
 import React from 'react';
 import { Plan } from '@kapeta/schemas';

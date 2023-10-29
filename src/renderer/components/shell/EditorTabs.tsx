@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import React, { useEffect } from 'react';
 import { Box, IconButton, Stack, Typography, SvgIcon, Button } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';

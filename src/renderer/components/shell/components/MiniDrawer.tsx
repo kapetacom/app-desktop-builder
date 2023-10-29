@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
 import { Drawer as MuiDrawer } from '@mui/material';
 import { withTheme } from '../../../Theme';
