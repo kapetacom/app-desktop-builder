@@ -3,9 +3,8 @@ name: Check License Headers
 on: [push]
 
 jobs:
-  lint:
+  check-license:
     runs-on: ubuntu-latest
-
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v3
