@@ -11,3 +11,8 @@ This is the kapeta desktop app.
 1. Clone this repository
 1. Run `npm install` in the folder after cloning it. Might take a few minutes
 1. Run `npm start` to start app
+
+
+## License
+
+This project is licensed under the BUSL-1.1 License - see the [LICENSE](LICENSE) file for details
