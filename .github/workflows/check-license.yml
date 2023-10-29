@@ -1,7 +1,6 @@
 name: Check License Headers
 
-on:
-    pull_request:
+on: [push]
 
 jobs:
   lint:
