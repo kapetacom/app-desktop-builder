@@ -126,27 +126,26 @@ export function Shell() {
         if (!window.pendo) {
             return;
         }
-        if (
-            contexts.profile?.id && 
-            contexts.activeContext 
-        ) {
-            window.pendo.initialize({
-                visitor: {
-                    id: contexts.profile.id,
-                    //email: userProfile.email,
-                    full_name: contexts.profile.name,
-                    handle: contexts.profile.handle,
-                },
-                account: {
-                    id: contexts.activeContext.identity.id,
-                    //email: currentContext.,
-                    name: contexts.activeContext.identity.name,
-                    handle: contexts.activeContext.identity.handle,
-                }
-
-            });
-                           
+        
+        const pendoInitObj: any = {};
+        if (contexts.profile?.id) {
+            pendoInitObj.visitor = { 
+                id: contexts.profile.id,
+                full_name: contexts.profile.name,
+                handle: contexts.profile.handle, 
+            };
         }
+        if (contexts.profile?.id &&
+            contexts.activeContext &&
+            contexts.activeContext.identity.id !== contexts.profile.id) {
+            pendoInitObj.account = {
+                id: contexts.activeContext.identity.id,
+                name: contexts.activeContext.identity.name,
+                handle: contexts.activeContext.identity.handle,
+            };
+        }
+        window.pendo.initialize(pendoInitObj);                           
+
     }, [contexts.profile?.id, contexts.activeContext?.identity?.id]);
 
     const previousPath = usePrevious(location.pathname);
