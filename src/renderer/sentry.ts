@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import { init } from '@sentry/electron/renderer';
 import { init as reactInit } from '@sentry/react';
 

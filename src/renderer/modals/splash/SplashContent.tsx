@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import React, { useEffect } from 'react';
 import { Paper, Alert, Typography, Button } from '@mui/material';
 import LogoSquareDark from '../../../../assets/logo_square_dark.svg';

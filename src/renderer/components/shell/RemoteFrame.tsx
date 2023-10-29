@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import { useMemo, useState } from 'react';
 import { SectionFrameElement } from '@kapeta/web-microfrontend/src/browser/components/SectionFrameElement';
 import { useKapetaContext } from '../../hooks/contextHook';

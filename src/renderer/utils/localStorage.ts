@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import React, { SetStateAction, useState } from 'react';
 
 export function useLocalStorage<T>(name: string, initialValue: T): [T, React.Dispatch<React.SetStateAction<T>>] {

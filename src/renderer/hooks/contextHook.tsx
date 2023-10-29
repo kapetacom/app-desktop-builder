@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Identity, MemberIdentity, SchemaKind } from '@kapeta/ui-web-types';
 import { useAsyncRetry } from 'react-use';

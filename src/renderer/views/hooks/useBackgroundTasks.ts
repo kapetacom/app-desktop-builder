@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import { useEffect } from 'react';
 import { Task, TaskStatus } from '@kapeta/ui-web-context';
 import { ListActions } from 'react-use/lib/useList';

@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 /* eslint import/prefer-default-export: off */
 import { URL } from 'url';
 import Path from 'path';

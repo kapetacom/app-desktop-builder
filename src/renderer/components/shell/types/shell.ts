@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 // import { FragmentMenuItem } from '@kapeta/web-microfrontend/browser';
 
 export interface MenuSection {

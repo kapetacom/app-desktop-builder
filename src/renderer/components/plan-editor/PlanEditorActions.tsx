@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import { PlannerActionConfig, PlannerContextData, PlannerMode } from '@kapeta/ui-web-plan-editor';
 import { ButtonStyle, useConfirmDelete } from '@kapeta/ui-web-components';
 import { IResourceTypeConverter, ResourceRole } from '@kapeta/ui-web-types';

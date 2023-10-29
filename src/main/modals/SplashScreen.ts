@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import { BrowserWindow } from 'electron';
 import { attachIPCListener, getPreloadScript, resolveHtmlPath } from '../helpers';
 import { ClusterService } from '../services/ClusterService';

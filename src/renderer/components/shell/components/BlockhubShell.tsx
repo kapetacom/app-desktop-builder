@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import { useInstallerService } from '../../../api/installerService';
 import { api, assetFetcher } from '../../../api/APIService';
 import React, { useEffect, useMemo, useState } from 'react';

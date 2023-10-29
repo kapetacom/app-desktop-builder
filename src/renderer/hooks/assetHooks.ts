@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { BlockTypeProvider } from '@kapeta/ui-web-context';
 import { BlockDefinition, Plan } from '@kapeta/schemas';

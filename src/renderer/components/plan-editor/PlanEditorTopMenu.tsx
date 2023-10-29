@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 import { InstanceEventType, TaskStatus } from '@kapeta/ui-web-context';

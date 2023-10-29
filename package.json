@@ -5,11 +5,11 @@
     "version": "0.50.1",
     "private": true,
     "homepage": "https://kapeta.com",
-    "license": "MIT",
+    "license": "BUSL-1.1",
     "author": {
-        "url": "https://kapeta.com",
-        "email": "info@kapeta.com",
-        "name": "Kapeta Inc."
+        "email": "engineering@kapeta.com",
+        "name": "Kapeta",
+        "url": "https://kapeta.com"
     },
     "main": "./src/main/main.ts",
     "scripts": {

@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import { useKapetaContext } from './contextHook';
 import { useMemo } from 'react';
 import { useFormContextField } from '@kapeta/ui-web-components';

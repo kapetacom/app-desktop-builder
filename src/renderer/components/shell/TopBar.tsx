@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import React, { useEffect, useState } from 'react';
 import { AppBar, Box, Divider, IconButton, CircularProgress, Stack, Toolbar } from '@mui/material';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';

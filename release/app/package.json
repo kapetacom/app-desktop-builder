@@ -5,14 +5,14 @@
     "private": true,
     "description": "Kapeta Desktop Application",
     "homepage": "https://kapeta.com",
+    "license": "BUSL-1.1",
     "author": {
-        "url": "https://kapeta.com",
-        "email": "info@kapeta.com",
-        "name": "Kapeta Inc."
+        "email": "engineering@kapeta.com",
+        "name": "Kapeta",
+        "url": "https://kapeta.com"
     },
     "main": "./dist/main/main.js",
     "type": "commonjs",
-    "license": "MIT",
     "scripts": {
         "rebuild": "node -r ts-node/register ../../.erb/scripts/electron-rebuild.js",
         "postinstall": "npm run rebuild && npm run link-modules",

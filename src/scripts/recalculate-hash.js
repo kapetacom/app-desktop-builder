@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');

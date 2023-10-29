@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import { useNotificationEmitter } from '../hooks/useNotifications';
 import { StateNotificationType } from '../components/shell/types';
 import { useEffect } from 'react';

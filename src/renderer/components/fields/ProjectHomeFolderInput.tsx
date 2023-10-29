@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import { SimpleLoader, useFormFieldController } from '@kapeta/ui-web-components';
 import React, { useEffect, useState } from 'react';
 import { useAsync } from 'react-use';

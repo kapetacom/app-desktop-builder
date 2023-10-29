@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 import ClusterConfiguration from '@kapeta/local-cluster-config';
 import { version } from '../../package.json';

@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import { useDesktop, TaskGetter, TaskState } from '@kapeta/ui-web-components';
 import { Task, TaskStatus } from '@kapeta/ui-web-context';
 import { useEffect, useState } from 'react';

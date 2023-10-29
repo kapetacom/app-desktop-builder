@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import { BlockInfo } from '../../../types';
 import React, { useCallback, useMemo } from 'react';
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';

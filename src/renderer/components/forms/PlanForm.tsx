@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import { AssetNameInput, FormField, FormFieldType } from '@kapeta/ui-web-components';
 import React from 'react';
 import { useKapetaContext } from '../../hooks/contextHook';
