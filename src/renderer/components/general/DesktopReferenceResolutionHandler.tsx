@@ -30,6 +30,7 @@ export const DesktopReferenceResolutionHandler = (props: Props) => {
             onClose={props.onClose}
             plan={props.plan}
             inline={props.inline}
+            delayedCheck={props.inline ? 5000 : 0}
             readOnly={planUri.version !== 'local'}
             blockAssets={props.blockAssets}
             assetCanBeInstalled={async (ref: string) => {
