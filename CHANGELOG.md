@@ -1,3 +1,10 @@
+## [0.51.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.51.0...v0.51.1) (2023-10-30)
+
+
+### Bug Fixes
+
+* Add delay when showing missing refs ui ([#185](https://github.com/kapetacom/app-desktop-builder/issues/185)) ([34f2147](https://github.com/kapetacom/app-desktop-builder/commit/34f214771598f47f8800fdadd2a1474870d2ada9))
+
 # [0.51.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.50.2...v0.51.0) (2023-10-30)
 
 
