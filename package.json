@@ -235,16 +235,17 @@
             "iconSize": 80,
             "window": {
                 "x": 500,
-                "y": 500
+                "y": 500,
+                "height": 375
             },
             "contents": [
                 {
-                    "x": 150,
-                    "y": 150
+                    "x": 172,
+                    "y": 141
                 },
                 {
-                    "x": 710,
-                    "y": 150,
+                    "x": 372,
+                    "y": 141,
                     "type": "link",
                     "path": "/Applications"
                 }
