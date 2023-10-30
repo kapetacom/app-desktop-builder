@@ -110,6 +110,7 @@ export const EditorTabs = () => {
                     const isCloseable = mainTabs.active.length > 1;
                     return (
                         <KapetaTab
+                            data-kap-id="tab"
                             key={value}
                             value={value}
                             href={value}
@@ -148,6 +149,7 @@ export const EditorTabs = () => {
 
                                     {isCloseable ? (
                                         <IconButton
+                                            data-kap-id="close-tab"
                                             className={'close-button'}
                                             type="button"
                                             size="small"
