@@ -1,3 +1,10 @@
+## [0.51.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.51.2...v0.51.3) (2023-10-30)
+
+
+### Bug Fixes
+
+* add kap-ids to planner by bumping ([#188](https://github.com/kapetacom/app-desktop-builder/issues/188)) ([4c148ee](https://github.com/kapetacom/app-desktop-builder/commit/4c148eefed8f76dea9d61f9684477c9fc0ae7438))
+
 ## [0.51.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.51.1...v0.51.2) (2023-10-30)
 
 
