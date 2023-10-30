@@ -1,3 +1,10 @@
+# [0.51.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.50.2...v0.51.0) (2023-10-30)
+
+
+### Features
+
+* Add background to DMG window ([7f211e2](https://github.com/kapetacom/app-desktop-builder/commit/7f211e21f8bcd13cda0f7f217f17bb3834d545fb))
+
 ## [0.50.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.50.1...v0.50.2) (2023-10-30)
 
 
