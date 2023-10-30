@@ -1,3 +1,10 @@
+## [0.50.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.50.1...v0.50.2) (2023-10-30)
+
+
+### Bug Fixes
+
+* split org and user up in the pendo tracking ([e0862bd](https://github.com/kapetacom/app-desktop-builder/commit/e0862bd9276793ef368741f43cc05bece866e0c1))
+
 ## [0.50.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.50.0...v0.50.1) (2023-10-29)
 
 
