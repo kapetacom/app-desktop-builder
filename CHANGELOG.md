@@ -1,3 +1,10 @@
+## [0.51.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.51.1...v0.51.2) (2023-10-30)
+
+
+### Bug Fixes
+
+* Tweak UI of DMG window ([9689000](https://github.com/kapetacom/app-desktop-builder/commit/96890006bf56f10fe2e273093c6b6b01af1fade1))
+
 ## [0.51.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.51.0...v0.51.1) (2023-10-30)
 
 
