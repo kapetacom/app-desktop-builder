@@ -231,22 +231,20 @@
             "gatekeeperAssess": false
         },
         "dmg": {
-            "backgroundColor": "#eeeeee",
+            "background": "assets/DMG_Background.tiff",
             "iconSize": 80,
             "window": {
                 "x": 500,
-                "y": 500,
-                "width": 500,
-                "height": 200
+                "y": 500
             },
             "contents": [
                 {
                     "x": 150,
-                    "y": 80
+                    "y": 150
                 },
                 {
-                    "x": 350,
-                    "y": 80,
+                    "x": 710,
+                    "y": 150,
                     "type": "link",
                     "path": "/Applications"
                 }
