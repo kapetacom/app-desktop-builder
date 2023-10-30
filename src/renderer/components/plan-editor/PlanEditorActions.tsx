@@ -112,6 +112,7 @@ export const usePlanEditorActions = (
                     icon: 'fa fa-search',
                     label: 'Inspect',
                     warningInspector: true,
+                    kapId: 'planner-block-instance-inspect-button',
                 },
                 {
                     enabled(context): boolean {
@@ -129,6 +130,7 @@ export const usePlanEditorActions = (
                     buttonStyle: ButtonStyle.DANGER,
                     icon: 'fa fa-trash',
                     label: 'Delete',
+                    kapId: 'planner-block-instance-delete-button',
                 },
                 {
                     enabled(context, { blockInstance }): boolean {
@@ -151,6 +153,7 @@ export const usePlanEditorActions = (
                     buttonStyle: ButtonStyle.SECONDARY,
                     icon: 'fa fa-pencil',
                     label: 'Edit',
+                    kapId: 'planner-block-instance-edit-button',
                 },
                 {
                     enabled(context): boolean {
@@ -168,6 +171,7 @@ export const usePlanEditorActions = (
                     buttonStyle: ButtonStyle.DEFAULT,
                     icon: 'fa fa-tools',
                     label: 'Configure',
+                    kapId: 'planner-block-instance-configure-button',
                 },
                 {
                     enabled(): boolean {
@@ -205,6 +209,7 @@ export const usePlanEditorActions = (
                         }
                         return 'Start';
                     },
+                    kapId: 'planner-block-instance-start-stop-button',
                 },
                 {
                     enabled(context, { blockInstance }): boolean {
@@ -225,6 +230,7 @@ export const usePlanEditorActions = (
                     buttonStyle: ButtonStyle.DEFAULT,
                     icon: 'fa fa-globe',
                     label: 'Visit',
+                    kapId: 'planner-block-instance-globe-button',
                 },
             ],
             resource: [
@@ -250,6 +256,7 @@ export const usePlanEditorActions = (
                     buttonStyle: ButtonStyle.SECONDARY,
                     icon: 'fa fa-pencil',
                     label: 'Edit',
+                    kapId: 'planner-resource-edit-button',
                 },
                 {
                     enabled(context, { blockInstance }): boolean {
@@ -271,6 +278,7 @@ export const usePlanEditorActions = (
                     buttonStyle: ButtonStyle.DANGER,
                     icon: 'fa fa-trash',
                     label: 'Delete',
+                    kapId: 'planner-resource-delete-button',
                 },
             ],
             connection: [
@@ -302,6 +310,7 @@ export const usePlanEditorActions = (
                     buttonStyle: ButtonStyle.DANGER,
                     icon: 'fa fa-trash',
                     label: 'Delete',
+                    kapId: 'planner-connection-delete-button',
                 },
                 {
                     enabled(context, actionContext): boolean {
@@ -330,6 +339,7 @@ export const usePlanEditorActions = (
                     buttonStyle: ButtonStyle.SECONDARY,
                     icon: 'fa fa-pencil',
                     label: 'Edit mapping',
+                    kapId: 'planner-connection-edit-button',
                 },
                 {
                     enabled(context, actionContext): boolean {
@@ -353,6 +363,7 @@ export const usePlanEditorActions = (
                     buttonStyle: ButtonStyle.PRIMARY,
                     icon: 'fa fa-search',
                     label: 'Inspect',
+                    kapId: 'planner-connection-inspect-button',
                 },
             ],
         } satisfies PlannerActionConfig;
