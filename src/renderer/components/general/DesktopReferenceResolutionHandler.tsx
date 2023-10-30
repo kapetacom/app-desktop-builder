@@ -10,7 +10,6 @@ import { BlockDefinition, Plan } from '@kapeta/schemas';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import { api } from '../../api/APIService';
 import { showFilePickerOne } from '../../utils/showFilePicker';
-import { DEFAULT_MISSING_REFERENCE_DELAY } from '@kapeta/ui-web-plan-editor';
 
 interface Props {
     open?: boolean;
@@ -31,7 +30,7 @@ export const DesktopReferenceResolutionHandler = (props: Props) => {
             onClose={props.onClose}
             plan={props.plan}
             inline={props.inline}
-            delayedCheck={props.inline ? DEFAULT_MISSING_REFERENCE_DELAY : 0}
+            delayedCheck={props.inline ? 5000 : 0}
             readOnly={planUri.version !== 'local'}
             blockAssets={props.blockAssets}
             assetCanBeInstalled={async (ref: string) => {
