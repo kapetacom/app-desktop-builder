@@ -1,3 +1,10 @@
+## [0.51.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.51.3...v0.51.4) (2023-10-31)
+
+
+### Bug Fixes
+
+* Fix dmg background ([8dcdd02](https://github.com/kapetacom/app-desktop-builder/commit/8dcdd0285970563a6ba4270899a068eea7b48fd6))
+
 ## [0.51.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.51.2...v0.51.3) (2023-10-30)
 
 
