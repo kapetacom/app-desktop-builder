@@ -231,11 +231,12 @@
             "gatekeeperAssess": false
         },
         "dmg": {
-            "background": "assets/DMG_Background.tiff",
+            "background": "assets/DMG_Background.png",
             "iconSize": 80,
             "window": {
                 "x": 500,
                 "y": 500,
+                "width": 544,
                 "height": 375
             },
             "contents": [
