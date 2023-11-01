@@ -1,3 +1,10 @@
+## [0.52.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.52.0...v0.52.1) (2023-11-01)
+
+
+### Bug Fixes
+
+* Allow clipboard write in frames ([#193](https://github.com/kapetacom/app-desktop-builder/issues/193)) ([a2bec9c](https://github.com/kapetacom/app-desktop-builder/commit/a2bec9cbcb96b70779c65840a91a1e30a122f8c8))
+
 # [0.52.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.51.6...v0.52.0) (2023-11-01)
 
 
