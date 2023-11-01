@@ -1,3 +1,10 @@
+## [0.51.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.51.4...v0.51.5) (2023-11-01)
+
+
+### Bug Fixes
+
+* public URLs are localhost in the editor (not kapeta.dev) ([#190](https://github.com/kapetacom/app-desktop-builder/issues/190)) ([d32d96f](https://github.com/kapetacom/app-desktop-builder/commit/d32d96fc4dbd4a52ad299bb9c77ae2f4dc329bae))
+
 ## [0.51.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.51.3...v0.51.4) (2023-10-31)
 
 
