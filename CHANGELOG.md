@@ -1,3 +1,10 @@
+## [0.51.6](https://github.com/kapetacom/app-desktop-builder/compare/v0.51.5...v0.51.6) (2023-11-01)
+
+
+### Bug Fixes
+
+* Decrease height of dmg window slightly ([e5e1588](https://github.com/kapetacom/app-desktop-builder/commit/e5e1588d8bbc2f1395fee1066a1151585d282329))
+
 ## [0.51.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.51.4...v0.51.5) (2023-11-01)
 
 
