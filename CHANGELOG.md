@@ -1,3 +1,10 @@
+# [0.53.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.52.1...v0.53.0) (2023-11-01)
+
+
+### Features
+
+* Solve several issues ([#194](https://github.com/kapetacom/app-desktop-builder/issues/194)) ([5c73ea7](https://github.com/kapetacom/app-desktop-builder/commit/5c73ea7d080945fde6aba1c3fade99f3ac1d8399))
+
 ## [0.52.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.52.0...v0.52.1) (2023-11-01)
 
 
