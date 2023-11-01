@@ -76,10 +76,15 @@ export const PlannerGatewaysList = withErrorBoundary(
         const internal = blocks.filter((block) => !block.public);
 
         return (
-            <Stack gap={3} sx={{ py: 1 }}>
-                <Stack gap={1.5} sx={{ py: 2 }} data-kap-id={'plan-editor-gateways-public'}>
+            <Stack gap={4} sx={{ py: 3 }}>
+                <Stack gap={1.5} data-kap-id="plan-editor-gateways-public">
                     <Stack direction={'row'} alignItems={'center'} gap={1}>
-                        <Typography variant={'h3'} fontSize={'14px'} fontWeight={700}>
+                        <Typography
+                            variant={'h3'}
+                            fontSize={'14px'}
+                            fontWeight={700}
+                            sx={{ display: 'inline-flex', alignItem: 'center' }}
+                        >
                             Public URLs
                             <TipIcon
                                 content={
@@ -118,7 +123,12 @@ export const PlannerGatewaysList = withErrorBoundary(
 
                 <Stack gap={1.5} data-kap-id={'plan-editor-gateways-internal'}>
                     <Stack direction={'row'} alignItems={'center'} gap={1}>
-                        <Typography variant={'h3'} fontSize={'14px'} fontWeight={700}>
+                        <Typography
+                            variant={'h3'}
+                            fontSize={'14px'}
+                            fontWeight={700}
+                            sx={{ display: 'inline-flex', alignItem: 'center' }}
+                        >
                             Internal URLs
                             <TipIcon
                                 content={
