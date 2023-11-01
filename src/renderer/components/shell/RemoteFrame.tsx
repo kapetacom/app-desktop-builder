@@ -95,6 +95,7 @@ export const RemoteFrame = (props: Props) => {
                 <SectionFrameElement
                     initialSrc={initialSrc}
                     origin={origin}
+                    allow={['clipboard-write']}
                     currentPath={props.path}
                     context={frameContext}
                     onReady={() => {
