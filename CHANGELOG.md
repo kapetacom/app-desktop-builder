@@ -1,3 +1,10 @@
+# [0.52.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.51.6...v0.52.0) (2023-11-01)
+
+
+### Features
+
+* Change tab Resources to Assets ([bab9705](https://github.com/kapetacom/app-desktop-builder/commit/bab9705572ea045329d882028ee8122e81906e27))
+
 ## [0.51.6](https://github.com/kapetacom/app-desktop-builder/compare/v0.51.5...v0.51.6) (2023-11-01)
 
 
