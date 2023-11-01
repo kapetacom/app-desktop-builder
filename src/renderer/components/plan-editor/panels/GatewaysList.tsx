@@ -104,6 +104,7 @@ export const PlannerGatewaysList = withErrorBoundary(
                                     key={blockId}
                                     status={status}
                                     title={instance.name || definition.metadata.title || definition.metadata.name}
+                                    fallbackText="Open on localhost"
                                     fallback={{
                                         url: url || null,
                                     }}
