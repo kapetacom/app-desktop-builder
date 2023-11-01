@@ -150,7 +150,7 @@ export const PlanEditor = withPlannerContext(
                 props.instanceInfos?.find((instance) => instance.instanceId === inspectInfo.item.instance.id)) ||
             undefined;
 
-        const [currentTab, setCurrentTab] = useState(readonly ? 'urls' : 'resources');
+        const [currentTab, setCurrentTab] = useState(readonly ? 'urls' : 'assets');
         const statusDot = getStatusDotForGroup(Object.values(planner.instanceStates || {}));
 
         const missingReferences = usePlanValidation(planner.plan, planner.blockAssets);
@@ -232,7 +232,7 @@ export const PlanEditor = withPlannerContext(
                             justifyContent: 'stretch',
                         }}
                     >
-                        {!readonly ? <StyledTab value={'resources'} label="Resources" /> : null}
+                        {!readonly ? <StyledTab value={'assets'} label="Assets" /> : null}
                         <StyledTab
                             value={'urls'}
                             label={
@@ -246,7 +246,7 @@ export const PlanEditor = withPlannerContext(
                             }
                         />
                     </Tabs>
-                    {currentTab === 'resources' && (
+                    {currentTab === 'assets' && (
                         <PlannerResourcesList
                             onShowMoreAssets={() => {
                                 kapetaContext.blockHub.open(planner.asset!, (selection) => {
