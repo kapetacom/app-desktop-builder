@@ -1,3 +1,10 @@
+## [0.53.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.53.1...v0.53.2) (2023-11-02)
+
+
+### Bug Fixes
+
+* Adds help and improves pendo integration ([0dbee8c](https://github.com/kapetacom/app-desktop-builder/commit/0dbee8c07094ebceba9b165767ec732c80e25140))
+
 ## [0.53.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.53.0...v0.53.1) (2023-11-02)
 
 
