@@ -232,8 +232,9 @@ export const PlanEditor = withPlannerContext(
                             justifyContent: 'stretch',
                         }}
                     >
-                        {!readonly ? <StyledTab value={'assets'} label="Assets" /> : null}
+                        {!readonly ? <StyledTab data-kap-id="assets-tab" value={'assets'} label="Assets" /> : null}
                         <StyledTab
+                            data-kap-id="plan-editor-urls-tab"
                             value={'urls'}
                             label={
                                 <Badge

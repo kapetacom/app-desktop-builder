@@ -55,21 +55,30 @@ const YourPlansListInner = (props: Props) => {
                     >
                         You don't have any Plans yet.
                         <br />
-                        <Button variant="text" onClick={props.onPlanCreate}>
+                        <Button variant="text" onClick={props.onPlanCreate} data-kap-id="empty-state-create-button">
                             Create
                         </Button>
                         <span>, </span>
-                        <Button variant="text" onClick={() => kapetaContext.blockHub.open()}>
+                        <Button
+                            variant="text"
+                            onClick={() => kapetaContext.blockHub.open()}
+                            data-kap-id="empty-state-find-button"
+                        >
                             Find
                         </Button>
                         <span> or </span>
-                        <Button variant="text" onClick={props.onPlanImport}>
+                        <Button variant="text" onClick={props.onPlanImport} data-kap-id="empty-state-import-button">
                             Import
                         </Button>
                         <span> a new Plan to see it here.</span>
                     </Typography>
 
-                    <Button variant="contained" color="primary" onClick={props.onPlanCreate}>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={props.onPlanCreate}
+                        data-kap-id="empty-state-create-button"
+                    >
                         Create new Plan
                     </Button>
                 </Stack>
@@ -79,6 +88,7 @@ const YourPlansListInner = (props: Props) => {
                     icon="launchpad"
                     title={
                         <Button
+                            data-kap-id="empty-state-plans-docs-link"
                             variant="text"
                             component="a"
                             href="https://docs.kapeta.com/docs/plans"
