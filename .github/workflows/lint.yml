@@ -1,4 +1,4 @@
-name: Lint
+name: Lint (Typecheck)
 
 on: [push]
 
@@ -21,6 +21,6 @@ jobs:
         run: |
           npm ci
 
-      - name: Lint
+      - name: Lint with TSC
         run: |
-          npm run lint
+          npm run lint:tsc

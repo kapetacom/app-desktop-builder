@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { ResourceConnectionMappingChange, ResourceRole, SchemaKind } from '@kapeta/ui-web-types';
+import { ResourceRole, SchemaKind } from '@kapeta/ui-web-types';
 import { AssetInfo } from '@kapeta/ui-web-plan-editor';
 import _ from 'lodash';
-import { BlockDefinition, Entity, EntityList, Resource } from '@kapeta/schemas';
+import { BlockDefinition, Entity, Resource } from '@kapeta/schemas';
 import { DSL_LANGUAGE_ID, DSLConverters, DSLWriter } from '@kapeta/ui-web-components';
 
 export function ProviderHeaderIcon() {
@@ -82,7 +82,12 @@ export function updateBlockFromMapping(
             types: newEntities,
             source: {
                 type: DSL_LANGUAGE_ID,
-                value: DSLWriter.write(newEntities.map(DSLConverters.fromSchemaEntity)),
+                value: DSLWriter.write(
+                    newEntities.reduce((acc, entity) => {
+                        const dslEntity = DSLConverters.fromSchemaEntity(entity);
+                        return dslEntity ? [...acc, dslEntity] : acc;
+                    }, [])
+                ),
             },
         };
     }
