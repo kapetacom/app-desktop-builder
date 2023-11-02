@@ -77,7 +77,7 @@ export function attachHandlers(main: MainWindow) {
             await main.update();
             return { success: true };
         } catch (err) {
-            return { success: false, error: err.message };
+            return { success: false, error: (err as Error).message };
         }
     });
 

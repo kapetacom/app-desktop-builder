@@ -5,7 +5,7 @@
 
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
-import { InstanceEventType, TaskStatus } from '@kapeta/ui-web-context';
+import { InstanceEventType, Task, TaskStatus } from '@kapeta/ui-web-context';
 import {
     ConfigurationEditor,
     DSL_LANGUAGE_ID,
@@ -131,7 +131,7 @@ export const PlanEditorTopMenu = (props: Props) => {
     const stopPlanJobId = `plan:stop:${props.systemId}`;
 
     const processTask = useCallback(
-        (task) => {
+        (task: Task) => {
             const active = [TaskStatus.RUNNING, TaskStatus.PENDING].includes(task.status);
             if (task.id === startPlanJobId) {
                 if (processing !== active) {
@@ -175,7 +175,7 @@ export const PlanEditorTopMenu = (props: Props) => {
         } catch (e) {
             showToasty({
                 title: errorMsg,
-                message: e.message,
+                message: (e as Error).message,
                 type: ToastType.DANGER,
             });
         }
@@ -404,14 +404,18 @@ export const PlanEditorTopMenu = (props: Props) => {
                     <FormContainer
                         initialValue={formData}
                         onSubmitData={async (data) => {
+                            // TODO: how should we handle this, if the form is not initialized?
+                            if (!data.metadata || !data.spec?.configuration || !data.configuration) {
+                                return;
+                            }
                             if (planner.plan && planner.plan.spec.blocks && planner.plan.spec.blocks.length > 0) {
-                                const newPlanUri = parseKapetaUri(data.metadata.name);
+                                const newPlanUri = parseKapetaUri(data.metadata?.name || '');
                                 const oldPlanUri = parseKapetaUri(planner.plan.metadata.name);
                                 const blockDefinitionRefs: BlockDefinitionReference[] = [];
 
                                 if (
-                                    planner.plan.metadata.visibility !== data.metadata.visibility &&
-                                    data.metadata.visibility === 'public'
+                                    planner.plan.metadata.visibility !== data.metadata?.visibility &&
+                                    data.metadata?.visibility === 'public'
                                 ) {
                                     const changeVisibility = await confirm({
                                         title: 'Visibility change',

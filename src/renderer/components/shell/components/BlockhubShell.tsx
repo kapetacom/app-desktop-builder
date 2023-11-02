@@ -46,7 +46,7 @@ export const BlockhubShell = (props: Props) => {
         return [
             ...Object.values(latest).map((installedAsset): AssetDisplay<any> => {
                 const installedUri = parseKapetaUri(installedAsset.ref);
-                const asset = all.find((asset) => {
+                const asset = all?.find((asset) => {
                     const assetUri = parseKapetaUri(`${asset.content.metadata.name}:${asset.version}`);
                     return assetUri.equals(installedUri);
                 });
@@ -74,9 +74,9 @@ export const BlockhubShell = (props: Props) => {
                     // Not logged in
                     return [];
                 }
-                return await api.registry().findByHandle(props.handle);
+                return (await api.registry().findByHandle(props.handle)) || [];
             case BlockhubCategory.COMMUNITY:
-                return await api.registry().list();
+                return (await api.registry().list()) || [];
         }
     }, [currentCategory, props.handle]);
 

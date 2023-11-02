@@ -52,11 +52,9 @@ export const PlanOverview = (props: Props) => {
         const samplePlan = props.plans.find((plan) => {
             return parseKapetaUri(plan.ref).fullName === props.samplePlanName;
         });
-        let plans;
+        let plans = [...props.plans];
         if (samplePlan && props.plans.length === 1) {
             plans = [];
-        } else {
-            plans = [...props.plans];
         }
 
         return {

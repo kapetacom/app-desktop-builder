@@ -51,7 +51,7 @@ class InstanceServiceImpl {
         >;
     }
 
-    async getInstanceStatusForInstance(systemId, instanceId) {
+    async getInstanceStatusForInstance(systemId: string, instanceId: string) {
         return simpleFetch(
             clusterPath(`/instances/${encodeURIComponent(systemId)}/instances/${encodeURIComponent(instanceId)}`),
             { method: 'GET' }

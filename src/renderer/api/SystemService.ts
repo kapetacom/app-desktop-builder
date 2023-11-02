@@ -37,7 +37,7 @@ class SystemServiceImpl {
         return simpleFetch(clusterPath(`/instances`), { method: 'GET' });
     }
 
-    async getInstanceStatusForPlan(systemId): Promise<InstanceInfo[]> {
+    async getInstanceStatusForPlan(systemId: string): Promise<InstanceInfo[]> {
         return simpleFetch(clusterPath(`/instances/${encodeURIComponent(systemId)}/instances`), { method: 'GET' });
     }
 

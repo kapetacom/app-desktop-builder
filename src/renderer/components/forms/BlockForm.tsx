@@ -27,7 +27,7 @@ import { fromTypeProviderToAssetType } from '../../utils/assetTypeConverters';
 
 interface Props extends ProjectHomeFolderInputProps {
     creating?: boolean;
-    asset: any;
+    asset?: any;
     readOnly?: boolean;
 }
 
