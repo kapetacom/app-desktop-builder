@@ -1,3 +1,10 @@
+## [0.53.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.53.0...v0.53.1) (2023-11-02)
+
+
+### Bug Fixes
+
+* add kap-ids to first actions and tabs ([#195](https://github.com/kapetacom/app-desktop-builder/issues/195)) ([c846bdd](https://github.com/kapetacom/app-desktop-builder/commit/c846bddca8cc80cfb7dd3f089879ecb9432c97a9))
+
 # [0.53.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.52.1...v0.53.0) (2023-11-01)
 
 
