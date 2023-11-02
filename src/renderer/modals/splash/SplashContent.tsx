@@ -3,12 +3,13 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Paper, Alert, Typography, Button } from '@mui/material';
 import LogoSquareDark from '../../../../assets/logo_square_dark.svg';
 import LogoTextWhite from '../../../../assets/logo_text_white.svg';
 import ImageRocket from '../../../../assets/images/rocket.png';
 import { isMac } from '../../utils/osUtils';
+import { Tooltip } from '@kapeta/ui-web-components';
 
 export enum SplashStatusCheck {
     LOADING = 'LOADING',
@@ -116,6 +117,23 @@ export const SplashContent = (props: Props) => {
             clearInterval(timer);
         };
     }, [done, minProgress, props.dockerStatus, props.localClusterStatus]);
+
+    const helpLink = useMemo(() => {
+        const platform = (window.navigator as any)?.userAgentData?.platform;
+        if (!platform) {
+            return 'https://docs.kapeta.com/docs/installation-windows';
+        }
+
+        if (platform.toLowerCase() === 'macos') {
+            return 'https://docs.kapeta.com/docs/installation-mac';
+        }
+
+        if (platform.toLowerCase() === 'windows') {
+            return 'https://docs.kapeta.com/docs/installation-windows';
+        }
+
+        return 'https://docs.kapeta.com/docs/installation-linux';
+    }, [(window.navigator as any)?.userAgentData?.platform]);
 
     //Windows can't do transparent modals
     const borderRadius = isMac() ? '10px' : '0px';
@@ -226,6 +244,9 @@ export const SplashContent = (props: Props) => {
                             left: 0,
                             right: 0,
                         },
+                        '.help-link a': {
+                            color: 'primary.main',
+                        },
                     },
                 },
                 '.progress': {
@@ -297,6 +318,14 @@ export const SplashContent = (props: Props) => {
                                     <span>Make sure NPM is installed</span>
                                 </div>
                             )}
+                            <div className={'error-message help-link'}>
+                                <i className="fas fa-circle"></i>
+                                <Tooltip title={'Open the Kapeta installation documentation'}>
+                                    <a href={helpLink} target={'_blank'} rel="noreferrer">
+                                        Click here to read more
+                                    </a>
+                                </Tooltip>
+                            </div>
                         </Typography>
                         <div className={'buttons'}>
                             <Button
