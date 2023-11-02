@@ -44,6 +44,7 @@ export const getStatusDotForGroup = (statuses: InstanceStatus[]) => {
         [InstanceStatus.FAILED]: 'One or more blocks failed to start',
         [InstanceStatus.BUSY]: 'One or more blocks are unresponsive',
         [InstanceStatus.READY]: 'All blocks are ready',
+        [InstanceStatus.STOPPED]: 'All blocks are stopped',
     };
 
     return {
