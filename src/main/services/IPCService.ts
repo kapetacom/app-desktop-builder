@@ -43,7 +43,7 @@ export function attachHandlers(main: MainWindow) {
             };
         } catch (err) {
             // Expected error when user is not logged in
-            if (err?.message?.includes('No current identity')) {
+            if (err && (err as Error).message?.includes('No current identity')) {
                 return {
                     memberships: [],
                     current: '',

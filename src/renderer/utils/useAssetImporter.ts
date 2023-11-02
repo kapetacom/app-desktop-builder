@@ -58,7 +58,7 @@ export const useAssetImporter = (opts: Options): AssetImporter => {
                 showToasty({
                     type: ToastType.ALERT,
                     title: 'Failed to read file',
-                    message: e.message,
+                    message: (e as Error).message,
                 });
                 setLoading(false);
                 return null;
@@ -70,7 +70,7 @@ export const useAssetImporter = (opts: Options): AssetImporter => {
                 showToasty({
                     type: ToastType.ALERT,
                     title: 'Failed to parse kind of file',
-                    message: e.message,
+                    message: (e as Error).message,
                 });
                 setLoading(false);
                 return null;
@@ -98,7 +98,7 @@ export const useAssetImporter = (opts: Options): AssetImporter => {
             showToasty({
                 type: ToastType.ALERT,
                 title: 'Failed to import asset',
-                message: err.message,
+                message: (err as Error).message,
             });
             return null;
         } finally {

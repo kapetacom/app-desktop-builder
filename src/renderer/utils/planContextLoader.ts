@@ -16,6 +16,8 @@ import { AssetInfo, fromAsset, fromAssetDisplay } from '@kapeta/ui-web-plan-edit
 import { assetFetcher } from '../api/APIService';
 import { clusterPath } from 'renderer/api/ClusterConfig';
 import { BlockService } from 'renderer/api/BlockService';
+// Careful not to import the code from cluster-config, it doesnt work in browser
+import type { DefinitionInfo } from '@kapeta/local-cluster-config';
 
 type PromiseCache<T = void> = { [key: string]: Promise<T> };
 const PROVIDER_CACHE: PromiseCache = {};
@@ -100,7 +102,7 @@ const loadProvider = async (providerKind: string): Promise<void> => {
 };
 
 const fetchLocalProviders = () => {
-    return simpleFetch(clusterPath(`/providers`));
+    return simpleFetch(clusterPath(`/providers`)) as Promise<DefinitionInfo[]>;
 };
 
 function toBlocks(assets: AssetInfo<SchemaKind>[]): AssetInfo<BlockDefinition>[] {

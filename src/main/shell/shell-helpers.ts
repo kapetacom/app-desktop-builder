@@ -40,7 +40,7 @@ const defaultShell = detectDefaultShell();
 
 function parseEnv(env: string) {
     env = env.split('_SHELL_ENV_DELIMITER_')[1];
-    const returnValue = {};
+    const returnValue: Record<string, string> = {};
 
     for (const line of env.split('\n').filter((line) => Boolean(line))) {
         const [key, ...values] = line.split('=');
