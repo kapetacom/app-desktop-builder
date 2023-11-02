@@ -121,31 +121,48 @@ export function Shell() {
             });
         }
     }, [contexts.activeContext, contexts.profile]);
-    
+
     useEffect(() => {
         if (!window.pendo) {
             return;
         }
-        
-        const pendoInitObj: any = {};
+
+        let visitor: pendo.Identity['visitor'] = {};
         if (contexts.profile?.id) {
-            pendoInitObj.visitor = { 
+            visitor = {
                 id: contexts.profile.id,
                 full_name: contexts.profile.name,
-                handle: contexts.profile.handle, 
+                handle: contexts.profile.handle,
             };
         }
-        if (contexts.profile?.id &&
+
+        let account: pendo.Identity['account'] = {};
+        if (
+            contexts.profile?.id &&
             contexts.activeContext &&
-            contexts.activeContext.identity.id !== contexts.profile.id) {
-            pendoInitObj.account = {
+            contexts.activeContext.identity.id !== contexts.profile.id
+        ) {
+            account = {
                 id: contexts.activeContext.identity.id,
                 name: contexts.activeContext.identity.name,
                 handle: contexts.activeContext.identity.handle,
             };
         }
-        window.pendo.initialize(pendoInitObj);                           
 
+        const hasVisitor = Object.keys(visitor).length > 0;
+        const hasAccount = Object.keys(account).length > 0;
+
+        if (window.pendo.isReady() === false) {
+            window.pendo.initialize({ visitor, account });
+        } else if (hasVisitor || hasAccount) {
+            window.pendo.identify({ visitor, account });
+        } else if (!hasVisitor && !hasAccount) {
+            /**
+             * pendo.clearSession does not exist in the typings for pendo but it does exist in pendo.
+             */
+            // @ts-ignore
+            window.pendo.clearSession();
+        }
     }, [contexts.profile?.id, contexts.activeContext?.identity?.id]);
 
     const previousPath = usePrevious(location.pathname);
