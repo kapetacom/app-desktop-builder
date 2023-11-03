@@ -1,3 +1,10 @@
+## [0.53.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.53.4...v0.53.5) (2023-11-03)
+
+
+### Bug Fixes
+
+* tsc strict + add missing status message for stopped instances ([#199](https://github.com/kapetacom/app-desktop-builder/issues/199)) ([866ac19](https://github.com/kapetacom/app-desktop-builder/commit/866ac1926a60c70fd85702b842747140d503bdd9))
+
 ## [0.53.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.53.3...v0.53.4) (2023-11-03)
 
 
