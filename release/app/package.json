@@ -21,6 +21,7 @@
     "dependencies": {
         "@kapeta/local-cluster-config": "<2",
         "@kapeta/local-cluster-service": ">=0.21.5 <2",
-        "@kapeta/nodejs-process": "^1.2.0"
+        "@kapeta/nodejs-process": "^1.2.0",
+        "@kapeta/ui-web-components": "^0.52.0"
     }
 }

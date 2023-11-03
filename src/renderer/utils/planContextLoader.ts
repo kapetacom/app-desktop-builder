@@ -167,10 +167,14 @@ export const useLoadedPlanContext = (plan: Plan | undefined) => {
 
             return (BLOCK_CACHE[blockRef] = new Promise<AssetInfo<BlockDefinition> | null>(async (resolve) => {
                 try {
-                    const block =
-                        blockUri.version === 'local'
-                            ? fromAsset(await BlockService.get(blockRef))
-                            : fromAssetDisplay(await assetFetcher(blockUri.fullName, blockUri.version));
+                    let block: AssetInfo<BlockDefinition> | null = null;
+                    if (blockUri.version === 'local') {
+                        block = fromAsset(await BlockService.get(blockRef));
+                    } else {
+                        const blockData = await assetFetcher(blockUri.fullName, blockUri.version);
+                        block = blockData && fromAssetDisplay(blockData);
+                    }
+
                     setCurrentlyLoading(blockRef);
 
                     if (!block) {

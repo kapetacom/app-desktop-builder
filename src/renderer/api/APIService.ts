@@ -3,11 +3,10 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { RESTService } from '@kapeta/web-microfrontend/browser';
+import { RESTService, ErrorHandler } from '@kapeta/web-microfrontend/browser';
 import { showToasty, ToastType, AssetDisplay } from '@kapeta/ui-web-components';
 import { clusterPath } from './ClusterConfig';
 
-type ErrorHandler = Parameters<RESTService['withErrorHandler']>[0];
 const errorHandler: ErrorHandler = (error) => {
     showToasty({
         title: 'Request failed',
@@ -61,10 +60,4 @@ export class APIService {
 
 export const api = new APIService();
 
-export const assetFetcher = async (name: string, version: string) => {
-    const asset = await api.registry().getAsset(name, version);
-    if (asset === null) {
-        throw new Error(`Asset ${name}:${version} not found`);
-    }
-    return asset;
-};
+export const assetFetcher = async (name: string, version: string) => api.registry().getAsset(name, version);
