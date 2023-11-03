@@ -1,3 +1,10 @@
+## [0.53.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.53.3...v0.53.4) (2023-11-03)
+
+
+### Bug Fixes
+
+* Use new version of ui-web-plan-editor ([10ea22a](https://github.com/kapetacom/app-desktop-builder/commit/10ea22af82139b3ed0890207638af53ce9397d3b))
+
 ## [0.53.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.53.2...v0.53.3) (2023-11-03)
 
 
