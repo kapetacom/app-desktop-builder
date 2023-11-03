@@ -12,7 +12,7 @@ interface SidebarProps {
 export const SidebarList = styled(List, {
     shouldForwardProp: (prop) => prop !== 'isOpen',
 })<SidebarProps>(({ theme, isOpen }) => ({
-    padding: theme.spacing[1],
+    padding: theme.spacing(1),
     '& .MuiListItemIcon-root': {
         // alignContent: "center",
         color: theme.palette.text.primary,

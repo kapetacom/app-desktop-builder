@@ -108,7 +108,7 @@ export const InstanceEditor = (props: Props) => {
 
     const getErrorFallback = useCallback(
         // eslint-disable-next-line react/no-unstable-nested-components
-        (kind) => (props: FallbackProps) => {
+        (kind: string) => (props: FallbackProps) => {
             return (
                 <div>
                     Failed to render block type: {kind}. <br />

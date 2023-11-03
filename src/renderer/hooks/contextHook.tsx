@@ -75,7 +75,7 @@ const useKapetaContextInternal = (): KapetaContextData => {
     }, []);
 
     useEffect(() => {
-        const handler = (event) => {
+        const handler = (event: MessageEvent) => {
             const msg = readPostedMessage(event);
             if (msg?.type === FragmentMessageTypes.CONTEXT_CHANGE) {
                 data.retry();

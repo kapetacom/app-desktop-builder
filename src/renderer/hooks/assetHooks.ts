@@ -122,7 +122,7 @@ export const useLocalAssets = <T = SchemaKind>(...kinds: string[]): AssetListRes
                     return identical;
                 }
 
-                return asset;
+                return asset as AssetInfo<T>;
             });
         });
     }, [assetResults.isLoading, data]);

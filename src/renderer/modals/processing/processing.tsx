@@ -27,9 +27,6 @@ function render(state: State) {
             <CssBaseline />
             <ThemeProvider theme={kapetaLight}>
                 <ProcessingContent
-                    onLinkOpen={async (url) => {
-                        window.open(url);
-                    }}
                     title={state.title ?? null}
                     text={state.text ?? null}
                     linkText={state.linkText ?? null}

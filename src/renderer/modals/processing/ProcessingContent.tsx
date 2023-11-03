@@ -14,7 +14,6 @@ interface Props {
     text: string | null;
     linkText: string | null;
     link: string | null;
-    onLinkOpen?: (url) => void | Promise<void>;
     onCancel?: () => void;
 }
 

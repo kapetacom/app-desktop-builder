@@ -13,6 +13,7 @@ import {
     EntityEditorForm,
     AssetVersionSelector,
     AssetVersionSelectorEntry,
+    FormData,
 } from '@kapeta/ui-web-components';
 
 import { BlockTypeProvider } from '@kapeta/ui-web-context';
@@ -144,7 +145,8 @@ export const BlockConfigurationPanel = (props: Props) => {
             });
     }, [props.instance?.block.ref, blockAssets]);
 
-    const onSave = async (blockData: BlockConfigurationData) => {
+    const onSave = async (formData: FormData) => {
+        const blockData = formData as BlockConfigurationData;
         if (!props.instance?.id) {
             return;
         }

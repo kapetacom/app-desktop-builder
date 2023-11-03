@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { RESTService } from '@kapeta/web-microfrontend/browser';
+import { RESTService, ErrorHandler } from '@kapeta/web-microfrontend/browser';
 import { showToasty, ToastType, AssetDisplay } from '@kapeta/ui-web-components';
 import { clusterPath } from './ClusterConfig';
 
-const errorHandler = (error) => {
+const errorHandler: ErrorHandler = (error) => {
     showToasty({
         title: 'Request failed',
         message: error,
@@ -21,28 +21,28 @@ class RegistryAPI extends RESTService {
         this.withErrorHandler(errorHandler);
     }
 
-    async list(): Promise<AssetDisplay[]> {
-        return this.get('/v1/registry/');
+    async list() {
+        return this.get<AssetDisplay[]>('/v1/registry/');
     }
 
-    async findByHandle(handle: string): Promise<AssetDisplay[]> {
-        return this.get(`/v1/registry/${encodeURIComponent(handle)}`);
+    async findByHandle(handle: string) {
+        return this.get<AssetDisplay[]>(`/v1/registry/${encodeURIComponent(handle)}`);
     }
 
-    async getAsset(name: string, version: string): Promise<AssetDisplay> {
+    async getAsset(name: string, version: string) {
         const [handle, assetName] = name.split('/');
-        return this.get(
+        return this.get<AssetDisplay>(
             `/v1/registry/${encodeURIComponent(handle)}/${encodeURIComponent(assetName)}/${encodeURIComponent(version)}`
         );
     }
 
-    async getCurrentAsset(name: string): Promise<AssetDisplay> {
+    async getCurrentAsset(name: string) {
         return this.getAsset(name, 'current');
     }
 
-    async getAssetVersions(name: string): Promise<AssetDisplay[]> {
+    async getAssetVersions(name: string) {
         const [handle, assetName] = name.split('/');
-        return this.get(`/v1/registry/${encodeURIComponent(handle)}/${encodeURIComponent(assetName)}`);
+        return this.get<AssetDisplay[]>(`/v1/registry/${encodeURIComponent(handle)}/${encodeURIComponent(assetName)}`);
     }
 }
 
@@ -60,4 +60,4 @@ export class APIService {
 
 export const api = new APIService();
 
-export const assetFetcher = (name: string, version: string) => api.registry().getAsset(name, version);
+export const assetFetcher = async (name: string, version: string) => api.registry().getAsset(name, version);

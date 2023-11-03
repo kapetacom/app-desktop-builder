@@ -17,12 +17,18 @@ autoUpdater.autoInstallOnAppQuit = true;
 autoUpdater.forceDevUpdateConfig = !!process.env.TEST_UPDATES;
 
 export class AutoUpdateHelper {
-    private initiated: boolean;
+    private initiated: boolean = false;
     private readonly updatesApplied = new Set<string>();
     private updatePromise: Promise<void> | undefined;
     private downloadReady: boolean = false;
 
-    private send(main: BrowserWindow | undefined, type, initiatedByUser, data?: any) {
+    private send(
+        main: BrowserWindow | undefined,
+        // TODO: Should be in a shared type
+        type: 'checking' | 'download:start' | 'download:complete' | 'done',
+        initiatedByUser: boolean,
+        data?: any
+    ) {
         if (!main) {
             return;
         }
@@ -62,7 +68,7 @@ export class AutoUpdateHelper {
                 } catch (e) {
                     this.send(main, 'done', initiatedByUser, {
                         state: 'FAILED',
-                        errorMessage: e.message,
+                        errorMessage: (e as Error).message,
                     });
                 }
             }

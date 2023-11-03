@@ -21,7 +21,7 @@ import {
 
 import { BlockTypeProvider, ResourceTypeProvider } from '@kapeta/ui-web-context';
 
-import { parseKapetaUri } from '@kapeta/nodejs-utils';
+import { parseKapetaUri, KapetaURI } from '@kapeta/nodejs-utils';
 
 import type { IResourceTypeProvider, ResourceConnectionMappingChange, SchemaKind } from '@kapeta/ui-web-types';
 import { ResourceRole } from '@kapeta/ui-web-types';
@@ -51,7 +51,7 @@ import { fromTypeProviderToAssetType } from '../../../../utils/assetTypeConverte
 import { updateBlockFromMapping } from '../../helpers';
 import { InstanceEditor } from './inner/InstanceEditor';
 
-function getResourceVersions(dataKindUri) {
+function getResourceVersions(dataKindUri: KapetaURI) {
     const allVersions = ResourceTypeProvider.getVersionsFor(dataKindUri.fullName);
     return allVersions.map((version) => {
         return fromTypeProviderToAssetType(ResourceTypeProvider.get(`${dataKindUri.fullName}:${version}`));
@@ -79,7 +79,7 @@ const InnerForm = ({ planner, info, onContextDataChanged }: InnerFormProps) => {
     const kindField = useFormContextField('kind');
     const getErrorFallback = useCallback(
         // eslint-disable-next-line react/no-unstable-nested-components
-        (kind) => (props: FallbackProps) => {
+        (kind: string) => (props: FallbackProps) => {
             return (
                 <div>
                     Failed to render block type: {kind}. <br />
@@ -363,7 +363,7 @@ export const EditorPanels: React.FC<Props> = (props) => {
 
     const globalValidators = useMemo(
         () => [
-            (name, value) => {
+            (name: string, value: string) => {
                 if (name === 'metadata.name' && existingNames.includes(value)) {
                     throw new Error('Resource name already exists');
                 }
