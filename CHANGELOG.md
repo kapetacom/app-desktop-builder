@@ -1,3 +1,10 @@
+## [0.53.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.53.2...v0.53.3) (2023-11-03)
+
+
+### Bug Fixes
+
+* Bump ui-web-plan-editor to get new GatewayCard ([f590dd2](https://github.com/kapetacom/app-desktop-builder/commit/f590dd28dab5f85e9702ca0081e209643b8c0823))
+
 ## [0.53.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.53.1...v0.53.2) (2023-11-02)
 
 
