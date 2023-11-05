@@ -1,3 +1,10 @@
+## [0.53.8](https://github.com/kapetacom/app-desktop-builder/compare/v0.53.7...v0.53.8) (2023-11-05)
+
+
+### Bug Fixes
+
+* Bump web-microfrontend ([fc212a7](https://github.com/kapetacom/app-desktop-builder/commit/fc212a7106e1d7461aa486cd763eed2db5c6ebce))
+
 ## [0.53.7](https://github.com/kapetacom/app-desktop-builder/compare/v0.53.6...v0.53.7) (2023-11-05)
 
 
