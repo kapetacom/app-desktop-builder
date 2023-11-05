@@ -23,6 +23,7 @@ import { NavigationButtons } from 'renderer/components/shell/NavigationButtons';
 import { Stack, Box } from '@mui/system';
 import { SvgIcon } from '@mui/material';
 import DeployIcon from '../components/shell/components/icons/DeployIcon.svg';
+import { PendoAccount, PendoVisitor, usePendoService } from '@kapeta/web-microfrontend/src/browser/utils/usePendo';
 
 const BASE_TRACKING_URL = 'https://desktop.kapeta.com';
 
@@ -122,12 +123,9 @@ export function Shell() {
         }
     }, [contexts.activeContext, contexts.profile]);
 
+    const { isLoaded, identify } = usePendoService();
     useEffect(() => {
-        if (!window.pendo) {
-            return;
-        }
-
-        let visitor: pendo.Identity['visitor'] = {};
+        let visitor: PendoVisitor | undefined;
         if (contexts.profile?.id) {
             visitor = {
                 id: contexts.profile.id,
@@ -136,7 +134,7 @@ export function Shell() {
             };
         }
 
-        let account: pendo.Identity['account'] = {};
+        let account: PendoAccount | undefined;
         if (
             contexts.profile?.id &&
             contexts.activeContext &&
@@ -149,21 +147,10 @@ export function Shell() {
             };
         }
 
-        const hasVisitor = Object.keys(visitor).length > 0;
-        const hasAccount = Object.keys(account).length > 0;
-
-        if (window.pendo.isReady() === false) {
-            window.pendo.initialize({ visitor, account });
-        } else if (hasVisitor || hasAccount) {
-            window.pendo.identify({ visitor, account });
-        } else if (!hasVisitor && !hasAccount) {
-            /**
-             * pendo.clearSession does not exist in the typings for pendo but it does exist in pendo.
-             */
-            // @ts-ignore
-            window.pendo.clearSession();
+        if (isLoaded) {
+            identify(visitor, account);
         }
-    }, [contexts.profile?.id, contexts.activeContext?.identity?.id]);
+    }, [contexts.profile?.id, contexts.activeContext?.identity?.id, isLoaded, identify]);
 
     const previousPath = usePrevious(location.pathname);
 
