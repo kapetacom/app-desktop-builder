@@ -1,3 +1,10 @@
+## [0.53.7](https://github.com/kapetacom/app-desktop-builder/compare/v0.53.6...v0.53.7) (2023-11-05)
+
+
+### Bug Fixes
+
+* Trigger new release ([5840bc4](https://github.com/kapetacom/app-desktop-builder/commit/5840bc445a19db94dfd0940fccd591630a90e27d))
+
 ## [0.53.6](https://github.com/kapetacom/app-desktop-builder/compare/v0.53.5...v0.53.6) (2023-11-05)
 
 
