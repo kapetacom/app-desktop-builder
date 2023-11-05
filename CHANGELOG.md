@@ -1,3 +1,11 @@
+## [0.53.6](https://github.com/kapetacom/app-desktop-builder/compare/v0.53.5...v0.53.6) (2023-11-05)
+
+
+### Bug Fixes
+
+* Bump ui-web-plan-editor ([2a7e020](https://github.com/kapetacom/app-desktop-builder/commit/2a7e020d20004f1b9aa26660a7008feec052ad1f))
+* Use pendo hook ([7d005f6](https://github.com/kapetacom/app-desktop-builder/commit/7d005f62fbbf7c9347f048d1f713bfa3c4b7555d))
+
 ## [0.53.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.53.4...v0.53.5) (2023-11-03)
 
 
