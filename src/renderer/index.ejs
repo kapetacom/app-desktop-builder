@@ -38,7 +38,6 @@
             background-color: #F5F1EE;
         }
     </style>
-
     <script>
         if (location.search && location.search.length > 1) {
             const keyValuePairs = new URLSearchParams(location.search);
@@ -49,6 +48,8 @@
             const clusterBase = keyValuePairs.get('cluster_service');
             const safeDomains = [
                 'https://*.googletagmanager.com',
+                'https://*.google-analytics.com',
+                'https://*.analytics.google.com',
                 'https://pendo-eu-static-5224383087443968.storage.googleapis.com',
                 'https://*.pendo.io',
                 'https://*.heapanalytics.com',
