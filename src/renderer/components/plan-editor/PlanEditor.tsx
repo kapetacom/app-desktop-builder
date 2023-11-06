@@ -38,6 +38,7 @@ import { Box, Badge, Tab, Tabs, styled } from '@mui/material';
 import { PlannerGatewaysList } from './panels/GatewaysList';
 import { getStatusDotForGroup } from '../../utils/statusDot';
 import { DesktopReferenceResolutionHandler } from '../general/DesktopReferenceResolutionHandler';
+import { useEffect } from 'react';
 
 interface Props {
     systemId: string;
@@ -62,11 +63,18 @@ export const StyledTab = styled(Tab, {
     },
 });
 
+const useAssetInvalidationKey = (blocks: any[], resources: any[]) => {
+    const [assetKey, setAssetKey] = useState(0);
+    useEffect(() => setAssetKey((key) => key + 1), [blocks, resources]);
+    return assetKey;
+};
+
 export const PlanEditor = withPlannerContext(
     forwardRef((props: Props, ref: ForwardedRef<HTMLDivElement>) => {
         const uri = parseKapetaUri(props.systemId);
         const planner = useContext(PlannerContext);
         const kapetaContext = useKapetaContext();
+        const assetInvalidationKey = useAssetInvalidationKey(planner.blockAssets, props.resourceAssets);
 
         const [configInfo, setConfigInfo] = useState<ConfigureItemInfo | null>(null);
         const [inspectInfo, setInspectInfo] = useState<InspectItemInfo | null>(null);
@@ -249,6 +257,8 @@ export const PlanEditor = withPlannerContext(
                     </Tabs>
                     {currentTab === 'assets' && (
                         <PlannerResourcesList
+                            // Invalidate the resource list on local assets change
+                            key={assetInvalidationKey}
                             onShowMoreAssets={() => {
                                 kapetaContext.blockHub.open(planner.asset!, (selection) => {
                                     selection.forEach((asset, i) => {
