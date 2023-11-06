@@ -1,3 +1,10 @@
+## [0.53.10](https://github.com/kapetacom/app-desktop-builder/compare/v0.53.9...v0.53.10) (2023-11-06)
+
+
+### Bug Fixes
+
+* Ensure we're allowed to send to GA ([#206](https://github.com/kapetacom/app-desktop-builder/issues/206)) ([4fe8dae](https://github.com/kapetacom/app-desktop-builder/commit/4fe8dae0ab2afa29a7cbf4829936f9fd0b59997d))
+
 ## [0.53.9](https://github.com/kapetacom/app-desktop-builder/compare/v0.53.8...v0.53.9) (2023-11-06)
 
 
