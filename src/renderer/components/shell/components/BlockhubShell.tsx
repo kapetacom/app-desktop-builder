@@ -83,7 +83,7 @@ export const BlockhubShell = (props: Props) => {
     useAssetsChanged(() => {
         // We only get notified of local changes
         localAssets.retry();
-    }, []);
+    }, [localAssets.retry]);
 
     useEffect(() => {
         if (kapetaContext.blockHub.visible) {
