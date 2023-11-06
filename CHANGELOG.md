@@ -1,3 +1,10 @@
+## [0.53.11](https://github.com/kapetacom/app-desktop-builder/compare/v0.53.10...v0.53.11) (2023-11-06)
+
+
+### Bug Fixes
+
+* reload blocks and resources on change [KAP-1902] ([#207](https://github.com/kapetacom/app-desktop-builder/issues/207)) ([bfe9184](https://github.com/kapetacom/app-desktop-builder/commit/bfe918423496634244fb156f8a08d3fb9613c768))
+
 ## [0.53.10](https://github.com/kapetacom/app-desktop-builder/compare/v0.53.9...v0.53.10) (2023-11-06)
 
 
