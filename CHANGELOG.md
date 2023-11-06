@@ -1,3 +1,10 @@
+## [0.53.9](https://github.com/kapetacom/app-desktop-builder/compare/v0.53.8...v0.53.9) (2023-11-06)
+
+
+### Bug Fixes
+
+* blockhub asset menu fixes ([#205](https://github.com/kapetacom/app-desktop-builder/issues/205)) ([22b3d84](https://github.com/kapetacom/app-desktop-builder/commit/22b3d842f5867b169d417706303d351901d27e35))
+
 ## [0.53.8](https://github.com/kapetacom/app-desktop-builder/compare/v0.53.7...v0.53.8) (2023-11-05)
 
 
