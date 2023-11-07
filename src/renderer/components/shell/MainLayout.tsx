@@ -96,7 +96,7 @@ export const MainLayout = (props: Props) => {
                                 );
                             })}
 
-                        <Divider />
+                        <Divider sx={{ my: 1 }} />
                         <SidebarListItem>
                             <SidebarListItemButton
                                 onClick={() => kapetaContext.blockHub.open()}
@@ -114,7 +114,19 @@ export const MainLayout = (props: Props) => {
                             mt: 'auto',
                             height: '96px',
                             ml: drawerIsOpen ? '0px' : '6px',
-                            transition: 'margin-left 225ms cubic-bezier(0.4, 0, 0.6, 1)',
+                            transition: (theme) =>
+                                theme.transitions.create(
+                                    'margin-left',
+                                    drawerIsOpen
+                                        ? {
+                                              easing: theme.transitions.easing.sharp,
+                                              duration: theme.transitions.duration.enteringScreen,
+                                          }
+                                        : {
+                                              easing: theme.transitions.easing.sharp,
+                                              duration: theme.transitions.duration.leavingScreen,
+                                          }
+                                ),
                         }}
                     >
                         <Box

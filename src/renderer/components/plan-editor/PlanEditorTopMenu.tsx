@@ -593,27 +593,23 @@ export const PlanEditorTopMenu = (props: Props) => {
                 }}
                 onClose={() => setPublishButton(null)}
             >
-                <Box
+                <Stack
                     sx={{
-                        width: 400,
+                        maxWidth: 500,
                         pt: 2,
                         px: 4,
                         pb: 3,
                     }}
+                    gap={1}
                 >
                     <Typography variant="h5">Publish to Kapeta</Typography>
+
                     <Typography variant="body2">
                         Publish your plan to Kapeta to be able to run this plan in a cloud environment and/or share it
                         with others.
                     </Typography>
 
-                    <Typography
-                        variant="body2"
-                        sx={{
-                            mt: 1,
-                            fontWeight: 600,
-                        }}
-                    >
+                    <Typography variant="body2" fontWeight={600}>
                         Note: You can also publish via CI/CD -{' '}
                         <a href="https://docs.kapeta.com/docs/working-with-cicd" target={'_blank'}>
                             see the docs
@@ -621,20 +617,13 @@ export const PlanEditorTopMenu = (props: Props) => {
                         for more info.
                     </Typography>
 
-                    <Typography
-                        variant="body2"
-                        sx={{
-                            mt: 1,
-                        }}
-                    >
-                        To publish now run the following command in your terminal:
-                        <CodeBlock
-                            language={'bash'}
-                            copyable={true}
-                            code={[`cd ${planner.asset!.path}`, `kap registry publish`].join('\n')}
-                        />
-                    </Typography>
-                </Box>
+                    <Typography variant="body2">To publish now run the following command in your terminal:</Typography>
+                    <CodeBlock
+                        language={'bash'}
+                        copyable={true}
+                        code={[`cd ${planner.asset!.path}`, `kap registry publish`].join('\n')}
+                    />
+                </Stack>
             </Popover>
 
             {showPlanTakesTimeTip && (

@@ -12,7 +12,6 @@ interface SidebarProps {
 export const SidebarList = styled(List, {
     shouldForwardProp: (prop) => prop !== 'isOpen',
 })<SidebarProps>(({ theme, isOpen }) => ({
-    padding: theme.spacing(1),
     '& .MuiListItemIcon-root': {
         // alignContent: "center",
         color: theme.palette.text.primary,
@@ -21,7 +20,6 @@ export const SidebarList = styled(List, {
         minWidth: '40px',
         paddingRight: theme.spacing(1.5),
     },
-    gap: '24px',
     '& .MuiListItemButton-root': {
         padding: theme.spacing(1, isOpen ? 2 : 0.5),
     },
@@ -30,6 +28,14 @@ export const SidebarList = styled(List, {
 export const SidebarListItem = styled(ListItem)(({ theme }) => ({
     padding: 0,
     borderRadius: '6px',
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+    '&:first-child': {
+        marginTop: 0,
+    },
+    '&:last-child': {
+        marginBottom: 0,
+    },
 }));
 
 export const SidebarListItemButton = styled(ListItemButton)<{ href?: string }>({

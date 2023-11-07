@@ -73,15 +73,15 @@ export const PlanOverview = (props: Props) => {
                 bgcolor: 'white',
                 pl: 2,
                 pr: 2,
+                pt: '50px',
             }}
         >
-            <Box sx={{ pt: '50px' }}></Box>
             <Stack
-                direction={'column'}
                 sx={{
                     margin: '0 auto',
                     maxWidth: '1152px',
                 }}
+                gap={4}
             >
                 <GetStartedHeader
                     assetImporter={assetImporter}
