@@ -89,14 +89,8 @@ export const GetStartedHeader = (props: Props) => {
     const kapetaContext = useKapetaContext();
 
     return (
-        <Stack
-            direction={'column'}
-            sx={{
-                pt: 2,
-                pb: 2,
-            }}
-        >
-            <Typography variant={'h6'} pb={2} pt={2}>
+        <Stack>
+            <Typography variant={'h6'} pb={2}>
                 Get started
             </Typography>
             <Stack

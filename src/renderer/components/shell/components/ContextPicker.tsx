@@ -57,7 +57,6 @@ export const ContextPicker = (props: ContextPickerProps) => {
         <>
             <SidebarList
                 sx={{
-                    pt: 0,
                     '& .MuiAvatar-root': {
                         width: 24,
                         height: 24,

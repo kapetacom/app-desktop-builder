@@ -18,7 +18,7 @@ const openedMixin = (theme: Theme): CSSObject => ({
     }),
     overflowX: 'hidden',
     padding: theme.spacing(2),
-    paddingTop: '48px',
+    paddingTop: theme.spacing(6),
 });
 
 const closedMixin = (theme: Theme): CSSObject => ({
@@ -33,7 +33,7 @@ const closedMixin = (theme: Theme): CSSObject => ({
         width: `calc(${theme.spacing(8)} + 1px)`,
     },
     padding: theme.spacing(1),
-    paddingTop: '48px',
+    paddingTop: theme.spacing(5),
 });
 
 /**

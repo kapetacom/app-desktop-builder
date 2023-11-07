@@ -19,7 +19,7 @@ interface Props {
 export const SamplePlanSection = (props: Props) => {
     return (
         <Box className={'sample-plan-section'}>
-            <Typography variant={'h6'} pb={2} pt={2}>
+            <Typography variant={'h6'} pb={2}>
                 Sample Plan
             </Typography>
             <Stack direction={'row'} gap={3}>

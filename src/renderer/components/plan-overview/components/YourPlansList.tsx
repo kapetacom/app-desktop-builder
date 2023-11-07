@@ -183,7 +183,7 @@ export const YourPlansList = (props: Props) => {
     });
     return (
         <Box className={className}>
-            <Typography variant={'h6'} pb={2} pt={2}>
+            <Typography variant={'h6'} pb={2}>
                 Your plans
             </Typography>
             <YourPlansListInner {...props} />
