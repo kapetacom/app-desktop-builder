@@ -4,11 +4,11 @@
  */
 
 import { BlockInfo } from '../../../types';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useContext, useMemo } from 'react';
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import * as _kapeta_schemas from '@kapeta/schemas';
 import { IBlockTypeProvider, SchemaKind } from '@kapeta/ui-web-types';
-import { Box, Stack, Tab, Tabs, Typography } from '@mui/material';
+import { Alert, Box, Stack, Tab, Tabs, Typography } from '@mui/material';
 import { useKapetaContext } from '../../../../../hooks/contextHook';
 import { useNamespacesForField } from '../../../../../hooks/useNamespacesForField';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
@@ -27,6 +27,7 @@ import {
     useFormContextField,
     InfoBox,
     createVerticalScrollShadow,
+    useIsFormSubmitAttempted,
 } from '@kapeta/ui-web-components';
 
 function filterEmpty<T>(value: T | null | undefined): boolean {
@@ -119,8 +120,12 @@ export const InstanceEditor = (props: Props) => {
         []
     );
 
+    const formSubmitAttempted = useIsFormSubmitAttempted();
+
     const entitiesField = useFormContextField('spec.entities');
     const configurationField = useFormContextField('spec.configuration');
+    const [entitiesError, setEntitiesError] = React.useState<string | null>(null);
+    const [configurationError, setConfigurationError] = React.useState<string | null>(null);
 
     const hasEntities = Boolean(BlockTypeConfig.definition.spec.schema?.properties?.hasOwnProperty('entities'));
     const hasConfigSchema = Boolean(
@@ -144,10 +149,21 @@ export const InstanceEditor = (props: Props) => {
                 <InfoBox>Define configuration data types for this block</InfoBox>
                 <ConfigurationEditor
                     value={result}
+                    onError={(err: any) => {
+                        configurationField.invalid();
+                        setConfigurationError(err.message);
+                    }}
                     onChange={(result) => {
                         result.entities && setConfiguration(result.code, result.entities);
+                        configurationField.valid();
+                        setConfigurationError(null);
                     }}
                 />
+                {configurationError && formSubmitAttempted && (
+                    <Alert sx={{ mt: 1 }} severity={'error'}>
+                        {configurationError}
+                    </Alert>
+                )}
             </Stack>
         );
     };
@@ -179,10 +195,21 @@ export const InstanceEditor = (props: Props) => {
                 <InfoBox>Entities define external data types to be used by the resources for this block</InfoBox>
                 <DataTypeEditor
                     value={result}
+                    onError={(err: any) => {
+                        entitiesField.invalid();
+                        setEntitiesError(err.message);
+                    }}
                     onChange={(result) => {
                         result.entities && setEntities(result.code, result.entities);
+                        entitiesField.valid();
+                        setEntitiesError(null);
                     }}
                 />
+                {entitiesError && formSubmitAttempted && (
+                    <Alert sx={{ mt: 1 }} severity={'error'}>
+                        {entitiesError}
+                    </Alert>
+                )}
             </Stack>
         );
     };

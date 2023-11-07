@@ -54,6 +54,31 @@ const kapetaDesktop = {
 };
 
 contextBridge.exposeInMainWorld('KapetaDesktop', kapetaDesktop);
+contextBridge.exposeInMainWorld('vscode', {
+    // Is needed to convince monaco to render correctly - otherwise it will try to use UserAgent to determine
+    // OS and fail since we override that to Kapeta
+    // Is copied from https://github.com/microsoft/vscode/blob/main/src/vs/base/parts/sandbox/electron-sandbox/preload.js#L251
+    process: {
+        get platform() {
+            return process.platform;
+        },
+        get arch() {
+            return process.arch;
+        },
+        get env() {
+            return { ...process.env };
+        },
+        get versions() {
+            return process.versions;
+        },
+        get type() {
+            return 'renderer';
+        },
+        get execPath() {
+            return process.execPath;
+        },
+    },
+});
 
 export type KapetaDesktop = typeof kapetaDesktop;
 export type ElectronHandler = typeof electronHandler;
