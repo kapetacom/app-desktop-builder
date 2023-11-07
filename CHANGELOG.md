@@ -1,3 +1,10 @@
+## [0.53.13](https://github.com/kapetacom/app-desktop-builder/compare/v0.53.12...v0.53.13) (2023-11-07)
+
+
+### Bug Fixes
+
+* Several DSL Editor fixes ([3898b21](https://github.com/kapetacom/app-desktop-builder/commit/3898b21d88b6395f3a0e713167e2584136c0d127))
+
 ## [0.53.12](https://github.com/kapetacom/app-desktop-builder/compare/v0.53.11...v0.53.12) (2023-11-07)
 
 
