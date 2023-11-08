@@ -5,7 +5,7 @@
 
 import { app, Menu, shell, BrowserWindow, MenuItemConstructorOptions } from 'electron';
 import { AutoUpdateHelper } from './AutoUpdateHelper';
-import { appVersion } from '../helpers';
+import { appVersion, safeSend } from '../helpers';
 
 interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
     selector?: string;
@@ -59,21 +59,21 @@ export class MenuBuilder {
                     label: 'New Tab',
                     accelerator: 'CmdOrCtrl+T',
                     click: () => {
-                        this.mainWindow?.webContents.send('change-tab', 'new');
+                        safeSend(this.mainWindow?.webContents, 'change-tab', 'new');
                     },
                 },
                 {
                     label: 'Reopen Closed Tab',
                     accelerator: 'CmdOrCtrl+Shift+T',
                     click: () => {
-                        this.mainWindow?.webContents.send('change-tab', 'reopen');
+                        safeSend(this.mainWindow?.webContents, 'change-tab', 'reopen');
                     },
                 },
                 {
                     label: 'Close Tab',
                     accelerator: 'CmdOrCtrl+W',
                     click: () => {
-                        this.mainWindow?.webContents.send('change-tab', 'close');
+                        safeSend(this.mainWindow?.webContents, 'change-tab', 'close');
                     },
                 },
                 ...['Ctrl+Tab', 'CmdOrCtrl+Option+Right', 'CmdOrCtrl+Shift+]'].map((accelerator, i) => ({
@@ -81,7 +81,7 @@ export class MenuBuilder {
                     accelerator,
                     visible: i === 0,
                     click: () => {
-                        this.mainWindow?.webContents.send('change-tab', 'next');
+                        safeSend(this.mainWindow?.webContents, 'change-tab', 'next');
                     },
                 })),
                 ...['Ctrl+Shift+Tab', 'CmdOrCtrl+Option+Left', 'CmdOrCtrl+Shift+['].map((accelerator, i) => ({
@@ -89,7 +89,7 @@ export class MenuBuilder {
                     accelerator,
                     visible: i === 0,
                     click: () => {
-                        this.mainWindow?.webContents.send('change-tab', 'prev');
+                        safeSend(this.mainWindow?.webContents, 'change-tab', 'prev');
                     },
                 })),
                 ...[
@@ -106,7 +106,7 @@ export class MenuBuilder {
                     label: `Switch to Tab ${i + 1}`,
                     accelerator,
                     click: () => {
-                        this.mainWindow?.webContents.send('change-tab', 'switch', i);
+                        safeSend(this.mainWindow?.webContents, 'change-tab', 'switch', i);
                     },
                 })),
             ],

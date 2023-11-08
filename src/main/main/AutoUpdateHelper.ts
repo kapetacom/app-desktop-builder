@@ -7,6 +7,7 @@ import { app, BrowserWindow } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import { MainWindow } from './MainWindow';
+import { safeSend } from '../helpers';
 const AUTO_UPDATE_INTERVAL_MS = 10 * 60 * 1000;
 
 // Configure auto updater
@@ -32,7 +33,8 @@ export class AutoUpdateHelper {
         if (!main) {
             return;
         }
-        main.webContents.send('auto-updater', {
+
+        safeSend(main.webContents, 'auto-updater', {
             type,
             initiatedByUser,
             data,

@@ -12,6 +12,7 @@ import packageJson from '../../package.json';
 import MessageBoxOptions = Electron.MessageBoxOptions;
 import FS from 'fs-extra';
 import ClusterConfiguration from '@kapeta/local-cluster-config';
+import WebContents = Electron.WebContents;
 
 const ENABLE_EXTENSIONS = false; // Disabled because Electron doesn't support react extension currently
 
@@ -195,4 +196,12 @@ export function showMessage(opts: MessageBoxOptions) {
         return dialog.showMessageBoxSync(win, opts);
     }
     return dialog.showMessageBoxSync(opts);
+}
+
+export function safeSend(contents: WebContents | undefined, channel: string, ...args: any[]) {
+    try {
+        contents && !contents.isDestroyed() && contents.send(channel, ...args);
+    } catch (e) {
+        console.warn('Failed to send message to renderer', e);
+    }
 }
