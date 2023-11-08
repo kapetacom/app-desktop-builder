@@ -4,7 +4,7 @@
  */
 
 import { BrowserWindow } from 'electron';
-import { getPreloadScript, resolveHtmlPath, WindowOpenHandler } from '../helpers';
+import { getPreloadScript, resolveHtmlPath, safeSend, WindowOpenHandler } from '../helpers';
 import { EventEmitter } from 'node:events';
 
 interface Props {
@@ -68,6 +68,6 @@ export class ModalProcessing extends EventEmitter {
         if (!this.win) {
             throw new Error('Processing modal is not open');
         }
-        this.win.webContents.send('processing', ['changed', props]);
+        safeSend(this.win.webContents, 'processing', ['changed', props]);
     }
 }

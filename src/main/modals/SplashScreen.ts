@@ -4,7 +4,7 @@
  */
 
 import { BrowserWindow } from 'electron';
-import { attachIPCListener, getPreloadScript, resolveHtmlPath } from '../helpers';
+import { attachIPCListener, getPreloadScript, resolveHtmlPath, safeSend } from '../helpers';
 import { ClusterService } from '../services/ClusterService';
 import { hasApp } from '@kapeta/nodejs-process';
 
@@ -50,7 +50,7 @@ export class SplashScreen {
             });
         } catch (e) {
             console.log('Failed to start cluster service', e);
-            win.webContents.send('splash', ['failed', e]);
+            safeSend(win.webContents, 'splash', ['failed', e]);
         }
     }
 
@@ -62,7 +62,7 @@ export class SplashScreen {
             ...this.status,
             ...status,
         };
-        this.win.webContents.send('splash', ['changed', this.status]);
+        safeSend(this.win.webContents, 'splash', ['changed', this.status]);
     }
 
     /**
