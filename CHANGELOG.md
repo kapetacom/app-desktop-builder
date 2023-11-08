@@ -1,3 +1,10 @@
+# [0.54.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.53.14...v0.54.0) (2023-11-08)
+
+
+### Features
+
+* Bump ui deps to get resizeable sidebar ([47d8b14](https://github.com/kapetacom/app-desktop-builder/commit/47d8b14aa8f3acbf734cc6502bb3ea7e2876771e))
+
 ## [0.53.14](https://github.com/kapetacom/app-desktop-builder/compare/v0.53.13...v0.53.14) (2023-11-08)
 
 
