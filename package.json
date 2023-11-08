@@ -2,7 +2,7 @@
     "name": "@kapeta/app-desktop-builder",
     "description": "Put your software development into overdrive",
     "productName": "Kapeta Dev",
-    "version": "0.53.13",
+    "version": "0.53.14",
     "private": true,
     "homepage": "https://kapeta.com",
     "license": "BUSL-1.1",

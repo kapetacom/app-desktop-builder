@@ -1,3 +1,10 @@
+## [0.53.14](https://github.com/kapetacom/app-desktop-builder/compare/v0.53.13...v0.53.14) (2023-11-08)
+
+
+### Bug Fixes
+
+* Wrap sends in safeSend to not crash if webContents is gone ([#214](https://github.com/kapetacom/app-desktop-builder/issues/214)) ([68908bd](https://github.com/kapetacom/app-desktop-builder/commit/68908bd002551039214d87674f6e4a523492c9e4))
+
 ## [0.53.13](https://github.com/kapetacom/app-desktop-builder/compare/v0.53.12...v0.53.13) (2023-11-07)
 
 
