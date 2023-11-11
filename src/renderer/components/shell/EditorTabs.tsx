@@ -17,6 +17,7 @@ import ApartmentIcon from '@mui/icons-material/Apartment';
 import CloseIcon from '@mui/icons-material/Close';
 import DeployIcon from './components/icons/DeployIcon.svg';
 import PersonIcon from '@mui/icons-material/Person';
+import { useRoutingPath } from '@kapeta/web-microfrontend/browser';
 
 export const EditorTabs = () => {
     const planAssets = usePlans();
@@ -24,14 +25,16 @@ export const EditorTabs = () => {
     const navigate = useNavigate();
     const kapetaContext = useKapetaContext();
     const mainTabs = useMainTabs();
+    const currentPathWithSearch = useRoutingPath();
 
     useEffect(() => {
         if (!location.pathname || location.pathname === '/') {
             navigate(DEFAULT_TAB_PATH, { replace: true });
             return;
         }
-        mainTabs.open(location.pathname, { navigate: false });
-    }, [location.pathname, mainTabs.open, navigate]);
+
+        mainTabs.open(currentPathWithSearch, { navigate: false });
+    }, [location.pathname, currentPathWithSearch, mainTabs.open, navigate]);
 
     const defaultTabOpen = mainTabs.active.some((tab) => tab.path === DEFAULT_TAB_PATH);
 

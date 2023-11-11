@@ -127,7 +127,11 @@ export class ClusterService extends EventEmitter {
 
     private stopProcess() {
         if (this.child) {
-            this.child.kill('SIGABRT');
+            try {
+                this.child.kill('SIGABRT');
+            } catch (err) {
+                console.error('Failed to kill cluster service process: %s', err);
+            }
         }
         this.info = null;
         this.running = false;
