@@ -11,7 +11,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Box } from '@mui/material';
 import { SimpleLoader } from '@kapeta/ui-web-components';
 import { normalizeUrl, useMainTabs } from '../../hooks/mainTabs';
-import { FrameContextInfo } from '@kapeta/web-microfrontend/src/browser/components/FragmentContext';
+import { FrameContextInfo, useRoutingPath } from '@kapeta/web-microfrontend/browser';
 
 interface Props {
     path: string;
@@ -23,6 +23,7 @@ export const RemoteFrame = (props: Props) => {
     const mainTabs = useMainTabs();
     const token = useAuthToken();
     const location = useLocation();
+    const currentPathWithSearch = useRoutingPath();
     const [ready, setReady] = useState(false);
 
     const normalizedPath = normalizeUrl(`/${props.path}`);
@@ -105,12 +106,12 @@ export const RemoteFrame = (props: Props) => {
                         mainTabs.setTitle(data.path, data.title);
                     }}
                     onNavigateTop={(toPath) => {
-                        if (location.pathname !== toPath) {
+                        if (currentPathWithSearch !== toPath) {
                             mainTabs.open(toPath, { contextId: frameContext?.id, navigate: true });
                         }
                     }}
                     onNavigate={(toPath) => {
-                        if (location.pathname !== toPath) {
+                        if (currentPathWithSearch !== toPath) {
                             mainTabs.open(toPath, { contextId: frameContext?.id, navigate: true });
                         }
                     }}

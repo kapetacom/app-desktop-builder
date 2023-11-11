@@ -5,10 +5,11 @@
 
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { usePlans } from './assetHooks';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { MainTabs, TabInfo, TabOptions } from './types';
 import { MemberIdentity } from '@kapeta/ui-web-types';
 import { useKapetaContext } from './contextHook';
+import { useRoutingPath } from '@kapeta/web-microfrontend/browser';
 
 const TAB_LOCAL_STORAGE = '$main_tabs';
 export const DEFAULT_TAB_PATH = '/edit';
@@ -27,6 +28,11 @@ export function normalizeUrl(url: string) {
             url = '/organizations';
         }
     }
+
+    if (url.includes('?')) {
+        url = url.split('?')[0];
+    }
+
     return url;
 }
 
@@ -60,9 +66,9 @@ export const useMainTabs = () => {
 };
 
 const createMainTabsContext = (context?: MemberIdentity): MainTabs => {
-    const location = useLocation();
     const navigate = useNavigate();
     const planAssets = usePlans();
+    const currentPathWithSearch = useRoutingPath();
 
     const tabFilter = useCallback(
         (tabInfo: TabInfo) => {
@@ -158,7 +164,7 @@ const createMainTabsContext = (context?: MemberIdentity): MainTabs => {
             // If the tab we're closing is the current tab, navigate to the previous tab, or default url if there is no previous tab
             setTabs((previous) => {
                 const newTabState = previous.filter((tab) => tab.path !== normalizedPath);
-                if (normalizeUrl(location.pathname) === normalizedPath) {
+                if (normalizeUrl(currentPathWithSearch) === normalizedPath) {
                     // Closing current tab
 
                     const i = previous.findIndex((tab) => tab.path === normalizedPath) ?? -1;
@@ -178,7 +184,7 @@ const createMainTabsContext = (context?: MemberIdentity): MainTabs => {
                 return newTabState;
             });
         },
-        [location.pathname, tabs, navigate, setTabs, DEFAULT_TAB_PATH, DEFAULT_TITLE]
+        [currentPathWithSearch, tabs, navigate, setTabs, DEFAULT_TAB_PATH, DEFAULT_TITLE]
     );
 
     // listen for tab events from main process
@@ -188,7 +194,7 @@ const createMainTabsContext = (context?: MemberIdentity): MainTabs => {
             (cmd: 'new' | 'prev' | 'next' | 'switch' | 'close' | 'reopen', i: number) => {
                 switch (cmd) {
                     case 'prev': {
-                        const currentIndex = tabs.findIndex((t) => t.path === location.pathname);
+                        const currentIndex = tabs.findIndex((t) => t.path === currentPathWithSearch);
                         // previous tab w/ wrap-around
                         const previousTab = tabs[currentIndex - 1] || tabs[tabs.length - 1];
                         if (previousTab) {
@@ -197,7 +203,7 @@ const createMainTabsContext = (context?: MemberIdentity): MainTabs => {
                         break;
                     }
                     case 'next': {
-                        const currentIndex = tabs.findIndex((t) => t.path === location.pathname);
+                        const currentIndex = tabs.findIndex((t) => t.path === currentPathWithSearch);
                         // next tab with wrap-around:
                         const nextTab = tabs[currentIndex + 1] || tabs[0];
                         if (nextTab) {
@@ -206,7 +212,7 @@ const createMainTabsContext = (context?: MemberIdentity): MainTabs => {
                         break;
                     }
                     case 'close':
-                        closeTab(location.pathname);
+                        closeTab(currentPathWithSearch);
                         break;
                     case 'switch': {
                         const tab = tabs[i];
@@ -227,11 +233,11 @@ const createMainTabsContext = (context?: MemberIdentity): MainTabs => {
                 }
             }
         );
-    }, [openTab, closeTab, navigate, tabs, location.pathname]);
+    }, [openTab, closeTab, navigate, tabs, currentPathWithSearch]);
 
     return useMemo(
         () => ({
-            current: tabs.find((t) => t.path === location.pathname) ?? tabs[0],
+            current: tabs.find((t) => t.path === currentPathWithSearch) ?? tabs[0],
             active: tabs.filter(tabFilter),
             open: openTab,
             close: closeTab,
@@ -258,6 +264,6 @@ const createMainTabsContext = (context?: MemberIdentity): MainTabs => {
                 });
             },
         }),
-        [tabs, openTab, closeTab, location.pathname, setTabs, tabFilter]
+        [tabs, openTab, closeTab, currentPathWithSearch, setTabs, tabFilter]
     );
 };

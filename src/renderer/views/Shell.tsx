@@ -23,7 +23,7 @@ import { NavigationButtons } from 'renderer/components/shell/NavigationButtons';
 import { Stack, Box } from '@mui/system';
 import { SvgIcon } from '@mui/material';
 import DeployIcon from '../components/shell/components/icons/DeployIcon.svg';
-import { PendoAccount, PendoVisitor, usePendoService } from '@kapeta/web-microfrontend/src/browser/utils/usePendo';
+import { useRoutingPath, PendoAccount, PendoVisitor, usePendoService } from '@kapeta/web-microfrontend/browser';
 
 const BASE_TRACKING_URL = 'https://desktop.kapeta.com';
 
@@ -98,8 +98,8 @@ const InnerShell = (props: Props) => {
 };
 
 export function Shell() {
-    const location = useLocation();
     const contexts = useKapetaContext();
+    const currentPathWithSearch = useRoutingPath();
 
     useEffect(() => {
         if (!window.analytics) {
@@ -152,20 +152,20 @@ export function Shell() {
         }
     }, [contexts.profile?.id, contexts.activeContext?.identity?.id, isLoaded, identify]);
 
-    const previousPath = usePrevious(location.pathname);
+    const previousPath = usePrevious(currentPathWithSearch);
 
     useEffect(() => {
         if (!window.analytics) {
             return;
         }
-        const url = BASE_TRACKING_URL + location.pathname;
+        const url = BASE_TRACKING_URL + currentPathWithSearch;
         const referrer = previousPath ? BASE_TRACKING_URL + previousPath : undefined;
-        window.analytics.page(location.pathname, {
-            path: location.pathname,
+        window.analytics.page(currentPathWithSearch, {
+            path: currentPathWithSearch,
             referrer,
             url,
         });
-    }, [location.pathname, previousPath]);
+    }, [currentPathWithSearch, previousPath]);
 
     return (
         <SimpleLoader text="Initialising application..." loading={contexts.loading}>
