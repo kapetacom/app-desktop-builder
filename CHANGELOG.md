@@ -1,3 +1,10 @@
+## [0.54.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.54.0...v0.54.1) (2023-11-11)
+
+
+### Bug Fixes
+
+* Allow intercom integration ([#216](https://github.com/kapetacom/app-desktop-builder/issues/216)) ([cfe2afa](https://github.com/kapetacom/app-desktop-builder/commit/cfe2afa680475052d2092d78c90c1088e450cfca))
+
 # [0.54.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.53.14...v0.54.0) (2023-11-08)
 
 
