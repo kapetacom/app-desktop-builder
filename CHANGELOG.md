@@ -1,3 +1,10 @@
+# [0.55.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.54.1...v0.55.0) (2023-11-11)
+
+
+### Features
+
+* Add support for query params in paths ([#215](https://github.com/kapetacom/app-desktop-builder/issues/215)) ([6dcbd0a](https://github.com/kapetacom/app-desktop-builder/commit/6dcbd0a198c075423de15d248124a0a1e3de8093))
+
 ## [0.54.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.54.0...v0.54.1) (2023-11-11)
 
 
