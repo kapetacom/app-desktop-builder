@@ -8,6 +8,9 @@ import { KapetaAPI } from '@kapeta/nodejs-api-client';
 import { MainWindow } from '../main/MainWindow';
 import FS from 'fs-extra';
 import OpenDialogOptions = Electron.OpenDialogOptions;
+import { findEditorOrDefault, launchExternalEditor } from '@kapeta/electron-ide-opener';
+import ClusterConfiguration from '@kapeta/local-cluster-config';
+import YAML from 'yaml';
 
 export function attachHandlers(main: MainWindow) {
     ipcMain.handle('get-token', async () => {
@@ -130,6 +133,19 @@ export function attachHandlers(main: MainWindow) {
     });
 
     ipcMain.handle('open-path', async (evt, path) => {
+        try {
+            const configData = await FS.readFile(ClusterConfiguration.getClusterConfigFile());
+            const config = YAML.parse(configData.toString());
+
+            const editor = await findEditorOrDefault(config?.filesystem?.editor || null);
+            if (editor) {
+                await launchExternalEditor(path, editor);
+                return;
+            }
+        } catch (err) {
+            console.error('Failed to find editor', err);
+        }
+
         try {
             await shell.openPath(path);
         } catch (err) {

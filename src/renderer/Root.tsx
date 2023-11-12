@@ -20,7 +20,9 @@ const ErrorContainer = () => {
 
 export const Root = () => {
     const data = useLoaderData();
+
     // TODO: Remove this mobx provider
+
     return (
         <DesktopContainer version={window.KapetaDesktop.version} taskGetter={taskGetter}>
             <DefaultContext>
