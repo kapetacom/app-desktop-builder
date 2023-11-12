@@ -4,7 +4,7 @@
  */
 
 import { BlockInfo } from '../../../types';
-import React, { useCallback, useContext, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import * as _kapeta_schemas from '@kapeta/schemas';
 import { IBlockTypeProvider, SchemaKind } from '@kapeta/ui-web-types';

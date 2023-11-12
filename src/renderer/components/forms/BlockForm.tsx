@@ -92,6 +92,10 @@ export const BlockForm = (props: Props) => {
                 label="Name"
                 validation={['required']}
                 namespaces={namespaces}
+                autoFocus={true}
+                onFocus={(evt) => {
+                    evt.target.select();
+                }}
                 defaultValue={context.activeContext?.identity?.handle ?? 'local'}
                 help={'The name of this block - e.g. "myhandle/my-block"'}
                 readOnly={props.readOnly}

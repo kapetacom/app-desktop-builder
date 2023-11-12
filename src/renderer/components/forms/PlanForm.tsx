@@ -25,6 +25,10 @@ export const PlanForm = (props: Props) => {
                 validation={['required']}
                 readOnly={props.readOnly}
                 namespaces={namespaces}
+                autoFocus={true}
+                onFocus={(evt) => {
+                    evt.target.select();
+                }}
                 defaultValue={context.activeContext?.identity?.handle ?? 'local'}
                 help={'Give your plan an identifier with your handle. E.g. myhandle/my-plan'}
             />
