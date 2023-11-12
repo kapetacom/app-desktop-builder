@@ -6,7 +6,8 @@
 import process from 'node:process';
 import { userInfo } from 'os';
 import { spawnSync } from 'child_process';
-import { dialog } from 'electron';
+import { app } from 'electron';
+import Path from 'path';
 
 const args = ['-ilc', 'echo -n "_SHELL_ENV_DELIMITER_"; env; echo -n "_SHELL_ENV_DELIMITER_"; exit'];
 
@@ -14,6 +15,8 @@ const env = {
     // Disables Oh My Zsh auto-update thing that can block the process.
     DISABLE_AUTO_UPDATE: 'true',
 };
+
+process.env.KAPETA_HOME = Path.join(app.getPath('home'), '.kapeta');
 
 export const detectDefaultShell = () => {
     const { env } = process;
