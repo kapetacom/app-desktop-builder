@@ -335,6 +335,14 @@
                     "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
                 }
             ]
+        ],
+        "branches": [
+            "production",
+            {
+                "name": "master",
+                "prerelease": true,
+                "channel": "beta"
+            }
         ]
     },
     "devEngines": {
