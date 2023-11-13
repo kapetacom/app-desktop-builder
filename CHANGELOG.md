@@ -1,3 +1,10 @@
+## [0.56.1-master.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.56.1-master.3...v0.56.1-master.4) (2023-11-13)
+
+
+### Bug Fixes
+
+* Use specific python version ([1b09be6](https://github.com/kapetacom/app-desktop-builder/commit/1b09be66ffe0a17595ec0ab6f2db8d7c68646400))
+
 ## [0.56.1-master.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.56.1-master.2...v0.56.1-master.3) (2023-11-13)
 
 
