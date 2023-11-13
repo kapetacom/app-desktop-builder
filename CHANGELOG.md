@@ -1,3 +1,10 @@
+# [0.57.0-beta.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.57.0-beta.1...v0.57.0-beta.2) (2023-11-13)
+
+
+### Bug Fixes
+
+* nicer release channel name formatting ([#223](https://github.com/kapetacom/app-desktop-builder/issues/223)) ([e73a2cb](https://github.com/kapetacom/app-desktop-builder/commit/e73a2cb27fc9d11b95bbcd7a80f0d4317bd83721))
+
 # [0.57.0-beta.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.56.1-master.4...v0.57.0-beta.1) (2023-11-13)
 
 
