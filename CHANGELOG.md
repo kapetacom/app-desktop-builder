@@ -1,3 +1,10 @@
+# [0.57.0-beta.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.57.0-beta.4...v0.57.0-beta.5) (2023-11-13)
+
+
+### Bug Fixes
+
+* fail build for unsigned mac releases ([86d7890](https://github.com/kapetacom/app-desktop-builder/commit/86d789093be73d59d976ff9b0288a5f0fd30cd40))
+
 # [0.57.0-beta.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.57.0-beta.3...v0.57.0-beta.4) (2023-11-13)
 
 
