@@ -61,6 +61,20 @@ class FileSystemServiceImpl implements FileSystemStore {
         });
     }
 
+    async getReleaseChannel(): Promise<string> {
+        return simpleFetch(clusterPath(`/files/release-channel`));
+    }
+
+    async setReleaseChannel(channel: string): Promise<string> {
+        return simpleFetch(clusterPath(`/files/release-channel`), {
+            headers: {
+                'Content-Type': 'text/plain',
+            },
+            body: channel,
+            method: 'POST',
+        });
+    }
+
     async listFilesInFolder(path: string): Promise<FileInfo[]> {
         return simpleFetch(clusterPath(`/files/list`, { path }));
     }

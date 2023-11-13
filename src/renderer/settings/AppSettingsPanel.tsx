@@ -15,16 +15,19 @@ import { FolderField } from '../components/fields/FolderField';
 export interface AppSettings {
     editor: string | null;
     projectHome: string | null;
+    releaseChannel: string | null;
 }
 
 export const AppSettingsPanel = () => {
     const appSettings = useAppSettings();
 
     const initialData = useAsyncRetry(async (): Promise<AppSettings> => {
-        const projectHome = await FileSystemService.getProjectFolder();
-        const editor = await FileSystemService.getEditor();
+        const projectHome = await FileSystemService.getProjectFolder().catch(() => null);
+        const editor = await FileSystemService.getEditor().catch(() => null);
+        const releaseChannel = await FileSystemService.getReleaseChannel().catch(() => null);
         return {
             projectHome,
+            releaseChannel,
             editor: editor || appSettings.data?.defaultEditor?.editor || null,
         };
     }, [appSettings.data?.defaultEditor?.editor]);
@@ -39,6 +42,10 @@ export const AppSettingsPanel = () => {
 
                 if (data.editor && data.editor !== initialData.value?.editor) {
                     await FileSystemService.setEditor(data.editor);
+                }
+
+                if (data.releaseChannel && data.releaseChannel !== initialData.value?.releaseChannel) {
+                    await FileSystemService.setReleaseChannel(data.releaseChannel);
                 }
                 initialData.retry();
                 appSettings.close();
@@ -69,6 +76,13 @@ export const AppSettingsPanel = () => {
                 name={'projectHome'}
                 label={'Project folder'}
                 help={'Select the folder where your assets will be created by default.'}
+            />
+            <FormField
+                type={FormFieldType.ENUM}
+                options={['stable', 'beta']}
+                name={'releaseChannel'}
+                label={'Release Channel'}
+                help={'Select whether to update the app from "stable" (default) or "beta" channels.'}
             />
         </KapFormDialog>
     );

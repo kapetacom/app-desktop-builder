@@ -6,8 +6,12 @@
 import { app, BrowserWindow } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
+import FS from 'fs-extra';
+import YAML from 'yaml';
+
 import { MainWindow } from './MainWindow';
 import { safeSend } from '../helpers';
+import ClusterConfiguration from '@kapeta/local-cluster-config';
 const AUTO_UPDATE_INTERVAL_MS = 10 * 60 * 1000;
 
 // Configure auto updater
@@ -53,8 +57,17 @@ export class AutoUpdateHelper {
         return this.updatePromise;
     }
 
+    private async getReleaseChannel() {
+        const configData = await FS.readFile(ClusterConfiguration.getClusterConfigFile());
+        const config = YAML.parse(configData.toString());
+        return config?.app?.releaseChannel || 'stable';
+    }
+
     private async checkForUpdatesInner(main: BrowserWindow | undefined, initiatedByUser = false) {
         const currentVersion = app.getVersion();
+        autoUpdater.channel = await this.getReleaseChannel();
+        console.log(`Checking for updates on ${autoUpdater.channel} channel...`);
+
         let nextVersion: string | undefined;
         this.send(main, 'checking', initiatedByUser);
 
