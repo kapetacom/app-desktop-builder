@@ -69,7 +69,8 @@ export class AutoUpdateHelper {
         // Github does not support release channels, so this is the best we've got
         // Prereleases will be any github release marked as prerelease
         autoUpdater.allowPrerelease = await this.getAllowPrerelease();
-        console.log(`Checking for updates on ${autoUpdater.channel} channel...`);
+        // allow downgrades for any pre-release version
+        autoUpdater.allowDowngrade = currentVersion.indexOf('-') > -1;
 
         let nextVersion: string | undefined;
         this.send(main, 'checking', initiatedByUser);
