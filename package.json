@@ -218,6 +218,7 @@
         "generateUpdatesFilesForAllChannels": true,
         "afterSign": ".erb/scripts/notarize.js",
         "mac": {
+            "forceCodeSigning": true,
             "category": "public.app-category.developer-tools",
             "target": [
                 {
