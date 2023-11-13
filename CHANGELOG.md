@@ -1,3 +1,10 @@
+# [0.57.0-beta.6](https://github.com/kapetacom/app-desktop-builder/compare/v0.57.0-beta.5...v0.57.0-beta.6) (2023-11-13)
+
+
+### Bug Fixes
+
+* **updater:** try using prerelease flag instead of channels ([611c9d0](https://github.com/kapetacom/app-desktop-builder/commit/611c9d00423df95ef3b41bc2f697eb7d224a70ed))
+
 # [0.57.0-beta.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.57.0-beta.4...v0.57.0-beta.5) (2023-11-13)
 
 
