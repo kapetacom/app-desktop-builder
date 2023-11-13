@@ -82,7 +82,6 @@
         }
     },
     "dependencies": {
-        "@kapeta/electron-ide-opener": "^1.0.0",
         "@kapeta/local-cluster-config": "<2",
         "@kapeta/web-microfrontend": "<2",
         "@sentry/electron": "^4.10.0",
@@ -102,6 +101,7 @@
         "@electron/rebuild": "^3.2.10",
         "@emotion/react": "^11.11.1",
         "@emotion/styled": "^11.11.0",
+        "@kapeta/electron-ide-opener": "^1.0.5",
         "@kapeta/nodejs-api-client": "<2",
         "@kapeta/nodejs-process": "<2",
         "@kapeta/prettier-config": "^0.6.1",

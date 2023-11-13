@@ -1,4 +1,9 @@
 import { useAppSettings } from './hooks';
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import { isMac } from '../utils/osUtils';
 import React from 'react';
 import { FormField, FormFieldType, FormInput, KapFormDialog, SimpleLoader } from '@kapeta/ui-web-components';
