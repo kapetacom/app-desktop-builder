@@ -1,3 +1,10 @@
+# [0.58.0-beta.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.57.0...v0.58.0-beta.1) (2023-11-13)
+
+
+### Features
+
+* update electron from v25 to v27 ([3fc9dd5](https://github.com/kapetacom/app-desktop-builder/commit/3fc9dd509cfefa9ad67b48c6b7d82bc6d8435875))
+
 # [0.57.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.56.0...v0.57.0) (2023-11-13)
 
 
