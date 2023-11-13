@@ -1,3 +1,10 @@
+# [0.57.0-beta.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.56.1-master.4...v0.57.0-beta.1) (2023-11-13)
+
+
+### Features
+
+* add support for setting release channel in the UI [KAP-2014] ([8f84111](https://github.com/kapetacom/app-desktop-builder/commit/8f8411140a02d8f9701722e9fb1ad2158314af75))
+
 ## [0.56.1-master.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.56.1-master.3...v0.56.1-master.4) (2023-11-13)
 
 
