@@ -1,3 +1,10 @@
+## [0.56.1-master.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.56.1-master.1...v0.56.1-master.2) (2023-11-13)
+
+
+### Bug Fixes
+
+* Handle asar.unpacked when running binaries ([#221](https://github.com/kapetacom/app-desktop-builder/issues/221)) ([120eb0b](https://github.com/kapetacom/app-desktop-builder/commit/120eb0bd9c6cc885178e5160a0750562c376965b))
+
 ## [0.56.1-master.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.56.0...v0.56.1-master.1) (2023-11-13)
 
 
