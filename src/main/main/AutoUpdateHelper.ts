@@ -57,16 +57,18 @@ export class AutoUpdateHelper {
         return this.updatePromise;
     }
 
-    private async getReleaseChannel() {
+    private async getAllowPrerelease() {
         const configData = await FS.readFile(ClusterConfiguration.getClusterConfigFile());
         const config = YAML.parse(configData.toString());
-        const channelName = config?.app?.releaseChannel || 'stable';
-        return channelName === 'stable' ? 'latest' : channelName;
+        const channelName = config?.app?.release_channel || 'stable';
+        return !!channelName && channelName !== 'stable';
     }
 
     private async checkForUpdatesInner(main: BrowserWindow | undefined, initiatedByUser = false) {
         const currentVersion = app.getVersion();
-        autoUpdater.channel = await this.getReleaseChannel();
+        // Github does not support release channels, so this is the best we've got
+        // Prereleases will be any github release marked as prerelease
+        autoUpdater.allowPrerelease = await this.getAllowPrerelease();
         console.log(`Checking for updates on ${autoUpdater.channel} channel...`);
 
         let nextVersion: string | undefined;
