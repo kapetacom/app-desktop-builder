@@ -1,3 +1,10 @@
+# [0.56.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.55.1...v0.56.0) (2023-11-13)
+
+
+### Features
+
+* Adds settings panel and allows selecting external code editor ([#218](https://github.com/kapetacom/app-desktop-builder/issues/218)) ([6382865](https://github.com/kapetacom/app-desktop-builder/commit/6382865bf5b67a89dc84e5514246aeb2a96b7fd1))
+
 ## [0.55.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.55.0...v0.55.1) (2023-11-12)
 
 
