@@ -1,3 +1,10 @@
+## [0.56.1-master.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.56.0...v0.56.1-master.1) (2023-11-13)
+
+
+### Bug Fixes
+
+* trigger prerelease w/ empty commit ([718fb80](https://github.com/kapetacom/app-desktop-builder/commit/718fb80c4bb3000f23bd3c7abc28ea5249897313))
+
 # [0.56.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.55.1...v0.56.0) (2023-11-13)
 
 
