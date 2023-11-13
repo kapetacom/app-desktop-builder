@@ -1,3 +1,10 @@
+# [0.57.0-beta.8](https://github.com/kapetacom/app-desktop-builder/compare/v0.57.0-beta.7...v0.57.0-beta.8) (2023-11-13)
+
+
+### Bug Fixes
+
+* allow downgrading back to stable release ([3ba89e7](https://github.com/kapetacom/app-desktop-builder/commit/3ba89e7236c30a556ff7062579d742b870b9f3fa))
+
 # [0.57.0-beta.7](https://github.com/kapetacom/app-desktop-builder/compare/v0.57.0-beta.6...v0.57.0-beta.7) (2023-11-13)
 
 
