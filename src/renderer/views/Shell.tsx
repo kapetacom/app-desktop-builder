@@ -24,6 +24,7 @@ import { Stack, Box } from '@mui/system';
 import { SvgIcon } from '@mui/material';
 import DeployIcon from '../components/shell/components/icons/DeployIcon.svg';
 import { useRoutingPath, PendoAccount, PendoVisitor, usePendoService } from '@kapeta/web-microfrontend/browser';
+import { AppSettingsPanel } from '../settings/AppSettingsPanel';
 
 const BASE_TRACKING_URL = 'https://desktop.kapeta.com';
 
@@ -170,6 +171,7 @@ export function Shell() {
     return (
         <SimpleLoader text="Initialising application..." loading={contexts.loading}>
             {contexts.profile ? <InnerShell /> : <LoginScreen onClickLogin={contexts.logIn} />}
+            <AppSettingsPanel />
         </SimpleLoader>
     );
 }

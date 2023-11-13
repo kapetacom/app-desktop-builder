@@ -205,3 +205,10 @@ export function safeSend(contents: WebContents | undefined, channel: string, ...
         console.warn('Failed to send message to renderer', e);
     }
 }
+
+export function withErrorLog(result: Promise<any>) {
+    const stack = new Error().stack;
+    result.catch((e) => {
+        console.error('A method throw unexpected', e, stack);
+    });
+}

@@ -8,6 +8,7 @@ import * as Path from 'path';
 import { FileInfo } from '@kapeta/ui-web-types';
 import { clusterPath } from './ClusterConfig';
 import { FileSystemStore, simpleFetch } from '@kapeta/ui-web-context';
+import { showToasty, ToastType } from '@kapeta/ui-web-components';
 
 class FileSystemServiceImpl implements FileSystemStore {
     async createFolder(path: string, folderName: string) {
@@ -16,6 +17,16 @@ class FileSystemServiceImpl implements FileSystemStore {
             method: 'PUT',
         });
         return true;
+    }
+
+    openPath(path: string) {
+        window.electron.ipcRenderer.invoke('open-path', path).catch((e) => {
+            showToasty({
+                title: 'Failed to open path',
+                message: (e as Error).message,
+                type: ToastType.DANGER,
+            });
+        });
     }
 
     async getHomeFolder(): Promise<string> {
@@ -28,6 +39,20 @@ class FileSystemServiceImpl implements FileSystemStore {
 
     async setProjectFolder(folder: string): Promise<string> {
         return simpleFetch(clusterPath(`/files/project/root`), {
+            headers: {
+                'Content-Type': 'text/plain',
+            },
+            body: folder,
+            method: 'POST',
+        });
+    }
+
+    async getEditor(): Promise<string> {
+        return simpleFetch(clusterPath(`/files/editor`));
+    }
+
+    async setEditor(folder: string): Promise<string> {
+        return simpleFetch(clusterPath(`/files/editor`), {
             headers: {
                 'Content-Type': 'text/plain',
             },

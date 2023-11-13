@@ -4,7 +4,7 @@
  */
 
 import { PlannerActionConfig, PlannerContextData, PlannerMode } from '@kapeta/ui-web-plan-editor';
-import { ButtonStyle, useConfirmDelete } from '@kapeta/ui-web-components';
+import { ButtonStyle, showToasty, ToastType, useConfirmDelete } from '@kapeta/ui-web-components';
 import { IResourceTypeConverter, ResourceRole } from '@kapeta/ui-web-types';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import { useEffect, useMemo } from 'react';
@@ -12,6 +12,7 @@ import { InstanceStatus, ResourceTypeProvider } from '@kapeta/ui-web-context';
 import { Connection } from '@kapeta/schemas';
 import { ActionHandlers, DataEntityType, InstanceInfo } from './types';
 import { InstanceService } from '../../api/InstanceService';
+import { FileSystemService } from '../../api/FileSystemService';
 
 function getConverter(planner: PlannerContextData, connection: Connection): IResourceTypeConverter | null {
     try {
@@ -154,6 +155,29 @@ export const usePlanEditorActions = (
                     icon: 'fa fa-pencil',
                     label: 'Edit',
                     kapId: 'planner-block-instance-edit-button',
+                },
+                {
+                    enabled(context, { blockInstance }): boolean {
+                        return !!blockInstance && parseKapetaUri(blockInstance.block.ref).version === 'local';
+                    },
+                    onClick(context, { blockInstance, block }) {
+                        if (!blockInstance?.block.ref) {
+                            return;
+                        }
+                        const blockUri = parseKapetaUri(blockInstance?.block.ref);
+                        const blockAsset = planner.blockAssets.find((asset) =>
+                            parseKapetaUri(asset.ref).equals(blockUri)
+                        );
+                        if (!blockAsset?.path) {
+                            return;
+                        }
+
+                        FileSystemService.openPath(blockAsset.path);
+                    },
+                    buttonStyle: ButtonStyle.DEFAULT,
+                    icon: 'fa fa-folder',
+                    label: 'Open in external editor',
+                    kapId: 'planner-block-instance-open-external',
                 },
                 {
                     enabled(context): boolean {

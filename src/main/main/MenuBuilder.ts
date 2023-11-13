@@ -5,7 +5,8 @@
 
 import { app, Menu, shell, BrowserWindow, MenuItemConstructorOptions } from 'electron';
 import { AutoUpdateHelper } from './AutoUpdateHelper';
-import { appVersion, safeSend } from '../helpers';
+import { appVersion, safeSend, withErrorLog } from '../helpers';
+import { getAvailableEditors, findEditorOrDefault } from '@kapeta/electron-ide-opener';
 
 interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
     selector?: string;
@@ -48,7 +49,11 @@ export class MenuBuilder {
     }
 
     private checkForUpdates() {
-        this.autoUpdater.checkForUpdates(this.mainWindow, true);
+        withErrorLog(
+            this.autoUpdater.checkForUpdates(this.mainWindow, true).catch((err) => {
+                console.error('Failed to check for updates', err);
+            })
+        );
     }
 
     private buildTabMenu(): MenuItemConstructorOptions {
@@ -113,6 +118,21 @@ export class MenuBuilder {
         };
     }
 
+    private async showAppSettings() {
+        const editors = [
+            {
+                path: '',
+                editor: 'Folder',
+            },
+            ...(await getAvailableEditors()),
+        ];
+
+        safeSend(this.mainWindow?.webContents, 'settings', {
+            editors,
+            defaultEditor: await findEditorOrDefault(null),
+        });
+    }
+
     private buildDarwinTemplate(): MenuItemConstructorOptions[] {
         const subMenuAbout: DarwinMenuItemConstructorOptions = {
             label: 'Kapeta',
@@ -128,7 +148,12 @@ export class MenuBuilder {
                     },
                 },
                 { type: 'separator' },
-                { label: 'Services', submenu: [] },
+                {
+                    label: 'Preferences...',
+                    click: async () => {
+                        withErrorLog(this.showAppSettings());
+                    },
+                },
                 { type: 'separator' },
                 {
                     label: 'Hide Kapeta',
@@ -225,13 +250,13 @@ export class MenuBuilder {
                 {
                     label: 'Learn More',
                     click() {
-                        shell.openExternal('https://kapeta.com');
+                        withErrorLog(shell.openExternal('https://kapeta.com'));
                     },
                 },
                 {
                     label: 'Documentation',
                     click() {
-                        shell.openExternal('https://docs.kapeta.com');
+                        withErrorLog(shell.openExternal('https://docs.kapeta.com'));
                     },
                 },
             ],
@@ -257,6 +282,12 @@ export class MenuBuilder {
                         },
                     },
                 ],
+            },
+            {
+                label: 'Settings...',
+                click: () => {
+                    withErrorLog(this.showAppSettings());
+                },
             },
             {
                 label: '&Edit',
@@ -319,13 +350,13 @@ export class MenuBuilder {
                     {
                         label: 'Learn More',
                         click() {
-                            shell.openExternal('https://kapeta.com');
+                            withErrorLog(shell.openExternal('https://kapeta.com'));
                         },
                     },
                     {
                         label: 'Documentation',
                         click() {
-                            shell.openExternal('https://docs.kapeta.com');
+                            withErrorLog(shell.openExternal('https://docs.kapeta.com'));
                         },
                     },
                     {

@@ -37,6 +37,7 @@ import {
     Button,
     Chip,
     CircularProgress,
+    IconButton,
     Modal,
     Paper,
     Popover,
@@ -54,6 +55,8 @@ import CoffeeIcon from '../../../../assets/images/coffee.svg';
 import { TipBox } from '../general/TipBox';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import _ from 'lodash';
+import { FileSystemService } from '../../api/FileSystemService';
+import { FolderOpen } from '@mui/icons-material';
 
 const ConfigSchemaEditor = (props: { systemId: string }) => {
     const configurationField = useFormContextField('spec.configuration');
@@ -386,15 +389,18 @@ export const PlanEditorTopMenu = (props: Props) => {
                 )}
 
                 {!props.readonly && planner.asset?.path ? (
-                    <Button
-                        data-kap-id={'plan-editor-top-menu-open-folder'}
-                        title={`Open ${planner.asset!.path}`}
-                        onClick={() => {
-                            window.electron.ipcRenderer.invoke('open-path', planner.asset!.path);
-                        }}
-                    >
-                        Open folder
-                    </Button>
+                    <Tooltip placement={'bottom'} title={'Open plan folder in your configured editor'}>
+                        <IconButton
+                            color={'primary'}
+                            data-kap-id={'plan-editor-top-menu-open-folder'}
+                            title={`Open ${planner.asset!.path}`}
+                            onClick={() => {
+                                FileSystemService.openPath(planner.asset!.path!);
+                            }}
+                        >
+                            <FolderOpen />
+                        </IconButton>
+                    </Tooltip>
                 ) : null}
             </Stack>
 

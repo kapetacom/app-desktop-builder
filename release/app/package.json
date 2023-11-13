@@ -19,6 +19,7 @@
         "link-modules": "node -r ts-node/register ../../.erb/scripts/link-modules.ts"
     },
     "dependencies": {
+        "@kapeta/electron-ide-opener": "^1.0.5",
         "@kapeta/local-cluster-config": "<2",
         "@kapeta/local-cluster-service": ">=0.21.5 <2",
         "@kapeta/nodejs-process": "^1.2.0"
