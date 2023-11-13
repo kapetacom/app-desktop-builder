@@ -8,6 +8,7 @@ import { userInfo } from 'os';
 import { spawnSync } from 'child_process';
 import { app } from 'electron';
 import Path from 'path';
+import FS from 'fs-extra';
 
 const args = ['-ilc', 'echo -n "_SHELL_ENV_DELIMITER_"; env; echo -n "_SHELL_ENV_DELIMITER_"; exit'];
 
@@ -17,6 +18,10 @@ const env = {
 };
 
 process.env.KAPETA_HOME = Path.join(app.getPath('home'), '.kapeta');
+if (!FS.existsSync(process.env.KAPETA_HOME)) {
+    // Create this sync and immediately
+    FS.mkdirpSync(process.env.KAPETA_HOME);
+}
 
 export const detectDefaultShell = () => {
     const { env } = process;
