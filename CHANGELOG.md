@@ -1,3 +1,10 @@
+## [0.56.1-master.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.56.1-master.2...v0.56.1-master.3) (2023-11-13)
+
+
+### Bug Fixes
+
+* Ensure python distutils ([9aa6dbb](https://github.com/kapetacom/app-desktop-builder/commit/9aa6dbb655861e02f61c0b9c65fe7960c2525b52))
+
 ## [0.56.1-master.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.56.1-master.1...v0.56.1-master.2) (2023-11-13)
 
 
