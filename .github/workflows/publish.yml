@@ -61,6 +61,7 @@ jobs:
         env:
           # This is used for uploading release assets to github
           GH_TOKEN: ${{ secrets.GH_DESKTOP_RELEASE_TOKEN }}
+          EP_PRE_RELEASE: ${{ github.event.release.prerelease }}
         run: |
           npm exec electron-builder -- --publish always --linux
 
@@ -123,6 +124,7 @@ jobs:
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         with:
+          prerelease: ${{ github.event.release.prerelease }}
           repo_token: ${{ secrets.GHA_TOKEN }}
           file: release/signed/*
           tag: ${{ github.ref }}
@@ -168,5 +170,6 @@ jobs:
           CSC_KEY_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
           # This is used for uploading release assets to github
           GH_TOKEN: ${{ secrets.GH_DESKTOP_RELEASE_TOKEN }}
+          EP_PRE_RELEASE: ${{ github.event.release.prerelease }}
         run: |
           npm exec electron-builder -- --publish always --mac
