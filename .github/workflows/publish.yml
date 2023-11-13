@@ -116,7 +116,7 @@ jobs:
         run: |
           cp release/build/latest.yml release/signed/latest.yml
           mv "release/signed/Kapeta Setup ${{steps.get_version.outputs.version-without-v}}.exe" release/signed/Kapeta-Setup-${{steps.get_version.outputs.version-without-v}}.exe
-      
+
       - name: recalculate hash
         run: npm run recalculate-hash release/signed/latest.yml
 
@@ -144,6 +144,9 @@ jobs:
         with:
           node-version: 18
           cache: npm
+
+      - name: Ensure distutils
+        run: python3 -m pip install distutils
 
       - name: Install and build
         run: |
