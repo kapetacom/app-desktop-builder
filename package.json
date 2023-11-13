@@ -24,7 +24,7 @@
         "prepare": "husky install",
         "rebuild": "electron-rebuild --parallel --types prod,dev,optional --module-dir release/app",
         "dev:dll": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.renderer.dev.dll.ts",
-        "start": "cross-env PORT=8080 ts-node ./.erb/scripts/check-port-in-use.js && cross-env PORT=8080 npm run start:renderer",
+        "start": "cross-env PORT=8080 ts-node ./.erb/scripts/check-port-in-use.mjs && cross-env PORT=8080 npm run start:renderer",
         "start:main": "cross-env NODE_ENV=development electronmon -r ts-node/register/transpile-only .",
         "start:preload": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.preload.dev.ts",
         "start:renderer": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack serve --config ./.erb/configs/webpack.config.renderer.dev.ts",
@@ -82,6 +82,7 @@
         }
     },
     "dependencies": {
+        "@kapeta/dsl-editor": "^1.0.0",
         "@kapeta/local-cluster-config": "<2",
         "@kapeta/web-microfrontend": "<2",
         "@sentry/electron": "^4.10.0",
@@ -106,7 +107,7 @@
         "@kapeta/prettier-config": "^0.6.1",
         "@kapeta/schemas": "<2",
         "@kapeta/style": "^0.94.0",
-        "@kapeta/ui-web-components": "<2",
+        "@kapeta/ui-web-components": "file:../../ui-web/ui-web-components/kapeta-ui-web-components-0.0.147.tgz",
         "@kapeta/ui-web-context": "<2",
         "@kapeta/ui-web-plan-editor": "<2",
         "@kapeta/ui-web-types": "<2",

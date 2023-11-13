@@ -5,15 +5,9 @@
 
 import React, { useCallback, useContext, useMemo, useState } from 'react';
 import {
-    AssetNameInput,
     AssetVersionSelector,
-    DSL_LANGUAGE_ID,
-    DSLConverters,
-    DSLWriter,
     FormButtons,
     FormContainer,
-    FormField,
-    FormFieldType,
     showToasty,
     ToastType,
     useFormContextField,
@@ -23,30 +17,18 @@ import { BlockTypeProvider, ResourceTypeProvider } from '@kapeta/ui-web-context'
 
 import { parseKapetaUri, KapetaURI } from '@kapeta/nodejs-utils';
 
-import type { IResourceTypeProvider, ResourceConnectionMappingChange, SchemaKind } from '@kapeta/ui-web-types';
+import type { IResourceTypeProvider, ResourceConnectionMappingChange } from '@kapeta/ui-web-types';
 import { ResourceRole } from '@kapeta/ui-web-types';
-import { BlockDefinition, Resource, Connection, Entity, IconType, BlockInstance } from '@kapeta/schemas';
+import { BlockDefinition, Resource, Connection, Entity, BlockInstance } from '@kapeta/schemas';
 
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
-import _, { cloneDeep } from 'lodash';
+import { cloneDeep } from 'lodash';
 import { PlannerContext, PlannerContextData, PlannerSidebar } from '@kapeta/ui-web-plan-editor';
 import { BlockInfo, DataEntityType, EditItemInfo } from '../../types';
 
 import './ItemEditorPanel.less';
 import { replaceBase64IconWithUrl } from '../../../../utils/iconHelpers';
-import {
-    Accordion,
-    AccordionDetails,
-    AccordionSummary,
-    Box,
-    Button,
-    Stack,
-    Tab,
-    Tabs,
-    Typography,
-} from '@mui/material';
-import { useKapetaContext } from '../../../../hooks/contextHook';
-import { useNamespacesForField } from '../../../../hooks/useNamespacesForField';
+import { Button } from '@mui/material';
 import { fromTypeProviderToAssetType } from '../../../../utils/assetTypeConverters';
 import { updateBlockFromMapping } from '../../helpers';
 import { InstanceEditor } from './inner/InstanceEditor';

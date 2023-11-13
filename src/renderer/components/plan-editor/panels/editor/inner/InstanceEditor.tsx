@@ -4,11 +4,11 @@
  */
 
 import { BlockInfo } from '../../../types';
-import React, { useCallback, useContext, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import * as _kapeta_schemas from '@kapeta/schemas';
 import { IBlockTypeProvider, SchemaKind } from '@kapeta/ui-web-types';
-import { Alert, Box, Stack, Tab, Tabs, Typography } from '@mui/material';
+import { Alert, Box, Stack, Tab, Tabs } from '@mui/material';
 import { useKapetaContext } from '../../../../../hooks/contextHook';
 import { useNamespacesForField } from '../../../../../hooks/useNamespacesForField';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
@@ -17,11 +17,6 @@ import { BlockTypeProvider } from '@kapeta/ui-web-context';
 import {
     AssetNameInput,
     AssetVersionSelector,
-    ConfigurationEditor,
-    DataTypeEditor,
-    DSL_LANGUAGE_ID,
-    DSLConverters,
-    DSLEntity,
     FormField,
     FormFieldType,
     useFormContextField,
@@ -29,6 +24,7 @@ import {
     createVerticalScrollShadow,
     useIsFormSubmitAttempted,
 } from '@kapeta/ui-web-components';
+import { ConfigurationEditor, DataTypeEditor, DSL_LANGUAGE_ID, DSLConverters, DSLEntity } from '@kapeta/dsl-editor';
 
 function filterEmpty<T>(value: T | null | undefined): boolean {
     return value !== null && value !== undefined;
@@ -149,10 +145,10 @@ export const InstanceEditor = (props: Props) => {
                 <InfoBox>Define configuration data types for this block</InfoBox>
                 <ConfigurationEditor
                     value={result}
-                    onError={(err: any) => {
-                        configurationField.invalid();
-                        setConfigurationError(err.message);
-                    }}
+                    // onError={(err: any) => {
+                    //     configurationField.invalid();
+                    //     setConfigurationError(err.message);
+                    // }}
                     onChange={(result) => {
                         result.entities && setConfiguration(result.code, result.entities);
                         configurationField.valid();
@@ -195,10 +191,10 @@ export const InstanceEditor = (props: Props) => {
                 <InfoBox>Entities define external data types to be used by the resources for this block</InfoBox>
                 <DataTypeEditor
                     value={result}
-                    onError={(err: any) => {
-                        entitiesField.invalid();
-                        setEntitiesError(err.message);
-                    }}
+                    // onError={(err: any) => {
+                    //     entitiesField.invalid();
+                    //     setEntitiesError(err.message);
+                    // }}
                     onChange={(result) => {
                         result.entities && setEntities(result.code, result.entities);
                         entitiesField.valid();

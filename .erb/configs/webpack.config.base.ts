@@ -28,6 +28,7 @@ const configuration: webpack.Configuration = {
      * Determine the array of extensions that should be used to resolve modules.
      */
     resolve: {
+        mainFields: ['browser', 'module', 'main'],
         extensions: [
             '.js',
             '.jsx',
@@ -55,7 +56,20 @@ const configuration: webpack.Configuration = {
         },
         modules: [webpackPaths.srcPath, 'node_modules'],
         // There is no need to add aliases here, the paths in tsconfig get mirrored
-        plugins: [new TsconfigPathsPlugins()],
+        plugins: [new TsconfigPathsPlugins({
+            extensions: [
+                '.js',
+                '.jsx',
+                '.json',
+                '.ts',
+                '.tsx',
+                '.css',
+                '.less',
+                '.yml',
+                '.yaml',
+            ],
+            mainFields: ['browser', 'module', 'main'],
+        })],
         fallback: { path: require.resolve('path-browserify') },
     },
 
