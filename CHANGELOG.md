@@ -1,3 +1,25 @@
+# [0.57.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.56.0...v0.57.0) (2023-11-13)
+
+
+### Bug Fixes
+
+* allow downgrading back to stable release ([3ba89e7](https://github.com/kapetacom/app-desktop-builder/commit/3ba89e7236c30a556ff7062579d742b870b9f3fa))
+* bump to test prerelease ([9e781ee](https://github.com/kapetacom/app-desktop-builder/commit/9e781ee4d16228d4d6b224508e5c30b2bd083fe9))
+* codesigning fix for prereleases ([150f99a](https://github.com/kapetacom/app-desktop-builder/commit/150f99ae0f3dd04376e2d7618af9731cf7a10bb9))
+* Ensure python distutils ([9aa6dbb](https://github.com/kapetacom/app-desktop-builder/commit/9aa6dbb655861e02f61c0b9c65fe7960c2525b52))
+* fail build for unsigned mac releases ([86d7890](https://github.com/kapetacom/app-desktop-builder/commit/86d789093be73d59d976ff9b0288a5f0fd30cd40))
+* Handle asar.unpacked when running binaries ([#221](https://github.com/kapetacom/app-desktop-builder/issues/221)) ([120eb0b](https://github.com/kapetacom/app-desktop-builder/commit/120eb0bd9c6cc885178e5160a0750562c376965b))
+* nicer release channel name formatting ([#223](https://github.com/kapetacom/app-desktop-builder/issues/223)) ([e73a2cb](https://github.com/kapetacom/app-desktop-builder/commit/e73a2cb27fc9d11b95bbcd7a80f0d4317bd83721))
+* publish prereleases for all platforms ([#224](https://github.com/kapetacom/app-desktop-builder/issues/224)) ([e39ab17](https://github.com/kapetacom/app-desktop-builder/commit/e39ab176fd2758b82959fb813d2ec977c4570559))
+* trigger prerelease w/ empty commit ([718fb80](https://github.com/kapetacom/app-desktop-builder/commit/718fb80c4bb3000f23bd3c7abc28ea5249897313))
+* **updater:** try using prerelease flag instead of channels ([611c9d0](https://github.com/kapetacom/app-desktop-builder/commit/611c9d00423df95ef3b41bc2f697eb7d224a70ed))
+* Use specific python version ([1b09be6](https://github.com/kapetacom/app-desktop-builder/commit/1b09be66ffe0a17595ec0ab6f2db8d7c68646400))
+
+
+### Features
+
+* add support for setting release channel in the UI [KAP-2014] ([8f84111](https://github.com/kapetacom/app-desktop-builder/commit/8f8411140a02d8f9701722e9fb1ad2158314af75))
+
 # [0.57.0-beta.8](https://github.com/kapetacom/app-desktop-builder/compare/v0.57.0-beta.7...v0.57.0-beta.8) (2023-11-13)
 
 
