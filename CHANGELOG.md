@@ -1,3 +1,10 @@
+# [0.57.0-beta.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.57.0-beta.2...v0.57.0-beta.3) (2023-11-13)
+
+
+### Bug Fixes
+
+* publish prereleases for all platforms ([#224](https://github.com/kapetacom/app-desktop-builder/issues/224)) ([e39ab17](https://github.com/kapetacom/app-desktop-builder/commit/e39ab176fd2758b82959fb813d2ec977c4570559))
+
 # [0.57.0-beta.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.57.0-beta.1...v0.57.0-beta.2) (2023-11-13)
 
 
