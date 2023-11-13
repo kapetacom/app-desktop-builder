@@ -79,7 +79,7 @@ export const AppSettingsPanel = () => {
             />
             <FormField
                 type={FormFieldType.ENUM}
-                options={['stable', 'beta']}
+                options={{ stable: 'Stable', beta: 'Beta' }}
                 name={'releaseChannel'}
                 label={'Release Channel'}
                 help={'Select whether to update the app from "stable" (default) or "beta" channels.'}

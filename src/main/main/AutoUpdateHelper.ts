@@ -60,7 +60,8 @@ export class AutoUpdateHelper {
     private async getReleaseChannel() {
         const configData = await FS.readFile(ClusterConfiguration.getClusterConfigFile());
         const config = YAML.parse(configData.toString());
-        return config?.app?.releaseChannel || 'stable';
+        const channelName = config?.app?.releaseChannel || 'stable';
+        return channelName === 'stable' ? 'latest' : channelName;
     }
 
     private async checkForUpdatesInner(main: BrowserWindow | undefined, initiatedByUser = false) {
