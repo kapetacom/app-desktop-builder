@@ -1,8 +1,6 @@
-name: Publish release
+name: Release to stable
 on:
-  push:
-    branches:
-      - master
+  workflow_dispatch:
 
 jobs:
   semantic-release:
@@ -12,9 +10,13 @@ jobs:
         uses: actions/checkout@v3
         with:
           token: ${{ secrets.BOT_TOKEN }}
+          ref: master
 
       - name: Semantic Release
         id: semantic_release
         uses: cycjimmy/semantic-release-action@v4
+        with:
+          branches: |
+            ['master']
         env:
           GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
