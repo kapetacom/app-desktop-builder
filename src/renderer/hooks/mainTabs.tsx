@@ -129,8 +129,10 @@ const createMainTabsContext = (context?: MemberIdentity): MainTabs => {
     const openTab = useCallback(
         (path = DEFAULT_TAB_PATH, opts: TabOptions = {}) => {
             setTabs((previous) => {
-                const contextId = isContextSensitive(path) ? opts.contextId || context?.identity.id : undefined;
                 const normalizedPath = normalizeUrl(path);
+                const contextId = isContextSensitive(normalizedPath)
+                    ? opts.contextId || context?.identity.id
+                    : undefined;
                 const existingTabIx = previous.findIndex((tab) => tab.path === normalizedPath);
                 if (existingTabIx > -1) {
                     const existingTab = previous[existingTabIx];

@@ -132,6 +132,9 @@ const useKapetaContextInternal = (): KapetaContextData => {
             const handle = !context || context.identity.type === 'user' ? undefined : context.identity.handle;
             setActiveContext(context);
             window.electron.ipcRenderer.invoke('set-context', handle);
+            window.electron.ipcRenderer.invoke('set-context', handle).catch((e) => {
+                console.error('Failed to set context', e);
+            });
         },
         logOut: async () => {
             const logOutPromise = window.electron.ipcRenderer.invoke('log-out') as Promise<boolean>;
