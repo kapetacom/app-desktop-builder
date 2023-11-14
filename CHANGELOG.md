@@ -1,3 +1,10 @@
+# [0.58.0-beta.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.58.0-beta.1...v0.58.0-beta.2) (2023-11-14)
+
+
+### Bug Fixes
+
+* Handle that deployments can have query params ([#226](https://github.com/kapetacom/app-desktop-builder/issues/226)) ([693064b](https://github.com/kapetacom/app-desktop-builder/commit/693064b304bf682797fe1c2e9e30885ae906ca3f))
+
 # [0.58.0-beta.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.57.0...v0.58.0-beta.1) (2023-11-13)
 
 
