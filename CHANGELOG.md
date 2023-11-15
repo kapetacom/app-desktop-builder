@@ -1,3 +1,10 @@
+# [0.58.0-beta.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.58.0-beta.2...v0.58.0-beta.3) (2023-11-15)
+
+
+### Bug Fixes
+
+* load monaco-editor only once [KAP-1918] ([#227](https://github.com/kapetacom/app-desktop-builder/issues/227)) ([612b895](https://github.com/kapetacom/app-desktop-builder/commit/612b8958c36aba56b06997c61bd70f2a79647f81))
+
 # [0.58.0-beta.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.58.0-beta.1...v0.58.0-beta.2) (2023-11-14)
 
 
