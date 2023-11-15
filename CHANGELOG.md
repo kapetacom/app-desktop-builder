@@ -1,3 +1,16 @@
+# [0.58.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.57.0...v0.58.0) (2023-11-15)
+
+
+### Bug Fixes
+
+* Handle that deployments can have query params ([#226](https://github.com/kapetacom/app-desktop-builder/issues/226)) ([693064b](https://github.com/kapetacom/app-desktop-builder/commit/693064b304bf682797fe1c2e9e30885ae906ca3f))
+* load monaco-editor only once [KAP-1918] ([#227](https://github.com/kapetacom/app-desktop-builder/issues/227)) ([612b895](https://github.com/kapetacom/app-desktop-builder/commit/612b8958c36aba56b06997c61bd70f2a79647f81))
+
+
+### Features
+
+* update electron from v25 to v27 ([3fc9dd5](https://github.com/kapetacom/app-desktop-builder/commit/3fc9dd509cfefa9ad67b48c6b7d82bc6d8435875))
+
 # [0.58.0-beta.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.58.0-beta.2...v0.58.0-beta.3) (2023-11-15)
 
 
