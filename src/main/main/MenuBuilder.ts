@@ -150,6 +150,7 @@ export class MenuBuilder {
                 { type: 'separator' },
                 {
                     label: 'Preferences...',
+                    accelerator: 'Command+,',
                     click: async () => {
                         withErrorLog(this.showAppSettings());
                     },
@@ -276,6 +277,7 @@ export class MenuBuilder {
                     },
                     {
                         label: 'Settings...',
+                        accelerator: 'Ctrl+,',
                         click: () => {
                             withErrorLog(this.showAppSettings());
                         },
