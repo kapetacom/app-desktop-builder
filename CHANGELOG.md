@@ -1,3 +1,10 @@
+# [0.59.0-beta.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.58.0...v0.59.0-beta.1) (2023-11-15)
+
+
+### Features
+
+* Add updater UI to make updating assets easier ([#228](https://github.com/kapetacom/app-desktop-builder/issues/228)) ([53b1613](https://github.com/kapetacom/app-desktop-builder/commit/53b161369c91b2efec108a037e02df43a4cbf027))
+
 # [0.58.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.57.0...v0.58.0) (2023-11-15)
 
 
