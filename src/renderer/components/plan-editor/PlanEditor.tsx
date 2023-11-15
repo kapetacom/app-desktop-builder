@@ -34,11 +34,15 @@ import { BlockCreatorPanel } from './panels/BlockCreatorPanel';
 import { BlockDefinition } from '@kapeta/schemas';
 import { normalizeKapetaUri } from '../../utils/planContextLoader';
 import { BlockTypeProvider } from '@kapeta/ui-web-context';
-import { Box, Badge, Tab, Tabs, styled } from '@mui/material';
+import { Box, Badge, Tab, Tabs, styled, Stack, Button, Slide } from '@mui/material';
 import { PlannerGatewaysList } from './panels/GatewaysList';
 import { getStatusDotForGroup } from '../../utils/statusDot';
 import { DesktopReferenceResolutionHandler } from '../general/DesktopReferenceResolutionHandler';
 import { useEffect } from 'react';
+import { usePlanUpdater } from '../../hooks/updaterHooks';
+import { PlanUpdaterModal } from './updater/PlanUpdaterModal';
+import UpdateIconPending from '../../../../assets/images/update-icon-pending.svg';
+import UpdateIconDone from '../../../../assets/images/update-icon-done.svg';
 
 interface Props {
     systemId: string;
@@ -160,7 +164,7 @@ export const PlanEditor = withPlannerContext(
 
         const [currentTab, setCurrentTab] = useState(readonly ? 'urls' : 'assets');
         const statusDot = getStatusDotForGroup(Object.values(planner.instanceStates || {}));
-
+        const planUpdater = usePlanUpdater();
         const missingReferences = usePlanValidation(planner.plan, planner.blockAssets);
 
         if (missingReferences.length > 0) {
@@ -185,6 +189,8 @@ export const PlanEditor = withPlannerContext(
         return (
             <div className={containerClass} ref={ref} data-kap-id={'plan-editor'}>
                 <PlanEditorTopMenu readonly={readonly} version={uri.version} systemId={props.systemId} />
+
+                <PlanUpdaterModal planUpdater={planUpdater} />
 
                 <BlockConfigurationPanel
                     systemId={props.systemId}
@@ -256,32 +262,61 @@ export const PlanEditor = withPlannerContext(
                         />
                     </Tabs>
                     {currentTab === 'assets' && (
-                        <PlannerResourcesList
-                            // Invalidate the resource list on local assets change
-                            key={assetInvalidationKey}
-                            onShowMoreAssets={() => {
-                                kapetaContext.blockHub.open(planner.asset!, (selection) => {
-                                    selection.forEach((asset, i) => {
-                                        const ref = normalizeKapetaUri(
-                                            `${asset.content.metadata.name}:${asset.version}`
-                                        );
-                                        planner.addBlockInstance({
-                                            name: asset.content.metadata.title ?? parseKapetaUri(ref).name,
-                                            id: randomUUID(),
-                                            block: {
-                                                ref,
-                                            },
-                                            dimensions: {
-                                                top: 50 + i * 150,
-                                                left: 50,
-                                                width: 0,
-                                                height: 0,
-                                            },
+                        <Stack>
+                            {planUpdater.updates.length > 0 && (
+                                <Slide direction={'down'} in={true}>
+                                    <Box
+                                        sx={{
+                                            pt: 1,
+                                        }}
+                                        textAlign={'center'}
+                                    >
+                                        <Button
+                                            size={'small'}
+                                            sx={{
+                                                fontSize: '12px',
+                                                fontWeight: 400,
+                                                width: '100%',
+                                                textDecoration: 'underline',
+                                            }}
+                                            endIcon={<UpdateIconPending height={18} />}
+                                            color={'inherit'}
+                                            onClick={() => {
+                                                planUpdater.showReview();
+                                            }}
+                                        >
+                                            {planUpdater.updates.length} updates available
+                                        </Button>
+                                    </Box>
+                                </Slide>
+                            )}
+                            <PlannerResourcesList
+                                // Invalidate the resource list on local assets change
+                                key={assetInvalidationKey}
+                                onShowMoreAssets={() => {
+                                    kapetaContext.blockHub.open(planner.asset!, (selection) => {
+                                        selection.forEach((asset, i) => {
+                                            const ref = normalizeKapetaUri(
+                                                `${asset.content.metadata.name}:${asset.version}`
+                                            );
+                                            planner.addBlockInstance({
+                                                name: asset.content.metadata.title ?? parseKapetaUri(ref).name,
+                                                id: randomUUID(),
+                                                block: {
+                                                    ref,
+                                                },
+                                                dimensions: {
+                                                    top: 50 + i * 150,
+                                                    left: 50,
+                                                    width: 0,
+                                                    height: 0,
+                                                },
+                                            });
                                         });
                                     });
-                                });
-                            }}
-                        />
+                                }}
+                            />
+                        </Stack>
                     )}
                     {currentTab === 'urls' && (
                         <PlannerGatewaysList

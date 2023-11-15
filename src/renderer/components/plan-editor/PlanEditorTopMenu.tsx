@@ -393,7 +393,6 @@ export const PlanEditorTopMenu = (props: Props) => {
                         <IconButton
                             color={'primary'}
                             data-kap-id={'plan-editor-top-menu-open-folder'}
-                            title={`Open ${planner.asset!.path}`}
                             onClick={() => {
                                 FileSystemService.openPath(planner.asset!.path!);
                             }}
