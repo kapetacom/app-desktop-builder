@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { parseKapetaUri } from '@kapeta/nodejs-utils';
+import { normalizeKapetaUri, parseKapetaUri } from '@kapeta/nodejs-utils';
 import {
     AssetInfo,
     getLocalRefForBlockDefinition,
@@ -32,7 +32,6 @@ import { toClass } from '@kapeta/ui-web-utils';
 import { useKapetaContext } from '../../hooks/contextHook';
 import { BlockCreatorPanel } from './panels/BlockCreatorPanel';
 import { BlockDefinition } from '@kapeta/schemas';
-import { normalizeKapetaUri } from '../../utils/planContextLoader';
 import { BlockTypeProvider } from '@kapeta/ui-web-context';
 import { Box, Badge, Tab, Tabs, styled, Stack, Button, Slide } from '@mui/material';
 import { PlannerGatewaysList } from './panels/GatewaysList';

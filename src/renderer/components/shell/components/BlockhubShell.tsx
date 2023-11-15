@@ -5,14 +5,12 @@
 
 import { useInstallerService } from '../../../api/installerService';
 import { api, assetFetcher } from '../../../api/APIService';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AssetDisplay, AssetType, BlockhubCategory, BlockhubModal } from '@kapeta/ui-web-components';
 import { useAsyncRetry } from 'react-use';
-import { parseKapetaUri } from '@kapeta/nodejs-utils';
+import { normalizeKapetaUri, parseKapetaUri, parseVersion } from '@kapeta/nodejs-utils';
 import { useKapetaContext } from '../../../hooks/contextHook';
-import { versionIsBigger } from '../../../utils/versionHelpers';
-
-import { normalizeKapetaUri, useLoadedPlanContext } from '../../../utils/planContextLoader';
+import { useLoadedPlanContext } from '../../../utils/planContextLoader';
 import { useAssetsChanged, useLocalAssets } from '../../../hooks/assetHooks';
 import { AssetInfo, AssetThumbnail, fromAsset, fromAssetDisplay } from '@kapeta/ui-web-plan-editor';
 import { AssetService } from 'renderer/api/AssetService';
@@ -35,7 +33,7 @@ export const BlockhubShell = (props: Props) => {
         installedAssets.forEach((installedAsset) => {
             const uri = parseKapetaUri(installedAsset.ref);
             if (latest[uri.fullName]) {
-                if (versionIsBigger(installedAsset.version, latest[uri.fullName].version)) {
+                if (parseVersion(installedAsset.version).isGreaterThan(parseVersion(latest[uri.fullName].version))) {
                     latest[uri.fullName] = fromAsset(installedAsset);
                 }
                 return;

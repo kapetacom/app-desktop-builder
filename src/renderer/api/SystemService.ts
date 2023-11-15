@@ -7,7 +7,7 @@ import { SocketService } from './SocketService';
 import { clusterPath } from './ClusterConfig';
 import { BlockStatusListener, InstanceEventType, PlanStatusListener, simpleFetch } from '@kapeta/ui-web-context';
 import { InstanceInfo } from '../components/plan-editor/types';
-import { normalizeKapetaUri } from '../utils/planContextLoader';
+import { normalizeKapetaUri } from '@kapeta/nodejs-utils';
 
 class SystemServiceImpl {
     public subscribe(

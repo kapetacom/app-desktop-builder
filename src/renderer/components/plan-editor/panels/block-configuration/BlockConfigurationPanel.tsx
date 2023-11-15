@@ -18,7 +18,7 @@ import {
 
 import { BlockTypeProvider } from '@kapeta/ui-web-context';
 
-import { parseKapetaUri } from '@kapeta/nodejs-utils';
+import { normalizeKapetaUri, parseKapetaUri } from '@kapeta/nodejs-utils';
 import { BlockInstance } from '@kapeta/schemas';
 import {
     createGlobalConfigurationFromEntities,
@@ -32,7 +32,6 @@ import './BlockConfigurationPanel.less';
 import { useAsyncFn } from 'react-use';
 import { getInstanceConfig, setInstanceConfig } from '../../../../api/LocalConfigService';
 import { Box, Button, Tab, Tabs } from '@mui/material';
-import { normalizeKapetaUri } from '../../../../utils/planContextLoader';
 import { getAssetTitle } from '../../helpers';
 
 type Options = { [key: string]: string };

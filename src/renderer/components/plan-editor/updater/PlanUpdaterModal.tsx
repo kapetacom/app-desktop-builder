@@ -10,7 +10,7 @@ import { Alert, AlertTitle, Badge, Box, Button, Stack, Typography } from '@mui/m
 
 import UpdateIcon from '../../../../../assets/images/update-icon.svg';
 import { KapDialog, KindIcon } from '@kapeta/ui-web-components';
-import { normalizeKapetaUri } from '../../../utils/planContextLoader';
+import { normalizeKapetaUri } from '@kapeta/nodejs-utils';
 
 interface Props {
     planUpdater: ReturnType<typeof usePlanUpdater>;

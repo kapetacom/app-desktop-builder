@@ -6,12 +6,10 @@ import { resolveDependencies } from '@kapeta/schemas';
 import { AssetInfo } from '@kapeta/ui-web-plan-editor/src/types';
 import { useContext, useMemo, useState } from 'react';
 import { useLocalAssets } from './assetHooks';
-import { versionIsBigger } from '../utils/versionHelpers';
-import { KapetaURI, parseKapetaUri } from '@kapeta/nodejs-utils';
+import { KapetaURI, normalizeKapetaUri, parseKapetaUri, parseVersion } from '@kapeta/nodejs-utils';
 import { SchemaKind } from '@kapeta/ui-web-types';
 import { useLocalStorage } from 'react-use';
 import { BlockDefinitionReference, PlannerContext } from '@kapeta/ui-web-plan-editor';
-import { normalizeKapetaUri } from '../utils/planContextLoader';
 import _ from 'lodash';
 
 export type UpdateType = 'plan' | 'block';
@@ -78,7 +76,10 @@ export const usePlanUpdater = (): PlanUpdater => {
                 return;
             }
 
-            if (!latestAssetVersions[name] || versionIsBigger(asset.version, latestAssetVersions[name])) {
+            if (
+                !latestAssetVersions[name] ||
+                parseVersion(asset.version).isGreaterThan(parseVersion(latestAssetVersions[name]))
+            ) {
                 latestAssetVersions[name] = asset.version;
             }
         });
