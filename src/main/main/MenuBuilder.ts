@@ -275,6 +275,12 @@ export class MenuBuilder {
                         accelerator: 'Ctrl+O',
                     },
                     {
+                        label: 'Settings...',
+                        click: () => {
+                            withErrorLog(this.showAppSettings());
+                        },
+                    },
+                    {
                         label: '&Close',
                         accelerator: 'Ctrl+W',
                         click: () => {
@@ -282,12 +288,6 @@ export class MenuBuilder {
                         },
                     },
                 ],
-            },
-            {
-                label: 'Settings...',
-                click: () => {
-                    withErrorLog(this.showAppSettings());
-                },
             },
             {
                 label: '&Edit',
