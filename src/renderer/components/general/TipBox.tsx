@@ -3,20 +3,10 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import {
-    Box,
-    Button,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    Modal,
-    Paper,
-    Slide,
-    Stack,
-    Typography,
-} from '@mui/material';
+import { Box, Button, Stack, Typography } from '@mui/material';
 import { useLocalStorage } from 'react-use';
 import { useCallback } from 'react';
+import { NoticeModal } from './NoticeModal';
 
 interface Props {
     id: string;
@@ -32,65 +22,31 @@ export const TipBox = (props: Props) => {
     const onClose = useCallback(() => setOpen(false), []);
 
     return (
-        <Modal
+        <NoticeModal
             open={Boolean(open)}
-            BackdropProps={{
-                sx: {
-                    backdropFilter: 'blur(2px)',
-                    bgcolor: 'transparent',
-                },
-            }}
             onClose={onClose}
+            title={props.title}
+            actions={
+                <Button color={'primary'} onClick={onClose}>
+                    Dismiss
+                </Button>
+            }
         >
-            <Slide direction={'left'} in={Boolean(open)}>
-                <Paper
-                    elevation={3}
+            <Stack direction={'row'} alignItems={'center'}>
+                <Box
                     sx={{
-                        width: '550px',
-                        position: 'absolute',
-                        right: '24px',
-                        bottom: '24px',
-                        boxShadow: 24,
-                        ':focus-visible': {
-                            outline: 'none',
+                        py: 1,
+                        px: 0.5,
+                        svg: {
+                            width: '100%',
+                            height: '100%',
                         },
                     }}
                 >
-                    <DialogTitle
-                        sx={{
-                            fontWeight: 600,
-                        }}
-                    >
-                        {props.title}
-                    </DialogTitle>
-                    <DialogContent
-                        sx={{
-                            py: 0,
-                        }}
-                    >
-                        <Stack direction={'row'} alignItems={'center'}>
-                            <Box
-                                sx={{
-                                    py: 1,
-                                    px: 0.5,
-                                    svg: {
-                                        width: '100%',
-                                        height: '100%',
-                                    },
-                                }}
-                            >
-                                {props.icon}
-                            </Box>
-                            <Typography>{props.description}</Typography>
-                        </Stack>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button color={'primary'} onClick={onClose}>
-                            {props.closeButtonLabel ?? 'Dismiss'}
-                        </Button>
-                    </DialogActions>
-                </Paper>
-            </Slide>
-        </Modal>
+                    {props.icon}
+                </Box>
+                <Typography>{props.description}</Typography>
+            </Stack>
+        </NoticeModal>
     );
 };

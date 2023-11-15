@@ -83,6 +83,7 @@
     },
     "dependencies": {
         "@kapeta/local-cluster-config": "<2",
+        "@kapeta/nodejs-utils": "<2",
         "@kapeta/web-microfrontend": "<2",
         "@sentry/electron": "^4.10.0",
         "@sentry/react": "^7.66.0",
@@ -93,6 +94,7 @@
         "fix-path": "^4.0.0",
         "gunzip-maybe": "^1.4.2",
         "hazardous": "^0.3.0",
+        "monaco-editor": "^0.44.0",
         "which": "^3.0.0",
         "xterm": "^5.2.1"
     },
@@ -108,6 +110,7 @@
         "@kapeta/schemas": "<2",
         "@kapeta/style": "^0.94.0",
         "@kapeta/ui-web-components": "<2",
+        "@kapeta/nodejs-utils": "<2",
         "@kapeta/ui-web-context": "<2",
         "@kapeta/ui-web-plan-editor": "<2",
         "@kapeta/ui-web-types": "<2",

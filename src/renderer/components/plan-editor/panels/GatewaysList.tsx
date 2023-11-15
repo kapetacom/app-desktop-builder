@@ -56,7 +56,9 @@ export const PlannerGatewaysList = withErrorBoundary(
                         definition: definition!,
                         status: state?.status || InstanceStatus.STOPPED,
                         instance: block,
-                        public: parseKapetaUri(definition?.kind).fullName === 'kapeta/block-type-gateway-http',
+                        public:
+                            definition?.kind &&
+                            parseKapetaUri(definition?.kind).fullName === 'kapeta/block-type-gateway-http',
                         url: state?.address,
                     };
                 } catch (e) {

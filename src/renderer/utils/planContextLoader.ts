@@ -4,7 +4,7 @@
  */
 
 import { BlockTargetProvider, BlockTypeProvider, ResourceTypeProvider, simpleFetch } from '@kapeta/ui-web-context';
-import { parseKapetaUri } from '@kapeta/nodejs-utils';
+import { normalizeKapetaUri, parseKapetaUri } from '@kapeta/nodejs-utils';
 import _ from 'lodash';
 import { IBlockTypeProvider, ILanguageTargetProvider, IResourceTypeProvider, SchemaKind } from '@kapeta/ui-web-types';
 import { useEffect, useMemo, useState } from 'react';
@@ -22,14 +22,6 @@ import type { DefinitionInfo } from '@kapeta/local-cluster-config';
 type PromiseCache<T = void> = { [key: string]: Promise<T> };
 const PROVIDER_CACHE: PromiseCache = {};
 const BLOCK_CACHE: PromiseCache<AssetInfo<BlockDefinition> | null> = {};
-
-export function normalizeKapetaUri(uri: string) {
-    if (!uri) {
-        return '';
-    }
-
-    return `kapeta://${parseKapetaUri(uri).id}`;
-}
 
 const registerMissing = () => {
     let loaded = 0;
