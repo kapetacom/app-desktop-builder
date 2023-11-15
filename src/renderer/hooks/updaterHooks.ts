@@ -1,4 +1,8 @@
-import { BlockDefinition, Plan, resolveDependencies } from '@kapeta/schemas';
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+import { resolveDependencies } from '@kapeta/schemas';
 import { AssetInfo } from '@kapeta/ui-web-plan-editor/src/types';
 import { useContext, useMemo, useState } from 'react';
 import { useLocalAssets } from './assetHooks';

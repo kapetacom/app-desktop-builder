@@ -1,11 +1,15 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import React, { useEffect, useState } from 'react';
 import { NoticeModal } from '../../general/NoticeModal';
 import { Update, usePlanUpdater } from '../../../hooks/updaterHooks';
 import { Alert, AlertTitle, Badge, Box, Button, Stack, Typography } from '@mui/material';
 
 import UpdateIcon from '../../../../../assets/images/update-icon.svg';
-import { AssetKindIconText, KapDialog, KindIcon } from '@kapeta/ui-web-components';
-import { AssetService } from '../../../api/AssetService';
+import { KapDialog, KindIcon } from '@kapeta/ui-web-components';
 import { normalizeKapetaUri } from '../../../utils/planContextLoader';
 
 interface Props {
