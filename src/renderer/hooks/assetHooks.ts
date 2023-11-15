@@ -8,6 +8,7 @@ import { BlockTypeProvider } from '@kapeta/ui-web-context';
 import { BlockDefinition, Plan } from '@kapeta/schemas';
 import { Asset, SchemaKind } from '@kapeta/ui-web-types';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
+
 import _ from 'lodash';
 
 import useSWRImmutable from 'swr/immutable';

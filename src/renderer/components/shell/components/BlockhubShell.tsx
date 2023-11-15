@@ -11,7 +11,7 @@ import { useAsyncRetry } from 'react-use';
 import { normalizeKapetaUri, parseKapetaUri, parseVersion } from '@kapeta/nodejs-utils';
 import { useKapetaContext } from '../../../hooks/contextHook';
 import { useLoadedPlanContext } from '../../../utils/planContextLoader';
-import { useAssetsChanged, useLocalAssets } from '../../../hooks/assetHooks';
+import { useAssetsChanged } from '../../../hooks/assetHooks';
 import { AssetInfo, AssetThumbnail, fromAsset, fromAssetDisplay } from '@kapeta/ui-web-plan-editor';
 import { AssetService } from 'renderer/api/AssetService';
 
