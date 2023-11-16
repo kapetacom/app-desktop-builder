@@ -1,3 +1,10 @@
+# [0.59.0-beta.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.59.0-beta.4...v0.59.0-beta.5) (2023-11-16)
+
+
+### Features
+
+* Add DSL support for any, Set and Map ([#233](https://github.com/kapetacom/app-desktop-builder/issues/233)) ([b11929d](https://github.com/kapetacom/app-desktop-builder/commit/b11929d31de61590ea71de0d6befd8bbcada1ccc))
+
 # [0.59.0-beta.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.59.0-beta.3...v0.59.0-beta.4) (2023-11-16)
 
 
