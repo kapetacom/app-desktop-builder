@@ -1,3 +1,10 @@
+# [0.59.0-beta.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.59.0-beta.3...v0.59.0-beta.4) (2023-11-16)
+
+
+### Bug Fixes
+
+* Plural texts  for updater UI ([#232](https://github.com/kapetacom/app-desktop-builder/issues/232)) ([de32714](https://github.com/kapetacom/app-desktop-builder/commit/de32714eae2278e2ef7b7f36b4f1143eb3a61a93))
+
 # [0.59.0-beta.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.59.0-beta.2...v0.59.0-beta.3) (2023-11-16)
 
 
