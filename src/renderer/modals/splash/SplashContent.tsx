@@ -45,6 +45,7 @@ const DONE_STATES = [SplashStatusCheck.OK, SplashStatusCheck.ERROR];
 export const SplashContent = (props: Props) => {
     const pendo = usePendo();
     const [progress, setProgress] = React.useState(0);
+    const [ignorePendo, setIgnorePendo] = React.useState(false);
 
     let text = 'Loading...';
     const done =
@@ -62,9 +63,19 @@ export const SplashContent = (props: Props) => {
     if (props.npmStatus === SplashStatusCheck.OK) {
         okCount += 1;
     }
-    if (pendo.ready) {
+    if (pendo.ready || ignorePendo) {
         okCount += 1;
     }
+
+    useEffect(() => {
+        // If pendo is not ready after 10 seconds, ignore it
+        const timeout = setTimeout(() => {
+            setIgnorePendo(true);
+        }, 10000);
+        return () => {
+            clearTimeout(timeout);
+        };
+    }, []);
 
     const hasError = done && okCount < TOTAL_STEPS;
     const minProgress = okCount * (100 / TOTAL_STEPS);
