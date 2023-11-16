@@ -284,7 +284,9 @@ export const PlanEditor = withPlannerContext(
                                                 planUpdater.showReview();
                                             }}
                                         >
-                                            {planUpdater.updates.length} updates available
+                                            {planUpdater.updates.length === 1 && `1 update available`}
+                                            {planUpdater.updates.length > 1 &&
+                                                `${planUpdater.updates.length} updates available`}
                                         </Button>
                                     </Box>
                                 </Slide>
