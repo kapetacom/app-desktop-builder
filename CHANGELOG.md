@@ -1,3 +1,10 @@
+# [0.59.0-beta.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.59.0-beta.1...v0.59.0-beta.2) (2023-11-16)
+
+
+### Bug Fixes
+
+* Add tracking to splash ([#229](https://github.com/kapetacom/app-desktop-builder/issues/229)) ([c22d7e1](https://github.com/kapetacom/app-desktop-builder/commit/c22d7e145d38b890fce6c35d4ae3162dd3a33d93))
+
 # [0.59.0-beta.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.58.0...v0.59.0-beta.1) (2023-11-15)
 
 
