@@ -1,3 +1,10 @@
+# [0.59.0-beta.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.59.0-beta.2...v0.59.0-beta.3) (2023-11-16)
+
+
+### Bug Fixes
+
+* only downgrade app when toggling off beta ([#231](https://github.com/kapetacom/app-desktop-builder/issues/231)) ([9a98fa1](https://github.com/kapetacom/app-desktop-builder/commit/9a98fa1f9ea81e4e070f4344b0fb3ce1f4058d0c))
+
 # [0.59.0-beta.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.59.0-beta.1...v0.59.0-beta.2) (2023-11-16)
 
 
