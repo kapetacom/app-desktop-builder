@@ -321,7 +321,12 @@ export const SplashContent = (props: Props) => {
                             <div className={'error-message help-link'}>
                                 <i className="fas fa-circle"></i>
                                 <Tooltip title={'Open the Kapeta installation documentation'}>
-                                    <a href={helpLink} target={'_blank'} rel="noreferrer">
+                                    <a
+                                        data-kap-id={'splash-failed-open-doc'}
+                                        href={helpLink}
+                                        target={'_blank'}
+                                        rel="noreferrer"
+                                    >
                                         Click here to read more
                                     </a>
                                 </Tooltip>
@@ -330,6 +335,7 @@ export const SplashContent = (props: Props) => {
                         <div className={'buttons'}>
                             <Button
                                 size={'small'}
+                                data-kap-id={'splash-failed-quit'}
                                 sx={{
                                     marginRight: '5px',
                                     '&:hover': {
@@ -346,6 +352,7 @@ export const SplashContent = (props: Props) => {
                             </Button>
                             <Button
                                 size={'small'}
+                                data-kap-id={'splash-failed-retry'}
                                 sx={{
                                     border: '1px solid rgba(255, 255, 255, 0.20)',
                                     '&:hover': {

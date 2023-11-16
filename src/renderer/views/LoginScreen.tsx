@@ -49,6 +49,7 @@ export const LoginScreen = (props: Props) => {
                         </Typography>
                         <Box position={'relative'}>
                             <Button
+                                data-kap-id={'login-continue-in-browser'}
                                 className="disallow-drag-app"
                                 variant={loggingIn ? 'outlined' : 'contained'}
                                 size={'large'}

@@ -78,7 +78,6 @@ export class SplashScreen {
         return new Promise<void>(async (resolve, reject) => {
             this.win = new BrowserWindow({
                 frame: false,
-                alwaysOnTop: true,
                 transparent: process.platform === 'darwin',
                 center: true,
                 modal: true,
