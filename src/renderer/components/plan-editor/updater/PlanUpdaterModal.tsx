@@ -31,6 +31,10 @@ export const PlanUpdaterModal = (props: Props) => {
         }
     }, [planUpdater.prompt]);
 
+    if (planUpdater.updates.length === 0) {
+        return null;
+    }
+
     return (
         <>
             <PlanUpdaterNotice
@@ -100,7 +104,7 @@ const PlanUpdaterReview = (props: ReviewProps) => {
                         mb: 2,
                     }}
                 >
-                    Review and apply updates to your plan and/or blocks below.
+                    Review and apply updates to your plan.
                 </Alert>
                 {Object.entries(updateCategories).map(([category, updates], ix) => {
                     const assetUpdates: { [fromVersion: string]: Update[] } = {};
@@ -248,7 +252,18 @@ const PlanUpdaterNotice = (props: NoticeProps) => {
                     <UpdateIcon />
                 </Box>
                 <Typography>
-                    There are <b>{props.planUpdater.updates.length}</b> updates available for this plan and/or blocks.
+                    {props.planUpdater.updates.length === 1 && (
+                        <>
+                            There is <b>{props.planUpdater.updates.length}</b> update available for this plan
+                        </>
+                    )}
+                    {props.planUpdater.updates.length > 1 && (
+                        <>
+                            There are <b>{props.planUpdater.updates.length}</b> updates available for this plan
+                        </>
+                    )}
+
+                    {props.planUpdater.updates.length === 0 && <>There are no updates available for this plan</>}
                 </Typography>
             </Stack>
         </NoticeModal>
