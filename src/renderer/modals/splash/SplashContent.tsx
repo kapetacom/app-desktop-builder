@@ -10,6 +10,7 @@ import LogoTextWhite from '../../../../assets/logo_text_white.svg';
 import ImageRocket from '../../../../assets/images/rocket.png';
 import { isMac } from '../../utils/osUtils';
 import { Tooltip } from '@kapeta/ui-web-components';
+import { usePendo } from '@kapeta/web-microfrontend/browser';
 
 export enum SplashStatusCheck {
     LOADING = 'LOADING',
@@ -37,19 +38,20 @@ interface Props {
     onDone?: () => void;
 }
 
-const TOTAL_STEPS = 3;
+const TOTAL_STEPS = 4;
 
 const DONE_STATES = [SplashStatusCheck.OK, SplashStatusCheck.ERROR];
 
 export const SplashContent = (props: Props) => {
+    const pendo = usePendo();
     const [progress, setProgress] = React.useState(0);
 
     let text = 'Loading...';
     const done =
         DONE_STATES.includes(props.dockerStatus) &&
         DONE_STATES.includes(props.localClusterStatus) &&
-        DONE_STATES.includes(props.npmStatus);
-
+        DONE_STATES.includes(props.npmStatus) &&
+        pendo.ready;
     let okCount = 0;
     if (props.dockerStatus === SplashStatusCheck.OK) {
         okCount += 1;
@@ -57,8 +59,10 @@ export const SplashContent = (props: Props) => {
     if (props.localClusterStatus === SplashStatusCheck.OK) {
         okCount += 1;
     }
-
     if (props.npmStatus === SplashStatusCheck.OK) {
+        okCount += 1;
+    }
+    if (pendo.ready) {
         okCount += 1;
     }
 
