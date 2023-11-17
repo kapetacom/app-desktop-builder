@@ -1,3 +1,10 @@
+## [0.59.1-beta.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.59.0...v0.59.1-beta.1) (2023-11-17)
+
+
+### Bug Fixes
+
+* Bump ui-web-components ([42faff3](https://github.com/kapetacom/app-desktop-builder/commit/42faff368fdb0e6607e0365d6776bc5d007e9b0c))
+
 # [0.59.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.58.0...v0.59.0) (2023-11-17)
 
 
