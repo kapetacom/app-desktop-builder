@@ -1,3 +1,18 @@
+# [0.59.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.58.0...v0.59.0) (2023-11-17)
+
+
+### Bug Fixes
+
+* Add tracking to splash ([#229](https://github.com/kapetacom/app-desktop-builder/issues/229)) ([c22d7e1](https://github.com/kapetacom/app-desktop-builder/commit/c22d7e145d38b890fce6c35d4ae3162dd3a33d93))
+* only downgrade app when toggling off beta ([#231](https://github.com/kapetacom/app-desktop-builder/issues/231)) ([9a98fa1](https://github.com/kapetacom/app-desktop-builder/commit/9a98fa1f9ea81e4e070f4344b0fb3ce1f4058d0c))
+* Plural texts  for updater UI ([#232](https://github.com/kapetacom/app-desktop-builder/issues/232)) ([de32714](https://github.com/kapetacom/app-desktop-builder/commit/de32714eae2278e2ef7b7f36b4f1143eb3a61a93))
+
+
+### Features
+
+* Add DSL support for any, Set and Map ([#233](https://github.com/kapetacom/app-desktop-builder/issues/233)) ([b11929d](https://github.com/kapetacom/app-desktop-builder/commit/b11929d31de61590ea71de0d6befd8bbcada1ccc))
+* Add updater UI to make updating assets easier ([#228](https://github.com/kapetacom/app-desktop-builder/issues/228)) ([53b1613](https://github.com/kapetacom/app-desktop-builder/commit/53b161369c91b2efec108a037e02df43a4cbf027))
+
 # [0.59.0-beta.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.59.0-beta.4...v0.59.0-beta.5) (2023-11-16)
 
 
