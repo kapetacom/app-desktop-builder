@@ -1,3 +1,15 @@
+# [0.60.0-beta.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.59.1-beta.2...v0.60.0-beta.1) (2023-11-17)
+
+
+### Bug Fixes
+
+* Bump electron-ide-opener ([d6247c6](https://github.com/kapetacom/app-desktop-builder/commit/d6247c66331d4c086397e146688ad737fc7b6ca2))
+
+
+### Features
+
+* Make splash screen draggable ([1db1389](https://github.com/kapetacom/app-desktop-builder/commit/1db138980f86de9b0ba68718d1338e2dc66d6cd0))
+
 ## [0.59.1-beta.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.59.1-beta.1...v0.59.1-beta.2) (2023-11-17)
 
 
