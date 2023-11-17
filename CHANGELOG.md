@@ -1,3 +1,10 @@
+## [0.59.1-beta.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.59.1-beta.1...v0.59.1-beta.2) (2023-11-17)
+
+
+### Bug Fixes
+
+* Set buildVersion to empty string ([f0c84c3](https://github.com/kapetacom/app-desktop-builder/commit/f0c84c37a258e9e9a6fd460fae8d2eb2167bc093))
+
 ## [0.59.1-beta.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.59.0...v0.59.1-beta.1) (2023-11-17)
 
 
