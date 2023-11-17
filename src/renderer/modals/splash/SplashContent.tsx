@@ -157,6 +157,7 @@ export const SplashContent = (props: Props) => {
     return (
         <Paper
             elevation={elevation}
+            className="allow-drag-app"
             sx={{
                 position: 'relative',
                 overflow: 'hidden',
@@ -307,7 +308,7 @@ export const SplashContent = (props: Props) => {
             </div>
             <div className="right">
                 {hasError && (
-                    <div className={'errors'}>
+                    <div className={'errors disallow-drag-app'}>
                         <Typography
                             variant={'body2'}
                             sx={{
