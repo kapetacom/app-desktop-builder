@@ -1,3 +1,10 @@
+# [0.60.0-beta.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.60.0-beta.2...v0.60.0-beta.3) (2023-11-18)
+
+
+### Features
+
+* Add highlighting of connections in plan editor ([#238](https://github.com/kapetacom/app-desktop-builder/issues/238)) ([67683e8](https://github.com/kapetacom/app-desktop-builder/commit/67683e818026c652849d987bcfa95dfeac741ebb))
+
 # [0.60.0-beta.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.60.0-beta.1...v0.60.0-beta.2) (2023-11-18)
 
 
