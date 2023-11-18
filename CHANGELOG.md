@@ -1,3 +1,10 @@
+# [0.60.0-beta.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.60.0-beta.1...v0.60.0-beta.2) (2023-11-18)
+
+
+### Features
+
+* Add ability to check if resource type is compatible with block ([#237](https://github.com/kapetacom/app-desktop-builder/issues/237)) ([1cf5ac4](https://github.com/kapetacom/app-desktop-builder/commit/1cf5ac437a8551330c8bbee7052063ae1684ae94))
+
 # [0.60.0-beta.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.59.1-beta.2...v0.60.0-beta.1) (2023-11-17)
 
 
