@@ -60,4 +60,11 @@ export class APIService {
 
 export const api = new APIService();
 
-export const assetFetcher = async (name: string, version: string) => api.registry().getAsset(name, version);
+export const assetFetcher = async (name: string, version: string) =>
+    api
+        .registry()
+        .getAsset(name, version)
+        .then((res) => {
+            console.log(name, version, res);
+            return res;
+        });

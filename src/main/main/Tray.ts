@@ -4,7 +4,6 @@
  */
 
 import { app, Menu, MenuItemConstructorOptions, shell, Tray, nativeTheme } from 'electron';
-import { ExtendedIdentity, KapetaAPI, Membership } from '@kapeta/nodejs-api-client';
 import { createFuture, getAssetPath, showError, showInfo, appVersion } from '../helpers';
 import { ClusterService } from '../services/ClusterService';
 import { MainWindow } from './MainWindow';
@@ -12,6 +11,7 @@ import { ModalProcessing } from '../modals/ModalProcessing';
 
 import MenuItem = Electron.MenuItem;
 import { MemberIdentity } from '@kapeta/ui-web-types';
+import { getUrl } from 'main/baseUrl';
 
 type TrayMenuItem = MenuItemConstructorOptions | MenuItem;
 
@@ -55,7 +55,7 @@ export class TrayWrapper {
             { type: 'separator' },
             {
                 label: 'Open Kapeta Cloud',
-                click: () => shell.openExternal('https://app.kapeta.com'),
+                click: () => shell.openExternal(getUrl('app')),
             },
             { type: 'separator' },
             {

@@ -6,7 +6,7 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 import ClusterConfiguration from '@kapeta/local-cluster-config';
 import { version } from '../../package.json';
-import { KapetaAPI } from '@kapeta/nodejs-api-client';
+import { getUrl } from './baseUrl';
 
 export type Channels = 'ipc-main' | 'splash' | 'processing' | 'auth' | 'auto-updater' | 'change-tab' | 'settings';
 export type Procedures =
@@ -43,16 +43,11 @@ const electronHandler = {
 };
 
 contextBridge.exposeInMainWorld('electron', electronHandler);
-// Load the Kapeta API
-const kapetaApi = new KapetaAPI();
-const getUrl = (prefix: string) => {
-    const url = new URL(kapetaApi.getBaseUrl());
-    url.host = [prefix, ...url.host.split('.').slice(1)].join('.');
-    return url.toString();
-};
+
 const kapetaDesktop = {
     version,
     urls: {
+        app: getUrl('app'),
         deployments: getUrl('web-deployments'),
         settings: getUrl('web-identity-provider'),
     },
