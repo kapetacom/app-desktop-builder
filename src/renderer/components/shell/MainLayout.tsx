@@ -20,6 +20,7 @@ import { useKapetaContext } from '../../hooks/contextHook';
 import BlockHubIcon from './components/icons/large/BlockHubIcon.svg';
 import { KindIcon } from '@kapeta/ui-web-components';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import { Ribbon } from './components/Ribbon';
 
 interface ConsoleLocation {
     pathname: string;
@@ -148,6 +149,7 @@ export const MainLayout = (props: Props) => {
                     </Box>
                     <IconButton
                         sx={{
+                            position: 'relative',
                             display: 'block',
                             py: 2,
                             width: '100%',
@@ -158,6 +160,9 @@ export const MainLayout = (props: Props) => {
                         onClick={toggleDrawer}
                     >
                         {drawerIsOpen ? <Logo width={122} /> : <KapetaIcon />}
+                        {window.KapetaDesktop && window.KapetaDesktop.urls.app.includes('.staging.kapeta.com') ? (
+                            <Ribbon>Staging</Ribbon>
+                        ) : null}
                     </IconButton>
                 </MiniDrawer>
 
