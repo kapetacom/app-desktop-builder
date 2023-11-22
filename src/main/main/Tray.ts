@@ -11,7 +11,7 @@ import { ModalProcessing } from '../modals/ModalProcessing';
 
 import MenuItem = Electron.MenuItem;
 import { MemberIdentity } from '@kapeta/ui-web-types';
-import { getUrl } from 'main/baseUrl';
+import { getUrl } from '../baseUrl';
 
 type TrayMenuItem = MenuItemConstructorOptions | MenuItem;
 
