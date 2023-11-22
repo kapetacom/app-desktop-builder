@@ -43,13 +43,18 @@ const electronHandler = {
 };
 
 contextBridge.exposeInMainWorld('electron', electronHandler);
+// Load the Kapeta API
 const kapetaApi = new KapetaAPI();
-const serviceDomain = new URL(kapetaApi.getBaseUrl()).host.split('.').slice(1).join('.');
+const getUrl = (prefix: string) => {
+    const url = new URL(kapetaApi.getBaseUrl());
+    url.host = [prefix, ...url.host.split('.').slice(1)].join('.');
+    return url.toString();
+};
 const kapetaDesktop = {
     version,
     urls: {
-        deployments: `https://web-deployments.${serviceDomain}`,
-        settings: `https://web-identity-provider.${serviceDomain}`,
+        deployments: getUrl('web-deployments'),
+        settings: getUrl('web-identity-provider'),
     },
     cluster_service: {
         url: ClusterConfiguration.getClusterServiceAddress(),
