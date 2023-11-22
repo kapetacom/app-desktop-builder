@@ -1,3 +1,10 @@
+# [0.60.0-beta.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.60.0-beta.3...v0.60.0-beta.4) (2023-11-22)
+
+
+### Features
+
+* Adds connection grouping and portals ([#240](https://github.com/kapetacom/app-desktop-builder/issues/240)) ([76ab7cd](https://github.com/kapetacom/app-desktop-builder/commit/76ab7cd67a7dc18b75f4bf8d9f59665009acd5d9))
+
 # [0.60.0-beta.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.60.0-beta.2...v0.60.0-beta.3) (2023-11-18)
 
 
