@@ -1,3 +1,10 @@
+# [0.60.0-beta.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.60.0-beta.4...v0.60.0-beta.5) (2023-11-23)
+
+
+### Features
+
+* support for alternative baseUrls [KAP-2033] ([#239](https://github.com/kapetacom/app-desktop-builder/issues/239)) ([fc1036e](https://github.com/kapetacom/app-desktop-builder/commit/fc1036e099595cdd1fb98af6dd3d081c47123209))
+
 # [0.60.0-beta.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.60.0-beta.3...v0.60.0-beta.4) (2023-11-22)
 
 
