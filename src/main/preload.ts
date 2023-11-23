@@ -6,6 +6,7 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 import ClusterConfiguration from '@kapeta/local-cluster-config';
 import { version } from '../../package.json';
+import { getUrl } from './baseUrl';
 
 export type Channels = 'ipc-main' | 'splash' | 'processing' | 'auth' | 'auto-updater' | 'change-tab' | 'settings';
 export type Procedures =
@@ -42,11 +43,13 @@ const electronHandler = {
 };
 
 contextBridge.exposeInMainWorld('electron', electronHandler);
+
 const kapetaDesktop = {
     version,
     urls: {
-        deployments: 'https://web-deployments.kapeta.com',
-        settings: 'https://web-identity-provider.kapeta.com',
+        app: getUrl('app'),
+        deployments: getUrl('web-deployments'),
+        settings: getUrl('web-identity-provider'),
     },
     cluster_service: {
         url: ClusterConfiguration.getClusterServiceAddress(),

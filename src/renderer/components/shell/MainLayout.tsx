@@ -5,7 +5,7 @@
 
 import React, { useState } from 'react';
 
-import { ListItemIcon, ListItemText, styled, Divider, IconButton, Box, Stack, Button } from '@mui/material';
+import { ListItemIcon, ListItemText, styled, Divider, IconButton, Box, Stack, Button, Badge } from '@mui/material';
 import { useMatches } from 'react-router-dom';
 import './MainLayout.less';
 import { Context, MenuSection } from './types/shell';
@@ -148,6 +148,7 @@ export const MainLayout = (props: Props) => {
                     </Box>
                     <IconButton
                         sx={{
+                            position: 'relative',
                             display: 'block',
                             py: 2,
                             width: '100%',
@@ -157,7 +158,22 @@ export const MainLayout = (props: Props) => {
                         }}
                         onClick={toggleDrawer}
                     >
-                        {drawerIsOpen ? <Logo width={122} /> : <KapetaIcon />}
+                        <Badge
+                            color="secondary"
+                            invisible={
+                                !window.KapetaDesktop || !window.KapetaDesktop.urls.app.includes('.staging.kapeta.com')
+                            }
+                            sx={{
+                                '.MuiBadge-badge': {
+                                    color: 'inherit',
+                                    top: '-5px',
+                                    right: '-5px',
+                                },
+                            }}
+                            badgeContent="Staging"
+                        >
+                            {drawerIsOpen ? <Logo width={122} /> : <KapetaIcon />}
+                        </Badge>
                     </IconButton>
                 </MiniDrawer>
 

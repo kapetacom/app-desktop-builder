@@ -94,7 +94,7 @@ export const LoginScreen = (props: Props) => {
                             <a
                                 target={'_blank'}
                                 className="disallow-drag-app"
-                                href={'https://app.kapeta.com/signup'}
+                                href={(window.KapetaDesktop?.urls?.app || '/') + 'signup'}
                                 rel="noreferrer"
                             >
                                 Create one
