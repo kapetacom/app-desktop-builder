@@ -1,3 +1,10 @@
+# [0.60.0-beta.6](https://github.com/kapetacom/app-desktop-builder/compare/v0.60.0-beta.5...v0.60.0-beta.6) (2023-11-23)
+
+
+### Bug Fixes
+
+* remove trailing slash from fragment baseURLs ([#241](https://github.com/kapetacom/app-desktop-builder/issues/241)) ([a3de05c](https://github.com/kapetacom/app-desktop-builder/commit/a3de05c4996204fa54425e8020113574d11b8354))
+
 # [0.60.0-beta.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.60.0-beta.4...v0.60.0-beta.5) (2023-11-23)
 
 
