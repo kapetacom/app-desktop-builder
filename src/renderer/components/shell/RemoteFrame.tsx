@@ -65,7 +65,7 @@ export const RemoteFrame = (props: Props) => {
         if (!token.value) {
             return undefined;
         }
-        return `${props.baseUrl}/${props.path}?token=${token.value}`;
+        return `${props.baseUrl.replace(/\/$/, '')}/${props.path}?token=${token.value}`;
     }, [token.value]);
 
     const origin = useMemo(() => {
