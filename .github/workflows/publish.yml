@@ -24,7 +24,6 @@ jobs:
           npm install
           npm run postinstall
           npm run build
-          npm run set-build-version
         env:
           NODE_OPTIONS: '--max_old_space_size=8192'
       - name: Create sentry release
@@ -55,7 +54,6 @@ jobs:
           npm install
           npm run postinstall
           npm run build
-          npm run set-build-version
         env:
           NODE_OPTIONS: '--max_old_space_size=8192'
 
@@ -84,7 +82,6 @@ jobs:
           npm install
           npm run postinstall
           npm run build
-          npm run set-build-version
         env:
           NODE_OPTIONS: '--max_old_space_size=8192'
 
@@ -162,7 +159,6 @@ jobs:
           npm install
           npm run postinstall
           npm run build
-          npm run set-build-version
         env:
           NODE_OPTIONS: '--max_old_space_size=8192'
 
