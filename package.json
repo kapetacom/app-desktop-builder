@@ -211,7 +211,6 @@
     },
     "build": {
         "productName": "Kapeta",
-        "buildVersion": "local",
         "appId": "com.kapeta.Kapeta",
         "asar": true,
         "asarUnpack": "**\\*.{node,dll}",
