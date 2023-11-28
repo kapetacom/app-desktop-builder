@@ -1,3 +1,10 @@
+# [0.60.0-beta.9](https://github.com/kapetacom/app-desktop-builder/compare/v0.60.0-beta.8...v0.60.0-beta.9) (2023-11-28)
+
+
+### Bug Fixes
+
+* Do not set build version at all ([c8166c7](https://github.com/kapetacom/app-desktop-builder/commit/c8166c785b7b724c358ddfc5559d7ce9f5ce1034))
+
 # [0.60.0-beta.8](https://github.com/kapetacom/app-desktop-builder/compare/v0.60.0-beta.7...v0.60.0-beta.8) (2023-11-28)
 
 
