@@ -16,6 +16,7 @@
         "build": "concurrently \"npm run build:main\" \"npm run build:renderer\"",
         "build:main": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.main.prod.ts && cp -rf src/service release/app/dist/service",
         "build:renderer": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.renderer.prod.ts",
+        "set-build-version": "jq '.build.buildVersion = \"'$(git rev-parse --short HEAD)'\"' package.json > tmp.json && mv tmp.json package.json && prettier --write package.json",
         "postinstall": "ts-node .erb/scripts/check-native-dep.js && electron-builder install-app-deps && npm run dev:dll",
         "lint:eslint": "cross-env NODE_ENV=development eslint . --ext .js,.jsx,.ts,.tsx",
         "lint:tsc": "tsc --noEmit",
@@ -210,7 +211,7 @@
     },
     "build": {
         "productName": "Kapeta",
-        "buildVersion": "",
+        "buildVersion": "local",
         "appId": "com.kapeta.Kapeta",
         "asar": true,
         "asarUnpack": "**\\*.{node,dll}",
