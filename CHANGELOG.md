@@ -1,3 +1,10 @@
+# [0.60.0-beta.8](https://github.com/kapetacom/app-desktop-builder/compare/v0.60.0-beta.7...v0.60.0-beta.8) (2023-11-28)
+
+
+### Bug Fixes
+
+* Move set-build-version to node ([f461885](https://github.com/kapetacom/app-desktop-builder/commit/f4618850385cee483265243ba603a1f86fe04904))
+
 # [0.60.0-beta.7](https://github.com/kapetacom/app-desktop-builder/compare/v0.60.0-beta.6...v0.60.0-beta.7) (2023-11-28)
 
 
