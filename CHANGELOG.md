@@ -1,3 +1,10 @@
+# [0.60.0-beta.7](https://github.com/kapetacom/app-desktop-builder/compare/v0.60.0-beta.6...v0.60.0-beta.7) (2023-11-28)
+
+
+### Bug Fixes
+
+* Set build version to short commit hash ([9ddca13](https://github.com/kapetacom/app-desktop-builder/commit/9ddca131d50bb9d3e0638887c156613e4b6466de))
+
 # [0.60.0-beta.6](https://github.com/kapetacom/app-desktop-builder/compare/v0.60.0-beta.5...v0.60.0-beta.6) (2023-11-23)
 
 
