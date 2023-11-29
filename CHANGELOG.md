@@ -1,3 +1,10 @@
+# [0.60.0-beta.10](https://github.com/kapetacom/app-desktop-builder/compare/v0.60.0-beta.9...v0.60.0-beta.10) (2023-11-29)
+
+
+### Bug Fixes
+
+* Remove quotes around file_path ([a4c9628](https://github.com/kapetacom/app-desktop-builder/commit/a4c96288efdf9abc9be8b2bc349577a5d135ef86))
+
 # [0.60.0-beta.9](https://github.com/kapetacom/app-desktop-builder/compare/v0.60.0-beta.8...v0.60.0-beta.9) (2023-11-28)
 
 
