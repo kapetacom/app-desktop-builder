@@ -109,11 +109,12 @@ export const PlannerGatewaysList = withErrorBoundary(
                             return (
                                 <GatewayCard
                                     key={blockId}
-                                    status={status}
                                     title={instance.name || definition.metadata.title || definition.metadata.name}
+                                    loading={status === InstanceStatus.STARTING || status === InstanceStatus.STOPPING}
                                     fallbackText="Open on localhost"
                                     fallback={{
                                         url: url || null,
+                                        status: status === InstanceStatus.READY ? 'ok' : undefined,
                                     }}
                                     onConfigureGateway={() => {
                                         props.onConfigure({ block: definition, instance });
@@ -152,11 +153,12 @@ export const PlannerGatewaysList = withErrorBoundary(
                         return (
                             <GatewayCard
                                 key={blockId}
-                                status={status}
                                 title={instance.name || definition.metadata.title || definition.metadata.name}
+                                loading={status === InstanceStatus.STARTING || status === InstanceStatus.STOPPING}
                                 fallbackText="Open on localhost"
                                 fallback={{
                                     url: url || null,
+                                    status: status === InstanceStatus.READY ? 'ok' : undefined,
                                 }}
                                 onConfigureGateway={() => {
                                     props.onConfigure({ block: definition, instance });
