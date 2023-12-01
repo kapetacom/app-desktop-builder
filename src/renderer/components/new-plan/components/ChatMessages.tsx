@@ -31,6 +31,7 @@ export const ChatMessages = (props: ChatMessagesProps) => {
             sx={{
                 height: '100%',
                 py: 4,
+                overflowY: 'scroll',
             }}
         >
             {messages.map((message, index) => (

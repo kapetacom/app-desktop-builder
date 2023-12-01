@@ -10,13 +10,11 @@ import { AIBuilder } from './components/AIBuilder';
 import { useState } from 'react';
 import { DraftPlanView } from './components/DraftPlanView';
 import { BlockDefinition, Plan } from '@kapeta/schemas';
+import { useKapetaContext } from '../../hooks/contextHook';
 
-export interface NewPlanProps {
-    handle: string;
-}
-
-export const NewPlan = (props: NewPlanProps) => {
-    const { handle = 'kapeta' } = props;
+export const NewPlan = () => {
+    const kapetaContext = useKapetaContext();
+    const handle = kapetaContext.activeContext?.identity.handle;
 
     const [createMode, setCreateMode] = useState<CreateMode>('ai');
 
@@ -51,7 +49,7 @@ export const NewPlan = (props: NewPlanProps) => {
                     <CreateModeToggle createMode={createMode} onChange={(mode: CreateMode) => setCreateMode(mode)} />
                 </Box>
 
-                {createMode === 'ai' ? <AIBuilder setPlan={setPlan} /> : null}
+                {createMode === 'ai' ? <AIBuilder handle={handle} setPlan={setPlan} /> : null}
             </Paper>
 
             {/* Planner */}

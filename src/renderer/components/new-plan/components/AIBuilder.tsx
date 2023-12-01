@@ -12,13 +12,12 @@ import { AIChatMessage } from '../aiTypes';
 import { aiService } from '../../../api/AIService';
 
 export interface AIBuilderProps {
+    handle: string | undefined;
     setPlan: (p: { plan: any; blocks: any }) => void;
 }
 
 export const AIBuilder = (props: AIBuilderProps) => {
-    const { setPlan } = props;
-
-    const handle = 'kapeta';
+    const { handle, setPlan } = props;
 
     const [isLoading, setIsLoading] = useState(false);
     const [hasError, setHasError] = useState(false);
@@ -28,6 +27,9 @@ export const AIBuilder = (props: AIBuilderProps) => {
         setIsLoading(true);
         setHasError(false);
         try {
+            if (!handle) {
+                throw new Error('No handle');
+            }
             const response = await aiService.sendPrompt(handle, p, threadId);
             if (response.threadId) {
                 setThreadId(response.threadId);
