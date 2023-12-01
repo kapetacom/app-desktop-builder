@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import { Box, Button, CircularProgress, SxProps, Typography, useTheme } from '@mui/material';
 import { AIChatMessage } from '../aiTypes';
 import { Markdown, UserAvatar } from '@kapeta/ui-web-components';

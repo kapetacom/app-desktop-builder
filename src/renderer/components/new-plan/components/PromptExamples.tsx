@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import { Box, Typography, keyframes } from '@mui/material';
 import SouthIcon from '@mui/icons-material/South';
 

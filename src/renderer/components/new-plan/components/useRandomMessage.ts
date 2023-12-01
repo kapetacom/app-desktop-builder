@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import { useState, useEffect, useCallback } from 'react';
 
 export const useRandomMessage = (messages: string[], intervalDuration: number): string => {

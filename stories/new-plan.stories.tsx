@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import { ThemeProvider } from '@mui/material';
 import { NewPlan } from '../src/renderer/components/new-plan/NewPlan';
 import { kapetaLight } from '../src/renderer/Theme';

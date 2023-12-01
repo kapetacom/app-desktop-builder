@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import React from 'react';
 import { BlockDefinition, Plan } from '@kapeta/schemas';
 import { AssetInfo, Planner, PlannerMode, withPlannerContext } from '@kapeta/ui-web-plan-editor';
