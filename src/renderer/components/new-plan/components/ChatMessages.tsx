@@ -4,10 +4,22 @@ import { ChatMessage } from './ChatMessage';
 
 export interface ChatMessagesProps {
     messages: AIChatMessage[];
+    /**
+     * `true` while waiting for AI to respond to user
+     */
+    isLoading?: boolean;
+    /**
+     * `true` if AI failed to return a valid response
+     */
+    hasError?: boolean;
+    /**
+     * Called when the user wants to try again after an error
+     */
+    onTryAgain?: () => void;
 }
 
 export const ChatMessages = (props: ChatMessagesProps) => {
-    const { messages } = props;
+    const { messages, isLoading, hasError, onTryAgain } = props;
 
     return (
         <Box
@@ -17,8 +29,10 @@ export const ChatMessages = (props: ChatMessagesProps) => {
             }}
         >
             {messages.map((message, index) => (
-                <ChatMessage message={message} />
+                <ChatMessage message={message} key={index} />
             ))}
+            {isLoading && <ChatMessage message={{ role: 'assistant', content: '' }} isLoading />}
+            {hasError && <ChatMessage message={{ role: 'assistant', content: '' }} hasError onTryAgain={onTryAgain} />}
         </Box>
     );
 };

@@ -4,31 +4,48 @@ import { PromptInput } from './PromptInput';
 import { useState } from 'react';
 import { ChatMessages } from './ChatMessages';
 import { AIChatMessage } from '../aiTypes';
+import { useAsyncRetry } from 'react-use';
+import { aiService } from '../../../api/AIService';
 
-export interface AIBuilderProps {}
+export interface AIBuilderProps {
+    setPlan: (p: { plan: any; blocks: any }) => void;
+}
 
 export const AIBuilder = (props: AIBuilderProps) => {
-    const {} = props;
+    const { setPlan } = props;
 
-    const [messages, setMessages] = useState<AIChatMessage[]>([
-        {
-            role: 'user',
-            content: 'Hello, how are you?',
-        },
-        {
-            role: 'assistant',
-            content:
-                '# Hello there \n\nI am fine, thank you! \n\n## Bullets \n\n- First\n- Second\n- Third\n\n```\nconst foo=1;\n```',
-            threadId: '1',
-        },
-        {
-            role: 'user',
-            content: 'I would like to build a banking app',
-            threadId: '1',
-        },
-    ]);
+    const handle = 'kapeta';
+
+    const [isLoading, setIsLoading] = useState(false);
+    const [hasError, setHasError] = useState(false);
+    const [threadId, setThreadId] = useState();
+
+    const sendPrompt = async (p: string) => {
+        setIsLoading(true);
+        setHasError(false);
+        try {
+            const response = await aiService.sendPrompt(handle, p, threadId);
+            if (response.threadId) {
+                setThreadId(response.threadId);
+            }
+            setMessages((prevMessages) => {
+                return [...prevMessages, { role: 'assistant', content: response.explanation }];
+            });
+            setPlan({
+                plan: response.context.plan,
+                blocks: response.context.blocks,
+            });
+        } catch (error) {
+            setHasError(true);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const [messages, setMessages] = useState<AIChatMessage[]>([]);
     const hasMessages = messages.length > 0;
 
+    const [prevPrompt, setPrevPrompt] = useState('');
     const [prompt, setPrompt] = useState('');
 
     return (
@@ -42,13 +59,19 @@ export const AIBuilder = (props: AIBuilderProps) => {
                     </Alert>
                 </Box>
             ) : (
-                <ChatMessages messages={messages} />
+                <ChatMessages
+                    messages={messages}
+                    isLoading={isLoading}
+                    hasError={hasError}
+                    onTryAgain={() => sendPrompt(prevPrompt)}
+                />
             )}
 
             <PromptInput
                 prompt={prompt}
                 setPrompt={setPrompt}
                 onSend={() => {
+                    sendPrompt(prompt);
                     setMessages((messages) => [
                         ...messages,
                         {
@@ -56,6 +79,7 @@ export const AIBuilder = (props: AIBuilderProps) => {
                             content: prompt,
                         },
                     ]);
+                    setPrevPrompt(prompt);
                     setPrompt('');
                 }}
             />
