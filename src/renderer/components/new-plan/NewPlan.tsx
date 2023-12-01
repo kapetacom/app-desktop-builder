@@ -1,12 +1,15 @@
-import CreateModeToggle from './components/CreateModeToggle';
+import CreateModeToggle, { CreateMode } from './components/CreateModeToggle';
 import { Paper } from '@mui/material';
 import { Box } from '@mui/system';
 import { AIBuilder } from './components/AIBuilder';
+import { useState } from 'react';
 
 export interface NewPlanProps {}
 
 export const NewPlan = (props: NewPlanProps) => {
     const {} = props;
+
+    const [createMode, setCreateMode] = useState<CreateMode>('ai');
 
     return (
         <Box
@@ -31,10 +34,10 @@ export const NewPlan = (props: NewPlanProps) => {
                 elevation={10}
             >
                 <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                    <CreateModeToggle />
+                    <CreateModeToggle createMode={createMode} onChange={(mode: CreateMode) => setCreateMode(mode)} />
                 </Box>
 
-                <AIBuilder />
+                {createMode === 'ai' ? <AIBuilder /> : null}
             </Paper>
 
             {/* Planner */}

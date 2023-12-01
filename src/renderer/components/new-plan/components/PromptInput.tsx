@@ -5,10 +5,11 @@ import { useRef } from 'react';
 export interface PromptInputProps {
     prompt: string;
     setPrompt: (prompt: string) => void;
+    onSend: () => void;
 }
 
 export const PromptInput = (props: PromptInputProps) => {
-    const { prompt, setPrompt } = props;
+    const { prompt, setPrompt, onSend } = props;
 
     const hasPrompt = Boolean(prompt.trim());
 
@@ -46,7 +47,7 @@ export const PromptInput = (props: PromptInputProps) => {
                 }}
                 InputProps={{
                     endAdornment: (
-                        <IconButton size="medium" ref={sendButtonRef} disabled={!hasPrompt}>
+                        <IconButton size="medium" ref={sendButtonRef} disabled={!hasPrompt} onClick={onSend}>
                             <SendIcon color={hasPrompt ? 'primary' : 'disabled'} fontSize="small" />
                         </IconButton>
                     ),
