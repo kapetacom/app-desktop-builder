@@ -1,13 +1,17 @@
-import { Box, SxProps, Typography, useTheme } from '@mui/material';
+import { Box, Button, CircularProgress, SxProps, Typography, useTheme } from '@mui/material';
 import { AIChatMessage } from '../aiTypes';
 import { Markdown, UserAvatar } from '@kapeta/ui-web-components';
 import { KapetaIcon } from '../../shell/components/KapetaIcon';
+import { useRandomMessage } from './useRandomMessage';
 
 export interface ChatMessageProps {
     message: AIChatMessage;
+    isLoading?: boolean;
+    hasError?: boolean;
+    onTryAgain?: () => void;
 }
 
-const AssistantAvatar = () => {
+const AssistantAvatar = (props: { isLoading?: boolean }) => {
     const { palette } = useTheme();
     return (
         <Box
@@ -16,8 +20,10 @@ const AssistantAvatar = () => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 backgroundColor: '#cfcfcf69',
-                width: '32px',
-                height: '32px',
+                width: '40px',
+                minWidth: '40px',
+                height: '40px',
+                minHeight: '40px',
                 borderRadius: '50%',
                 'svg path': {
                     fill: palette.primary.main,
@@ -27,6 +33,17 @@ const AssistantAvatar = () => {
             }}
         >
             <KapetaIcon />
+            {props.isLoading && (
+                <CircularProgress
+                    sx={{
+                        position: 'absolute',
+                    }}
+                    size={40}
+                    variant="indeterminate"
+                    thickness={1}
+                    color="primary"
+                />
+            )}
         </Box>
     );
 };
@@ -47,6 +64,8 @@ const MarkdownStyles: SxProps = {
     // Styles for other elements
     p: {
         marginTop: 0,
+        fontSize: '14px',
+        fontWeight: 400,
     },
     a: {
         textDecoration: 'none',
@@ -82,18 +101,45 @@ const MarkdownStyles: SxProps = {
     code: {
         fontFamily: '"Courier New", monospace',
         backgroundColor: 'grey.200',
-        padding: '8px 12px',
+        padding: '2px 4px',
         borderRadius: '4px',
-        boxSizing: 'border-box',
-        width: '100%',
-        display: 'block',
+    },
+
+    '> :first-child': {
+        marginTop: 0,
+    },
+
+    '> :last-child': {
+        marginBottom: 0,
     },
 };
 
 export const ChatMessage = (props: ChatMessageProps) => {
     const {
         message: { role, content },
+        isLoading,
+        hasError,
+        onTryAgain,
     } = props;
+
+    const loadingText = useRandomMessage(
+        [
+            'Reading your prompt like a detective finding clues.',
+            "Thinking, 'What would a Software Architect guru do?'",
+            'Designing a system so sleek, it could wear a tuxedo.',
+            'Getting my architecture wizard hat on.',
+            'Crafting an architecture so cool, it needs its own soundtrack.',
+            'Considering plan B, C, and even D, just in case.',
+            "Quality-checking like it's a five-star software hotel.",
+            'Wrapping it up with a bow and serving it with style.',
+        ],
+        3000
+    );
+
+    const showUserMessage = role === 'user';
+    const showAssistantMessage = role === 'assistant' && !isLoading && !hasError;
+    const showAssistancentLoadingMessage = role === 'assistant' && isLoading;
+    const showAssistancentErrorMessage = role === 'assistant' && hasError;
 
     return (
         <Box
@@ -109,9 +155,10 @@ export const ChatMessage = (props: ChatMessageProps) => {
             {role === 'user' && (
                 <UserAvatar
                     name={'Random User'} // TODO: Get real name of user
+                    size={40}
                 />
             )}
-            {role === 'assistant' && <AssistantAvatar />}
+            {role === 'assistant' && <AssistantAvatar isLoading={isLoading} />}
 
             <Box
                 sx={{
@@ -123,13 +170,39 @@ export const ChatMessage = (props: ChatMessageProps) => {
                               padding: 3,
                           }
                         : {}),
+                    ...(hasError
+                        ? {
+                              border: (theme) => `1px solid ${theme.palette.error.main}`,
+                              color: (theme) => theme.palette.error.main,
+                          }
+                        : {}),
                 }}
             >
-                {role === 'user' ? (
-                    <Typography variant="body2">{content}</Typography>
-                ) : (
+                {showUserMessage && <Typography variant="body1">{content}</Typography>}
+
+                {showAssistantMessage && (
                     <Box sx={MarkdownStyles}>
                         <Markdown content={content} />
+                    </Box>
+                )}
+
+                {showAssistancentLoadingMessage && <Typography variant="body1">{loadingText}</Typography>}
+
+                {showAssistancentErrorMessage && (
+                    <Box sx={{ display: 'flex', gap: 1, justifyContent: 'space-between' }}>
+                        <Typography variant="body1">
+                            Something went wrong. Please try again or contact support.
+                        </Typography>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            sx={{
+                                whiteSpace: 'nowrap',
+                            }}
+                            onClick={onTryAgain}
+                        >
+                            Try again
+                        </Button>
                     </Box>
                 )}
             </Box>

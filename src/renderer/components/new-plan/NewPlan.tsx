@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { DraftPlanView } from './components/DraftPlanView';
 import { useAsyncRetry } from 'react-use';
 import { aiService } from 'renderer/api/AIService';
+import { BlockDefinition, Plan } from '@kapeta/schemas';
 
 export interface NewPlanProps {
     handle: string;
@@ -14,21 +15,12 @@ export interface NewPlanProps {
 export const NewPlan = (props: NewPlanProps) => {
     const { handle = 'kapeta' } = props;
 
-    const testPlan = useAsyncRetry(async () => {
-        const response = await aiService.sendPrompt(
-            handle,
-            'An awesome demo plan with ponies and rainbows. Make sure the backend has a database.'
-        );
-
-        return {
-            plan: response.context.plan,
-            blocks: response.context.blocks,
-        };
-    }, []);
-
-    console.log(testPlan.value);
-
     const [createMode, setCreateMode] = useState<CreateMode>('ai');
+
+    const [plan, setPlan] = useState<{ plan: Plan | undefined; blocks: BlockDefinition[] | undefined }>({
+        plan: undefined,
+        blocks: undefined,
+    });
 
     return (
         <Box
@@ -56,7 +48,7 @@ export const NewPlan = (props: NewPlanProps) => {
                     <CreateModeToggle createMode={createMode} onChange={(mode: CreateMode) => setCreateMode(mode)} />
                 </Box>
 
-                {createMode === 'ai' ? <AIBuilder /> : null}
+                {createMode === 'ai' ? <AIBuilder setPlan={setPlan} /> : null}
             </Paper>
 
             {/* Planner */}
@@ -67,7 +59,7 @@ export const NewPlan = (props: NewPlanProps) => {
                     zIndex: 1,
                 }}
             >
-                <DraftPlanView plan={testPlan.value?.plan} blocks={testPlan.value?.blocks} />
+                <DraftPlanView plan={plan.plan} blocks={plan.blocks} />
             </Box>
         </Box>
     );
