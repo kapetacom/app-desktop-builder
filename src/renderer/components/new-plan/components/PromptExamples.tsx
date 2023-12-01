@@ -115,11 +115,14 @@ export const PromptExamples = (props: PromptExamplesProps) => {
             </Typography>
 
             <Box sx={{ display: 'flex', gap: 2 }}>
-                <PromptExampleBox onClick={onClickExample} text="Webshop system for handmade wood furniture" />
-                <PromptExampleBox onClick={onClickExample} text="Todo app with reminders" />
                 <PromptExampleBox
                     onClick={onClickExample}
-                    text="Make a twitter app. It should have users, tweets, comments, user settings, user subscription. Users can like tweets and comment on them. Their comments are also tweets. Users have a settings page where they can change their twitter handle, change password, bio etc. Use a microfrontend architecture. I prefer mongodb. I do not like java."
+                    text="Webshop with user login, cart, checkout, and payment"
+                />
+                <PromptExampleBox onClick={onClickExample} text="Make a blog app" />
+                <PromptExampleBox
+                    onClick={onClickExample}
+                    text="Make a CRM app with user management, customer management, and product management"
                 />
             </Box>
         </Box>
