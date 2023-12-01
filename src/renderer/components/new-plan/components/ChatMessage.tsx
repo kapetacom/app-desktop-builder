@@ -21,6 +21,7 @@ const AssistantAvatar = (props: { isLoading?: boolean }) => {
     return (
         <Box
             sx={{
+                position: 'relative',
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
