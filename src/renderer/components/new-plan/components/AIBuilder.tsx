@@ -31,6 +31,7 @@ export const AIBuilder = (props: AIBuilderProps) => {
                 throw new Error('No handle');
             }
             const response = await aiService.sendPrompt(handle, p, threadId);
+
             if (response.threadId) {
                 setThreadId(response.threadId);
             }

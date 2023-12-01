@@ -18,13 +18,15 @@ interface PlanImportProps {
     state: AssetCreatorState;
     onDone: (asset?: AssetInfo<Plan>) => void;
     skipFiles: string[];
+    inline?: boolean;
+    handle?: string;
 }
 
-const createNewPlan = (): Plan => {
+const createNewPlan = (handle?: string): Plan => {
     return {
         kind: 'core/plan',
         metadata: {
-            name: '',
+            name: handle ? `${handle}/` : '',
             visibility: 'private',
             description: '',
         },
@@ -45,13 +47,14 @@ export const PlanCreator = (props: PlanImportProps) => {
             state={props.state}
             title="Create new plan..."
             skipFiles={props.skipFiles}
-            createNewKind={createNewPlan}
+            createNewKind={() => createNewPlan(props.handle)}
             fileName="kapeta.yml"
             onDone={props.onDone}
             onCancel={props.onDone}
             fileSelectableHandler={selectableHandler}
             assetService={props.assetService}
             formRenderer={PlanForm}
+            inline={props.inline}
         />
     );
 };

@@ -7,18 +7,22 @@ import CreateModeToggle, { CreateMode } from './components/CreateModeToggle';
 import { Paper } from '@mui/material';
 import { Box } from '@mui/system';
 import { AIBuilder } from './components/AIBuilder';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { DraftPlanView } from './components/DraftPlanView';
 import { BlockDefinition, Plan } from '@kapeta/schemas';
+import { PlanCreator } from '../creators/PlanCreator';
+import { AssetCreatorState } from '../creators/AssetCreator';
+import { AssetService } from '../../api/AssetService';
 import { useKapetaContext } from '../../hooks/contextHook';
 import { useNavigate } from 'react-router-dom';
-import { AssetService } from 'renderer/api/AssetService';
-import { FileSystemService } from 'renderer/api/FileSystemService';
+import { FileSystemService } from '../../api/FileSystemService';
 
-export const NewPlan = () => {
-    const kapetaContext = useKapetaContext();
-    const handle = kapetaContext.activeContext?.identity.handle;
+export interface NewPlanProps {}
 
+export const NewPlan = (props: NewPlanProps) => {
+    const context = useKapetaContext();
+    const handle = context.contexts?.current ?? context.profile?.handle!;
+    const navigateTo = useNavigate();
     const [plan, setPlan] = useState<{ plan: Plan | undefined; blocks: BlockDefinition[] | undefined }>({
         plan: undefined,
         blocks: undefined,
@@ -81,7 +85,22 @@ export const NewPlan = () => {
                     <CreateModeToggle createMode={createMode} onChange={(mode: CreateMode) => setCreateMode(mode)} />
                 </Box>
 
-                {createMode === 'ai' ? <AIBuilder handle={handle} setPlan={setPlan} /> : null}
+                {createMode === 'ai' ? (
+                    <AIBuilder handle={handle} setPlan={setPlan} />
+                ) : (
+                    <PlanCreator
+                        handle={handle}
+                        state={AssetCreatorState.CREATING}
+                        assetService={AssetService}
+                        inline={true}
+                        onDone={(newPlan) => {
+                            if (newPlan) {
+                                navigateTo(`/edit/${encodeURIComponent(newPlan.ref)}`);
+                            }
+                        }}
+                        skipFiles={[]}
+                    />
+                )}
             </Paper>
 
             {/* Planner */}
