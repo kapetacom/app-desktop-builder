@@ -16,6 +16,7 @@ import { SimpleLoader } from '@kapeta/ui-web-components';
 import { RemoteFrame } from './components/shell/RemoteFrame';
 import { useKapetaContext } from './hooks/contextHook';
 import { AssetService } from './api/AssetService';
+import { NewPlan } from './components/new-plan/NewPlan';
 
 const router = createHashRouter([
     {
@@ -99,6 +100,12 @@ const router = createHashRouter([
                             path={`settings/${path ?? 'general'}`}
                         />
                     );
+                },
+            },
+            {
+                path: 'new-plan',
+                Component: () => {
+                    return <NewPlan />;
                 },
             },
             {

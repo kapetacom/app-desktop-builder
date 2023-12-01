@@ -102,6 +102,10 @@ const createMainTabsContext = (context?: MemberIdentity): MainTabs => {
                 return true;
             }
 
+            if (tabInfo.path.startsWith('/new-plan')) {
+                return true;
+            }
+
             return false;
         },
         [planAssets.loading, planAssets.data]

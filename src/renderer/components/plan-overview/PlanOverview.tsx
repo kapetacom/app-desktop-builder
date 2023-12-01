@@ -17,6 +17,7 @@ import { AssetCreatorState } from '../creators/AssetCreator';
 import { AssetInfo, fromAsset } from '@kapeta/ui-web-plan-editor';
 import { useAssetImporter } from '../../utils/useAssetImporter';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
     plans: AssetInfo<Plan>[];
@@ -63,6 +64,8 @@ export const PlanOverview = (props: Props) => {
         };
     }, [props.plans, props.samplePlanName]);
 
+    const navigateTo = useNavigate();
+
     return (
         <Box
             sx={{
@@ -86,7 +89,8 @@ export const PlanOverview = (props: Props) => {
                 <GetStartedHeader
                     assetImporter={assetImporter}
                     onPlanCreate={() => {
-                        setCreatorState(AssetCreatorState.CREATING);
+                        // setCreatorState(AssetCreatorState.CREATING);
+                        navigateTo(`/new-plan`);
                     }}
                     onPlanImport={onPlanImport}
                 />
@@ -96,7 +100,8 @@ export const PlanOverview = (props: Props) => {
                 <YourPlansList
                     onPlanOpen={props.onPlanSelected}
                     onPlanCreate={() => {
-                        setCreatorState(AssetCreatorState.CREATING);
+                        // setCreatorState(AssetCreatorState.CREATING);
+                        navigateTo(`/new-plan`);
                     }}
                     onPlanImport={onPlanImport}
                     plans={plans}
