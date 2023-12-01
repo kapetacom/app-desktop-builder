@@ -45,6 +45,7 @@ interface Props {
     state: AssetCreatorState;
     onCancel?: () => void;
     onError?: (e: any) => void;
+    inline?: boolean;
 }
 
 export const AssetCreator = (props: Props) => {
@@ -123,6 +124,69 @@ export const AssetCreator = (props: Props) => {
     }, [props.state, props.assetService]);
 
     const InnerFormRenderer = props.formRenderer;
+
+    const content = (
+        <Box
+            sx={{
+                height: '100%',
+                overflow: 'hidden',
+                '& > .form-container': {
+                    height: '100%',
+                    overflow: 'hidden',
+                },
+            }}
+        >
+            <FormContainer initialValue={newEntity} onSubmitData={(data: any) => onSubmit(data)}>
+                <Stack
+                    direction={'column'}
+                    className="asset-creator-form"
+                    sx={{
+                        height: '100%',
+                        overflow: 'hidden',
+                    }}
+                >
+                    <Stack
+                        direction={'column'}
+                        sx={{
+                            height: '100%',
+                            ...createVerticalScrollShadow(0.1),
+                        }}
+                    >
+                        <InnerFormRenderer asset={newEntity} creating />
+
+                        <ProjectHomeFolderInput
+                            onChange={(newUseProjectHome, newProjectHome) => {
+                                setUseProjectHome(newUseProjectHome);
+                                setProjectHome(newProjectHome);
+                            }}
+                        />
+                    </Stack>
+
+                    <FormButtons>
+                        <Button
+                            color={'error'}
+                            variant={'contained'}
+                            onClick={() => {
+                                if (props.onCancel) {
+                                    props.onCancel();
+                                }
+                            }}
+                        >
+                            Cancel
+                        </Button>
+                        <Button color={'primary'} type={'submit'} variant={'contained'}>
+                            Create
+                        </Button>
+                    </FormButtons>
+                </Stack>
+            </FormContainer>
+        </Box>
+    );
+
+    if (props.inline) {
+        return content;
+    }
+
     return (
         <PlannerSidebar
             open={props.state === AssetCreatorState.CREATING}
@@ -132,62 +196,6 @@ export const AssetCreator = (props: Props) => {
                 }
             }}
             title={props.title}
-        >
-            <Box
-                sx={{
-                    height: '100%',
-                    overflow: 'hidden',
-                    '& > .form-container': {
-                        height: '100%',
-                        overflow: 'hidden',
-                    },
-                }}
-            >
-                <FormContainer initialValue={newEntity} onSubmitData={(data: any) => onSubmit(data)}>
-                    <Stack
-                        direction={'column'}
-                        className="asset-creator-form"
-                        sx={{
-                            height: '100%',
-                            overflow: 'hidden',
-                        }}
-                    >
-                        <Stack
-                            direction={'column'}
-                            sx={{
-                                height: '100%',
-                                ...createVerticalScrollShadow(0.1),
-                            }}
-                        >
-                            <InnerFormRenderer asset={newEntity} creating />
-
-                            <ProjectHomeFolderInput
-                                onChange={(newUseProjectHome, newProjectHome) => {
-                                    setUseProjectHome(newUseProjectHome);
-                                    setProjectHome(newProjectHome);
-                                }}
-                            />
-                        </Stack>
-
-                        <FormButtons>
-                            <Button
-                                color={'error'}
-                                variant={'contained'}
-                                onClick={() => {
-                                    if (props.onCancel) {
-                                        props.onCancel();
-                                    }
-                                }}
-                            >
-                                Cancel
-                            </Button>
-                            <Button color={'primary'} type={'submit'} variant={'contained'}>
-                                Create
-                            </Button>
-                        </FormButtons>
-                    </Stack>
-                </FormContainer>
-            </Box>
-        </PlannerSidebar>
+        ></PlannerSidebar>
     );
 };
