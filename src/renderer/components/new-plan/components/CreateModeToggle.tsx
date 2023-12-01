@@ -25,20 +25,23 @@ const StyledToggleButton = styled(ToggleButton)(({ theme }) => ({
     },
 }));
 
-export default function CreateModeToggle() {
-    const [createMode, setCreateMode] = React.useState<CreateMode>('ai');
+interface CreateModeToggleProps {
+    createMode: CreateMode;
+    onChange: (createMode: CreateMode) => void;
+}
 
-    const onChange = (event: React.MouseEvent<HTMLElement>, newMode: CreateMode) => {
-        if (newMode !== null) {
-            setCreateMode(newMode);
-        }
-    };
+export default function CreateModeToggle(props: CreateModeToggleProps) {
+    const { createMode, onChange } = props;
 
     return (
         <ToggleButtonGroup
             exclusive
             value={createMode}
-            onChange={onChange}
+            onChange={(event: React.MouseEvent<HTMLElement>, newMode: CreateMode) => {
+                if (newMode !== null) {
+                    onChange(newMode);
+                }
+            }}
             aria-label="Create plan mode"
             sx={{
                 p: 0.5,
