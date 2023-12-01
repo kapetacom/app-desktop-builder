@@ -85,6 +85,10 @@ export const EditorTabs = () => {
                         variant = 'deploy';
                         label = tabInfo.title ?? handle ?? 'Organization';
                         icon = <ApartmentIcon />;
+                    } else if (tabInfo.path.startsWith('/new-plan')) {
+                        variant = 'new-plan';
+                        label = tabInfo.title ?? 'New plan';
+                        icon = <KindIcon kind="core/plan" size={16} />;
                     } else {
                         console.warn('Unknown tab url', tabInfo);
                         return null;
