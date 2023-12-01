@@ -60,6 +60,10 @@ const router = createHashRouter([
                         },
                     },
                     {
+                        path: 'new',
+                        Component: NewPlan,
+                    },
+                    {
                         path: ':systemId',
                         Component: () => {
                             const navigateTo = useNavigate();
