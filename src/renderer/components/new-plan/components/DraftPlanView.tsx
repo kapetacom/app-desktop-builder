@@ -10,6 +10,7 @@ import { useLoadedPlanContext } from 'renderer/utils/planContextLoader';
 import { useMemo } from 'react';
 import { Box } from '@mui/system';
 import { Button, Paper } from '@mui/material';
+import { KindIcon } from '@kapeta/ui-web-components';
 
 const BasicPlanner = withPlannerContext(React.forwardRef(Planner));
 
@@ -27,7 +28,12 @@ const emptyPlan: Plan = {
     },
 };
 
-export const DraftPlanView = (props: { plan?: Plan; blocks?: BlockDefinition[]; onSubmit: () => void }) => {
+export const DraftPlanView = (props: {
+    plan?: Plan;
+    blocks?: BlockDefinition[];
+    onSubmit: () => void;
+    loading?: boolean;
+}) => {
     const planContext = useLoadedPlanContext(props.plan || emptyPlan);
     const planAsset: AssetInfo<Plan> = useMemo(() => {
         return {
@@ -47,6 +53,18 @@ export const DraftPlanView = (props: { plan?: Plan; blocks?: BlockDefinition[]; 
             }) || []
         );
     }, [props.blocks]);
+
+    const emptyState = planContext.loading ? (
+        <Box></Box>
+    ) : (
+        <Box
+            textAlign={'center'}
+            sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}
+        >
+            <KindIcon kind="core/plan" size={64} />
+            <Box>Your plan will be visible here</Box>
+        </Box>
+    );
 
     return (
         <Box
@@ -76,8 +94,8 @@ export const DraftPlanView = (props: { plan?: Plan; blocks?: BlockDefinition[]; 
             >
                 <Button onClick={props.onSubmit}>Use this plan</Button>
             </Paper>
-            {planContext.loading || !props.plan || !props.blocks ? (
-                <div>Loading...</div>
+            {!props.plan || !props.blocks ? (
+                emptyState
             ) : (
                 <BasicPlanner
                     systemId={planRef}
