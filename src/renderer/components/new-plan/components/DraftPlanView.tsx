@@ -8,6 +8,8 @@ import { BlockDefinition, Plan } from '@kapeta/schemas';
 import { AssetInfo, Planner, PlannerMode, withPlannerContext } from '@kapeta/ui-web-plan-editor';
 import { useLoadedPlanContext } from 'renderer/utils/planContextLoader';
 import { useMemo } from 'react';
+import { Box } from '@mui/system';
+import { Button, Paper } from '@mui/material';
 
 const BasicPlanner = withPlannerContext(React.forwardRef(Planner));
 
@@ -25,7 +27,7 @@ const emptyPlan: Plan = {
     },
 };
 
-export const DraftPlanView = (props: { plan?: Plan; blocks?: BlockDefinition[] }) => {
+export const DraftPlanView = (props: { plan?: Plan; blocks?: BlockDefinition[]; onSubmit: () => void }) => {
     const planContext = useLoadedPlanContext(props.plan || emptyPlan);
     const planAsset: AssetInfo<Plan> = useMemo(() => {
         return {
@@ -46,17 +48,45 @@ export const DraftPlanView = (props: { plan?: Plan; blocks?: BlockDefinition[] }
         );
     }, [props.blocks]);
 
-    if (planContext.loading || !props.plan || !props.blocks) {
-        return <div>Loading...</div>;
-    }
-
     return (
-        <BasicPlanner
-            systemId={planRef}
-            mode={PlannerMode.VIEW}
-            plan={props.plan}
-            asset={planAsset}
-            blockAssets={blockAssets}
-        />
+        <Box
+            sx={{
+                backgroundColor: '#F6F1EE',
+                flexGrow: 1,
+                zIndex: 1,
+                position: 'relative',
+                pt: '52px',
+            }}
+        >
+            <Paper
+                data-kap-id={'draft-plan-top-menu'}
+                elevation={0}
+                sx={{
+                    padding: '7px 10px',
+                    position: 'absolute',
+                    borderRadius: 0,
+                    top: 0,
+                    left: 0,
+                    // borderLeft: `1px solid ${grey[200]}`,
+                    right: 0,
+                    height: '52px',
+                    zIndex: 6,
+                    boxSizing: 'border-box',
+                }}
+            >
+                <Button onClick={props.onSubmit}>Use this plan</Button>
+            </Paper>
+            {planContext.loading || !props.plan || !props.blocks ? (
+                <div>Loading...</div>
+            ) : (
+                <BasicPlanner
+                    systemId={planRef}
+                    mode={PlannerMode.VIEW}
+                    plan={props.plan}
+                    asset={planAsset}
+                    blockAssets={blockAssets}
+                />
+            )}
+        </Box>
     );
 };
