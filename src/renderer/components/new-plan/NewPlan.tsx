@@ -1,11 +1,14 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import CreateModeToggle, { CreateMode } from './components/CreateModeToggle';
 import { Paper } from '@mui/material';
 import { Box } from '@mui/system';
 import { AIBuilder } from './components/AIBuilder';
 import { useState } from 'react';
 import { DraftPlanView } from './components/DraftPlanView';
-import { useAsyncRetry } from 'react-use';
-import { aiService } from 'renderer/api/AIService';
 import { BlockDefinition, Plan } from '@kapeta/schemas';
 
 export interface NewPlanProps {

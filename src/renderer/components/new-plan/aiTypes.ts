@@ -1,20 +1,7 @@
-// import { BlockDefinition, Plan } from '@kapeta/schemas';
-
-// export type PlanContext = {
-//     plan: Plan;
-//     blocks: BlockDefinition[];
-// };
-
-// export type PromptResult = {
-//     explanation: string;
-//     context: PlanContext;
-//     threadId: string;
-// };
-
-// export interface APIResponse {
-//     answer: string;
-//     threadid: string;
-// }
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
 
 export interface AIChatMessage {
     role: 'user' | 'assistant';
