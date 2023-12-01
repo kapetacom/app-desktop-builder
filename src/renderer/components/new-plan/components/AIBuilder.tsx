@@ -4,7 +4,6 @@ import { PromptInput } from './PromptInput';
 import { useState } from 'react';
 import { ChatMessages } from './ChatMessages';
 import { AIChatMessage } from '../aiTypes';
-import { useAsyncRetry } from 'react-use';
 import { aiService } from '../../../api/AIService';
 
 export interface AIBuilderProps {
