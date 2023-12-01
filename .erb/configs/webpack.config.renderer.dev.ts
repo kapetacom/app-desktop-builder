@@ -49,7 +49,7 @@ if (
 const sentryPath = path.join(webpackPaths.srcRendererPath, 'sentry.ts');
 
 const configuration: webpack.Configuration = {
-    devtool: 'inline-source-map',
+    devtool: 'eval',
 
     mode: 'development',
 
