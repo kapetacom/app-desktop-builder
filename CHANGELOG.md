@@ -1,3 +1,10 @@
+# [0.60.0-beta.11](https://github.com/kapetacom/app-desktop-builder/compare/v0.60.0-beta.10...v0.60.0-beta.11) (2023-12-05)
+
+
+### Bug Fixes
+
+* use simplified gateway card states [KAP-1890] ([#246](https://github.com/kapetacom/app-desktop-builder/issues/246)) ([104f10f](https://github.com/kapetacom/app-desktop-builder/commit/104f10f2cc0a2d9331cebfd406d5356f9ee3a0d2))
+
 # [0.60.0-beta.10](https://github.com/kapetacom/app-desktop-builder/compare/v0.60.0-beta.9...v0.60.0-beta.10) (2023-11-29)
 
 
