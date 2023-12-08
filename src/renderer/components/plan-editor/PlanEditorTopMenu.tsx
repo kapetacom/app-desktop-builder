@@ -410,7 +410,7 @@ export const PlanEditorTopMenu = (props: Props) => {
                         initialValue={formData}
                         onSubmitData={async (data) => {
                             // TODO: how should we handle this, if the form is not initialized?
-                            if (!data.metadata || !data.spec?.configuration || !data.configuration) {
+                            if (!data.metadata || !data.configuration) {
                                 return;
                             }
                             if (planner.plan && planner.plan.spec.blocks && planner.plan.spec.blocks.length > 0) {
@@ -512,11 +512,11 @@ export const PlanEditorTopMenu = (props: Props) => {
                             }
 
                             const defaultConfig = createGlobalConfigurationFromEntities(
-                                data.spec.configuration,
+                                data.spec?.configuration,
                                 data.configuration
                             );
 
-                            planner.updatePlanMetadata(data.metadata, data.spec.configuration, defaultConfig);
+                            planner.updatePlanMetadata(data.metadata, data.spec?.configuration || [], defaultConfig);
                             await setPlanConfig(props.systemId, data.configuration);
                             setShowSettings(false);
                         }}
