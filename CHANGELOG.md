@@ -1,3 +1,10 @@
+# [0.60.0-beta.12](https://github.com/kapetacom/app-desktop-builder/compare/v0.60.0-beta.11...v0.60.0-beta.12) (2023-12-08)
+
+
+### Bug Fixes
+
+* plans w/o configuration data can be saved ([#248](https://github.com/kapetacom/app-desktop-builder/issues/248)) ([3ad4a49](https://github.com/kapetacom/app-desktop-builder/commit/3ad4a49e265c0855d91797fd6abe7aba0e359b79))
+
 # [0.60.0-beta.11](https://github.com/kapetacom/app-desktop-builder/compare/v0.60.0-beta.10...v0.60.0-beta.11) (2023-12-05)
 
 
