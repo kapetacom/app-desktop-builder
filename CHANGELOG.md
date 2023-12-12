@@ -1,3 +1,10 @@
+# [0.60.0-beta.15](https://github.com/kapetacom/app-desktop-builder/compare/v0.60.0-beta.14...v0.60.0-beta.15) (2023-12-12)
+
+
+### Bug Fixes
+
+* add explainer for URLs in empty state [KAP-2104] ([#251](https://github.com/kapetacom/app-desktop-builder/issues/251)) ([a09ca87](https://github.com/kapetacom/app-desktop-builder/commit/a09ca87088325cf2f6551333d672a4c66c0fd015))
+
 # [0.60.0-beta.14](https://github.com/kapetacom/app-desktop-builder/compare/v0.60.0-beta.13...v0.60.0-beta.14) (2023-12-12)
 
 
