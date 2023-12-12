@@ -1,3 +1,11 @@
+# [0.60.0-beta.13](https://github.com/kapetacom/app-desktop-builder/compare/v0.60.0-beta.12...v0.60.0-beta.13) (2023-12-12)
+
+
+### Bug Fixes
+
+* Do not run eslint as part of lint-staged ([0a57680](https://github.com/kapetacom/app-desktop-builder/commit/0a5768095c34e83d5d96e4e95f3f2fce46b61631))
+* Do not send a message to a destroyed window ([a97fc54](https://github.com/kapetacom/app-desktop-builder/commit/a97fc548f6db4de5d8abbcd4a834d49845ed56c0))
+
 # [0.60.0-beta.12](https://github.com/kapetacom/app-desktop-builder/compare/v0.60.0-beta.11...v0.60.0-beta.12) (2023-12-08)
 
 
