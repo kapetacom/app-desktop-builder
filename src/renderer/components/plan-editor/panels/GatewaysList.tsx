@@ -24,6 +24,7 @@ interface PlannerGatewaysListProps {
      */
     systemId: string;
     onConfigure: (info: BlockInfo) => void;
+    readOnly?: boolean;
 }
 
 export const PlannerGatewaysList = withErrorBoundary(
@@ -103,9 +104,8 @@ export const PlannerGatewaysList = withErrorBoundary(
                         </Typography>
                     </Stack>
 
-                    {gateways
-                        .filter((block) => block.public)
-                        .map(({ id: blockId, definition, status, instance, url }) => {
+                    {gateways.length ? (
+                        gateways.map(({ id: blockId, definition, status, instance, url }) => {
                             return (
                                 <GatewayCard
                                     key={blockId}
@@ -121,7 +121,14 @@ export const PlannerGatewaysList = withErrorBoundary(
                                     }}
                                 />
                             );
-                        })}
+                        })
+                    ) : props.readOnly ? (
+                        <Typography variant={'body2'}>No public URLs available for this plan.</Typography>
+                    ) : (
+                        <Typography variant={'body2'}>
+                            No public URLs yet. Add public URLs to the plan by adding Gateway blocks.
+                        </Typography>
+                    )}
                 </Stack>
 
                 <Stack gap={1.5} data-kap-id={'plan-editor-gateways-internal'}>
@@ -149,23 +156,31 @@ export const PlannerGatewaysList = withErrorBoundary(
 
                     <Typography variant={'body2'}></Typography>
 
-                    {internal.map(({ id: blockId, definition, status, instance, url }) => {
-                        return (
-                            <GatewayCard
-                                key={blockId}
-                                title={instance.name || definition.metadata.title || definition.metadata.name}
-                                loading={status === InstanceStatus.STARTING || status === InstanceStatus.STOPPING}
-                                fallbackText="Open on localhost"
-                                fallback={{
-                                    url: url || null,
-                                    status: status === InstanceStatus.READY ? 'ok' : undefined,
-                                }}
-                                onConfigureGateway={() => {
-                                    props.onConfigure({ block: definition, instance });
-                                }}
-                            />
-                        );
-                    })}
+                    {internal.length ? (
+                        internal.map(({ id: blockId, definition, status, instance, url }) => {
+                            return (
+                                <GatewayCard
+                                    key={blockId}
+                                    title={instance.name || definition.metadata.title || definition.metadata.name}
+                                    loading={status === InstanceStatus.STARTING || status === InstanceStatus.STOPPING}
+                                    fallbackText="Open on localhost"
+                                    fallback={{
+                                        url: url || null,
+                                        status: status === InstanceStatus.READY ? 'ok' : undefined,
+                                    }}
+                                    onConfigureGateway={() => {
+                                        props.onConfigure({ block: definition, instance });
+                                    }}
+                                />
+                            );
+                        })
+                    ) : props.readOnly ? (
+                        <Typography variant={'body2'}>No internal URLs available for this plan.</Typography>
+                    ) : (
+                        <Typography variant={'body2'}>
+                            No internal URLs yet. Add internal URLs to the plan by adding blocks.
+                        </Typography>
+                    )}
                 </Stack>
             </Stack>
         );

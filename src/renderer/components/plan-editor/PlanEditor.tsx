@@ -323,6 +323,7 @@ export const PlanEditor = withPlannerContext(
                         <PlannerGatewaysList
                             systemId={props.systemId}
                             onConfigure={(info) => setConfigInfo({ type: DataEntityType.INSTANCE, item: info })}
+                            readOnly={readonly}
                         />
                     )}
                 </PlannerDrawer>
