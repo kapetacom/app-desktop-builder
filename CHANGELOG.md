@@ -1,3 +1,10 @@
+# [0.60.0-beta.14](https://github.com/kapetacom/app-desktop-builder/compare/v0.60.0-beta.13...v0.60.0-beta.14) (2023-12-12)
+
+
+### Features
+
+* allow resolving a missing reference w/ a different local asset [KAP-2187] ([#250](https://github.com/kapetacom/app-desktop-builder/issues/250)) ([457b6aa](https://github.com/kapetacom/app-desktop-builder/commit/457b6aa906271d5516f4f3c69f8c64c5a1798e44))
+
 # [0.60.0-beta.13](https://github.com/kapetacom/app-desktop-builder/compare/v0.60.0-beta.12...v0.60.0-beta.13) (2023-12-12)
 
 
