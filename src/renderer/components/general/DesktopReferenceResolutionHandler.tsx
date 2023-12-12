@@ -42,7 +42,11 @@ export const DesktopReferenceResolutionHandler = (props: Props) => {
                 await AssetService.install(ref, true);
             }}
             importAsset={async (filePath: string) => {
-                await AssetService.import(filePath);
+                const assetSchemas = await AssetService.import(filePath);
+                if (!assetSchemas.length) {
+                    throw new Error('No asset found in file');
+                }
+                return assetSchemas[0].ref;
             }}
             selectAssetFromDisk={async () => {
                 const result = await showFilePickerOne({
