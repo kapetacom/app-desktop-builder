@@ -34,7 +34,7 @@ export class AutoUpdateHelper {
         initiatedByUser: boolean,
         data?: any
     ) {
-        if (!main) {
+        if (!main || main.isDestroyed()) {
             return;
         }
 
