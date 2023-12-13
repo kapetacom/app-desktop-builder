@@ -1,3 +1,10 @@
+## [0.60.1-beta.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.60.0...v0.60.1-beta.1) (2023-12-13)
+
+
+### Bug Fixes
+
+* Set default configuration to empty obj ([2d415c1](https://github.com/kapetacom/app-desktop-builder/commit/2d415c1ebb997b07d31d64a8f3ef1c3dfc0a771d))
+
 # [0.60.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.59.0...v0.60.0) (2023-12-13)
 
 
