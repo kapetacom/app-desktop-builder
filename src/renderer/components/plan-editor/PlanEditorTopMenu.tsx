@@ -516,7 +516,7 @@ export const PlanEditorTopMenu = (props: Props) => {
                                 data.configuration
                             );
 
-                            planner.updatePlanMetadata(data.metadata, data.spec?.configuration || [], defaultConfig);
+                            planner.updatePlanMetadata(data.metadata, data.spec?.configuration ?? {}, defaultConfig);
                             await setPlanConfig(props.systemId, data.configuration);
                             setShowSettings(false);
                         }}
