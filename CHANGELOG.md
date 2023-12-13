@@ -1,3 +1,34 @@
+# [0.60.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.59.0...v0.60.0) (2023-12-13)
+
+
+### Bug Fixes
+
+* add explainer for URLs in empty state [KAP-2104] ([#251](https://github.com/kapetacom/app-desktop-builder/issues/251)) ([a09ca87](https://github.com/kapetacom/app-desktop-builder/commit/a09ca87088325cf2f6551333d672a4c66c0fd015))
+* Bump electron-ide-opener ([d6247c6](https://github.com/kapetacom/app-desktop-builder/commit/d6247c66331d4c086397e146688ad737fc7b6ca2))
+* Bump ui-web-components ([42faff3](https://github.com/kapetacom/app-desktop-builder/commit/42faff368fdb0e6607e0365d6776bc5d007e9b0c))
+* Do not run eslint as part of lint-staged ([0a57680](https://github.com/kapetacom/app-desktop-builder/commit/0a5768095c34e83d5d96e4e95f3f2fce46b61631))
+* Do not send a message to a destroyed window ([a97fc54](https://github.com/kapetacom/app-desktop-builder/commit/a97fc548f6db4de5d8abbcd4a834d49845ed56c0))
+* Do not set build version at all ([c8166c7](https://github.com/kapetacom/app-desktop-builder/commit/c8166c785b7b724c358ddfc5559d7ce9f5ce1034))
+* Move set-build-version to node ([f461885](https://github.com/kapetacom/app-desktop-builder/commit/f4618850385cee483265243ba603a1f86fe04904))
+* plans w/o configuration data can be saved ([#248](https://github.com/kapetacom/app-desktop-builder/issues/248)) ([3ad4a49](https://github.com/kapetacom/app-desktop-builder/commit/3ad4a49e265c0855d91797fd6abe7aba0e359b79))
+* Remove quotes around file_path ([a4c9628](https://github.com/kapetacom/app-desktop-builder/commit/a4c96288efdf9abc9be8b2bc349577a5d135ef86))
+* remove trailing slash from fragment baseURLs ([#241](https://github.com/kapetacom/app-desktop-builder/issues/241)) ([a3de05c](https://github.com/kapetacom/app-desktop-builder/commit/a3de05c4996204fa54425e8020113574d11b8354))
+* Set build version to short commit hash ([9ddca13](https://github.com/kapetacom/app-desktop-builder/commit/9ddca131d50bb9d3e0638887c156613e4b6466de))
+* Set buildVersion to empty string ([f0c84c3](https://github.com/kapetacom/app-desktop-builder/commit/f0c84c37a258e9e9a6fd460fae8d2eb2167bc093))
+* update ui components ([#253](https://github.com/kapetacom/app-desktop-builder/issues/253)) ([0d8febc](https://github.com/kapetacom/app-desktop-builder/commit/0d8febc1d43114fedfd0794b9b4adfa07e72f140))
+* use simplified gateway card states [KAP-1890] ([#246](https://github.com/kapetacom/app-desktop-builder/issues/246)) ([104f10f](https://github.com/kapetacom/app-desktop-builder/commit/104f10f2cc0a2d9331cebfd406d5356f9ee3a0d2))
+
+
+### Features
+
+* Add ability to check if resource type is compatible with block ([#237](https://github.com/kapetacom/app-desktop-builder/issues/237)) ([1cf5ac4](https://github.com/kapetacom/app-desktop-builder/commit/1cf5ac437a8551330c8bbee7052063ae1684ae94))
+* Add highlighting of connections in plan editor ([#238](https://github.com/kapetacom/app-desktop-builder/issues/238)) ([67683e8](https://github.com/kapetacom/app-desktop-builder/commit/67683e818026c652849d987bcfa95dfeac741ebb))
+* Adds connection grouping and portals ([#240](https://github.com/kapetacom/app-desktop-builder/issues/240)) ([76ab7cd](https://github.com/kapetacom/app-desktop-builder/commit/76ab7cd67a7dc18b75f4bf8d9f59665009acd5d9))
+* allow resolving a missing reference w/ a different local asset [KAP-2187] ([#250](https://github.com/kapetacom/app-desktop-builder/issues/250)) ([457b6aa](https://github.com/kapetacom/app-desktop-builder/commit/457b6aa906271d5516f4f3c69f8c64c5a1798e44))
+* Bump dependencies ([#252](https://github.com/kapetacom/app-desktop-builder/issues/252)) ([3181004](https://github.com/kapetacom/app-desktop-builder/commit/3181004097f61fdc7401ef4c4353e90f02520731))
+* Make splash screen draggable ([1db1389](https://github.com/kapetacom/app-desktop-builder/commit/1db138980f86de9b0ba68718d1338e2dc66d6cd0))
+* support for alternative baseUrls [KAP-2033] ([#239](https://github.com/kapetacom/app-desktop-builder/issues/239)) ([fc1036e](https://github.com/kapetacom/app-desktop-builder/commit/fc1036e099595cdd1fb98af6dd3d081c47123209))
+
 # [0.60.0-beta.17](https://github.com/kapetacom/app-desktop-builder/compare/v0.60.0-beta.16...v0.60.0-beta.17) (2023-12-12)
 
 
