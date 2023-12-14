@@ -13,3 +13,7 @@ export const getUrl = (prefix: string) => {
     url.host = [prefix, ...url.host.split('.').slice(1)].join('.');
     return url.toString();
 };
+
+export const getEnv = () => {
+    return getUrl('app').includes('.staging.') ? 'staging' : 'production';
+};
