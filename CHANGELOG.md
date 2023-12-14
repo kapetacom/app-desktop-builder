@@ -1,3 +1,10 @@
+## [0.60.1-beta.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.60.1-beta.1...v0.60.1-beta.2) (2023-12-14)
+
+
+### Bug Fixes
+
+* Add email to analytics ([#255](https://github.com/kapetacom/app-desktop-builder/issues/255)) ([bd8dac4](https://github.com/kapetacom/app-desktop-builder/commit/bd8dac4e495a8c4e3f0011de893ed3a0c6f705c5))
+
 ## [0.60.1-beta.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.60.0...v0.60.1-beta.1) (2023-12-13)
 
 
