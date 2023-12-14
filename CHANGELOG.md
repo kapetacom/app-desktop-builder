@@ -1,3 +1,10 @@
+# [0.61.0-beta.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.60.1-beta.2...v0.61.0-beta.1) (2023-12-14)
+
+
+### Features
+
+* support downloading staging providers via KAP_ENV env var ([#257](https://github.com/kapetacom/app-desktop-builder/issues/257)) ([ff6e875](https://github.com/kapetacom/app-desktop-builder/commit/ff6e875dfdbbf3a0e78e6ce44398201f2773604c))
+
 ## [0.60.1-beta.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.60.1-beta.1...v0.60.1-beta.2) (2023-12-14)
 
 
