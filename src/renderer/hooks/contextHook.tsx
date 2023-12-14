@@ -10,7 +10,7 @@ import { AssetDisplay } from '@kapeta/ui-web-components';
 import { Plan } from '@kapeta/schemas';
 
 import { AssetInfo } from '@kapeta/ui-web-plan-editor';
-import { IdentityService } from '../api/IdentityService';
+import { ExtendedIdentity, IdentityService } from '../api/IdentityService';
 import { SocketService } from '../api/SocketService';
 import { readPostedMessage } from '@kapeta/web-microfrontend/src/browser/utils/helpers';
 import { FragmentMessageTypes } from '@kapeta/web-microfrontend/src/browser/definitions/types';
@@ -35,8 +35,8 @@ interface LoginResult {
 interface KapetaContextData {
     refreshContexts: () => void;
     activeContext?: MemberIdentity;
-    profile?: Identity;
-    setProfile: (identity: Identity) => void;
+    profile?: ExtendedIdentity;
+    setProfile: (identity: ExtendedIdentity) => void;
     setActiveContext: (ctx: MemberIdentity) => void;
     logOut: () => Promise<boolean>;
     logIn: () => Promise<LoginResult>;
@@ -56,7 +56,7 @@ interface KapetaContextData {
 const useKapetaContextInternal = (): KapetaContextData => {
     const [initialLoad, setInitialLoad] = useState(true);
     const [activeContext, setActiveContext] = useState<MemberIdentity>();
-    const [profile, setProfile] = useState<Identity>();
+    const [profile, setProfile] = useState<ExtendedIdentity>();
     const [blockHubVisible, setBlockHubVisible] = useState(false);
     const [blockHubOpener, setBlockHubOpener] = useState<BlockHubOpener>();
 

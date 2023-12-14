@@ -7,8 +7,12 @@ import { clusterPath } from './ClusterConfig';
 import { Identity, MemberIdentity } from '@kapeta/ui-web-types';
 import { IdentityStore, simpleFetch } from '@kapeta/ui-web-context';
 
+export type ExtendedIdentity = Identity & {
+    email: string;
+};
+
 class IdentityServiceImpl implements IdentityStore {
-    async getCurrent(): Promise<Identity> {
+    async getCurrent(): Promise<ExtendedIdentity> {
         return simpleFetch(clusterPath('/identities/current'));
     }
 

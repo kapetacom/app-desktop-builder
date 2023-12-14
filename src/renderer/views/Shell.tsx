@@ -110,6 +110,7 @@ export function Shell() {
             window.analytics.identify(contexts.profile.id, {
                 name: contexts.profile.name,
                 username: contexts.profile.handle,
+                email: contexts.profile.email,
             });
         }
         if (
@@ -132,6 +133,7 @@ export function Shell() {
                 id: contexts.profile.id,
                 full_name: contexts.profile.name,
                 handle: contexts.profile.handle,
+                email: contexts.profile.email,
             };
         }
 
