@@ -24,7 +24,6 @@ import {
     showToasty,
     ToastType,
 } from '@kapeta/ui-web-components';
-import { useNavigate } from 'react-router-dom';
 import { ProjectHomeFolderInput } from '../fields/ProjectHomeFolderInput';
 import { showFilePickerOne } from '../../utils/showFilePicker';
 import Path from 'path';
@@ -38,7 +37,6 @@ export const NewPlan = (props: NewPlanProps) => {
     const context = useKapetaContext();
     const mainTabs = useMainTabs();
     const handle = context.contexts?.current ?? context.profile?.handle!;
-    const navigate = useNavigate();
     const [useProjectHome, setUseProjectHome] = useState<boolean>();
     const [projectHome, setProjectHome] = useState<string>();
 
