@@ -10,6 +10,7 @@ import { MainTabs, TabInfo, TabOptions } from './types';
 import { MemberIdentity } from '@kapeta/ui-web-types';
 import { useKapetaContext } from './contextHook';
 import { useRoutingPath } from '@kapeta/web-microfrontend/browser';
+import { parseKapetaUri } from '@kapeta/nodejs-utils';
 
 const TAB_LOCAL_STORAGE = '$main_tabs';
 export const DEFAULT_TAB_PATH = '/edit';
@@ -80,12 +81,17 @@ const createMainTabsContext = (context?: MemberIdentity): MainTabs => {
                         // We dont know yet if the plan exists, so we'll keep the tab open
                         return true;
                     }
-                    const ref = decodeURIComponent(/\/edit\/(.+)/.exec(tabInfo.path)?.[1] ?? '');
-                    const plan = planAssets.data?.find((a) => a.ref === ref);
-                    if (!plan) {
+                    try {
+                        const ref = decodeURIComponent(/\/edit\/(.+)/.exec(tabInfo.path)?.[1] ?? '');
+                        const plan = planAssets.data?.find((a) => parseKapetaUri(a.ref).equals(parseKapetaUri(ref)));
+                        if (!plan) {
+                            return false;
+                        }
+                        return true;
+                    } catch (e) {
+                        console.error(e);
                         return false;
                     }
-                    return true;
                 }
                 return true;
             }
@@ -132,8 +138,8 @@ const createMainTabsContext = (context?: MemberIdentity): MainTabs => {
 
     const openTab = useCallback(
         (path = DEFAULT_TAB_PATH, opts: TabOptions = {}) => {
+            const normalizedPath = normalizeUrl(path);
             setTabs((previous) => {
-                const normalizedPath = normalizeUrl(path);
                 const contextId = isContextSensitive(normalizedPath)
                     ? opts.contextId || context?.identity.id
                     : undefined;
@@ -149,7 +155,9 @@ const createMainTabsContext = (context?: MemberIdentity): MainTabs => {
                     return previous;
                 }
                 return [
-                    ...previous,
+                    ...(opts.replace
+                        ? previous.filter((tab) => normalizeUrl(tab.path) !== normalizeUrl(currentPathWithSearch))
+                        : previous),
                     {
                         path: normalizedPath,
                         title: opts.title,
@@ -158,7 +166,7 @@ const createMainTabsContext = (context?: MemberIdentity): MainTabs => {
                 ];
             });
             if (opts.navigate) {
-                navigate(path);
+                navigate(normalizedPath);
             }
         },
         [setTabs, navigate, context, DEFAULT_TAB_PATH, DEFAULT_TITLE]
@@ -243,7 +251,7 @@ const createMainTabsContext = (context?: MemberIdentity): MainTabs => {
 
     return useMemo(
         () => ({
-            current: tabs.find((t) => t.path === currentPathWithSearch) ?? tabs[0],
+            current: tabs.filter(tabFilter).find((t) => t.path === currentPathWithSearch) ?? tabs[0],
             active: tabs.filter(tabFilter),
             open: openTab,
             close: closeTab,

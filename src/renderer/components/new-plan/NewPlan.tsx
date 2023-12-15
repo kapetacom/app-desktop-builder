@@ -24,7 +24,6 @@ import {
     showToasty,
     ToastType,
 } from '@kapeta/ui-web-components';
-import { navigate } from '@storybook/addon-links';
 import { useNavigate } from 'react-router-dom';
 import { ProjectHomeFolderInput } from '../fields/ProjectHomeFolderInput';
 import { showFilePickerOne } from '../../utils/showFilePicker';
@@ -174,11 +173,9 @@ export const NewPlan = (props: NewPlanProps) => {
     };
 
     const navigateToPlan = (ref: string) => {
-        navigate(`/edit/${encodeURIComponent(ref)}`, {
+        mainTabs.open(`/edit/${encodeURIComponent(ref)}`, {
+            navigate: true,
             replace: true,
-            state: {
-                closeCurrent: true,
-            },
         });
     };
 
