@@ -1,3 +1,10 @@
+# [0.61.0-beta.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.61.0-beta.1...v0.61.0-beta.2) (2023-12-15)
+
+
+### Bug Fixes
+
+* bump plan-editor w/ action button fix [KAP-2241] ([#258](https://github.com/kapetacom/app-desktop-builder/issues/258)) ([9f06691](https://github.com/kapetacom/app-desktop-builder/commit/9f0669135e08c2179d91e4232206c8938cd02957))
+
 # [0.61.0-beta.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.60.1-beta.2...v0.61.0-beta.1) (2023-12-14)
 
 
