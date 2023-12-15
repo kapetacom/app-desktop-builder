@@ -83,6 +83,15 @@ class FileSystemServiceImpl implements FileSystemStore {
         return simpleFetch(clusterPath(`/files/readfile`, { path }));
     }
 
+    async exists(path: string): Promise<boolean> {
+        try {
+            const result = await simpleFetch(clusterPath(`/files/readfile`, { path }));
+            return result !== null;
+        } catch (e) {
+            return false;
+        }
+    }
+
     async writeFile(path: string, content: string): Promise<void> {
         await simpleFetch(clusterPath(`/files/writefile`, { path }), {
             headers: {

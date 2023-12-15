@@ -6,5 +6,4 @@
 export interface AIChatMessage {
     role: 'user' | 'assistant';
     content: string;
-    threadId?: string;
 }

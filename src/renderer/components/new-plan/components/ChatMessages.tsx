@@ -6,6 +6,7 @@
 import { Box } from '@mui/material';
 import { AIChatMessage } from '../aiTypes';
 import { ChatMessage } from './ChatMessage';
+import { useKapetaContext } from '../../../hooks/contextHook';
 
 export interface ChatMessagesProps {
     messages: AIChatMessage[];
@@ -29,6 +30,7 @@ export const ChatMessages = (props: ChatMessagesProps) => {
     return (
         <Box
             sx={{
+                flex: 1,
                 height: '100%',
                 py: 4,
                 overflowY: 'scroll',

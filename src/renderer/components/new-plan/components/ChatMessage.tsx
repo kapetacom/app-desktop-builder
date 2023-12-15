@@ -8,6 +8,7 @@ import { AIChatMessage } from '../aiTypes';
 import { Markdown, UserAvatar } from '@kapeta/ui-web-components';
 import { KapetaIcon } from '../../shell/components/KapetaIcon';
 import { useRandomMessage } from './useRandomMessage';
+import { useKapetaContext } from '../../../hooks/contextHook';
 
 export interface ChatMessageProps {
     message: AIChatMessage;
@@ -121,6 +122,8 @@ const MarkdownStyles: SxProps = {
 };
 
 export const ChatMessage = (props: ChatMessageProps) => {
+    const kapetaContext = useKapetaContext();
+
     const {
         message: { role, content },
         isLoading,
@@ -160,7 +163,7 @@ export const ChatMessage = (props: ChatMessageProps) => {
         >
             {role === 'user' && (
                 <UserAvatar
-                    name={'Random User'} // TODO: Get real name of user
+                    name={kapetaContext.profile?.name ?? kapetaContext.profile?.handle ?? 'Unknown'} // TODO: Get real name of user
                     size={40}
                 />
             )}

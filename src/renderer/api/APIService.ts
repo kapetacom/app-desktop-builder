@@ -65,6 +65,5 @@ export const assetFetcher = async (name: string, version: string) =>
         .registry()
         .getAsset(name, version)
         .then((res) => {
-            console.log(name, version, res);
             return res;
         });

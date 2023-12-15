@@ -5,12 +5,13 @@
 
 import React from 'react';
 import { BlockDefinition, Plan } from '@kapeta/schemas';
-import { AssetInfo, Planner, PlannerMode, withPlannerContext } from '@kapeta/ui-web-plan-editor';
+import { AssetInfo, Planner, PlannerMode, PlanPreview, withPlannerContext } from '@kapeta/ui-web-plan-editor';
 import { useLoadedPlanContext } from 'renderer/utils/planContextLoader';
 import { useMemo } from 'react';
 import { Box } from '@mui/system';
 import { Button, Paper } from '@mui/material';
 import { KindIcon } from '@kapeta/ui-web-components';
+import { Size } from '@kapeta/ui-web-types';
 
 const BasicPlanner = withPlannerContext(React.forwardRef(Planner));
 
@@ -68,12 +69,14 @@ export const DraftPlanView = (props: {
 
     return (
         <Box
+            className={'draft-plan-view'}
             sx={{
                 backgroundColor: '#F6F1EE',
                 flexGrow: 1,
                 zIndex: 1,
                 position: 'relative',
                 pt: '52px',
+                display: 'flex',
             }}
         >
             <Paper

@@ -19,6 +19,7 @@ interface Props {
     onAssetCreateEnd?: (errorMessage?: string) => void;
     onStateChanged: (state: AssetCreatorState) => void;
     assetService: AssetStore;
+    basePath?: string;
     files: string[];
     onCancel?: () => void;
     onError?: (e: any) => void;
@@ -68,6 +69,7 @@ export const BlockCreator = (props: Props) => {
             fileSelectableHandler={selectableHandler}
             assetService={props.assetService}
             formRenderer={BlockForm}
+            basePath={props.basePath}
         />
     );
 };

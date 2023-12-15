@@ -77,7 +77,7 @@ export default function CreateModeToggle(props: CreateModeToggleProps) {
                 AI Builder
             </StyledToggleButton>
             <StyledToggleButton value="manual" aria-label="Manual Builder">
-                Manual Builder
+                Settings
             </StyledToggleButton>
         </ToggleButtonGroup>
     );

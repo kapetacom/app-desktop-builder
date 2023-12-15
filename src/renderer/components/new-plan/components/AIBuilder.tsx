@@ -3,13 +3,14 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { Alert, Box } from '@mui/material';
+import { Alert, Box, Stack } from '@mui/material';
 import { PromptExamples } from './PromptExamples';
 import { PromptInput } from './PromptInput';
 import { useState } from 'react';
 import { ChatMessages } from './ChatMessages';
 import { AIChatMessage } from '../aiTypes';
 import { aiService } from '../../../api/AIService';
+import { useList } from 'react-use';
 
 export interface AIBuilderProps {
     handle: string | undefined;
@@ -21,27 +22,33 @@ export const AIBuilder = (props: AIBuilderProps) => {
 
     const [isLoading, setIsLoading] = useState(false);
     const [hasError, setHasError] = useState(false);
-    const [threadId, setThreadId] = useState();
+    const [messages, setMessages] = useState<AIChatMessage[]>([]);
 
-    const sendPrompt = async (p: string) => {
+    const appendMessage = (message: AIChatMessage) => {
+        setMessages((prevMessages) => [...prevMessages, message]);
+        return message;
+    };
+
+    const sendPrompt = async (specificMessages?: AIChatMessage[]) => {
         setIsLoading(true);
         setHasError(false);
         try {
             if (!handle) {
                 throw new Error('No handle');
             }
-            const response = await aiService.sendPrompt(handle, p, threadId);
 
-            if (response.threadId) {
-                setThreadId(response.threadId);
+            const response = await aiService.sendPrompt(handle, specificMessages ?? messages);
+
+            if (response.response) {
+                appendMessage({ role: 'assistant', content: response.response });
             }
-            setMessages((prevMessages) => {
-                return [...prevMessages, { role: 'assistant', content: response.explanation }];
-            });
-            setPlan({
-                plan: response.context.plan,
-                blocks: response.context.blocks,
-            });
+
+            if (response?.context?.plan) {
+                setPlan({
+                    plan: response.context.plan,
+                    blocks: response.context.blocks,
+                });
+            }
         } catch (error) {
             setHasError(true);
         } finally {
@@ -49,20 +56,31 @@ export const AIBuilder = (props: AIBuilderProps) => {
         }
     };
 
-    const [messages, setMessages] = useState<AIChatMessage[]>([]);
+    const writePrompt = async (prompt: string) => {
+        const newMessage = appendMessage({ role: 'user', content: prompt });
+        return sendPrompt([...messages, newMessage]);
+    };
+
     const hasMessages = messages.length > 0;
 
-    const [prevPrompt, setPrevPrompt] = useState('');
     const [prompt, setPrompt] = useState('');
 
     return (
-        <>
+        <Box
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                height: '100%',
+                width: '100%',
+            }}
+        >
             {!hasMessages ? (
-                <Box>
-                    <PromptExamples onClickExample={(text) => setPrompt(text)} />
+                <Box sx={{ mb: 2 }}>
+                    <PromptExamples onClickExample={(text) => writePrompt(text)} />
 
                     <Alert severity="info" sx={{ mt: 4 }}>
-                        Helper text goes here
+                        Explain what your system should do in plain english below. <br />
+                        You can skip this by just changing to the "Settings" tab and filling in the details there.
                     </Alert>
                 </Box>
             ) : (
@@ -70,26 +88,21 @@ export const AIBuilder = (props: AIBuilderProps) => {
                     messages={messages}
                     isLoading={isLoading}
                     hasError={hasError}
-                    onTryAgain={() => sendPrompt(prevPrompt)}
+                    onTryAgain={() => sendPrompt()}
                 />
             )}
 
-            <PromptInput
-                prompt={prompt}
-                setPrompt={setPrompt}
-                onSend={() => {
-                    sendPrompt(prompt);
-                    setMessages((messages) => [
-                        ...messages,
-                        {
-                            role: 'user',
-                            content: prompt,
-                        },
-                    ]);
-                    setPrevPrompt(prompt);
-                    setPrompt('');
-                }}
-            />
-        </>
+            <Box>
+                <PromptInput
+                    prompt={prompt}
+                    disabled={isLoading}
+                    setPrompt={setPrompt}
+                    onSend={() => {
+                        writePrompt(prompt);
+                        setPrompt('');
+                    }}
+                />
+            </Box>
+        </Box>
     );
 };

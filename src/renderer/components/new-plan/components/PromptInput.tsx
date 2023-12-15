@@ -9,6 +9,7 @@ import { useRef } from 'react';
 
 export interface PromptInputProps {
     prompt: string;
+    disabled?: boolean;
     setPrompt: (prompt: string) => void;
     onSend: () => void;
 }
@@ -25,21 +26,26 @@ export const PromptInput = (props: PromptInputProps) => {
             event.preventDefault();
             sendButtonRef.current?.focus();
         }
+        if (event.key === 'Enter' && hasPrompt && (event.metaKey || event.ctrlKey)) {
+            event.preventDefault();
+            onSend();
+        }
     };
 
     return (
         <Box
             sx={{
                 backgroundColor: '#FAFAFA',
-                p: 4,
-                mx: -4,
-                mb: -4,
+                p: 2,
+                mx: -2,
+                mb: -2,
             }}
         >
             <TextField
                 multiline
                 minRows={3}
                 maxRows={10}
+                disabled={props.disabled}
                 sx={{
                     width: '100%',
                     '& .MuiInputBase-root': {

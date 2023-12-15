@@ -13,12 +13,16 @@ import {
     showToasty,
     ToastType,
     createVerticalScrollShadow,
+    FormField,
+    FormInput,
+    Type,
 } from '@kapeta/ui-web-components';
 import { ProjectHomeFolderInput } from '../fields/ProjectHomeFolderInput';
 import { replaceBase64IconWithUrl } from '../../utils/iconHelpers';
 import { AssetInfo, fromAsset, PlannerSidebar } from '@kapeta/ui-web-plan-editor';
 import { Box, Button, Stack } from '@mui/material';
 import { showFilePickerOne } from '../../utils/showFilePicker';
+import { parseKapetaUri } from '@kapeta/nodejs-utils';
 
 export interface CreatingFormProps {
     creating?: boolean;
@@ -38,6 +42,7 @@ interface Props {
     skipFiles: string[]; // A collection of files to prevent importing as they are already loaded
     title: string;
     fileName: string;
+    basePath?: string;
     createNewKind: () => SchemaKind;
     formRenderer: React.ComponentType<CreatingFormProps>;
     fileSelectableHandler: (file: FileInfo) => boolean;
@@ -54,6 +59,13 @@ export const AssetCreator = (props: Props) => {
     const [projectHome, setProjectHome] = useState<string>();
 
     const onSubmit = async (data: SchemaKind) => {
+        const nameUri = parseKapetaUri(data.metadata.name);
+        if (props.basePath) {
+            const path = Path.join(props.basePath, nameUri.name);
+            await createAsset(path, data);
+            return;
+        }
+
         if (useProjectHome && projectHome) {
             const path = Path.join(projectHome, data.metadata.name);
             await createAsset(path, data);
@@ -154,12 +166,23 @@ export const AssetCreator = (props: Props) => {
                     >
                         <InnerFormRenderer asset={newEntity} creating />
 
-                        <ProjectHomeFolderInput
-                            onChange={(newUseProjectHome, newProjectHome) => {
-                                setUseProjectHome(newUseProjectHome);
-                                setProjectHome(newProjectHome);
-                            }}
-                        />
+                        {!props.basePath && (
+                            <ProjectHomeFolderInput
+                                onChange={(newUseProjectHome, newProjectHome) => {
+                                    setUseProjectHome(newUseProjectHome);
+                                    setProjectHome(newProjectHome);
+                                }}
+                            />
+                        )}
+                        {props.basePath && (
+                            <FormInput
+                                type={Type.TEXT}
+                                label={'Path'}
+                                value={props.basePath}
+                                disabled
+                                help={'This asset will be created here because the plan uses a mono-repo structure'}
+                            />
+                        )}
                     </Stack>
 
                     <FormButtons>
@@ -196,6 +219,8 @@ export const AssetCreator = (props: Props) => {
                 }
             }}
             title={props.title}
-        ></PlannerSidebar>
+        >
+            {content}
+        </PlannerSidebar>
     );
 };

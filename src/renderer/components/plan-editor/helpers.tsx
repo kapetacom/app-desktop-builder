@@ -8,6 +8,11 @@ import { AssetInfo } from '@kapeta/ui-web-plan-editor';
 import _ from 'lodash';
 import { BlockDefinition, Entity, Resource } from '@kapeta/schemas';
 import { DSL_LANGUAGE_ID, DSLConverters, DSLEntity, DSLWriter } from '@kapeta/ui-web-components';
+import Path from 'path';
+
+export function getBlockFolderForPlan(planPath: string): string {
+    return Path.join(planPath, 'blocks');
+}
 
 export function ProviderHeaderIcon() {
     return (
