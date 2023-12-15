@@ -16,7 +16,7 @@ export default {
 export const NewPlanWithAI = () => {
     return (
         <ThemeProvider theme={kapetaLight}>
-            <NewPlan handle="johndoe" />
+            <NewPlan />
         </ThemeProvider>
     );
 };
