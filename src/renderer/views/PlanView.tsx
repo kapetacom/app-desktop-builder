@@ -7,15 +7,18 @@ import React, { useEffect, useMemo } from 'react';
 import { useAsyncRetry } from 'react-use';
 import { PlannerMode } from '@kapeta/ui-web-plan-editor';
 import { InstanceEventType, InstanceStatus } from '@kapeta/ui-web-context';
-import { Plan } from '@kapeta/schemas';
+import { Plan, validateSchema } from '@kapeta/schemas';
 import { normalizeKapetaUri, parseKapetaUri } from '@kapeta/nodejs-utils';
-import { SimpleLoader } from '@kapeta/ui-web-components';
+import { CoreTypes, SimpleLoader } from '@kapeta/ui-web-components';
 import { PlanEditor } from '../components/plan-editor/PlanEditor';
 import { useLoadedPlanContext } from '../utils/planContextLoader';
 import { useAsset } from '../hooks/assetHooks';
 import { AssetService } from 'renderer/api/AssetService';
 import { SystemService } from '../api/SystemService';
 import './PlanView.less';
+import { Box, Typography } from '@mui/material';
+import { ErrorBox, ExceptionWrapper, PlanExceptionWrapper } from '../components/general/ExceptionWrapper';
+import { getAssetTitle } from '../components/plan-editor/helpers';
 
 interface PlanViewProps {
     systemId: string;
@@ -70,40 +73,48 @@ export const PlanView = (props: PlanViewProps) => {
     }
 
     return (
-        <SimpleLoader loading={planData.loading || loading} text={loadingText}>
-            {!planData.loading && !loading && planData.data && resourceAssets && blocks && (
-                <PlanEditor
-                    plan={planData.data.content}
-                    asset={planData.data}
-                    resourceAssets={resourceAssets}
-                    instanceInfos={instanceInfos.value}
-                    instanceStates={instanceStatusMap}
-                    mode={plannerMode}
-                    systemId={systemUri.toNormalizedString()}
-                    onChange={async (plan) => {
-                        try {
-                            await AssetService.update(systemUri.toNormalizedString(), plan);
-                            const newPlanUri = parseKapetaUri(plan.metadata.name + ':local');
-                            if (newPlanUri.fullName !== systemUri.fullName) {
-                                props.onSystemIdChange(newPlanUri.toNormalizedString());
+        <PlanExceptionWrapper
+            sx={{
+                mx: 4,
+                mt: 4,
+            }}
+            plan={planData.data}
+        >
+            <SimpleLoader loading={planData.loading || loading} text={loadingText}>
+                {!planData.loading && !loading && planData.data && resourceAssets && blocks && (
+                    <PlanEditor
+                        plan={planData.data.content}
+                        asset={planData.data}
+                        resourceAssets={resourceAssets}
+                        instanceInfos={instanceInfos.value}
+                        instanceStates={instanceStatusMap}
+                        mode={plannerMode}
+                        systemId={systemUri.toNormalizedString()}
+                        onChange={async (plan) => {
+                            try {
+                                await AssetService.update(systemUri.toNormalizedString(), plan);
+                                const newPlanUri = parseKapetaUri(plan.metadata.name + ':local');
+                                if (newPlanUri.fullName !== systemUri.fullName) {
+                                    props.onSystemIdChange(newPlanUri.toNormalizedString());
+                                }
+                            } catch (e) {
+                                console.error('Failed to update plan', e);
                             }
-                        } catch (e) {
-                            console.error('Failed to update plan', e);
-                        }
-                    }}
-                    onAssetChange={async (asset) => {
-                        if (!asset.exists) {
-                            return;
-                        }
-                        try {
-                            await AssetService.update(normalizeKapetaUri(asset.ref), asset.content);
-                        } catch (e) {
-                            console.error('Failed to update asset', e);
-                        }
-                    }}
-                    blockAssets={blocks}
-                />
-            )}
-        </SimpleLoader>
+                        }}
+                        onAssetChange={async (asset) => {
+                            if (!asset.exists) {
+                                return;
+                            }
+                            try {
+                                await AssetService.update(normalizeKapetaUri(asset.ref), asset.content);
+                            } catch (e) {
+                                console.error('Failed to update asset', e);
+                            }
+                        }}
+                        blockAssets={blocks}
+                    />
+                )}
+            </SimpleLoader>
+        </PlanExceptionWrapper>
     );
 };
