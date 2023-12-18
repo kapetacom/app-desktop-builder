@@ -1,3 +1,10 @@
+# [0.61.0-beta.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.61.0-beta.4...v0.61.0-beta.5) (2023-12-18)
+
+
+### Bug Fixes
+
+* migrate to clusterConfig for environment info ([0428d95](https://github.com/kapetacom/app-desktop-builder/commit/0428d95554884303b988f2cd2f7d0892ae11ed36))
+
 # [0.61.0-beta.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.61.0-beta.3...v0.61.0-beta.4) (2023-12-18)
 
 
