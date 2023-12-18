@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import request from 'request'; // Only used because it was already a dependency of the project
 import ClusterConfiguration from '@kapeta/local-cluster-config';
 import FS from 'fs-extra';
