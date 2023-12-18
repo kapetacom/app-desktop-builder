@@ -109,16 +109,26 @@ export const useLoadedPlanContext = (plan: Plan | undefined) => {
     const [loading, setLoading] = useState(true);
 
     const dependencyHash = useMemo(() => {
-        if (!plan) {
+        try {
+            if (!plan) {
+                return '';
+            }
+            const deps = plan.spec?.blocks?.map((block) => block.block.ref) ?? [];
+            return `${plan.metadata.name}:${deps.join(',')}`;
+        } catch (e) {
+            console.warn('Failed to compute dependency hash', e);
             return '';
         }
-        const deps = plan.spec?.blocks?.map((block) => block.block.ref) ?? [];
-        return `${plan.metadata.name}:${deps.join(',')}`;
     }, [plan]);
 
     const localAssetsResult = useLocalAssets();
     const localBlocks = useMemo(() => {
-        return !localAssetsResult.loading && localAssetsResult.data ? toBlocks(localAssetsResult.data) : undefined;
+        try {
+            return !localAssetsResult.loading && localAssetsResult.data ? toBlocks(localAssetsResult.data) : undefined;
+        } catch (e) {
+            console.warn('Failed to compute local blocks', e);
+            return [];
+        }
     }, [localAssetsResult.loading, localAssetsResult.data]);
 
     const missingData = !plan || !localAssetsResult.data || !localBlocks;
