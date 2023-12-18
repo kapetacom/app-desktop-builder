@@ -80,7 +80,7 @@
         }
     },
     "dependencies": {
-        "@kapeta/local-cluster-config": "<2",
+        "@kapeta/local-cluster-config": ">=0.3.0 <2",
         "@kapeta/nodejs-utils": "<2",
         "@kapeta/web-microfrontend": "<2",
         "@sentry/electron": "^4.10.0",
