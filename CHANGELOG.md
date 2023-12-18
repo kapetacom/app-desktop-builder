@@ -1,3 +1,10 @@
+# [0.61.0-beta.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.61.0-beta.2...v0.61.0-beta.3) (2023-12-18)
+
+
+### Bug Fixes
+
+* Remove 1px gap between top bar and main ([edcf054](https://github.com/kapetacom/app-desktop-builder/commit/edcf0541a947542cdf018d511a1cf0499e319951))
+
 # [0.61.0-beta.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.61.0-beta.1...v0.61.0-beta.2) (2023-12-15)
 
 
