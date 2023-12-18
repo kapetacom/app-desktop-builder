@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import { Alert, AlertProps, AlertTitle, Box, BoxProps, Typography } from '@mui/material';
 import React, { PropsWithChildren } from 'react';
