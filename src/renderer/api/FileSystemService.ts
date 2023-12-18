@@ -75,6 +75,34 @@ class FileSystemServiceImpl implements FileSystemStore {
         });
     }
 
+    async getShowPixelGrid(): Promise<boolean> {
+        return simpleFetch(clusterPath(`/files/show-pixel-grid`));
+    }
+
+    async setShowPixelGrid(show: boolean): Promise<boolean> {
+        return simpleFetch(clusterPath(`/files/show-pixel-grid`), {
+            headers: {
+                'Content-Type': 'text/plain',
+            },
+            body: show ? 'true' : 'false',
+            method: 'POST',
+        });
+    }
+
+    async getSnapToPixelGrid(): Promise<boolean> {
+        return simpleFetch(clusterPath(`/files/snap-to-pixel-grid`));
+    }
+
+    async setSnapToPixelGrid(snap: boolean): Promise<boolean> {
+        return simpleFetch(clusterPath(`/files/snap-to-pixel-grid`), {
+            headers: {
+                'Content-Type': 'text/plain',
+            },
+            body: snap ? 'true' : 'false',
+            method: 'POST',
+        });
+    }
+
     async listFilesInFolder(path: string): Promise<FileInfo[]> {
         return simpleFetch(clusterPath(`/files/list`, { path }));
     }

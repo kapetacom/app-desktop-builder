@@ -17,7 +17,7 @@ import {
     withPlannerContext,
     usePlanValidation,
 } from '@kapeta/ui-web-plan-editor';
-import React, { ForwardedRef, forwardRef, useContext, useMemo, useState } from 'react';
+import { ForwardedRef, forwardRef, useContext, useMemo, useState } from 'react';
 import { IResourceTypeProvider } from '@kapeta/ui-web-types';
 import { useAsyncRetry } from 'react-use';
 import { PlanEditorTopMenu } from './PlanEditorTopMenu';
@@ -41,7 +41,7 @@ import { useEffect } from 'react';
 import { usePlanUpdater } from '../../hooks/updaterHooks';
 import { PlanUpdaterModal } from './updater/PlanUpdaterModal';
 import UpdateIconPending from '../../../../assets/images/update-icon-pending.svg';
-import UpdateIconDone from '../../../../assets/images/update-icon-done.svg';
+import { AppSettingsContext } from '../../utils/AppSettingsContextSync';
 
 interface Props {
     systemId: string;
@@ -184,6 +184,8 @@ export const PlanEditor = withPlannerContext(
                 </Box>
             );
         }
+
+        const appSettings = useContext(AppSettingsContext);
 
         return (
             <div className={containerClass} ref={ref} data-kap-id={'plan-editor'}>
@@ -355,6 +357,7 @@ export const PlanEditor = withPlannerContext(
                             },
                         });
                     }}
+                    showPixelGrid={appSettings.show_pixel_grid}
                 />
             </div>
         );
