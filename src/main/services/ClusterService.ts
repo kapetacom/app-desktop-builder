@@ -10,7 +10,6 @@ import request from 'request';
 import Path from 'node:path';
 import FS from 'node:fs';
 import { app } from 'electron';
-import { getEnv } from '../baseUrl';
 
 export interface ClusterInfo {
     host: string;
@@ -87,11 +86,6 @@ export class ClusterService extends EventEmitter {
         return new Promise((resolve, reject) => {
             const child = (this.child = fork(SERVICE_FILE, {
                 stdio: 'pipe',
-                env: {
-                    ...process.env,
-                    // Used to toggle between staging and prod mode
-                    KAP_ENV: getEnv(),
-                },
             }));
 
             child.stdout?.pipe(process.stdout);
