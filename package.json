@@ -14,7 +14,7 @@
     "main": "./src/main/main.ts",
     "scripts": {
         "build": "concurrently \"npm run build:main\" \"npm run build:renderer\"",
-        "build:main": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.main.prod.ts && cp -rf src/service release/app/dist/service",
+        "build:main": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.main.prod.ts && rm -rf release/app/dist/service && cp -r src/service release/app/dist/service",
         "build:renderer": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.renderer.prod.ts",
         "set-build-version": "node set-build-version.js && prettier --write package.json",
         "postinstall": "ts-node .erb/scripts/check-native-dep.js && electron-builder install-app-deps && npm run dev:dll",
