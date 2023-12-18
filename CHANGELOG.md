@@ -1,3 +1,10 @@
+# [0.61.0-beta.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.61.0-beta.3...v0.61.0-beta.4) (2023-12-18)
+
+
+### Bug Fixes
+
+* Gracefully handle errors in plan YML ([#259](https://github.com/kapetacom/app-desktop-builder/issues/259)) ([1e2801e](https://github.com/kapetacom/app-desktop-builder/commit/1e2801ef314990d7ab67c2c97f806a335a82d6f6))
+
 # [0.61.0-beta.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.61.0-beta.2...v0.61.0-beta.3) (2023-12-18)
 
 
