@@ -21,12 +21,16 @@ export const AppSettingsContextSync = (props: PropsWithChildren) => {
     // Initial load settings from FileSystemService
     useEffect(() => {
         (async () => {
-            const show_pixel_grid = await FileSystemService.getShowPixelGrid();
-            const snap_to_pixel_grid = await FileSystemService.getSnapToPixelGrid();
-            setSettings({
-                show_pixel_grid,
-                snap_to_pixel_grid,
-            });
+            try {
+                const show_pixel_grid = await FileSystemService.getShowPixelGrid();
+                const snap_to_pixel_grid = await FileSystemService.getSnapToPixelGrid();
+                setSettings({
+                    show_pixel_grid,
+                    snap_to_pixel_grid,
+                });
+            } catch (error) {
+                console.error('Failed to fetch settings from FileSystemService', error);
+            }
         })();
     }, []);
 
