@@ -1,3 +1,16 @@
+# [0.62.0-beta.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.61.0...v0.62.0-beta.1) (2023-12-19)
+
+
+### Bug Fixes
+
+* Add license headers ([e7e5514](https://github.com/kapetacom/app-desktop-builder/commit/e7e5514f479dd6146d52e126dd20af0eb9b72008))
+* Try-catch loading settings ([d7c19f7](https://github.com/kapetacom/app-desktop-builder/commit/d7c19f73b01abc043578a9ae13fb789c95e0c978))
+
+
+### Features
+
+* Toggle Pixel Grid from View menu ([a2d6834](https://github.com/kapetacom/app-desktop-builder/commit/a2d68349f8f0e6c789b622c89c1cc069e2a2df97))
+
 # [0.61.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.60.0...v0.61.0) (2023-12-18)
 
 
