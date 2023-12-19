@@ -16,7 +16,6 @@ export interface TabOptions {
     title?: string;
     contextId?: string;
     navigate?: boolean;
-    replace?: boolean;
 }
 export interface MainTabs {
     current: TabInfo;

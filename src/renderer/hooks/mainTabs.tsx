@@ -70,6 +70,7 @@ const createMainTabsContext = (context?: MemberIdentity): MainTabs => {
     const navigate = useNavigate();
     const planAssets = usePlans();
     const currentPathWithSearch = useRoutingPath();
+    const [navigateDestination, setNavigateDestination] = useState<string | undefined>(undefined);
 
     const tabFilter = useCallback(
         (tabInfo: TabInfo) => {
@@ -154,10 +155,9 @@ const createMainTabsContext = (context?: MemberIdentity): MainTabs => {
                     }
                     return previous;
                 }
+
                 return [
-                    ...(opts.replace
-                        ? previous.filter((tab) => normalizeUrl(tab.path) !== normalizeUrl(currentPathWithSearch))
-                        : previous),
+                    ...previous,
                     {
                         path: normalizedPath,
                         title: opts.title,
@@ -166,7 +166,8 @@ const createMainTabsContext = (context?: MemberIdentity): MainTabs => {
                 ];
             });
             if (opts.navigate) {
-                navigate(normalizedPath);
+                // Use async navigate to make it play nice with async setTabs above
+                setNavigateDestination(() => normalizedPath);
             }
         },
         [setTabs, navigate, context, DEFAULT_TAB_PATH, DEFAULT_TITLE]
@@ -248,6 +249,14 @@ const createMainTabsContext = (context?: MemberIdentity): MainTabs => {
             }
         );
     }, [openTab, closeTab, navigate, tabs, currentPathWithSearch]);
+
+    useEffect(() => {
+        // Async navigate to destination to allow for tab to be created
+        if (navigateDestination) {
+            navigate(navigateDestination);
+        }
+        setNavigateDestination(undefined);
+    }, [navigateDestination]);
 
     return useMemo(
         () => ({

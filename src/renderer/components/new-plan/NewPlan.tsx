@@ -173,8 +173,8 @@ export const NewPlan = (props: NewPlanProps) => {
     const navigateToPlan = (ref: string) => {
         mainTabs.open(`/edit/${encodeURIComponent(ref)}`, {
             navigate: true,
-            replace: true,
         });
+        mainTabs.close('/new-plan');
     };
 
     return (
