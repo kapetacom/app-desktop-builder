@@ -7,6 +7,7 @@ import { app, Menu, shell, BrowserWindow, MenuItemConstructorOptions } from 'ele
 import { AutoUpdateHelper } from './AutoUpdateHelper';
 import { appVersion, safeSend, withErrorLog } from '../helpers';
 import { getAvailableEditors, findEditorOrDefault } from '@kapeta/electron-ide-opener';
+import { SettingsService } from '../services/SettingsService';
 
 interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
     selector?: string;
@@ -16,19 +17,23 @@ interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
 export class MenuBuilder {
     private readonly mainWindow: BrowserWindow;
     private readonly autoUpdater: AutoUpdateHelper;
+    private readonly settingsService: SettingsService;
 
-    constructor(mainWindow: BrowserWindow, autoUpdater: AutoUpdateHelper) {
+    constructor(mainWindow: BrowserWindow, autoUpdater: AutoUpdateHelper, settingsService: SettingsService) {
         this.mainWindow = mainWindow;
         this.autoUpdater = autoUpdater;
+        this.settingsService = settingsService;
     }
 
-    buildMenu(): Menu {
+    async buildMenu(): Promise<Menu> {
         this.setupContextMenu();
 
         const template = process.platform === 'darwin' ? this.buildDarwinTemplate() : this.buildDefaultTemplate();
 
         const menu = Menu.buildFromTemplate(template);
         Menu.setApplicationMenu(menu);
+
+        this.updateAsyncMenuItems();
 
         return menu;
     }
@@ -46,6 +51,37 @@ export class MenuBuilder {
                 },
             ]).popup({ window: this.mainWindow });
         });
+    }
+
+    private async updateAsyncMenuItems() {
+        try {
+            const menu = Menu.getApplicationMenu();
+            if (menu) {
+                const showPixelGridMenuItem = menu.getMenuItemById('showPixelGrid');
+                if (showPixelGridMenuItem) {
+                    const settings = await this.settingsService.get();
+                    if (!settings) {
+                        throw new Error('Failed to get settings');
+                    }
+                    showPixelGridMenuItem.checked = settings.show_pixel_grid ?? false;
+                }
+            }
+        } catch (error) {
+            console.error('Error updating Show Pixel Grid menu item:', error);
+        }
+    }
+
+    private async toggleShowPixelGrid() {
+        try {
+            const settings = await this.settingsService.get();
+            if (!settings) {
+                throw new Error('Failed to get settings');
+            }
+            const currentValue = settings.show_pixel_grid;
+            await this.settingsService.set('show_pixel_grid', currentValue ? false : true);
+        } catch (error) {
+            console.error('Error toggling Show Pixel Grid:', error);
+        }
     }
 
     private checkForUpdates() {
@@ -205,6 +241,13 @@ export class MenuBuilder {
             label: 'View',
             submenu: [
                 {
+                    id: 'showPixelGrid',
+                    label: 'Show Pixel Grid',
+                    type: 'checkbox',
+                    checked: false, // Default value, we'll get the actual value asynchronously
+                    click: () => this.toggleShowPixelGrid(),
+                },
+                {
                     label: 'Reload',
                     accelerator: 'Command+R',
                     click: () => {
@@ -318,6 +361,13 @@ export class MenuBuilder {
             {
                 label: '&View',
                 submenu: [
+                    {
+                        id: 'showPixelGrid',
+                        label: 'Show Pixel Grid',
+                        type: 'checkbox',
+                        checked: false, // Default value, we'll get the actual value asynchronously
+                        click: () => this.toggleShowPixelGrid(),
+                    },
                     {
                         label: '&Reload',
                         accelerator: 'Ctrl+R',

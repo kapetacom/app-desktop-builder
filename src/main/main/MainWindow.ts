@@ -10,6 +10,7 @@ import { DockWrapper } from './Dock';
 import { TrayWrapper } from './Tray';
 import { ClusterService } from '../services/ClusterService';
 import { AutoUpdateHelper } from './AutoUpdateHelper';
+import { SettingsService } from '../services/SettingsService';
 
 export class MainWindow {
     private _window: BrowserWindow | undefined = undefined;
@@ -17,12 +18,14 @@ export class MainWindow {
     private dock: DockWrapper;
     private autoUpdater: AutoUpdateHelper;
     private clusterService: ClusterService;
+    private settingsService: SettingsService;
 
     constructor(clusterService: ClusterService) {
         this.dock = new DockWrapper();
         this.tray = new TrayWrapper(this, clusterService);
         this.autoUpdater = new AutoUpdateHelper();
         this.clusterService = clusterService;
+        this.settingsService = new SettingsService(this);
     }
 
     public get window() {
@@ -59,7 +62,7 @@ export class MainWindow {
 
         await this.dock.show();
 
-        let icon:string;
+        let icon: string;
         if (process.platform === 'win32') {
             icon = getAssetPath('icon.ico');
         } else {
@@ -107,7 +110,7 @@ export class MainWindow {
             await this.tray.update();
         });
 
-        const menuBuilder = new MenuBuilder(this._window, this.autoUpdater);
+        const menuBuilder = new MenuBuilder(this._window, this.autoUpdater, this.settingsService);
         menuBuilder.buildMenu();
 
         // Open urls in the user's browser

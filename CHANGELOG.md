@@ -1,3 +1,75 @@
+# [0.62.0-beta.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.61.0...v0.62.0-beta.1) (2023-12-19)
+
+
+### Bug Fixes
+
+* Add license headers ([e7e5514](https://github.com/kapetacom/app-desktop-builder/commit/e7e5514f479dd6146d52e126dd20af0eb9b72008))
+* Try-catch loading settings ([d7c19f7](https://github.com/kapetacom/app-desktop-builder/commit/d7c19f73b01abc043578a9ae13fb789c95e0c978))
+
+
+### Features
+
+* Toggle Pixel Grid from View menu ([a2d6834](https://github.com/kapetacom/app-desktop-builder/commit/a2d68349f8f0e6c789b622c89c1cc069e2a2df97))
+
+# [0.61.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.60.0...v0.61.0) (2023-12-18)
+
+
+### Bug Fixes
+
+* Add email to analytics ([#255](https://github.com/kapetacom/app-desktop-builder/issues/255)) ([bd8dac4](https://github.com/kapetacom/app-desktop-builder/commit/bd8dac4e495a8c4e3f0011de893ed3a0c6f705c5))
+* bump plan-editor w/ action button fix [KAP-2241] ([#258](https://github.com/kapetacom/app-desktop-builder/issues/258)) ([9f06691](https://github.com/kapetacom/app-desktop-builder/commit/9f0669135e08c2179d91e4232206c8938cd02957))
+* Gracefully handle errors in plan YML ([#259](https://github.com/kapetacom/app-desktop-builder/issues/259)) ([1e2801e](https://github.com/kapetacom/app-desktop-builder/commit/1e2801ef314990d7ab67c2c97f806a335a82d6f6))
+* migrate to clusterConfig for environment info ([0428d95](https://github.com/kapetacom/app-desktop-builder/commit/0428d95554884303b988f2cd2f7d0892ae11ed36))
+* Remove 1px gap between top bar and main ([edcf054](https://github.com/kapetacom/app-desktop-builder/commit/edcf0541a947542cdf018d511a1cf0499e319951))
+* Set default configuration to empty obj ([2d415c1](https://github.com/kapetacom/app-desktop-builder/commit/2d415c1ebb997b07d31d64a8f3ef1c3dfc0a771d))
+
+
+### Features
+
+* support downloading staging providers via KAP_ENV env var ([#257](https://github.com/kapetacom/app-desktop-builder/issues/257)) ([ff6e875](https://github.com/kapetacom/app-desktop-builder/commit/ff6e875dfdbbf3a0e78e6ce44398201f2773604c))
+
+# [0.61.0-beta.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.61.0-beta.4...v0.61.0-beta.5) (2023-12-18)
+
+
+### Bug Fixes
+
+* migrate to clusterConfig for environment info ([0428d95](https://github.com/kapetacom/app-desktop-builder/commit/0428d95554884303b988f2cd2f7d0892ae11ed36))
+
+# [0.61.0-beta.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.61.0-beta.3...v0.61.0-beta.4) (2023-12-18)
+
+
+### Bug Fixes
+
+* Gracefully handle errors in plan YML ([#259](https://github.com/kapetacom/app-desktop-builder/issues/259)) ([1e2801e](https://github.com/kapetacom/app-desktop-builder/commit/1e2801ef314990d7ab67c2c97f806a335a82d6f6))
+
+# [0.61.0-beta.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.61.0-beta.2...v0.61.0-beta.3) (2023-12-18)
+
+
+### Bug Fixes
+
+* Remove 1px gap between top bar and main ([edcf054](https://github.com/kapetacom/app-desktop-builder/commit/edcf0541a947542cdf018d511a1cf0499e319951))
+
+# [0.61.0-beta.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.61.0-beta.1...v0.61.0-beta.2) (2023-12-15)
+
+
+### Bug Fixes
+
+* bump plan-editor w/ action button fix [KAP-2241] ([#258](https://github.com/kapetacom/app-desktop-builder/issues/258)) ([9f06691](https://github.com/kapetacom/app-desktop-builder/commit/9f0669135e08c2179d91e4232206c8938cd02957))
+
+# [0.61.0-beta.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.60.1-beta.2...v0.61.0-beta.1) (2023-12-14)
+
+
+### Features
+
+* support downloading staging providers via KAP_ENV env var ([#257](https://github.com/kapetacom/app-desktop-builder/issues/257)) ([ff6e875](https://github.com/kapetacom/app-desktop-builder/commit/ff6e875dfdbbf3a0e78e6ce44398201f2773604c))
+
+## [0.60.1-beta.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.60.1-beta.1...v0.60.1-beta.2) (2023-12-14)
+
+
+### Bug Fixes
+
+* Add email to analytics ([#255](https://github.com/kapetacom/app-desktop-builder/issues/255)) ([bd8dac4](https://github.com/kapetacom/app-desktop-builder/commit/bd8dac4e495a8c4e3f0011de893ed3a0c6f705c5))
+
 ## [0.60.1-beta.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.60.0...v0.60.1-beta.1) (2023-12-13)
 
 

@@ -5,15 +5,17 @@
 
 import React from 'react';
 import { Box, Button, Slide, Stack, Typography } from '@mui/material';
-import { Plan } from '@kapeta/schemas';
+import { Plan, validateSchema } from '@kapeta/schemas';
 import { toClass } from '@kapeta/ui-web-utils';
 
 import { useKapetaContext } from '../../../hooks/contextHook';
 import { AssetInfo, AssetThumbnail, MissingReference } from '@kapeta/ui-web-plan-editor';
 import { useLoadedPlanContext } from '../../../utils/planContextLoader';
 import { useInstallerService } from '../../../api/installerService';
-import { EmptyStateBox, InstallerService } from '@kapeta/ui-web-components';
+import { CoreTypes, EmptyStateBox, InstallerService } from '@kapeta/ui-web-components';
 import { DesktopReferenceResolutionHandler } from '../../general/DesktopReferenceResolutionHandler';
+import { ErrorBox, ExceptionWrapper, PlanExceptionWrapper } from '../../general/ExceptionWrapper';
+import { getAssetTitle } from '../../plan-editor/helpers';
 
 interface Props {
     plans: AssetInfo<Plan>[];
@@ -142,36 +144,46 @@ const PlanTile = ({
 
     return (
         <Box>
-            <DesktopReferenceResolutionHandler
-                open={resolverOpen}
-                plan={plan.content}
-                planRef={plan.ref}
-                blockAssets={planContext.blocks}
-                missingReferences={missingReferences}
-                onClose={() => setResolverOpen(false)}
-            />
-            <AssetThumbnail
-                width={366}
-                height={262}
-                asset={plan}
-                onMissingReferences={(missingReferences) => {
-                    if (resolverOpen && missingReferences.length < 1) {
-                        setResolverOpen(false);
-                    }
-                    setMissingReferences(missingReferences);
+            <PlanExceptionWrapper
+                plan={plan}
+                sx={{
+                    width: '368px',
+                    height: '264px',
+                    boxSizing: 'border-box',
+                    borderRadius: '10px',
                 }}
-                installerService={installerService}
-                onClick={() => {
-                    if (missingReferences.length > 0) {
-                        setResolverOpen(true);
-                    } else {
-                        onPlanOpen && onPlanOpen(plan);
-                    }
-                }}
-                loadPlanContext={() => {
-                    return planContext;
-                }}
-            />
+            >
+                <DesktopReferenceResolutionHandler
+                    open={resolverOpen}
+                    plan={plan.content}
+                    planRef={plan.ref}
+                    blockAssets={planContext.blocks}
+                    missingReferences={missingReferences}
+                    onClose={() => setResolverOpen(false)}
+                />
+                <AssetThumbnail
+                    width={366}
+                    height={262}
+                    asset={plan}
+                    onMissingReferences={(missingReferences) => {
+                        if (resolverOpen && missingReferences.length < 1) {
+                            setResolverOpen(false);
+                        }
+                        setMissingReferences(missingReferences);
+                    }}
+                    installerService={installerService}
+                    onClick={() => {
+                        if (missingReferences.length > 0) {
+                            setResolverOpen(true);
+                        } else {
+                            onPlanOpen && onPlanOpen(plan);
+                        }
+                    }}
+                    loadPlanContext={() => {
+                        return planContext;
+                    }}
+                />
+            </PlanExceptionWrapper>
         </Box>
     );
 };

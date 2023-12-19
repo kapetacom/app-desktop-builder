@@ -8,7 +8,16 @@ import ClusterConfiguration from '@kapeta/local-cluster-config';
 import { version } from '../../package.json';
 import { getUrl } from './baseUrl';
 
-export type Channels = 'ipc-main' | 'splash' | 'processing' | 'auth' | 'auto-updater' | 'change-tab' | 'settings';
+export type Channels =
+    | 'ipc-main'
+    | 'splash'
+    | 'processing'
+    | 'auth'
+    | 'auto-updater'
+    | 'change-tab'
+    | 'settings'
+    | 'desktop-app-settings';
+
 export type Procedures =
     | 'get-token'
     | 'get-contexts'

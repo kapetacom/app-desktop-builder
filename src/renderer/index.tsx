@@ -17,6 +17,7 @@ import { RemoteFrame } from './components/shell/RemoteFrame';
 import { useKapetaContext } from './hooks/contextHook';
 import { AssetService } from './api/AssetService';
 import { NewPlan } from './components/new-plan/NewPlan';
+import { AppSettingsContextSync } from './utils/AppSettingsContextSync';
 
 const router = createHashRouter([
     {
@@ -139,6 +140,8 @@ const container = document.getElementById('root')!;
 const root = createRoot(container);
 root.render(
     <ThemeProvider theme={kapetaLight}>
-        <RouterProvider router={router} />
+        <AppSettingsContextSync>
+            <RouterProvider router={router} />
+        </AppSettingsContextSync>
     </ThemeProvider>
 );

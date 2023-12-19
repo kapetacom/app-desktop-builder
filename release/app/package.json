@@ -1,6 +1,6 @@
 {
     "name": "@kapeta/ui-web-desktop",
-    "version": "0.60.1-beta.1",
+    "version": "0.62.0-beta.1",
     "productName": "Kapeta",
     "private": true,
     "description": "Kapeta Desktop Application",
@@ -21,7 +21,7 @@
     "dependencies": {
         "@kapeta/electron-ide-opener": "^1.1.0",
         "@kapeta/local-cluster-config": "<2",
-        "@kapeta/local-cluster-service": ">=0.27.0 <2",
+        "@kapeta/local-cluster-service": ">=0.30.1 <2",
         "@kapeta/nodejs-process": "^1.2.0"
     }
 }
