@@ -13,12 +13,16 @@ import {
     showToasty,
     ToastType,
     createVerticalScrollShadow,
+    FormField,
+    FormInput,
+    Type,
 } from '@kapeta/ui-web-components';
 import { ProjectHomeFolderInput } from '../fields/ProjectHomeFolderInput';
 import { replaceBase64IconWithUrl } from '../../utils/iconHelpers';
 import { AssetInfo, fromAsset, PlannerSidebar } from '@kapeta/ui-web-plan-editor';
 import { Box, Button, Stack } from '@mui/material';
 import { showFilePickerOne } from '../../utils/showFilePicker';
+import { parseKapetaUri } from '@kapeta/nodejs-utils';
 
 export interface CreatingFormProps {
     creating?: boolean;
@@ -38,6 +42,7 @@ interface Props {
     skipFiles: string[]; // A collection of files to prevent importing as they are already loaded
     title: string;
     fileName: string;
+    basePath?: string;
     createNewKind: () => SchemaKind;
     formRenderer: React.ComponentType<CreatingFormProps>;
     fileSelectableHandler: (file: FileInfo) => boolean;
@@ -45,6 +50,7 @@ interface Props {
     state: AssetCreatorState;
     onCancel?: () => void;
     onError?: (e: any) => void;
+    inline?: boolean;
 }
 
 export const AssetCreator = (props: Props) => {
@@ -53,6 +59,13 @@ export const AssetCreator = (props: Props) => {
     const [projectHome, setProjectHome] = useState<string>();
 
     const onSubmit = async (data: SchemaKind) => {
+        const nameUri = parseKapetaUri(data.metadata.name);
+        if (props.basePath) {
+            const path = Path.join(props.basePath, nameUri.name);
+            await createAsset(path, data);
+            return;
+        }
+
         if (useProjectHome && projectHome) {
             const path = Path.join(projectHome, data.metadata.name);
             await createAsset(path, data);
@@ -123,6 +136,80 @@ export const AssetCreator = (props: Props) => {
     }, [props.state, props.assetService]);
 
     const InnerFormRenderer = props.formRenderer;
+
+    const content = (
+        <Box
+            sx={{
+                height: '100%',
+                overflow: 'hidden',
+                '& > .form-container': {
+                    height: '100%',
+                    overflow: 'hidden',
+                },
+            }}
+        >
+            <FormContainer initialValue={newEntity} onSubmitData={(data: any) => onSubmit(data)}>
+                <Stack
+                    direction={'column'}
+                    className="asset-creator-form"
+                    sx={{
+                        height: '100%',
+                        overflow: 'hidden',
+                    }}
+                >
+                    <Stack
+                        direction={'column'}
+                        sx={{
+                            height: '100%',
+                            ...createVerticalScrollShadow(0.1),
+                        }}
+                    >
+                        <InnerFormRenderer asset={newEntity} creating />
+
+                        {!props.basePath && (
+                            <ProjectHomeFolderInput
+                                onChange={(newUseProjectHome, newProjectHome) => {
+                                    setUseProjectHome(newUseProjectHome);
+                                    setProjectHome(newProjectHome);
+                                }}
+                            />
+                        )}
+                        {props.basePath && (
+                            <FormInput
+                                type={Type.TEXT}
+                                label={'Path'}
+                                value={props.basePath}
+                                disabled
+                                help={'This asset will be created here because the plan uses a mono-repo structure'}
+                            />
+                        )}
+                    </Stack>
+
+                    <FormButtons>
+                        <Button
+                            color={'error'}
+                            variant={'contained'}
+                            onClick={() => {
+                                if (props.onCancel) {
+                                    props.onCancel();
+                                }
+                            }}
+                        >
+                            Cancel
+                        </Button>
+                        <Button color={'primary'} type={'submit'} variant={'contained'}>
+                            Create
+                        </Button>
+                    </FormButtons>
+                </Stack>
+            </FormContainer>
+        </Box>
+    );
+
+    if (props.inline) {
+        return content;
+    }
+
     return (
         <PlannerSidebar
             open={props.state === AssetCreatorState.CREATING}
@@ -133,61 +220,7 @@ export const AssetCreator = (props: Props) => {
             }}
             title={props.title}
         >
-            <Box
-                sx={{
-                    height: '100%',
-                    overflow: 'hidden',
-                    '& > .form-container': {
-                        height: '100%',
-                        overflow: 'hidden',
-                    },
-                }}
-            >
-                <FormContainer initialValue={newEntity} onSubmitData={(data: any) => onSubmit(data)}>
-                    <Stack
-                        direction={'column'}
-                        className="asset-creator-form"
-                        sx={{
-                            height: '100%',
-                            overflow: 'hidden',
-                        }}
-                    >
-                        <Stack
-                            direction={'column'}
-                            sx={{
-                                height: '100%',
-                                ...createVerticalScrollShadow(0.1),
-                            }}
-                        >
-                            <InnerFormRenderer asset={newEntity} creating />
-
-                            <ProjectHomeFolderInput
-                                onChange={(newUseProjectHome, newProjectHome) => {
-                                    setUseProjectHome(newUseProjectHome);
-                                    setProjectHome(newProjectHome);
-                                }}
-                            />
-                        </Stack>
-
-                        <FormButtons>
-                            <Button
-                                color={'error'}
-                                variant={'contained'}
-                                onClick={() => {
-                                    if (props.onCancel) {
-                                        props.onCancel();
-                                    }
-                                }}
-                            >
-                                Cancel
-                            </Button>
-                            <Button color={'primary'} type={'submit'} variant={'contained'}>
-                                Create
-                            </Button>
-                        </FormButtons>
-                    </Stack>
-                </FormContainer>
-            </Box>
+            {content}
         </PlannerSidebar>
     );
 };

@@ -14,6 +14,7 @@ import { AssetInfo } from '@kapeta/ui-web-plan-editor';
 import { ConfirmProvider } from '@kapeta/ui-web-components';
 import { AssetStore } from '@kapeta/ui-web-context';
 import { Asset, SchemaKind } from '@kapeta/ui-web-types';
+import { MemoryRouter } from 'node_modules/react-router-dom';
 
 const defaultInfo = {
     ymlPath: '',
@@ -55,135 +56,130 @@ const assetService: AssetStore = {
 
 export default {
     title: 'Plan Overview',
+    decorators: [
+        (Story: React.FC) => (
+            <MemoryRouter>
+                <ConfirmProvider>
+                    <ThemeProvider theme={kapetaLight}>
+                        <div style={{ maxWidth: '1152px' }}>
+                            <Story />
+                        </div>
+                    </ThemeProvider>
+                </ConfirmProvider>
+            </MemoryRouter>
+        ),
+    ],
 };
 
 export const EmptyState = () => {
     return (
-        <ConfirmProvider>
-            <ThemeProvider theme={kapetaLight}>
-                <div style={{ maxWidth: '1152px' }}>
-                    <PlanOverview
-                        assetService={assetService}
-                        onPlanSelected={(plan) => {
-                            console.log('onPlanSelected', plan);
-                        }}
-                        onPlanAdded={(plan) => {
-                            console.log('onPlanAdded', plan);
-                        }}
-                        onPlanRemoved={(plan) => {
-                            console.log('onPlanRemoved', plan);
-                        }}
-                        onPlanImported={(plan) => {
-                            console.log('onPlanImported', plan);
-                        }}
-                        samplePlanName={SAMPLE_PLAN.content.metadata.name}
-                        plans={[SAMPLE_PLAN]}
-                    />
-                </div>
-            </ThemeProvider>
-        </ConfirmProvider>
+        <PlanOverview
+            assetService={assetService}
+            onPlanSelected={(plan) => {
+                console.log('onPlanSelected', plan);
+            }}
+            onPlanAdded={(plan) => {
+                console.log('onPlanAdded', plan);
+            }}
+            onPlanRemoved={(plan) => {
+                console.log('onPlanRemoved', plan);
+            }}
+            onPlanImported={(plan) => {
+                console.log('onPlanImported', plan);
+            }}
+            samplePlanName={SAMPLE_PLAN.content.metadata.name}
+            plans={[SAMPLE_PLAN]}
+        />
     );
 };
 
 export const EmptyNoSampleState = () => {
     return (
-        <ConfirmProvider>
-            <ThemeProvider theme={kapetaLight}>
-                <div style={{ maxWidth: '1152px' }}>
-                    <PlanOverview
-                        assetService={assetService}
-                        onPlanSelected={(plan) => {
-                            console.log('onPlanSelected', plan);
-                        }}
-                        onPlanAdded={(plan) => {
-                            console.log('onPlanAdded', plan);
-                        }}
-                        onPlanRemoved={(plan) => {
-                            console.log('onPlanRemoved', plan);
-                        }}
-                        onPlanImported={(plan) => {
-                            console.log('onPlanImported', plan);
-                        }}
-                        plans={[]}
-                    />
-                </div>
-            </ThemeProvider>
-        </ConfirmProvider>
+        <PlanOverview
+            assetService={assetService}
+            onPlanSelected={(plan) => {
+                console.log('onPlanSelected', plan);
+            }}
+            onPlanAdded={(plan) => {
+                console.log('onPlanAdded', plan);
+            }}
+            onPlanRemoved={(plan) => {
+                console.log('onPlanRemoved', plan);
+            }}
+            onPlanImported={(plan) => {
+                console.log('onPlanImported', plan);
+            }}
+            plans={[]}
+        />
     );
 };
 export const FilledState = () => {
     return (
-        <ConfirmProvider>
-            <ThemeProvider theme={kapetaLight}>
-                <div style={{ maxWidth: '1152px' }}>
-                    <PlanOverview
-                        assetService={assetService}
-                        samplePlanName={SAMPLE_PLAN.content.metadata.name}
-                        onPlanSelected={(plan) => {
-                            console.log('onPlanSelected', plan);
-                        }}
-                        onPlanAdded={(plan) => {
-                            console.log('onPlanAdded', plan);
-                        }}
-                        onPlanRemoved={(plan) => {
-                            console.log('onPlanRemoved', plan);
-                        }}
-                        onPlanImported={(plan) => {
-                            console.log('onPlanImported', plan);
-                        }}
-                        plans={[
-                            {
-                                ...defaultInfo,
-                                version: '1.0.0',
-                                ref: 'kapeta/test:1.0.0',
-                                content: {
-                                    ...defaultData,
-                                    metadata: {
-                                        name: 'kapeta/test',
-                                        title: 'Test Plan',
-                                    },
-                                },
-                            },
-                            {
-                                ...defaultInfo,
-                                version: '1.0.0',
-                                ref: 'kapeta/todo:1.0.0',
-                                content: {
-                                    ...defaultData,
-                                    metadata: {
-                                        name: 'kapeta/todo',
-                                        title: 'Todo System',
-                                    },
-                                },
-                            },
-                            {
-                                ...defaultInfo,
-                                version: '1.0.0',
-                                ref: 'kapeta/projects:1.0.0',
-                                content: {
-                                    ...defaultData,
-                                    metadata: {
-                                        name: 'kapeta/projects',
-                                        title: 'Project Management',
-                                    },
-                                },
-                            },
-                            {
-                                ...defaultInfo,
-                                version: '1.0.0',
-                                ref: 'kapeta/payments:1.0.0',
-                                content: {
-                                    ...defaultData,
-                                    metadata: {
-                                        name: 'kapeta/payments',
-                                        title: 'Payment System',
-                                    },
-                                },
-                            },
-                        ]}
-                    />
-                </div>
-            </ThemeProvider>
-        </ConfirmProvider>
+        <PlanOverview
+            assetService={assetService}
+            samplePlanName={SAMPLE_PLAN.content.metadata.name}
+            onPlanSelected={(plan) => {
+                console.log('onPlanSelected', plan);
+            }}
+            onPlanAdded={(plan) => {
+                console.log('onPlanAdded', plan);
+            }}
+            onPlanRemoved={(plan) => {
+                console.log('onPlanRemoved', plan);
+            }}
+            onPlanImported={(plan) => {
+                console.log('onPlanImported', plan);
+            }}
+            plans={[
+                {
+                    ...defaultInfo,
+                    version: '1.0.0',
+                    ref: 'kapeta/test:1.0.0',
+                    content: {
+                        ...defaultData,
+                        metadata: {
+                            name: 'kapeta/test',
+                            title: 'Test Plan',
+                        },
+                    },
+                },
+                {
+                    ...defaultInfo,
+                    version: '1.0.0',
+                    ref: 'kapeta/todo:1.0.0',
+                    content: {
+                        ...defaultData,
+                        metadata: {
+                            name: 'kapeta/todo',
+                            title: 'Todo System',
+                        },
+                    },
+                },
+                {
+                    ...defaultInfo,
+                    version: '1.0.0',
+                    ref: 'kapeta/projects:1.0.0',
+                    content: {
+                        ...defaultData,
+                        metadata: {
+                            name: 'kapeta/projects',
+                            title: 'Project Management',
+                        },
+                    },
+                },
+                {
+                    ...defaultInfo,
+                    version: '1.0.0',
+                    ref: 'kapeta/payments:1.0.0',
+                    content: {
+                        ...defaultData,
+                        metadata: {
+                            name: 'kapeta/payments',
+                            title: 'Payment System',
+                        },
+                    },
+                },
+            ]}
+        />
     );
 };

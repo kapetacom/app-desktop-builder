@@ -49,7 +49,6 @@ export const PlanForm = (props: Props) => {
                 name="metadata.title"
                 label="Title"
                 readOnly={props.readOnly}
-                validation={['required']}
                 help="Give your plan a user friendly title - e.g. My Awesome Plan"
             />
 
@@ -58,6 +57,20 @@ export const PlanForm = (props: Props) => {
                 type={FormFieldType.TEXT}
                 label="Description"
                 help="Give your block a longer description"
+            />
+
+            <FormField
+                label={'Project Structure'}
+                name={'metadata.structure'}
+                type={FormFieldType.ENUM}
+                validation={['required']}
+                options={{
+                    mono: 'Mono-Repo',
+                    multi: 'Multi-Repo',
+                }}
+                help={
+                    'Mono-Repo will create blocks under the plan folder. Multi-Repo will create blocks in their own folder.'
+                }
             />
         </>
     );

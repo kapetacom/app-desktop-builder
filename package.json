@@ -31,7 +31,7 @@
         "start:renderer": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack serve --config ./.erb/configs/webpack.config.renderer.dev.ts",
         "test": "jest",
         "format": "prettier --write .",
-        "storybook": "start-storybook -s assets",
+        "storybook": "start-storybook -s assets -p 6010",
         "build-storybook": "build-storybook",
         "recalculate-hash": "node src/scripts/recalculate-hash.js"
     },
@@ -181,7 +181,7 @@
         "react-dom": ">=18",
         "react-error-boundary": "^3.1.4",
         "react-refresh": "^0.14.0",
-        "react-router-dom": "^6.6.2",
+        "react-router-dom": "^6.21.0",
         "react-tabs": "^6.0.0",
         "react-test-renderer": "^18.2.0",
         "react-toastify": "^9.1.1",

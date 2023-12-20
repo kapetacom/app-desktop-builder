@@ -63,7 +63,6 @@ export const DesktopReferenceResolutionHandler = (props: Props) => {
             }}
             missingReferences={props.missingReferences}
             onResolved={async (result) => {
-                console.log('resolved', result);
                 try {
                     if (result.plan) {
                         await AssetService.update(props.planRef, result.plan);

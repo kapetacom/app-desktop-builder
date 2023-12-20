@@ -12,6 +12,7 @@ import { DataEntityType, EditItemInfo } from '../types';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import { useBlocks } from '../../../hooks/assetHooks';
 import { AssetService } from 'renderer/api/AssetService';
+import { getBlockFolderForPlan } from '../helpers';
 
 interface Props {
     open: boolean;
@@ -28,10 +29,16 @@ export const BlockCreatorPanel = (props: Props) => {
     }, [props.open]);
 
     const blocks = useBlocks();
+    const monoStructure = planner.plan?.metadata.structure === 'mono';
+    let basePath: string | undefined = undefined;
+    if (monoStructure && planner.asset?.path) {
+        basePath = getBlockFolderForPlan(planner.asset?.path);
+    }
 
     return (
         <BlockCreator
             assetService={AssetService}
+            basePath={basePath}
             state={creatorState}
             onStateChanged={setCreatorState}
             createNewKind={(): BlockDefinition => {

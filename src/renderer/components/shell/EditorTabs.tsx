@@ -18,6 +18,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import DeployIcon from './components/icons/DeployIcon.svg';
 import PersonIcon from '@mui/icons-material/Person';
 import { useRoutingPath } from '@kapeta/web-microfrontend/browser';
+import { parseKapetaUri } from '@kapeta/nodejs-utils';
 
 export const EditorTabs = () => {
     const planAssets = usePlans();
@@ -51,7 +52,9 @@ export const EditorTabs = () => {
                         if (/\/edit\/(.+)/.test(tabInfo.path)) {
                             // Open plan
                             const ref = decodeURIComponent(/\/edit\/(.+)/.exec(tabInfo.path)?.[1] ?? '');
-                            const plan = planAssets.data?.find((a) => a.ref === ref);
+                            const plan = planAssets.data?.find((a) =>
+                                parseKapetaUri(a.ref).equals(parseKapetaUri(ref))
+                            );
                             if (!plan) {
                                 console.warn('Plan not found', ref);
                                 return null;
@@ -85,6 +88,10 @@ export const EditorTabs = () => {
                         variant = 'deploy';
                         label = tabInfo.title ?? handle ?? 'Organization';
                         icon = <ApartmentIcon />;
+                    } else if (tabInfo.path.startsWith('/new-plan')) {
+                        variant = 'new-plan';
+                        label = tabInfo.title ?? 'New plan';
+                        icon = <KindIcon kind="core/plan" size={16} />;
                     } else {
                         console.warn('Unknown tab url', tabInfo);
                         return null;
