@@ -1,3 +1,10 @@
+# [0.62.0-beta.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.62.0-beta.1...v0.62.0-beta.2) (2023-12-20)
+
+
+### Features
+
+* add prompt-based creation to new plan ([#256](https://github.com/kapetacom/app-desktop-builder/issues/256)) ([f52af46](https://github.com/kapetacom/app-desktop-builder/commit/f52af46466297259bd7920ba2f66669febac4c51))
+
 # [0.62.0-beta.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.61.0...v0.62.0-beta.1) (2023-12-19)
 
 
