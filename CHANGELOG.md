@@ -1,3 +1,10 @@
+# [0.62.0-beta.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.62.0-beta.2...v0.62.0-beta.3) (2023-12-22)
+
+
+### Bug Fixes
+
+* more stable layout for drawer resources [CORE-1180] ([#264](https://github.com/kapetacom/app-desktop-builder/issues/264)) ([66320d5](https://github.com/kapetacom/app-desktop-builder/commit/66320d508057f77df4371e6ac475101ab431c111))
+
 # [0.62.0-beta.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.62.0-beta.1...v0.62.0-beta.2) (2023-12-20)
 
 
