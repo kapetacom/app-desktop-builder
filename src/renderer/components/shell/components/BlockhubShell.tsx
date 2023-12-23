@@ -4,7 +4,7 @@
  */
 
 import { useInstallerService } from '../../../api/installerService';
-import { api, assetFetcher } from '../../../api/APIService';
+import { api, assetFetcher, AssetFilter } from '../../../api/APIService';
 import React, { useEffect, useState } from 'react';
 import { AssetDisplay, AssetType, BlockhubCategory, BlockhubModal } from '@kapeta/ui-web-components';
 import { useAsyncRetry } from 'react-use';
@@ -14,6 +14,13 @@ import { useLoadedPlanContext } from '../../../utils/planContextLoader';
 import { useAssetsChanged } from '../../../hooks/assetHooks';
 import { AssetInfo, AssetThumbnail, fromAsset, fromAssetDisplay } from '@kapeta/ui-web-plan-editor';
 import { AssetService } from 'renderer/api/AssetService';
+
+const COMMUNITY_FILTER: AssetFilter[] = [
+    {
+        type: 'public',
+        value: 'true',
+    },
+];
 
 interface Props {
     handle?: string;
@@ -74,7 +81,7 @@ export const BlockhubShell = (props: Props) => {
                 }
                 return (await api.registry().findByHandle(props.handle)) || [];
             case BlockhubCategory.COMMUNITY:
-                return (await api.registry().list()) || [];
+                return (await api.registry().list(COMMUNITY_FILTER)) || [];
         }
     }, [currentCategory, props.handle]);
 

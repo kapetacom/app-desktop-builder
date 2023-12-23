@@ -15,14 +15,25 @@ const errorHandler: ErrorHandler = (error) => {
     });
 };
 
+export interface AssetFilter {
+    type: 'kind' | 'dependency' | 'public';
+    value: string;
+}
+
 class RegistryAPI extends RESTService {
     constructor() {
         super(clusterPath('/api/registry'));
         this.withErrorHandler(errorHandler);
     }
 
-    async list() {
-        return this.get<AssetDisplay[]>('/v1/registry/');
+    async list(filters?: AssetFilter[]) {
+        const params = new URLSearchParams();
+        if (filters) {
+            for (const filter of filters) {
+                params.append('filter', filter.type + '=' + filter.value);
+            }
+        }
+        return this.get<AssetDisplay[]>(`/v1/registry/${filters ? '?' + params.toString() : ''}`);
     }
 
     async findByHandle(handle: string) {
