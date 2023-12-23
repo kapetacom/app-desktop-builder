@@ -1,3 +1,10 @@
+# [0.62.0-beta.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.62.0-beta.3...v0.62.0-beta.4) (2023-12-23)
+
+
+### Bug Fixes
+
+* Several bug fixes ([3ff550e](https://github.com/kapetacom/app-desktop-builder/commit/3ff550ed133d0cd1411b2605bb015d4ec998afca))
+
 # [0.62.0-beta.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.62.0-beta.2...v0.62.0-beta.3) (2023-12-22)
 
 
