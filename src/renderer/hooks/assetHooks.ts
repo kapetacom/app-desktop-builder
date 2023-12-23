@@ -193,10 +193,7 @@ export const useAsset = <T = SchemaKind>(ref: string, ensure?: boolean): AssetRe
                 console.warn(`Failed to reload asset: ${ref}`, e, evt);
             }
         };
-        SocketService.on(ASSET_CHANGED_EVENT, handler);
-        return () => {
-            SocketService.off(ASSET_CHANGED_EVENT, handler);
-        };
+        return onAssetChanged(handler);
     }, [assetResult, ref]);
 
     return {

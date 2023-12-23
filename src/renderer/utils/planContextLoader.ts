@@ -219,7 +219,7 @@ export const useLoadedPlanContext = (plan: Plan | undefined) => {
             blocks: allBlocks.filter((block) => block !== null) as AssetInfo<BlockDefinition>[],
             providers: ResourceTypeProvider.list(),
         };
-    }, [dependencyHash, localBlocks, missingData]);
+    }, [dependencyHash, localBlocks, missingData, localAssetsResult.data]);
 
     useEffect(() => {
         if (results.loading && !missingData) {
