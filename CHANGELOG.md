@@ -1,3 +1,10 @@
+# [0.62.0-beta.6](https://github.com/kapetacom/app-desktop-builder/compare/v0.62.0-beta.5...v0.62.0-beta.6) (2023-12-25)
+
+
+### Features
+
+* Use simpler log output panel ([#267](https://github.com/kapetacom/app-desktop-builder/issues/267)) ([d7c8e43](https://github.com/kapetacom/app-desktop-builder/commit/d7c8e43a77922b58fe743be065b9c40db8678e85))
+
 # [0.62.0-beta.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.62.0-beta.4...v0.62.0-beta.5) (2023-12-25)
 
 
