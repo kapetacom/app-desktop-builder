@@ -80,7 +80,17 @@ export const NewPlan = (props: NewPlanProps) => {
 
         const structure = planMetaData.metadata.structure ?? 'mono';
         const homeFolder = projectHome ?? (await FileSystemService.getProjectFolder());
-        const planUri = parseKapetaUri(planData.metadata.name);
+        let planUri: KapetaURI;
+        try {
+            planUri = parseKapetaUri(planData.metadata.name);
+        } catch (e) {
+            showToasty({
+                type: ToastType.ALERT,
+                message: `Plan name was invalid`,
+                title: 'Error',
+            });
+            return;
+        }
         let planPath = Path.join(homeFolder, planData.metadata.name);
         if (!useProjectHome) {
             const result = await showFilePickerOne({
@@ -99,64 +109,63 @@ export const NewPlan = (props: NewPlanProps) => {
                 : Path.join(homeFolder, nameUri.fullName, 'kapeta.yml');
         };
 
-        if (plan.blocks) {
-            const blockInfos = await Promise.all(
-                plan.blocks.map(async (block) => {
-                    const copy = _.cloneDeep(block);
-                    const nameUri = parseKapetaUri(block.metadata.name);
-                    nameUri.handle = planUri.handle;
-
-                    const originalName = nameUri.name;
-                    let iteration = 1;
-                    while (true) {
-                        const tmpPath = getPath(nameUri);
-                        if (await FileSystemService.exists(tmpPath)) {
-                            nameUri.name = originalName + '-' + iteration++;
-                            continue;
-                        }
-                        break;
-                    }
-
-                    const path = getPath(nameUri);
-
-                    if (structure === 'mono') {
-                        nameUri.name = planUri.name + '-' + nameUri.name;
-                    }
-
-                    planData.spec.blocks.forEach((b) => {
-                        const uri = parseKapetaUri(b.block.ref);
-                        if (uri.fullName === block.metadata.name) {
-                            uri.handle = nameUri.handle;
-                            uri.name = nameUri.name;
-                            b.block.ref = uri.toNormalizedString();
-                        }
-                    });
-
-                    copy.metadata.name = nameUri.fullName;
-
-                    return {
-                        path,
-                        block: copy,
-                    };
-                })
-            );
-
-            // Create blocks for plan
-            await Promise.all(
-                blockInfos.map(({ block, path }) => {
-                    return AssetService.create(path, block).catch((err) => {
-                        if ((err.message as string).startsWith('File already exists')) {
-                            // everything is fine.
-                            return;
-                        }
-                        throw err;
-                    });
-                })
-            );
-        }
-
         // Create plan
         try {
+            if (plan.blocks) {
+                const blockInfos = await Promise.all(
+                    plan.blocks.map(async (block) => {
+                        const copy = _.cloneDeep(block);
+                        const nameUri = parseKapetaUri(block.metadata.name);
+                        nameUri.handle = planUri.handle;
+
+                        const originalName = nameUri.name;
+                        let iteration = 1;
+                        while (true) {
+                            const tmpPath = getPath(nameUri);
+                            if (await FileSystemService.exists(tmpPath)) {
+                                nameUri.name = originalName + '-' + iteration++;
+                                continue;
+                            }
+                            break;
+                        }
+
+                        const path = getPath(nameUri);
+
+                        if (structure === 'mono') {
+                            nameUri.name = planUri.name + '-' + nameUri.name;
+                        }
+
+                        planData.spec.blocks.forEach((b) => {
+                            const uri = parseKapetaUri(b.block.ref);
+                            if (uri.fullName === block.metadata.name) {
+                                uri.handle = nameUri.handle;
+                                uri.name = nameUri.name;
+                                b.block.ref = uri.toNormalizedString();
+                            }
+                        });
+
+                        copy.metadata.name = nameUri.fullName;
+
+                        return {
+                            path,
+                            block: copy,
+                        };
+                    })
+                );
+
+                // Create blocks for plan
+                await Promise.all(
+                    blockInfos.map(({ block, path }) => {
+                        return AssetService.create(path, block).catch((err) => {
+                            if ((err.message as string).startsWith('File already exists')) {
+                                // everything is fine.
+                                return;
+                            }
+                            throw err;
+                        });
+                    })
+                );
+            }
             await AssetService.create(`${planPath}/kapeta.yml`, planData);
         } catch (err: any) {
             showToasty({
