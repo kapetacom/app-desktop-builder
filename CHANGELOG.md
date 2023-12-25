@@ -1,3 +1,10 @@
+# [0.62.0-beta.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.62.0-beta.4...v0.62.0-beta.5) (2023-12-25)
+
+
+### Bug Fixes
+
+* Handle invalid names during creation ([#266](https://github.com/kapetacom/app-desktop-builder/issues/266)) ([55a9ddb](https://github.com/kapetacom/app-desktop-builder/commit/55a9ddb1d5a35689a1e0af5813ed6aa2857422b5))
+
 # [0.62.0-beta.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.62.0-beta.3...v0.62.0-beta.4) (2023-12-23)
 
 
