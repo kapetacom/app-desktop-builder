@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import React, { useContext, useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { InstanceEventType, InstanceStatus } from '@kapeta/ui-web-context';
 
 import { BlockInspectorPanel, LogEntry, LogLevel, LogSource, PlannerContext } from '@kapeta/ui-web-plan-editor';
-import { useAsync } from 'react-use';
+import { useAsync, useList } from 'react-use';
 
 import { BlockInstance } from '@kapeta/schemas';
 import { getInstanceConfig } from '../../../../api/LocalConfigService';
@@ -24,25 +24,7 @@ interface Props {
 
 export const EditorBlockInspectorPanel = (props: Props) => {
     const { instance } = props;
-    const planner = useContext(PlannerContext);
-
-    const emitter = useMemo(() => {
-        const listeners: ((entry: any) => void)[] = [];
-        return {
-            listeners,
-            onLog: (listener: (entry: any) => void) => {
-                listeners.push(listener);
-                return () => {
-                    const ix = listeners.indexOf(listener);
-                    if (ix > -1) {
-                        listeners.splice(ix, 1);
-                    }
-                };
-            },
-        };
-        // cache this per blockRef
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [props.systemId, props.instance?.id]);
+    const [logs, logActions] = useList<LogEntry>([]);
 
     useEffect(() => {
         if (!props.instance?.id || !props.open) {
@@ -52,9 +34,7 @@ export const EditorBlockInspectorPanel = (props: Props) => {
         }
 
         const onInstanceLog = (entry: any) => {
-            emitter.listeners.forEach((listener) => {
-                listener(entry);
-            });
+            logActions.push(entry);
         };
 
         return InstanceService.subscribeForLogs(
@@ -63,7 +43,7 @@ export const EditorBlockInspectorPanel = (props: Props) => {
             InstanceEventType.EVENT_INSTANCE_LOG,
             onInstanceLog
         );
-    }, [props.systemId, props.instance?.id, emitter, props.open]);
+    }, [props.systemId, props.instance?.id, logActions, props.open]);
 
     const instanceConfig = useAsync(async () => {
         if (!props.instance?.id || !props.open) {
@@ -72,7 +52,7 @@ export const EditorBlockInspectorPanel = (props: Props) => {
         return getInstanceConfig(props.systemId, props.instance!.id);
     }, [props.systemId, props.instance?.id, props.open]);
 
-    const logs = useAsync(async (): Promise<LogEntry[]> => {
+    const initialLogs = useAsync(async (): Promise<LogEntry[]> => {
         if (!instance?.id || !props.open) {
             return [];
         }
@@ -100,12 +80,19 @@ export const EditorBlockInspectorPanel = (props: Props) => {
         return result?.ok === false ? [] : result.logs;
     }, [instance?.id, props.open, props.instanceInfo]);
 
+    useEffect(() => {
+        if (initialLogs.loading || !initialLogs.value || !props.open) {
+            return;
+        }
+        logActions.clear();
+        logActions.push(...initialLogs.value);
+    }, [initialLogs.loading, initialLogs.value, props.open]);
+
     return instance ? (
         <BlockInspectorPanel
             open={props.open}
             onClosed={props.onClosed}
-            logs={logs.value}
-            emitter={emitter}
+            logs={logs}
             instance={instance}
             configuration={instanceConfig.value}
         />
