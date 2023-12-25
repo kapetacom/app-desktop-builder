@@ -63,7 +63,7 @@ export const NewPlan = (props: NewPlanProps) => {
         blocks: undefined,
     });
 
-    const [createMode, setCreateMode] = useState<CreateMode>('ai');
+    const [createMode, setCreateMode] = useState<CreateMode>('manual');
     const onCreate = async () => {
         if (!plan.plan && !planMetaData) {
             return;
