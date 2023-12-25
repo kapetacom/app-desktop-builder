@@ -1,3 +1,10 @@
+# [0.62.0-beta.7](https://github.com/kapetacom/app-desktop-builder/compare/v0.62.0-beta.6...v0.62.0-beta.7) (2023-12-25)
+
+
+### Bug Fixes
+
+* Default to manual plan creation ([2fe2ddb](https://github.com/kapetacom/app-desktop-builder/commit/2fe2ddb3c20a9d2050e358c5a7f42fb54629a78a))
+
 # [0.62.0-beta.6](https://github.com/kapetacom/app-desktop-builder/compare/v0.62.0-beta.5...v0.62.0-beta.6) (2023-12-25)
 
 
