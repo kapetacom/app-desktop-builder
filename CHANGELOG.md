@@ -1,3 +1,10 @@
+# [0.62.0-beta.8](https://github.com/kapetacom/app-desktop-builder/compare/v0.62.0-beta.7...v0.62.0-beta.8) (2023-12-26)
+
+
+### Bug Fixes
+
+* Wrap in try/catch if stream is closed / defunct ([#268](https://github.com/kapetacom/app-desktop-builder/issues/268)) ([8ab158d](https://github.com/kapetacom/app-desktop-builder/commit/8ab158de7087160e341d381a40749672b652eb09))
+
 # [0.62.0-beta.7](https://github.com/kapetacom/app-desktop-builder/compare/v0.62.0-beta.6...v0.62.0-beta.7) (2023-12-25)
 
 
