@@ -55,8 +55,14 @@ export const installOutputCatcher = () => {
                 return;
             }
 
-            writeChunk(chunk);
-            return originalStdoutWrite(chunk, encoding, callback);
+            try {
+                writeChunk(chunk);
+                return originalStdoutWrite(chunk, encoding, callback);
+            } catch (e) {
+                // Ignore
+                console.warn('Failed to write to stdout', e);
+                return false;
+            }
         };
 
         const originalStderrWrite = process.stdout.write.bind(process.stderr);
@@ -65,8 +71,15 @@ export const installOutputCatcher = () => {
             if (process.stderr.closed) {
                 return;
             }
-            writeChunk(chunk);
-            return originalStderrWrite(chunk, encoding, callback);
+
+            try {
+                writeChunk(chunk);
+                return originalStderrWrite(chunk, encoding, callback);
+            } catch (e) {
+                // Ignore
+                console.warn('Failed to write to stderr', e);
+                return false;
+            }
         };
 
         console.log('Starting Kapeta in %s', app.getAppPath());
