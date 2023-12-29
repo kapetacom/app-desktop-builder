@@ -1,3 +1,23 @@
+# [0.62.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.61.0...v0.62.0) (2023-12-29)
+
+
+### Bug Fixes
+
+* Add license headers ([e7e5514](https://github.com/kapetacom/app-desktop-builder/commit/e7e5514f479dd6146d52e126dd20af0eb9b72008))
+* Default to manual plan creation ([2fe2ddb](https://github.com/kapetacom/app-desktop-builder/commit/2fe2ddb3c20a9d2050e358c5a7f42fb54629a78a))
+* Handle invalid names during creation ([#266](https://github.com/kapetacom/app-desktop-builder/issues/266)) ([55a9ddb](https://github.com/kapetacom/app-desktop-builder/commit/55a9ddb1d5a35689a1e0af5813ed6aa2857422b5))
+* more stable layout for drawer resources [CORE-1180] ([#264](https://github.com/kapetacom/app-desktop-builder/issues/264)) ([66320d5](https://github.com/kapetacom/app-desktop-builder/commit/66320d508057f77df4371e6ac475101ab431c111))
+* Several bug fixes ([3ff550e](https://github.com/kapetacom/app-desktop-builder/commit/3ff550ed133d0cd1411b2605bb015d4ec998afca))
+* Try-catch loading settings ([d7c19f7](https://github.com/kapetacom/app-desktop-builder/commit/d7c19f73b01abc043578a9ae13fb789c95e0c978))
+* Wrap in try/catch if stream is closed / defunct ([#268](https://github.com/kapetacom/app-desktop-builder/issues/268)) ([8ab158d](https://github.com/kapetacom/app-desktop-builder/commit/8ab158de7087160e341d381a40749672b652eb09))
+
+
+### Features
+
+* add prompt-based creation to new plan ([#256](https://github.com/kapetacom/app-desktop-builder/issues/256)) ([f52af46](https://github.com/kapetacom/app-desktop-builder/commit/f52af46466297259bd7920ba2f66669febac4c51))
+* Toggle Pixel Grid from View menu ([a2d6834](https://github.com/kapetacom/app-desktop-builder/commit/a2d68349f8f0e6c789b622c89c1cc069e2a2df97))
+* Use simpler log output panel ([#267](https://github.com/kapetacom/app-desktop-builder/issues/267)) ([d7c8e43](https://github.com/kapetacom/app-desktop-builder/commit/d7c8e43a77922b58fe743be065b9c40db8678e85))
+
 # [0.62.0-beta.8](https://github.com/kapetacom/app-desktop-builder/compare/v0.62.0-beta.7...v0.62.0-beta.8) (2023-12-26)
 
 
