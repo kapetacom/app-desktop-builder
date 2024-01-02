@@ -1,3 +1,10 @@
+# [0.63.0-beta.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.63.0-beta.2...v0.63.0-beta.3) (2024-01-02)
+
+
+### Bug Fixes
+
+* Set z-index for notification popper ([5b2129c](https://github.com/kapetacom/app-desktop-builder/commit/5b2129c7d57af0fa33b6cf1ab2dd81b57420a2f6))
+
 # [0.63.0-beta.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.63.0-beta.1...v0.63.0-beta.2) (2024-01-02)
 
 
