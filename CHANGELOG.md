@@ -1,3 +1,10 @@
+# [0.63.0-beta.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.63.0-beta.3...v0.63.0-beta.4) (2024-01-02)
+
+
+### Bug Fixes
+
+* Bump ui-web-plan-editor ([169cc09](https://github.com/kapetacom/app-desktop-builder/commit/169cc09a91d4789ddee973137aa9e2e40efa5ccc))
+
 # [0.63.0-beta.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.63.0-beta.2...v0.63.0-beta.3) (2024-01-02)
 
 
