@@ -18,6 +18,7 @@ import { Identity, MemberIdentity } from '@kapeta/ui-web-types';
 import { BlockhubShell } from './components/BlockhubShell';
 import { useKapetaContext } from '../../hooks/contextHook';
 import BlockHubIcon from './components/icons/large/BlockHubIcon.svg';
+import IntercomIcon from './components/icons/Intercom.svg';
 import { KindIcon } from '@kapeta/ui-web-components';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 
@@ -175,6 +176,24 @@ export const MainLayout = (props: Props) => {
                             {drawerIsOpen ? <Logo width={122} /> : <KapetaIcon />}
                         </Badge>
                     </IconButton>
+                    <Button
+                        color="info"
+                        sx={{
+                            '&:hover': { backgroundColor: 'inherit' },
+                            m: '0 auto 12px auto',
+                            fontSize: 'inherit',
+                            border: '1px solid',
+                            maxWidth: '100%',
+                            minWidth: 'auto',
+                            width: drawerIsOpen ? '140px' : 'auto',
+                        }}
+                        onClick={() => {
+                            window.Intercom?.('show');
+                        }}
+                    >
+                        <IntercomIcon />
+                        {drawerIsOpen ? <>&nbsp;Get Help</> : ''}
+                    </Button>
                 </MiniDrawer>
 
                 <section style={{ flexGrow: 1 }}>
