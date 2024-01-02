@@ -358,6 +358,10 @@ export const PlanEditor = withPlannerContext(
                         });
                     }}
                     showPixelGrid={appSettings.show_pixel_grid}
+                    initialZoomPanView={{
+                        view: 'center',
+                        transitionDuration: 500,
+                    }}
                 />
             </div>
         );
