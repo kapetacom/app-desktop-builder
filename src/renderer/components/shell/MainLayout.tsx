@@ -180,7 +180,7 @@ export const MainLayout = (props: Props) => {
                         color="info"
                         sx={{
                             '&:hover': { backgroundColor: 'inherit' },
-                            m: '0 auto',
+                            m: '0 auto 12px auto',
                             fontSize: 'inherit',
                             border: '1px solid',
                             maxWidth: '100%',
