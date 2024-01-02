@@ -1,3 +1,10 @@
+# [0.63.0-beta.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.63.0-beta.1...v0.63.0-beta.2) (2024-01-02)
+
+
+### Features
+
+* add get help button for intercom [CORE-1814] ([#272](https://github.com/kapetacom/app-desktop-builder/issues/272)) ([7b7f84d](https://github.com/kapetacom/app-desktop-builder/commit/7b7f84dc7c14e77dbcd251bb2a686fd0af581b58))
+
 # [0.63.0-beta.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.62.1...v0.63.0-beta.1) (2024-01-02)
 
 
