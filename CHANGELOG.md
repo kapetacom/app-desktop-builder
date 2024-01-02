@@ -1,3 +1,15 @@
+# [0.63.0-beta.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.62.1...v0.63.0-beta.1) (2024-01-02)
+
+
+### Bug Fixes
+
+* Bump ui-web-plan-editor ([916dd8f](https://github.com/kapetacom/app-desktop-builder/commit/916dd8f9781ec16da21857a6514e136cd6965ffe))
+
+
+### Features
+
+* Use planner with zoom & pan feature ([506911a](https://github.com/kapetacom/app-desktop-builder/commit/506911a7b30c367063dbc6869076f8c3510fe9fa))
+
 ## [0.62.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.62.0...v0.62.1) (2024-01-02)
 
 
