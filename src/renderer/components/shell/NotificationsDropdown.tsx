@@ -171,6 +171,9 @@ export const NotificationsDropdown = withTheme((props: NotificationsDropdownProp
                 },
             ]}
             transition
+            style={{
+                zIndex: 1500,
+            }}
         >
             {({ TransitionProps }) => (
                 <Grow
