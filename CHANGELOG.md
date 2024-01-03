@@ -1,3 +1,10 @@
+# [0.63.0-beta.6](https://github.com/kapetacom/app-desktop-builder/compare/v0.63.0-beta.5...v0.63.0-beta.6) (2024-01-03)
+
+
+### Bug Fixes
+
+* Bump ui-web-plan-editor to get correct drop position ([445bdeb](https://github.com/kapetacom/app-desktop-builder/commit/445bdebc5f41860c81ed6efff63a57d71b39abfa))
+
 # [0.63.0-beta.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.63.0-beta.4...v0.63.0-beta.5) (2024-01-03)
 
 
