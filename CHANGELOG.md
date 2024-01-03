@@ -1,3 +1,10 @@
+# [0.63.0-beta.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.63.0-beta.4...v0.63.0-beta.5) (2024-01-03)
+
+
+### Bug Fixes
+
+* bump segment and disable intercom in modals [CORE-1814] ([#274](https://github.com/kapetacom/app-desktop-builder/issues/274)) ([07e0014](https://github.com/kapetacom/app-desktop-builder/commit/07e0014d805e030e1a2a98e335e926cd7a06d211))
+
 # [0.63.0-beta.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.63.0-beta.3...v0.63.0-beta.4) (2024-01-02)
 
 
