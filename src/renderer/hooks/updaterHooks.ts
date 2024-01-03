@@ -134,7 +134,7 @@ export const usePlanUpdater = (): PlanUpdater => {
             const blockTypeUri = parseKapetaUri(currentBlock.content.kind);
 
             const currentBlockType = localAssets.data.find((asset) => {
-                return asset.content.metadata.name === blockTypeUri.fullName && asset.version !== blockTypeUri.version;
+                return asset.content.metadata.name === blockTypeUri.fullName && asset.version === blockTypeUri.version;
             });
 
             if (!currentBlockType) {
