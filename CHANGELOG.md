@@ -1,3 +1,10 @@
+# [0.63.0-beta.11](https://github.com/kapetacom/app-desktop-builder/compare/v0.63.0-beta.10...v0.63.0-beta.11) (2024-01-04)
+
+
+### Bug Fixes
+
+* Do not notify sentry about intercom errors ([b0e5683](https://github.com/kapetacom/app-desktop-builder/commit/b0e5683521e8e285c5ea27b7f59feb9eb47c74b9))
+
 # [0.63.0-beta.10](https://github.com/kapetacom/app-desktop-builder/compare/v0.63.0-beta.9...v0.63.0-beta.10) (2024-01-04)
 
 
