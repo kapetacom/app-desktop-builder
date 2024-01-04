@@ -5,7 +5,7 @@
 
 import { app, Menu, shell, BrowserWindow, MenuItemConstructorOptions } from 'electron';
 import { AutoUpdateHelper } from './AutoUpdateHelper';
-import { appVersion, safeSend, withErrorLog } from '../helpers';
+import { appVersion, safeWindowInteraction, safeSend, withErrorLog } from '../helpers';
 import { getAvailableEditors, findEditorOrDefault } from '@kapeta/electron-ide-opener';
 import { SettingsService } from '../services/SettingsService';
 
@@ -46,7 +46,7 @@ export class MenuBuilder {
                 {
                     label: 'Inspect element',
                     click: () => {
-                        this.mainWindow.webContents.inspectElement(x, y);
+                        safeWindowInteraction(this.mainWindow, () => this.mainWindow.webContents.inspectElement(x, y));
                     },
                 },
             ]).popup({ window: this.mainWindow });
@@ -251,21 +251,23 @@ export class MenuBuilder {
                     label: 'Reload',
                     accelerator: 'Command+R',
                     click: () => {
-                        this.mainWindow.webContents.reload();
+                        safeWindowInteraction(this.mainWindow, () => this.mainWindow.webContents.reload());
                     },
                 },
                 {
                     label: 'Toggle Full Screen',
                     accelerator: 'Ctrl+Command+F',
                     click: () => {
-                        this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
+                        safeWindowInteraction(this.mainWindow, () =>
+                            this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen())
+                        );
                     },
                 },
                 {
                     label: 'Toggle Developer Tools',
                     accelerator: 'Alt+Command+I',
                     click: () => {
-                        this.mainWindow.webContents.toggleDevTools();
+                        safeWindowInteraction(this.mainWindow, () => this.mainWindow.webContents.toggleDevTools());
                     },
                 },
             ],
@@ -329,7 +331,7 @@ export class MenuBuilder {
                         label: '&Close',
                         accelerator: 'Ctrl+W',
                         click: () => {
-                            this.mainWindow.close();
+                            safeWindowInteraction(this.mainWindow, () => this.mainWindow.close());
                         },
                     },
                 ],
@@ -372,21 +374,23 @@ export class MenuBuilder {
                         label: '&Reload',
                         accelerator: 'Ctrl+R',
                         click: () => {
-                            this.mainWindow.webContents.reload();
+                            safeWindowInteraction(this.mainWindow, () => this.mainWindow.webContents.reload());
                         },
                     },
                     {
                         label: 'Toggle &Full Screen',
                         accelerator: 'F11',
                         click: () => {
-                            this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
+                            safeWindowInteraction(this.mainWindow, () =>
+                                this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen())
+                            );
                         },
                     },
                     {
                         label: 'Toggle &Developer Tools',
                         accelerator: 'Alt+Ctrl+I',
                         click: () => {
-                            this.mainWindow.webContents.toggleDevTools();
+                            safeWindowInteraction(this.mainWindow, () => this.mainWindow.webContents.toggleDevTools());
                         },
                     },
                 ],
