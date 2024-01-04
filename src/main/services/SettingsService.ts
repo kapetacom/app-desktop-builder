@@ -25,15 +25,33 @@ export class SettingsService {
         this.clusterAddress = ClusterConfiguration.getClusterServiceAddress();
     }
 
-    async get() {
+    async get(): Promise<DesktopAppSettings> {
+        // Default settings
+        const settings = {
+            show_pixel_grid: true,
+            snap_to_pixel_grid: false,
+        };
+
         try {
             const configData = await FS.readFile(ClusterConfiguration.getClusterConfigFile());
             const config = YAML.parse(configData.toString());
-            const appSettings = config.app;
-            return appSettings as DesktopAppSettings;
+
+            if (!config.app) {
+                throw new Error('No app settings found in cluster config file');
+            }
+
+            if (config.app.show_pixel_grid !== undefined) {
+                settings.show_pixel_grid = config.app.show_pixel_grid;
+            }
+
+            if (config.app.snap_to_pixel_grid !== undefined) {
+                settings.snap_to_pixel_grid = config.app.snap_to_pixel_grid;
+            }
         } catch (err) {
             console.error('Failed to get settings', err);
         }
+
+        return settings;
     }
 
     async set(key: DesktopAppSettingsKey, value: string | boolean): Promise<void> {
