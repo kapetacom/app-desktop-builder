@@ -33,7 +33,6 @@ export class SettingsService {
         };
 
         try {
-            // Read the cluster config file
             const configData = await FS.readFile(ClusterConfiguration.getClusterConfigFile());
             const config = YAML.parse(configData.toString());
 
