@@ -1,3 +1,11 @@
+# [0.63.0-beta.9](https://github.com/kapetacom/app-desktop-builder/compare/v0.63.0-beta.8...v0.63.0-beta.9) (2024-01-04)
+
+
+### Bug Fixes
+
+* Remove comment ([b8e786e](https://github.com/kapetacom/app-desktop-builder/commit/b8e786ef7180b2b7a05a584a9473afc4de2fd4f4))
+* Set default values for app settings ([b111042](https://github.com/kapetacom/app-desktop-builder/commit/b111042fd9f4386bd150ae97be13f24028ab77d1))
+
 # [0.63.0-beta.8](https://github.com/kapetacom/app-desktop-builder/compare/v0.63.0-beta.7...v0.63.0-beta.8) (2024-01-04)
 
 
