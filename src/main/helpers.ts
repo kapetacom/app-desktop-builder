@@ -225,3 +225,9 @@ export function withErrorLog(result: Promise<any>) {
         console.error('A method throw unexpected', e, stack);
     });
 }
+
+export function safeWindowInteraction(browserWindow: BrowserWindow, callback: () => void): void {
+    if (browserWindow && !browserWindow.isDestroyed()) {
+        callback();
+    }
+}
