@@ -1,3 +1,10 @@
+# [0.63.0-beta.12](https://github.com/kapetacom/app-desktop-builder/compare/v0.63.0-beta.11...v0.63.0-beta.12) (2024-01-05)
+
+
+### Bug Fixes
+
+* Add safety to window interaction ([c4f0221](https://github.com/kapetacom/app-desktop-builder/commit/c4f02210b8999919692c9942b0b80fddb86915a4))
+
 # [0.63.0-beta.11](https://github.com/kapetacom/app-desktop-builder/compare/v0.63.0-beta.10...v0.63.0-beta.11) (2024-01-04)
 
 
