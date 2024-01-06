@@ -1,3 +1,10 @@
+# [0.63.0-beta.13](https://github.com/kapetacom/app-desktop-builder/compare/v0.63.0-beta.12...v0.63.0-beta.13) (2024-01-06)
+
+
+### Bug Fixes
+
+* Issues when sending query params through proxy ([#282](https://github.com/kapetacom/app-desktop-builder/issues/282)) ([b7231a4](https://github.com/kapetacom/app-desktop-builder/commit/b7231a4dc743a6f3fa079576c452018a2cefe922))
+
 # [0.63.0-beta.12](https://github.com/kapetacom/app-desktop-builder/compare/v0.63.0-beta.11...v0.63.0-beta.12) (2024-01-05)
 
 
