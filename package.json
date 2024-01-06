@@ -107,6 +107,7 @@
         "@kapeta/nodejs-utils": "<2",
         "@kapeta/prettier-config": "^0.6.1",
         "@kapeta/schemas": "<2",
+        "@kapeta/sdk-web-rest-client": "^2.0.1",
         "@kapeta/style": "^0.94.0",
         "@kapeta/ui-web-components": "<2",
         "@kapeta/ui-web-context": "<2",
