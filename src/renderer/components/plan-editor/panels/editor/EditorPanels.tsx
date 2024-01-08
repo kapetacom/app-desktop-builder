@@ -16,6 +16,7 @@ import {
     FormFieldType,
     showToasty,
     ToastType,
+    useConfirm,
     useFormContextField,
 } from '@kapeta/ui-web-components';
 
@@ -50,6 +51,7 @@ import { useNamespacesForField } from '../../../../hooks/useNamespacesForField';
 import { fromTypeProviderToAssetType } from '../../../../utils/assetTypeConverters';
 import { updateBlockFromMapping } from '../../helpers';
 import { InstanceEditor } from './inner/InstanceEditor';
+import { useEffect } from 'react';
 
 function getResourceVersions(dataKindUri: KapetaURI) {
     const allVersions = ResourceTypeProvider.getVersionsFor(dataKindUri.fullName);
@@ -220,7 +222,9 @@ interface Props {
 
 export const EditorPanels: React.FC<Props> = (props) => {
     const planner = useContext(PlannerContext);
+    const confirm = useConfirm();
     const [contextData, setContextData] = useState<any>();
+    const [currentData, setCurrentData] = useState<any>();
     // callbacks
     const saveAndClose = async (data: any) => {
         switch (props.info?.type) {
@@ -298,7 +302,56 @@ export const EditorPanels: React.FC<Props> = (props) => {
         props.onClosed();
     };
 
-    const onPanelCancel = () => {
+    const initialValue = useMemo(() => {
+        let block: BlockDefinition;
+        switch (props.info?.type) {
+            case DataEntityType.CONNECTION:
+                return cloneDeep(props.info.item);
+            case DataEntityType.INSTANCE:
+                block = cloneDeep(props.info.item.block);
+                if (!block.metadata.visibility) {
+                    block.metadata.visibility = 'private';
+                }
+                return block;
+            case DataEntityType.BLOCK:
+                block = cloneDeep(props.info.item.asset.content);
+                if (!block.metadata.visibility) {
+                    block.metadata.visibility = 'private';
+                }
+                return block;
+            case DataEntityType.RESOURCE:
+                return cloneDeep(props.info.item.resource);
+        }
+
+        return {} as any;
+    }, [props.info]);
+
+    useEffect(() => {
+        setCurrentData(initialValue);
+    }, [initialValue]);
+
+    const onPanelCancel = async () => {
+        const hasEditorChanges =
+            // Entity editor
+            !_.isEqual(currentData?.spec?.entities?.source, initialValue?.spec?.entities?.source) ||
+            // REST editor
+            !_.isEqual(currentData?.spec?.source, initialValue?.spec?.source) ||
+            // Parameters editor
+            !_.isEqual(currentData?.spec?.configuration, initialValue?.spec?.configuration);
+
+        if (
+            hasEditorChanges &&
+            !(await confirm({
+                title: 'Unsaved changes',
+                content: 'Are you sure you want to close this panel without saving?',
+                confirmationText: 'Close without saving',
+                confirmationButtonProps: { color: 'error' },
+                cancellationText: 'Keep editing',
+            }))
+        ) {
+            return;
+        }
+
         if (props.info?.creating) {
             // We remove the item if it was created in this session and then cancelled
             switch (props.info?.type) {
@@ -322,30 +375,6 @@ export const EditorPanels: React.FC<Props> = (props) => {
         }
         props.onClosed();
     };
-
-    const initialValue = useMemo(() => {
-        let block: BlockDefinition;
-        switch (props.info?.type) {
-            case DataEntityType.CONNECTION:
-                return cloneDeep(props.info.item);
-            case DataEntityType.INSTANCE:
-                block = cloneDeep(props.info.item.block);
-                if (!block.metadata.visibility) {
-                    block.metadata.visibility = 'private';
-                }
-                return block;
-            case DataEntityType.BLOCK:
-                block = cloneDeep(props.info.item.asset.content);
-                if (!block.metadata.visibility) {
-                    block.metadata.visibility = 'private';
-                }
-                return block;
-            case DataEntityType.RESOURCE:
-                return cloneDeep(props.info.item.resource);
-        }
-
-        return {};
-    }, [props.info]);
 
     const existingNames = useMemo(() => {
         if (props.info && props.info.type === DataEntityType.RESOURCE) {
@@ -387,6 +416,9 @@ export const EditorPanels: React.FC<Props> = (props) => {
                         validators={globalValidators}
                         initialValue={initialValue}
                         onSubmitData={(data) => saveAndClose(data)}
+                        onChange={(data) => {
+                            setCurrentData(data);
+                        }}
                     >
                         <div className="item-form">
                             <InnerForm planner={planner} info={props.info} onContextDataChanged={setContextData} />
