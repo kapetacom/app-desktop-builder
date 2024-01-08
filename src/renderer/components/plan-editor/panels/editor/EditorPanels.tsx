@@ -16,6 +16,7 @@ import {
     FormFieldType,
     showToasty,
     ToastType,
+    useConfirm,
     useFormContextField,
 } from '@kapeta/ui-web-components';
 
@@ -220,7 +221,9 @@ interface Props {
 
 export const EditorPanels: React.FC<Props> = (props) => {
     const planner = useContext(PlannerContext);
+    const confirm = useConfirm();
     const [contextData, setContextData] = useState<any>();
+    const [currentData, setCurrentData] = useState<any>();
     // callbacks
     const saveAndClose = async (data: any) => {
         switch (props.info?.type) {
@@ -298,31 +301,6 @@ export const EditorPanels: React.FC<Props> = (props) => {
         props.onClosed();
     };
 
-    const onPanelCancel = () => {
-        if (props.info?.creating) {
-            // We remove the item if it was created in this session and then cancelled
-            switch (props.info?.type) {
-                case DataEntityType.CONNECTION:
-                    planner.removeConnection(props.info.item);
-                    break;
-                case DataEntityType.BLOCK:
-                    planner.removeBlockDefinition(props.info.item.asset);
-                    planner.removeBlockInstance(props.info.item.instance.id);
-                    break;
-                case DataEntityType.INSTANCE:
-                    planner.removeBlockInstance(props.info.item.instance.id);
-                    break;
-                case DataEntityType.RESOURCE: {
-                    const resource = props.info.item.resource;
-                    const resourceType = ResourceTypeProvider.get(resource.kind);
-                    planner.removeResource(props.info.item.ref, resource.metadata.name, resourceType.role);
-                    break;
-                }
-            }
-        }
-        props.onClosed();
-    };
-
     const initialValue = useMemo(() => {
         let block: BlockDefinition;
         switch (props.info?.type) {
@@ -346,6 +324,44 @@ export const EditorPanels: React.FC<Props> = (props) => {
 
         return {};
     }, [props.info]);
+
+    const onPanelCancel = async () => {
+        if (
+            !_.isEqual(currentData, initialValue) &&
+            !(await confirm({
+                title: 'Unsaved changes',
+                content: 'Are you sure you want to close this panel without saving?',
+                confirmationText: 'Close without saving',
+                confirmationButtonProps: { color: 'error' },
+                cancellationText: 'Keep editing',
+            }))
+        ) {
+            return;
+        }
+
+        if (props.info?.creating) {
+            // We remove the item if it was created in this session and then cancelled
+            switch (props.info?.type) {
+                case DataEntityType.CONNECTION:
+                    planner.removeConnection(props.info.item);
+                    break;
+                case DataEntityType.BLOCK:
+                    planner.removeBlockDefinition(props.info.item.asset);
+                    planner.removeBlockInstance(props.info.item.instance.id);
+                    break;
+                case DataEntityType.INSTANCE:
+                    planner.removeBlockInstance(props.info.item.instance.id);
+                    break;
+                case DataEntityType.RESOURCE: {
+                    const resource = props.info.item.resource;
+                    const resourceType = ResourceTypeProvider.get(resource.kind);
+                    planner.removeResource(props.info.item.ref, resource.metadata.name, resourceType.role);
+                    break;
+                }
+            }
+        }
+        props.onClosed();
+    };
 
     const existingNames = useMemo(() => {
         if (props.info && props.info.type === DataEntityType.RESOURCE) {
@@ -387,6 +403,9 @@ export const EditorPanels: React.FC<Props> = (props) => {
                         validators={globalValidators}
                         initialValue={initialValue}
                         onSubmitData={(data) => saveAndClose(data)}
+                        onChange={(data) => {
+                            setCurrentData(data);
+                        }}
                     >
                         <div className="item-form">
                             <InnerForm planner={planner} info={props.info} onContextDataChanged={setContextData} />
