@@ -1,3 +1,10 @@
+# [0.63.0-beta.16](https://github.com/kapetacom/app-desktop-builder/compare/v0.63.0-beta.15...v0.63.0-beta.16) (2024-01-08)
+
+
+### Bug Fixes
+
+* confirm when dimissing "dirty" editor panels ([#284](https://github.com/kapetacom/app-desktop-builder/issues/284)) ([79a3f47](https://github.com/kapetacom/app-desktop-builder/commit/79a3f4786fa8bb1380a03b97c503317f894d8f31))
+
 # [0.63.0-beta.15](https://github.com/kapetacom/app-desktop-builder/compare/v0.63.0-beta.14...v0.63.0-beta.15) (2024-01-08)
 
 
