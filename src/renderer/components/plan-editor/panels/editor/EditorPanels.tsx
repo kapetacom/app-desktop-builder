@@ -51,6 +51,7 @@ import { useNamespacesForField } from '../../../../hooks/useNamespacesForField';
 import { fromTypeProviderToAssetType } from '../../../../utils/assetTypeConverters';
 import { updateBlockFromMapping } from '../../helpers';
 import { InstanceEditor } from './inner/InstanceEditor';
+import { useEffect } from 'react';
 
 function getResourceVersions(dataKindUri: KapetaURI) {
     const allVersions = ResourceTypeProvider.getVersionsFor(dataKindUri.fullName);
@@ -322,12 +323,24 @@ export const EditorPanels: React.FC<Props> = (props) => {
                 return cloneDeep(props.info.item.resource);
         }
 
-        return {};
+        return {} as any;
     }, [props.info]);
 
+    useEffect(() => {
+        setCurrentData(initialValue);
+    }, [initialValue]);
+
     const onPanelCancel = async () => {
+        const hasEditorChanges =
+            // Entity editor
+            !_.isEqual(currentData?.spec?.entities?.source, initialValue?.spec?.entities?.source) ||
+            // REST editor
+            !_.isEqual(currentData?.spec?.source, initialValue?.spec?.source) ||
+            // Parameters editor
+            !_.isEqual(currentData?.spec?.configuration, initialValue?.spec?.configuration);
+
         if (
-            !_.isEqual(currentData, initialValue) &&
+            hasEditorChanges &&
             !(await confirm({
                 title: 'Unsaved changes',
                 content: 'Are you sure you want to close this panel without saving?',
