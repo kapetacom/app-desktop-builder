@@ -1,3 +1,10 @@
+# [0.63.0-beta.14](https://github.com/kapetacom/app-desktop-builder/compare/v0.63.0-beta.13...v0.63.0-beta.14) (2024-01-08)
+
+
+### Bug Fixes
+
+* Do not disregard name from converter function ([#283](https://github.com/kapetacom/app-desktop-builder/issues/283)) ([f8a5e4e](https://github.com/kapetacom/app-desktop-builder/commit/f8a5e4eafbdba14b1113f07b30c8f5e740c9bc7d))
+
 # [0.63.0-beta.13](https://github.com/kapetacom/app-desktop-builder/compare/v0.63.0-beta.12...v0.63.0-beta.13) (2024-01-06)
 
 
