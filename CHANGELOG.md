@@ -1,3 +1,10 @@
+# [0.63.0-beta.18](https://github.com/kapetacom/app-desktop-builder/compare/v0.63.0-beta.17...v0.63.0-beta.18) (2024-01-09)
+
+
+### Bug Fixes
+
+* Catch errors instead of sentry, and improved file checking ([#286](https://github.com/kapetacom/app-desktop-builder/issues/286)) ([a0b9ef5](https://github.com/kapetacom/app-desktop-builder/commit/a0b9ef54569abd4841c5b4d7ba45e2539261f8ea))
+
 # [0.63.0-beta.17](https://github.com/kapetacom/app-desktop-builder/compare/v0.63.0-beta.16...v0.63.0-beta.17) (2024-01-09)
 
 
