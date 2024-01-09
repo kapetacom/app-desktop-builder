@@ -1,3 +1,10 @@
+# [0.63.0-beta.17](https://github.com/kapetacom/app-desktop-builder/compare/v0.63.0-beta.16...v0.63.0-beta.17) (2024-01-09)
+
+
+### Bug Fixes
+
+* Bump ui-web-plan-editor to get new autofit ([2482ff5](https://github.com/kapetacom/app-desktop-builder/commit/2482ff5391647dae392e44d80cb0f947c626a653))
+
 # [0.63.0-beta.16](https://github.com/kapetacom/app-desktop-builder/compare/v0.63.0-beta.15...v0.63.0-beta.16) (2024-01-08)
 
 
