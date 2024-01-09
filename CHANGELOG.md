@@ -1,3 +1,10 @@
+## [0.63.1-beta.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.63.0...v0.63.1-beta.1) (2024-01-09)
+
+
+### Bug Fixes
+
+* Refresh expired tokens, support latest images, improve error handling ([#287](https://github.com/kapetacom/app-desktop-builder/issues/287)) ([9e3cb94](https://github.com/kapetacom/app-desktop-builder/commit/9e3cb9450c0e78fb76c94749cc25bc9440396c29))
+
 # [0.63.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.62.1...v0.63.0) (2024-01-09)
 
 
