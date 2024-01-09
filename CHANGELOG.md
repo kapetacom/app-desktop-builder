@@ -1,3 +1,33 @@
+# [0.63.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.62.1...v0.63.0) (2024-01-09)
+
+
+### Bug Fixes
+
+* Add safety to window interaction ([c4f0221](https://github.com/kapetacom/app-desktop-builder/commit/c4f02210b8999919692c9942b0b80fddb86915a4))
+* Build issues ([1530ee9](https://github.com/kapetacom/app-desktop-builder/commit/1530ee91621411384e797a72fc3f8bd35a68a5b9))
+* Bump local-cluster-service ([2059637](https://github.com/kapetacom/app-desktop-builder/commit/20596373cb95aad016f6243996de3282ab5724dd))
+* bump segment and disable intercom in modals [CORE-1814] ([#274](https://github.com/kapetacom/app-desktop-builder/issues/274)) ([07e0014](https://github.com/kapetacom/app-desktop-builder/commit/07e0014d805e030e1a2a98e335e926cd7a06d211))
+* Bump ui-web-plan-editor ([f75aab1](https://github.com/kapetacom/app-desktop-builder/commit/f75aab164d4c9c1107733b04b45af6e6cf2d2d23))
+* Bump ui-web-plan-editor ([169cc09](https://github.com/kapetacom/app-desktop-builder/commit/169cc09a91d4789ddee973137aa9e2e40efa5ccc))
+* Bump ui-web-plan-editor ([916dd8f](https://github.com/kapetacom/app-desktop-builder/commit/916dd8f9781ec16da21857a6514e136cd6965ffe))
+* Bump ui-web-plan-editor to get correct drop position ([445bdeb](https://github.com/kapetacom/app-desktop-builder/commit/445bdebc5f41860c81ed6efff63a57d71b39abfa))
+* Bump ui-web-plan-editor to get new autofit ([2482ff5](https://github.com/kapetacom/app-desktop-builder/commit/2482ff5391647dae392e44d80cb0f947c626a653))
+* Catch errors instead of sentry, and improved file checking ([#286](https://github.com/kapetacom/app-desktop-builder/issues/286)) ([a0b9ef5](https://github.com/kapetacom/app-desktop-builder/commit/a0b9ef54569abd4841c5b4d7ba45e2539261f8ea))
+* confirm when dimissing "dirty" editor panels ([#284](https://github.com/kapetacom/app-desktop-builder/issues/284)) ([79a3f47](https://github.com/kapetacom/app-desktop-builder/commit/79a3f4786fa8bb1380a03b97c503317f894d8f31))
+* Do not disregard name from converter function ([#283](https://github.com/kapetacom/app-desktop-builder/issues/283)) ([f8a5e4e](https://github.com/kapetacom/app-desktop-builder/commit/f8a5e4eafbdba14b1113f07b30c8f5e740c9bc7d))
+* Do not notify sentry about intercom errors ([b0e5683](https://github.com/kapetacom/app-desktop-builder/commit/b0e5683521e8e285c5ea27b7f59feb9eb47c74b9))
+* Issue when checking for updates ([#276](https://github.com/kapetacom/app-desktop-builder/issues/276)) ([9ea4797](https://github.com/kapetacom/app-desktop-builder/commit/9ea4797b72a09dc668e552065436911f46ce9b47))
+* Issues when sending query params through proxy ([#282](https://github.com/kapetacom/app-desktop-builder/issues/282)) ([b7231a4](https://github.com/kapetacom/app-desktop-builder/commit/b7231a4dc743a6f3fa079576c452018a2cefe922))
+* Remove comment ([b8e786e](https://github.com/kapetacom/app-desktop-builder/commit/b8e786ef7180b2b7a05a584a9473afc4de2fd4f4))
+* Set default values for app settings ([b111042](https://github.com/kapetacom/app-desktop-builder/commit/b111042fd9f4386bd150ae97be13f24028ab77d1))
+* Set z-index for notification popper ([5b2129c](https://github.com/kapetacom/app-desktop-builder/commit/5b2129c7d57af0fa33b6cf1ab2dd81b57420a2f6))
+
+
+### Features
+
+* add get help button for intercom [CORE-1814] ([#272](https://github.com/kapetacom/app-desktop-builder/issues/272)) ([7b7f84d](https://github.com/kapetacom/app-desktop-builder/commit/7b7f84dc7c14e77dbcd251bb2a686fd0af581b58))
+* Use planner with zoom & pan feature ([506911a](https://github.com/kapetacom/app-desktop-builder/commit/506911a7b30c367063dbc6869076f8c3510fe9fa))
+
 # [0.63.0-beta.18](https://github.com/kapetacom/app-desktop-builder/compare/v0.63.0-beta.17...v0.63.0-beta.18) (2024-01-09)
 
 
