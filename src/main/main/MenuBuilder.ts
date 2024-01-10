@@ -283,7 +283,6 @@ export class MenuBuilder {
                 },
                 {
                     label: 'Close',
-                    accelerator: 'Command+W',
                     selector: 'performClose:',
                 },
                 { type: 'separator' },
@@ -329,7 +328,6 @@ export class MenuBuilder {
                     },
                     {
                         label: '&Close',
-                        accelerator: 'Ctrl+W',
                         click: () => {
                             safeWindowInteraction(this.mainWindow, () => this.mainWindow.close());
                         },
