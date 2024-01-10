@@ -1,3 +1,10 @@
+## [0.63.1-beta.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.63.1-beta.1...v0.63.1-beta.2) (2024-01-10)
+
+
+### Bug Fixes
+
+* Remove shortcut for closing window ([b39d0cc](https://github.com/kapetacom/app-desktop-builder/commit/b39d0ccd878a8959c6ab30997df2998b38d00784))
+
 ## [0.63.1-beta.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.63.0...v0.63.1-beta.1) (2024-01-09)
 
 
