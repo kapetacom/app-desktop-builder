@@ -1,3 +1,10 @@
+## [0.63.1-beta.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.63.1-beta.2...v0.63.1-beta.3) (2024-01-11)
+
+
+### Bug Fixes
+
+* update to support fullName resourceInfo ([#289](https://github.com/kapetacom/app-desktop-builder/issues/289)) ([077c141](https://github.com/kapetacom/app-desktop-builder/commit/077c141cd0a61b37e5237f51f3d7d324254245f1))
+
 ## [0.63.1-beta.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.63.1-beta.1...v0.63.1-beta.2) (2024-01-10)
 
 
