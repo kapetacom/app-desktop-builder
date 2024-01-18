@@ -12,11 +12,11 @@ import Logout from '@mui/icons-material/Logout';
 import AddIcon from '@mui/icons-material/Add';
 import { UserAvatar } from '@kapeta/ui-web-components';
 
-import { withTheme } from 'renderer/Theme';
 import { SidebarList, SidebarListItem, SidebarListItemButton } from './SidebarMenu';
 import { Context } from '../types/shell';
 import { useKapetaContext } from '../../../hooks/contextHook';
 import { useMainTabs } from '../../../hooks/mainTabs';
+import { withTheme } from '../../../Theme';
 
 interface ContextPickerProps {
     contexts: Context[];

@@ -28,6 +28,7 @@ import {
     InfoBox,
     createVerticalScrollShadow,
     useIsFormSubmitAttempted,
+    DSLDataType,
 } from '@kapeta/ui-web-components';
 
 function filterEmpty<T>(value: T | null | undefined): boolean {
@@ -169,7 +170,7 @@ export const InstanceEditor = (props: Props) => {
     };
 
     const setConfiguration = (code: string, results: DSLEntity[]) => {
-        const types = results.map(DSLConverters.toSchemaEntity);
+        const types = results.map((e) => DSLConverters.toSchemaEntity(e, results as DSLDataType[]));
         const configuration = {
             types,
             source: {
@@ -198,6 +199,7 @@ export const InstanceEditor = (props: Props) => {
                     onError={(err: any) => {
                         entitiesField.invalid();
                         setEntitiesError(err.message);
+                        console.warn('Failed while processing', err);
                     }}
                     onChange={(result) => {
                         result.entities && setEntities(result.code, result.entities);
@@ -215,7 +217,7 @@ export const InstanceEditor = (props: Props) => {
     };
 
     const setEntities = (code: string, results: DSLEntity[]) => {
-        const types = results.map(DSLConverters.toSchemaEntity);
+        const types = results.map((entity) => DSLConverters.toSchemaEntity(entity, results as DSLDataType[]));
         const entities = {
             types,
             source: {
@@ -260,6 +262,7 @@ export const InstanceEditor = (props: Props) => {
                     }}
                 >
                     <ErrorBoundary fallbackRender={getErrorFallback(kind)}>
+                        {/* @ts-ignore React types are messy */}
                         <EditorComponent block={data.block} creating={props.creating} />
                     </ErrorBoundary>
                 </Box>

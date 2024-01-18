@@ -13,7 +13,7 @@ import { useKapetaContext } from '../../../hooks/contextHook';
 import { useLoadedPlanContext } from '../../../utils/planContextLoader';
 import { useAssetsChanged } from '../../../hooks/assetHooks';
 import { AssetInfo, AssetThumbnail, fromAsset, fromAssetDisplay } from '@kapeta/ui-web-plan-editor';
-import { AssetService } from 'renderer/api/AssetService';
+import { AssetService } from '../../../api/AssetService';
 
 const COMMUNITY_FILTER: AssetFilter[] = [
     {

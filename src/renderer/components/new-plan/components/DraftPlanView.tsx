@@ -5,13 +5,12 @@
 
 import React from 'react';
 import { BlockDefinition, Plan } from '@kapeta/schemas';
-import { AssetInfo, Planner, PlannerMode, PlanPreview, withPlannerContext } from '@kapeta/ui-web-plan-editor';
-import { useLoadedPlanContext } from 'renderer/utils/planContextLoader';
+import { AssetInfo, Planner, PlannerMode, withPlannerContext } from '@kapeta/ui-web-plan-editor';
+import { useLoadedPlanContext } from '../../../utils/planContextLoader';
 import { useMemo } from 'react';
 import { Box } from '@mui/system';
 import { Button, Paper } from '@mui/material';
 import { KindIcon } from '@kapeta/ui-web-components';
-import { Size } from '@kapeta/ui-web-types';
 
 const BasicPlanner = withPlannerContext(React.forwardRef(Planner));
 

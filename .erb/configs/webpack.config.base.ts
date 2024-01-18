@@ -51,12 +51,16 @@ const configuration: webpack.Configuration = {
             '@kapeta/ui-web-components': Path.resolve(webpackPaths.rootPath, './node_modules/@kapeta/ui-web-components'),
             '@kapeta/ui-web-plan-editor': Path.resolve(webpackPaths.rootPath, './node_modules/@kapeta/ui-web-plan-editor'),
             '@mui/material': Path.resolve(webpackPaths.rootPath, './node_modules/@mui/material'),
-            '@mui/icons-material': Path.resolve(webpackPaths.rootPath, './node_modules/@mui/icons-material'),
+            '@mui/system': Path.resolve(webpackPaths.rootPath, './node_modules/@mui/system/esm'),
+            '@mui/utils': Path.resolve(webpackPaths.rootPath, './node_modules/@mui/utils/esm'),
+            '@mui/icons-material': Path.resolve(webpackPaths.rootPath, './node_modules/@mui/icons-material/esm'),
         },
         modules: [webpackPaths.srcPath, 'node_modules'],
         // There is no need to add aliases here, the paths in tsconfig get mirrored
         plugins: [new TsconfigPathsPlugins()],
-        fallback: { path: require.resolve('path-browserify') },
+        fallback: {
+            path: require.resolve('path-browserify')
+        },
     },
 
     plugins: [

@@ -146,6 +146,7 @@ const InnerForm = ({ planner, info, onContextDataChanged }: InnerFormProps) => {
         const targetClone = useMemo(() => cloneDeep(target), [target]);
 
         return (
+            /* @ts-ignore React types are messy */
             <MappingComponent
                 title="mapping-editor"
                 source={sourceClone}
@@ -204,6 +205,7 @@ const InnerForm = ({ planner, info, onContextDataChanged }: InnerFormProps) => {
 
                 {resourceType?.editorComponent && (
                     <ErrorBoundary resetKeys={[kind, info.item]} fallbackRender={getErrorFallback(kind)}>
+                        {/* @ts-ignore React types are messy */}
                         <resourceType.editorComponent key={kind} block={info.item.block} creating={info.creating} />
                     </ErrorBoundary>
                 )}

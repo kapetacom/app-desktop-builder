@@ -19,7 +19,7 @@
         "set-build-version": "node set-build-version.js && prettier --write package.json",
         "postinstall": "ts-node .erb/scripts/check-native-dep.js && electron-builder install-app-deps && npm run dev:dll",
         "lint:eslint": "cross-env NODE_ENV=development eslint . --ext .js,.jsx,.ts,.tsx",
-        "lint:tsc": "tsc --noEmit",
+        "lint:tsc": "tsc --noEmit && tsc --noEmit --project src/renderer/tsconfig.json",
         "lint": "npm run lint:eslint && npm run lint:tsc",
         "package": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --publish never",
         "prepare": "husky install",

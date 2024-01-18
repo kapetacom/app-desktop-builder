@@ -47,6 +47,7 @@ const InnerBlockType = (props: InnerBlockTypeProps) => {
     const currentTarget = BlockTypeProvider.get(props.kind);
 
     if (currentTarget && currentTarget.editorComponent) {
+        // @ts-ignore React types are messy
         BlockTypeComponent = currentTarget.editorComponent;
     }
 

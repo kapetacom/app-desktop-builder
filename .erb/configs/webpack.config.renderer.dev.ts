@@ -91,8 +91,11 @@ const configuration: webpack.Configuration = {
                 use: {
                     loader: 'ts-loader',
                     options: {
-                        // Remove this line to enable type checking in webpack builds
-                        transpileOnly: true,
+                        allowTsInNodeModules: true,
+                        configFile: path.join(
+                            webpackPaths.srcRendererPath,
+                            'tsconfig.json'
+                        ),
                     },
                 },
             },
@@ -234,7 +237,6 @@ const configuration: webpack.Configuration = {
     ],
     resolve: {
         alias,
-
     },
 
     node: {

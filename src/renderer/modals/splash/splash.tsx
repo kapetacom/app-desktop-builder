@@ -39,7 +39,7 @@ function render(state: State) {
     );
 }
 
-window.electron.ipcRenderer.on('splash', ([eventType, data]) => {
+window.electron.ipcRenderer.on('splash', ([eventType, data]: [string, any]) => {
     if (eventType === 'changed') {
         render({
             localClusterStatus:

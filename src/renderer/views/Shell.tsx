@@ -3,23 +3,23 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import 'react-tabs/style/react-tabs.css';
 
-import { TopBar } from 'renderer/components/shell/TopBar';
-import { MainLayout } from 'renderer/components/shell/MainLayout';
-import { EditorTabs } from 'renderer/components/shell/EditorTabs';
+import { TopBar } from '../components/shell/TopBar';
+import { MainLayout } from '../components/shell/MainLayout';
+import { EditorTabs } from '../components/shell/EditorTabs';
 
 import './Shell.less';
-import { useKapetaContext } from 'renderer/hooks/contextHook';
+import { useKapetaContext } from '../hooks/contextHook';
 import { useBackgroundTasks } from './hooks/useBackgroundTasks';
 import { useNotifications } from '../hooks/useNotifications';
 import { useEffect } from 'react';
 import { KindIcon, SimpleLoader } from '@kapeta/ui-web-components';
 import { LoginScreen } from './LoginScreen';
-import { MainTabsContextProvider, useMainTabs } from '../hooks/mainTabs';
+import { MainTabsContextProvider } from '../hooks/mainTabs';
 import { usePrevious } from 'react-use';
-import { NavigationButtons } from 'renderer/components/shell/NavigationButtons';
+import { NavigationButtons } from '../components/shell/NavigationButtons';
 import { Stack, Box } from '@mui/system';
 import { SvgIcon } from '@mui/material';
 import DeployIcon from '../components/shell/components/icons/DeployIcon.svg';

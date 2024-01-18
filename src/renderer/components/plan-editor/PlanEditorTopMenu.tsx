@@ -21,6 +21,7 @@ import {
     useFormContextField,
     InfoBox,
     useConfirm,
+    DSLDataType,
 } from '@kapeta/ui-web-components';
 import './PlanEditorTopMenu.less';
 import {
@@ -47,8 +48,6 @@ import {
     Typography,
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import { TaskService } from 'renderer/api/TaskService';
-import { SystemService } from 'renderer/api/SystemService';
 import PublishIcon from '@mui/icons-material/Publish';
 import { CodeBlock } from '../general/CodeBlock';
 import CoffeeIcon from '../../../../assets/images/coffee.svg';
@@ -57,6 +56,8 @@ import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import _ from 'lodash';
 import { FileSystemService } from '../../api/FileSystemService';
 import { FolderOpen } from '@mui/icons-material';
+import { SystemService } from '../../api/SystemService';
+import { TaskService } from '../../api/TaskService';
 
 const ConfigSchemaEditor = (props: { systemId: string }) => {
     const configurationField = useFormContextField('spec.configuration');
@@ -67,7 +68,7 @@ const ConfigSchemaEditor = (props: { systemId: string }) => {
     };
 
     const setConfiguration = (code: string, results: DSLEntity[]) => {
-        const types = results.map(DSLConverters.toSchemaEntity);
+        const types = results.map((e) => DSLConverters.toSchemaEntity(e, results as DSLDataType[]));
         const config = {
             types,
             source: {
