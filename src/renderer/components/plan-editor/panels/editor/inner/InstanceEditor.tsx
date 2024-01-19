@@ -20,7 +20,6 @@ import {
     ConfigurationEditor,
     DataTypeEditor,
     DSL_LANGUAGE_ID,
-    DSLConverters,
     DSLEntity,
     FormField,
     FormFieldType,
@@ -30,6 +29,8 @@ import {
     useIsFormSubmitAttempted,
     DSLDataType,
 } from '@kapeta/ui-web-components';
+
+import { DSLConverters } from '@kapeta/kaplang-core';
 
 function filterEmpty<T>(value: T | null | undefined): boolean {
     return value !== null && value !== undefined;

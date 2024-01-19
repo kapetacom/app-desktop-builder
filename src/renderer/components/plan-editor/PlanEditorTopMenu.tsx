@@ -9,7 +9,6 @@ import { InstanceEventType, Task, TaskStatus } from '@kapeta/ui-web-context';
 import {
     ConfigurationEditor,
     DSL_LANGUAGE_ID,
-    DSLConverters,
     DSLEntity,
     EntityEditor,
     FormButtons,
@@ -23,6 +22,7 @@ import {
     useConfirm,
     DSLDataType,
 } from '@kapeta/ui-web-components';
+import { DSLConverters } from '@kapeta/kaplang-core';
 import './PlanEditorTopMenu.less';
 import {
     BlockDefinitionReference,
