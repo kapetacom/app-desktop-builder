@@ -91,6 +91,7 @@ const configuration: webpack.Configuration = {
                 use: {
                     loader: 'ts-loader',
                     options: {
+                        transpileOnly: true,
                         allowTsInNodeModules: true,
                         configFile: path.join(
                             webpackPaths.srcRendererPath,

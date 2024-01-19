@@ -8,7 +8,7 @@ import React, { useCallback, useMemo } from 'react';
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import * as _kapeta_schemas from '@kapeta/schemas';
 import { IBlockTypeProvider, SchemaKind } from '@kapeta/ui-web-types';
-import { Alert, Box, Stack, Tab, Tabs, Typography } from '@mui/material';
+import { Alert, Box, Stack, Tab, Tabs } from '@mui/material';
 import { useKapetaContext } from '../../../../../hooks/contextHook';
 import { useNamespacesForField } from '../../../../../hooks/useNamespacesForField';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
@@ -31,6 +31,7 @@ import {
 } from '@kapeta/ui-web-components';
 
 import { DSLConverters } from '@kapeta/kaplang-core';
+import { toDataTypes } from '../../../../../utils/dsl-filter';
 
 function filterEmpty<T>(value: T | null | undefined): boolean {
     return value !== null && value !== undefined;
@@ -171,7 +172,7 @@ export const InstanceEditor = (props: Props) => {
     };
 
     const setConfiguration = (code: string, results: DSLEntity[]) => {
-        const types = results.map((e) => DSLConverters.toSchemaEntity(e, results as DSLDataType[]));
+        const types = results.map((e) => DSLConverters.toSchemaEntity(e, toDataTypes(results)));
         const configuration = {
             types,
             source: {

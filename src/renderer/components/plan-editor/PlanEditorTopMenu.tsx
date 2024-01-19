@@ -39,7 +39,6 @@ import {
     Chip,
     CircularProgress,
     IconButton,
-    Modal,
     Paper,
     Popover,
     Stack,
@@ -58,6 +57,7 @@ import { FileSystemService } from '../../api/FileSystemService';
 import { FolderOpen } from '@mui/icons-material';
 import { SystemService } from '../../api/SystemService';
 import { TaskService } from '../../api/TaskService';
+import { toDataTypes } from '../../utils/dsl-filter';
 
 const ConfigSchemaEditor = (props: { systemId: string }) => {
     const configurationField = useFormContextField('spec.configuration');
@@ -68,7 +68,7 @@ const ConfigSchemaEditor = (props: { systemId: string }) => {
     };
 
     const setConfiguration = (code: string, results: DSLEntity[]) => {
-        const types = results.map((e) => DSLConverters.toSchemaEntity(e, results as DSLDataType[]));
+        const types = results.map((e) => DSLConverters.toSchemaEntity(e, toDataTypes(results)));
         const config = {
             types,
             source: {
