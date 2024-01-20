@@ -1,3 +1,10 @@
+# [0.64.0-beta.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.63.1-beta.3...v0.64.0-beta.1) (2024-01-20)
+
+
+### Features
+
+* Adds support for new Kaplang version ([47c3f25](https://github.com/kapetacom/app-desktop-builder/commit/47c3f25dfd3bb3f0123cdd88e678134bdaec0b62))
+
 ## [0.63.1-beta.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.63.1-beta.2...v0.63.1-beta.3) (2024-01-11)
 
 
