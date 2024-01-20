@@ -20,7 +20,7 @@ class FileSystemServiceImpl implements FileSystemStore {
     }
 
     openPath(path: string) {
-        window.electron.ipcRenderer.invoke('open-path', path).catch((e) => {
+        window.electron.ipcRenderer.invoke('open-path', path).catch((e: any) => {
             showToasty({
                 title: 'Failed to open path',
                 message: (e as Error).message,

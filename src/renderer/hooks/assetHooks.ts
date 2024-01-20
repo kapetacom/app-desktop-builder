@@ -14,8 +14,8 @@ import _ from 'lodash';
 import useSWRImmutable from 'swr/immutable';
 import { useAsyncRetry } from 'react-use';
 import { AssetInfo, fromAsset } from '@kapeta/ui-web-plan-editor';
-import { SocketService } from 'renderer/api/SocketService';
-import { AssetService } from 'renderer/api/AssetService';
+import { SocketService } from '../api/SocketService';
+import { AssetService } from '../api/AssetService';
 
 interface AssetChangedEvent {
     type: string;

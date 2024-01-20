@@ -11,8 +11,8 @@ import { useAsync, useList } from 'react-use';
 
 import { BlockInstance } from '@kapeta/schemas';
 import { getInstanceConfig } from '../../../../api/LocalConfigService';
-import { InstanceService } from 'renderer/api/InstanceService';
 import { InstanceInfo } from '../../types';
+import { InstanceService } from '../../../../api/InstanceService';
 
 interface Props {
     systemId: string;

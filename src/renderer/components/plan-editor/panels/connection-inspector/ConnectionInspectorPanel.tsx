@@ -11,7 +11,7 @@ import { Connection } from '@kapeta/schemas';
 import { useList } from 'react-use';
 import { getConnectionId, PlannerContext, PlannerContextData } from '@kapeta/ui-web-plan-editor';
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
-import { TrafficEventType, TrafficService } from 'renderer/api/TrafficService';
+import { TrafficEventType, TrafficService } from '../../../../api/TrafficService';
 
 interface ModalProps {
     connection: Connection;
@@ -50,6 +50,7 @@ const ModalContent = ({ planner, connection, trafficLines }: ModalProps) => {
 
     const mapping: ConnectionMethodsMapping = connection.mapping || {};
 
+    // @ts-ignore React types are messy
     return <Inspector trafficLines={trafficLines} mapping={mapping} />;
 };
 

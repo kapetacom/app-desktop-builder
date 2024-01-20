@@ -23,5 +23,13 @@
         "@kapeta/local-cluster-config": "^0.3.1",
         "@kapeta/local-cluster-service": "^0.33.10",
         "@kapeta/nodejs-process": "^1.2.0"
+    },
+    "devDependencies": {
+        "@kapeta/web-microfrontend": "^1",
+        "@kapeta/kaplang-core": "^1.9",
+        "@kapeta/schemas": "^2.0.0",
+        "@kapeta/ui-web-components": "^3.0.1",
+        "@kapeta/ui-web-plan-editor": "^2.0.0",
+        "@kapeta/ui-web-types": "^1.2.0"
     }
 }

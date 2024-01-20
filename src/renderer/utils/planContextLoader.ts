@@ -14,10 +14,11 @@ import Kapeta from '../kapeta';
 import { useLocalAssets } from '../hooks/assetHooks';
 import { AssetInfo, fromAsset, fromAssetDisplay } from '@kapeta/ui-web-plan-editor';
 import { assetFetcher } from '../api/APIService';
-import { clusterPath } from 'renderer/api/ClusterConfig';
-import { BlockService } from 'renderer/api/BlockService';
+
 // Careful not to import the code from cluster-config, it doesnt work in browser
 import type { DefinitionInfo } from '@kapeta/local-cluster-config';
+import { clusterPath } from '../api/ClusterConfig';
+import { BlockService } from '../api/BlockService';
 
 type PromiseCache<T = void> = { [key: string]: Promise<T> };
 const PROVIDER_CACHE: PromiseCache = {};

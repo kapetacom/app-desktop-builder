@@ -11,8 +11,8 @@ import { BlockDefinition } from '@kapeta/schemas';
 import { DataEntityType, EditItemInfo } from '../types';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import { useBlocks } from '../../../hooks/assetHooks';
-import { AssetService } from 'renderer/api/AssetService';
 import { getBlockFolderForPlan } from '../helpers';
+import { AssetService } from '../../../api/AssetService';
 
 interface Props {
     open: boolean;

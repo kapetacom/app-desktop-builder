@@ -232,11 +232,14 @@ export const BlockConfigurationPanel = (props: Props) => {
                         {currentTab === 'configuration' &&
                             block &&
                             (typeProvider?.configComponent && props.instance ? (
-                                <typeProvider.configComponent
-                                    block={block}
-                                    instance={props.instance}
-                                    readOnly={configReadOnly}
-                                />
+                                <>
+                                    {/* @ts-ignore React types are messy */}
+                                    <typeProvider.configComponent
+                                        block={block}
+                                        instance={props.instance}
+                                        readOnly={configReadOnly}
+                                    />
+                                </>
                             ) : (
                                 <EntityEditorForm
                                     instances={planner.plan?.spec.blocks?.map((blockInstance) => {

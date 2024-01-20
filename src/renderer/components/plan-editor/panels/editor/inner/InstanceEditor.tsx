@@ -8,7 +8,7 @@ import React, { useCallback, useMemo } from 'react';
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import * as _kapeta_schemas from '@kapeta/schemas';
 import { IBlockTypeProvider, SchemaKind } from '@kapeta/ui-web-types';
-import { Alert, Box, Stack, Tab, Tabs, Typography } from '@mui/material';
+import { Alert, Box, Stack, Tab, Tabs } from '@mui/material';
 import { useKapetaContext } from '../../../../../hooks/contextHook';
 import { useNamespacesForField } from '../../../../../hooks/useNamespacesForField';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
@@ -20,7 +20,6 @@ import {
     ConfigurationEditor,
     DataTypeEditor,
     DSL_LANGUAGE_ID,
-    DSLConverters,
     DSLEntity,
     FormField,
     FormFieldType,
@@ -28,7 +27,12 @@ import {
     InfoBox,
     createVerticalScrollShadow,
     useIsFormSubmitAttempted,
+    DSLDataType,
 } from '@kapeta/ui-web-components';
+
+import { DSLConverters, KAPLANG_ID, KAPLANG_VERSION } from '@kapeta/kaplang-core';
+import { toDataTypes } from '../../../../../utils/dsl-filter';
+import { useDSLEntityIncludes } from '@kapeta/ui-web-plan-editor';
 
 function filterEmpty<T>(value: T | null | undefined): boolean {
     return value !== null && value !== undefined;
@@ -135,6 +139,8 @@ export const InstanceEditor = (props: Props) => {
     type PanelId = 'info' | 'edit' | 'entities' | 'parameters';
     const [currentTabId, setCurrentTabId] = React.useState<PanelId>('info');
 
+    const dataTypeIncludes = useDSLEntityIncludes(data.block.kind, data.block.spec.target?.kind);
+
     const renderConfiguration = () => {
         const configuration = configurationField.get();
         const result = {
@@ -169,11 +175,12 @@ export const InstanceEditor = (props: Props) => {
     };
 
     const setConfiguration = (code: string, results: DSLEntity[]) => {
-        const types = results.map(DSLConverters.toSchemaEntity);
+        const types = results.map((e) => DSLConverters.toSchemaEntity(e, toDataTypes(results)));
         const configuration = {
             types,
             source: {
-                type: DSL_LANGUAGE_ID,
+                type: KAPLANG_ID,
+                version: KAPLANG_VERSION,
                 value: code,
             },
         };
@@ -195,9 +202,11 @@ export const InstanceEditor = (props: Props) => {
                 <InfoBox>Entities define external data types to be used by the resources for this block</InfoBox>
                 <DataTypeEditor
                     value={result}
+                    validTypes={dataTypeIncludes}
                     onError={(err: any) => {
                         entitiesField.invalid();
                         setEntitiesError(err.message);
+                        console.warn('Failed while processing', err);
                     }}
                     onChange={(result) => {
                         result.entities && setEntities(result.code, result.entities);
@@ -215,11 +224,12 @@ export const InstanceEditor = (props: Props) => {
     };
 
     const setEntities = (code: string, results: DSLEntity[]) => {
-        const types = results.map(DSLConverters.toSchemaEntity);
+        const types = results.map((entity) => DSLConverters.toSchemaEntity(entity, results as DSLDataType[]));
         const entities = {
             types,
             source: {
-                type: DSL_LANGUAGE_ID,
+                type: KAPLANG_ID,
+                version: KAPLANG_VERSION,
                 value: code,
             },
         };
@@ -260,6 +270,7 @@ export const InstanceEditor = (props: Props) => {
                     }}
                 >
                     <ErrorBoundary fallbackRender={getErrorFallback(kind)}>
+                        {/* @ts-ignore React types are messy */}
                         <EditorComponent block={data.block} creating={props.creating} />
                     </ErrorBoundary>
                 </Box>

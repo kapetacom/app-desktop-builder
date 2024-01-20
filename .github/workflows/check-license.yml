@@ -15,4 +15,3 @@ jobs:
           holder: 'Kapeta Inc.'
           license: 'BUSL-1.1'
           sources: 'src/**/* stories/*'
-

@@ -1,0 +1,11 @@
+{
+    "extends": "../../tsconfig.json",
+    "compilerOptions": {
+        "target": "ES2020",
+        "module": "ES2020",
+        "jsx": "react-jsx",
+        "baseUrl": "./",
+        "moduleResolution": "Bundler"
+    },
+    "exclude": ["test", "release/build", "release/app/dist", ".erb/dll"]
+}

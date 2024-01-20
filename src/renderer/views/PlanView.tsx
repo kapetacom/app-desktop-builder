@@ -7,18 +7,17 @@ import React, { useEffect, useMemo } from 'react';
 import { useAsyncRetry } from 'react-use';
 import { PlannerMode } from '@kapeta/ui-web-plan-editor';
 import { InstanceEventType, InstanceStatus } from '@kapeta/ui-web-context';
-import { Plan, validateSchema } from '@kapeta/schemas';
+import { Plan } from '@kapeta/schemas';
 import { normalizeKapetaUri, parseKapetaUri } from '@kapeta/nodejs-utils';
-import { CoreTypes, SimpleLoader } from '@kapeta/ui-web-components';
+import { SimpleLoader } from '@kapeta/ui-web-components';
 import { PlanEditor } from '../components/plan-editor/PlanEditor';
 import { useLoadedPlanContext } from '../utils/planContextLoader';
 import { useAsset } from '../hooks/assetHooks';
-import { AssetService } from 'renderer/api/AssetService';
+import { AssetService } from '../api/AssetService';
 import { SystemService } from '../api/SystemService';
 import './PlanView.less';
-import { Box, Typography } from '@mui/material';
-import { ErrorBox, ExceptionWrapper, PlanExceptionWrapper } from '../components/general/ExceptionWrapper';
-import { getAssetTitle } from '../components/plan-editor/helpers';
+
+import { PlanExceptionWrapper } from '../components/general/ExceptionWrapper';
 
 interface PlanViewProps {
     systemId: string;

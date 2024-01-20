@@ -37,7 +37,7 @@ function render(state: State) {
     );
 }
 
-window.electron.ipcRenderer.on('processing', ([eventType, data]) => {
+window.electron.ipcRenderer.on('processing', ([eventType, data]: [string, any]) => {
     if (eventType === 'changed') {
         render(data as State);
     }

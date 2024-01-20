@@ -3,12 +3,13 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { ResourceRole, SchemaKind } from '@kapeta/ui-web-types';
-import { AssetInfo } from '@kapeta/ui-web-plan-editor';
+import { ResourceRole, type ResourceWithSpec, SchemaKind } from '@kapeta/ui-web-types';
+import { AssetInfo, createEntityList, getBlockEntities, isDirectDSL } from '@kapeta/ui-web-plan-editor';
 import _ from 'lodash';
-import { BlockDefinition, Entity, Resource } from '@kapeta/schemas';
-import { DSL_LANGUAGE_ID, DSLConverters, DSLEntity, DSLWriter } from '@kapeta/ui-web-components';
+import { BlockDefinition, Entity } from '@kapeta/schemas';
+import { DSLConverters } from '@kapeta/ui-web-components';
 import Path from 'path';
+import { DSLData } from '@kapeta/kaplang-core';
 
 export function getBlockFolderForPlan(planPath: string): string {
     return Path.join(planPath, 'blocks');
@@ -69,13 +70,20 @@ export function getSchemaTitle(asset: SchemaKind): string {
 
 export function updateBlockFromMapping(
     role: ResourceRole,
-    newResource: Resource,
-    newEntities: Entity[],
-    oldResource: Resource,
+    newResource: ResourceWithSpec<any>,
+    newEntities: Entity[] | DSLData[],
+    oldResource: ResourceWithSpec<any>,
     oldBlock: BlockDefinition
 ) {
+    getBlockEntities(newResource.kind, oldBlock, false);
+
+    const directDSL = isDirectDSL(newResource.kind);
+    const oldEntities = directDSL
+        ? getBlockEntities(newResource.kind, oldBlock, false)
+        : oldBlock.spec.entities?.types ?? [];
+
     const targetResourceChanged = !_.isEqual(newResource, oldResource);
-    const targetEntitiesChanged = !_.isEqual(oldBlock.spec.entities?.types, newEntities);
+    const targetEntitiesChanged = !_.isEqual(newEntities, oldEntities);
     const targetBlockChanged = targetResourceChanged || targetEntitiesChanged;
     if (!targetBlockChanged) {
         return null;
@@ -83,21 +91,21 @@ export function updateBlockFromMapping(
     //If we had to add entities to the target block, we need to update the block definition
     const newBlockDefinition = _.cloneDeep(oldBlock);
     if (targetEntitiesChanged) {
-        newBlockDefinition.spec.entities = {
-            types: newEntities,
-            source: {
-                type: DSL_LANGUAGE_ID,
-                value: DSLWriter.write(
-                    newEntities.reduce((acc, entity) => {
-                        const dslEntity = DSLConverters.fromSchemaEntity(entity);
-                        return dslEntity ? [...acc, dslEntity] : acc;
-                    }, [] as DSLEntity[])
-                ),
-            },
-        };
+        if (directDSL) {
+            const dslTypes = newEntities as DSLData[];
+            newBlockDefinition.spec.entities = createEntityList(dslTypes);
+        } else {
+            const entities = newEntities as Entity[];
+            const dslEntities = entities
+                .map((entity) => {
+                    return DSLConverters.fromSchemaEntity(entity);
+                })
+                .filter((entity) => entity !== undefined) as DSLData[];
+            newBlockDefinition.spec.entities = createEntityList(dslEntities);
+        }
     }
 
-    const resourceList =
+    const resourceList: ResourceWithSpec<any>[] | undefined =
         role === ResourceRole.PROVIDES ? newBlockDefinition.spec.providers : newBlockDefinition.spec.consumers;
 
     if (targetResourceChanged && resourceList) {
