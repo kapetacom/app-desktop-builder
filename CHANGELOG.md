@@ -1,3 +1,10 @@
+# [0.64.0-beta.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.64.0-beta.1...v0.64.0-beta.2) (2024-01-20)
+
+
+### Bug Fixes
+
+* local-cluster-service needed bumping ([#291](https://github.com/kapetacom/app-desktop-builder/issues/291)) ([dcaf478](https://github.com/kapetacom/app-desktop-builder/commit/dcaf478f5c3d0dab9028173a1e318f4af78475bb))
+
 # [0.64.0-beta.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.63.1-beta.3...v0.64.0-beta.1) (2024-01-20)
 
 
