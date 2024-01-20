@@ -95,10 +95,12 @@ export function updateBlockFromMapping(
             const dslTypes = newEntities as DSLData[];
             newBlockDefinition.spec.entities = createEntityList(dslTypes);
         } else {
-            const dslEntities = newEntities.reduce((acc, entity) => {
-                const dslEntity = DSLConverters.fromSchemaEntity(entity);
-                return dslEntity ? [...acc, dslEntity] : acc;
-            }, [] as DSLEntity[]);
+            const entities = newEntities as Entity[];
+            const dslEntities = entities
+                .map((entity) => {
+                    return DSLConverters.fromSchemaEntity(entity);
+                })
+                .filter((entity) => entity !== undefined) as DSLData[];
             newBlockDefinition.spec.entities = createEntityList(dslEntities);
         }
     }
