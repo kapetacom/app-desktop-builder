@@ -7,9 +7,9 @@ import { ResourceRole, type ResourceWithSpec, SchemaKind } from '@kapeta/ui-web-
 import { AssetInfo, createEntityList, getBlockEntities, isDirectDSL } from '@kapeta/ui-web-plan-editor';
 import _ from 'lodash';
 import { BlockDefinition, Entity } from '@kapeta/schemas';
-import { DSL_LANGUAGE_ID, DSLConverters, DSLEntity, DSLWriter } from '@kapeta/ui-web-components';
+import { DSLConverters } from '@kapeta/ui-web-components';
 import Path from 'path';
-import { DSLData, DSLEntityType } from '../../../../../../../kaplang';
+import { DSLData } from '@kapeta/kaplang-core';
 
 export function getBlockFolderForPlan(planPath: string): string {
     return Path.join(planPath, 'blocks');

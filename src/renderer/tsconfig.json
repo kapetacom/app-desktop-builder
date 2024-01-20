@@ -5,7 +5,7 @@
         "module": "ES2020",
         "jsx": "react-jsx",
         "baseUrl": "./",
-        "moduleResolution": "Bundler",
+        "moduleResolution": "Bundler"
     },
     "exclude": ["test", "release/build", "release/app/dist", ".erb/dll"]
 }
