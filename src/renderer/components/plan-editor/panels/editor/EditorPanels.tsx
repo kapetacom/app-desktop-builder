@@ -5,49 +5,38 @@
 
 import React, { useCallback, useContext, useMemo, useState } from 'react';
 import {
-    AssetNameInput,
     AssetVersionSelector,
-    DSL_LANGUAGE_ID,
-    DSLConverters,
-    DSLWriter,
     FormButtons,
     FormContainer,
-    FormField,
-    FormFieldType,
     showToasty,
     ToastType,
     useConfirm,
     useFormContextField,
 } from '@kapeta/ui-web-components';
 
-import { BlockTypeProvider, ResourceTypeProvider } from '@kapeta/ui-web-context';
+import { BlockTargetProvider, BlockTypeProvider, ResourceTypeProvider } from '@kapeta/ui-web-context';
 
 import { parseKapetaUri, KapetaURI } from '@kapeta/nodejs-utils';
 
-import type { IResourceTypeProvider, ResourceConnectionMappingChange, SchemaKind } from '@kapeta/ui-web-types';
+import type { IResourceTypeProvider, ResourceConnectionMappingChange, ResourceWithSpec } from '@kapeta/ui-web-types';
 import { ResourceRole } from '@kapeta/ui-web-types';
-import { BlockDefinition, Resource, Connection, Entity, IconType, BlockInstance } from '@kapeta/schemas';
+import { BlockDefinition, Resource, Connection, BlockInstance } from '@kapeta/schemas';
 
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import _, { cloneDeep } from 'lodash';
-import { PlannerContext, PlannerContextData, PlannerSidebar } from '@kapeta/ui-web-plan-editor';
+import {
+    PlannerContext,
+    PlannerContextData,
+    PlannerSidebar,
+    useBlockEntities,
+    useDirectDSL,
+    useTransformEntities,
+} from '@kapeta/ui-web-plan-editor';
 import { BlockInfo, DataEntityType, EditItemInfo } from '../../types';
 
 import './ItemEditorPanel.less';
 import { replaceBase64IconWithUrl } from '../../../../utils/iconHelpers';
-import {
-    Accordion,
-    AccordionDetails,
-    AccordionSummary,
-    Box,
-    Button,
-    Stack,
-    Tab,
-    Tabs,
-    Typography,
-} from '@mui/material';
-import { useKapetaContext } from '../../../../hooks/contextHook';
-import { useNamespacesForField } from '../../../../hooks/useNamespacesForField';
+import { Button } from '@mui/material';
 import { fromTypeProviderToAssetType } from '../../../../utils/assetTypeConverters';
 import { updateBlockFromMapping } from '../../helpers';
 import { InstanceEditor } from './inner/InstanceEditor';
@@ -70,10 +59,10 @@ interface ConnectionContextData {
     change: ResourceConnectionMappingChange;
     fromBlock: BlockDefinition;
     fromBlockInstance: BlockInstance;
-    fromResource: Resource;
+    fromResource: ResourceWithSpec<any>;
     toBlock: BlockDefinition;
     toBlockInstance: BlockInstance;
-    toResource: Resource;
+    toResource: ResourceWithSpec<any>;
 }
 
 const InnerForm = ({ planner, info, onContextDataChanged }: InnerFormProps) => {
@@ -132,21 +121,14 @@ const InnerForm = ({ planner, info, onContextDataChanged }: InnerFormProps) => {
 
         const currentValue = mappingField.get(connection.mapping);
 
-        const sourceEntities = useMemo(
-            () => cloneDeep(fromBlock?.spec.entities?.types ?? ([] as Entity[])),
-            [fromBlock?.spec.entities?.types]
-        );
-
-        const targetEntities = useMemo(
-            () => cloneDeep(toBlock?.spec.entities?.types ?? ([] as Entity[])),
-            [toBlock?.spec.entities?.types]
-        );
-
+        const sourceTypes = useBlockEntities(source.kind, fromBlock);
+        const sourceEntities = useTransformEntities(source.kind, sourceTypes);
+        const targetTypes = useBlockEntities(target.kind, toBlock);
+        const targetEntities = useTransformEntities(source.kind, targetTypes);
         const sourceClone = useMemo(() => cloneDeep(source), [source]);
         const targetClone = useMemo(() => cloneDeep(target), [target]);
 
         return (
-            /* @ts-ignore React types are messy */
             <MappingComponent
                 title="mapping-editor"
                 source={sourceClone}
@@ -182,6 +164,7 @@ const InnerForm = ({ planner, info, onContextDataChanged }: InnerFormProps) => {
 
     if (info.type === DataEntityType.RESOURCE) {
         const data = info.item.resource as Resource;
+        const block = info.item.block as BlockDefinition;
         const kind = kindField.get(data.kind) || data.kind;
         let resourceType: IResourceTypeProvider | null = null;
         try {
@@ -192,6 +175,14 @@ const InnerForm = ({ planner, info, onContextDataChanged }: InnerFormProps) => {
 
         const dataKindUri = parseKapetaUri(kind);
         const assetTypes = getResourceVersions(dataKindUri);
+
+        const blockProvider = useMemo(() => {
+            return BlockTypeProvider.get(block.kind);
+        }, [block.kind]);
+
+        const languageProvider = useMemo(() => {
+            return block.spec.target?.kind ? BlockTargetProvider.get(block.spec.target.kind, block.kind) : undefined;
+        }, [block.spec.target?.kind, block.kind]);
 
         return (
             <>
@@ -205,8 +196,15 @@ const InnerForm = ({ planner, info, onContextDataChanged }: InnerFormProps) => {
 
                 {resourceType?.editorComponent && (
                     <ErrorBoundary resetKeys={[kind, info.item]} fallbackRender={getErrorFallback(kind)}>
-                        {/* @ts-ignore React types are messy */}
-                        <resourceType.editorComponent key={kind} block={info.item.block} creating={info.creating} />
+                        <resourceType.editorComponent
+                            key={kind}
+                            block={info.item.block}
+                            creating={info.creating}
+                            context={{
+                                blockProvider,
+                                languageProvider,
+                            }}
+                        />
                     </ErrorBoundary>
                 )}
             </>

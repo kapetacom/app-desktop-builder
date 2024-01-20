@@ -30,8 +30,9 @@ import {
     DSLDataType,
 } from '@kapeta/ui-web-components';
 
-import { DSLConverters } from '@kapeta/kaplang-core';
+import { DSLConverters, KAPLANG_ID, KAPLANG_VERSION } from '@kapeta/kaplang-core';
 import { toDataTypes } from '../../../../../utils/dsl-filter';
+import { useDSLEntityIncludes } from '@kapeta/ui-web-plan-editor';
 
 function filterEmpty<T>(value: T | null | undefined): boolean {
     return value !== null && value !== undefined;
@@ -138,6 +139,8 @@ export const InstanceEditor = (props: Props) => {
     type PanelId = 'info' | 'edit' | 'entities' | 'parameters';
     const [currentTabId, setCurrentTabId] = React.useState<PanelId>('info');
 
+    const dataTypeIncludes = useDSLEntityIncludes(data.block.kind, data.block.spec.target?.kind);
+
     const renderConfiguration = () => {
         const configuration = configurationField.get();
         const result = {
@@ -176,7 +179,8 @@ export const InstanceEditor = (props: Props) => {
         const configuration = {
             types,
             source: {
-                type: DSL_LANGUAGE_ID,
+                type: KAPLANG_ID,
+                version: KAPLANG_VERSION,
                 value: code,
             },
         };
@@ -198,6 +202,7 @@ export const InstanceEditor = (props: Props) => {
                 <InfoBox>Entities define external data types to be used by the resources for this block</InfoBox>
                 <DataTypeEditor
                     value={result}
+                    validTypes={dataTypeIncludes}
                     onError={(err: any) => {
                         entitiesField.invalid();
                         setEntitiesError(err.message);
@@ -223,7 +228,8 @@ export const InstanceEditor = (props: Props) => {
         const entities = {
             types,
             source: {
-                type: DSL_LANGUAGE_ID,
+                type: KAPLANG_ID,
+                version: KAPLANG_VERSION,
                 value: code,
             },
         };
