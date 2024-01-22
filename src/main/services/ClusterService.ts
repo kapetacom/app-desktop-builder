@@ -39,6 +39,9 @@ export class ClusterService extends EventEmitter {
     private child?: ChildProcess = undefined;
 
     private async checkClusterStatus(): Promise<ClusterInfo> {
+        // Reset the cluster configuration to make sure we are not using any old values
+        ClusterConfiguration.resetClusterConfig();
+
         const clusterAddress = ClusterConfiguration.getClusterServiceAddress();
         if (!clusterAddress) {
             throw new Error('No cluster service address found');
