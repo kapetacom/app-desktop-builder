@@ -96,13 +96,18 @@ export class ClusterService extends EventEmitter {
                         return;
                     }
 
-                    const status = await this.checkStatus();
-                    if (status) {
-                        resolve(status);
-                    } else {
-                        console.log('Cluster service not running yet... waiting...');
-                        checkLater();
+                    try {
+                        const status = await this.checkStatus();
+                        if (status) {
+                            resolve(status);
+                            return;
+                        }
+                    } catch (err) {
+                        // Ignore
                     }
+
+                    console.log('Cluster service not running yet... waiting...');
+                    checkLater();
                 }, CLUSTER_CHECK_INTERVAL);
 
             checkLater();
