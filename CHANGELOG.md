@@ -1,3 +1,10 @@
+# [0.64.0-beta.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.64.0-beta.2...v0.64.0-beta.3) (2024-01-22)
+
+
+### Bug Fixes
+
+* Avoid using ipc - not working consistently ([#292](https://github.com/kapetacom/app-desktop-builder/issues/292)) ([e8f580f](https://github.com/kapetacom/app-desktop-builder/commit/e8f580fd55d7c6f2761fd41e17bb7751dd20d6f1))
+
 # [0.64.0-beta.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.64.0-beta.1...v0.64.0-beta.2) (2024-01-20)
 
 
