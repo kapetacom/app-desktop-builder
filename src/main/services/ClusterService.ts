@@ -11,6 +11,8 @@ import Path from 'node:path';
 import FS from 'node:fs';
 import { app } from 'electron';
 
+const CLUSTER_CHECK_INTERVAL = 1000;
+
 export interface ClusterInfo {
     host: string;
     port: number;
@@ -65,44 +67,75 @@ export class ClusterService extends EventEmitter {
         });
     }
 
+    private async checkStatus() {
+        try {
+            const clusterStatus = await this.checkClusterStatus();
+            this.running = true;
+            this.info = clusterStatus;
+            this.emit('started', this.info);
+            console.log('Cluster service listening on %s:%s ', clusterStatus.host, clusterStatus.port);
+            return this.info;
+        } catch (err) {
+            // Ignore
+        }
+        return null;
+    }
+
+    public async waitForClusterService(): Promise<ClusterInfo> {
+        return new Promise(async (resolve, reject) => {
+            const status = await this.checkStatus();
+            if (status) {
+                resolve(status);
+                return;
+            }
+
+            const checkLater = () =>
+                setTimeout(async () => {
+                    if (this.stoppedIntentionally) {
+                        reject(new Error('Cluster service was stopped intentionally'));
+                        return;
+                    }
+
+                    const status = await this.checkStatus();
+                    if (status) {
+                        resolve(status);
+                    } else {
+                        console.log('Cluster service not running yet... waiting...');
+                        checkLater();
+                    }
+                }, CLUSTER_CHECK_INTERVAL);
+
+            checkLater();
+        });
+    }
+
     public async start(): Promise<ClusterInfo> {
         this.stoppedIntentionally = false;
         if (this.child) {
             throw new Error('Cluster service is already running');
         }
 
-        try {
-            const clusterStatus = await this.checkClusterStatus();
-            this.running = true;
-            this.info = clusterStatus;
-            this.emit('started', this.info);
-            console.log('Cluster service already listening on %s:%s ', clusterStatus.host, clusterStatus.port);
-            return this.info;
-        } catch (err) {
-            console.debug('Cluster service was not already running...');
+        const status = await this.checkStatus();
+        if (status) {
+            return status;
         }
 
         console.log('Starting cluster service from %s', SERVICE_FILE);
         return new Promise((resolve, reject) => {
             const child = (this.child = fork(SERVICE_FILE, {
-                stdio: 'pipe',
+                stdio: ['pipe', 'pipe', 'pipe', 'ipc'],
             }));
 
             child.stdout?.pipe(process.stdout);
             child.stderr?.pipe(process.stderr);
 
             console.log('Cluster service started with PID: %s', child.pid);
-            child.on('message', (msg: ClusterInfo) => {
-                this.running = true;
-                this.info = msg;
-                this.emit('started', msg);
-                console.log('Cluster service listening on %s:%s ', msg.host, msg.port);
-                resolve(msg);
-            });
+
             child.on('error', (err) => {
                 this.stopProcess();
                 reject(err);
             });
+
             child.on('exit', (exitCode: number) => {
                 console.log('Cluster service exited with code: %s', exitCode);
                 if (exitCode !== null && exitCode !== 0) {
@@ -113,6 +146,8 @@ export class ClusterService extends EventEmitter {
                     this.start();
                 }
             });
+
+            resolve(this.waitForClusterService());
         });
     }
 
