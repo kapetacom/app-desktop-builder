@@ -1,3 +1,10 @@
+# [0.64.0-beta.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.64.0-beta.3...v0.64.0-beta.4) (2024-01-23)
+
+
+### Bug Fixes
+
+* Translate query params correctly ([#293](https://github.com/kapetacom/app-desktop-builder/issues/293)) ([498c84e](https://github.com/kapetacom/app-desktop-builder/commit/498c84e53d9bc175e5119409bffd7212038e8209))
+
 # [0.64.0-beta.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.64.0-beta.2...v0.64.0-beta.3) (2024-01-22)
 
 
