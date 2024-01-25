@@ -1,3 +1,20 @@
+# [0.64.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.63.0...v0.64.0) (2024-01-25)
+
+
+### Bug Fixes
+
+* Avoid using ipc - not working consistently ([#292](https://github.com/kapetacom/app-desktop-builder/issues/292)) ([e8f580f](https://github.com/kapetacom/app-desktop-builder/commit/e8f580fd55d7c6f2761fd41e17bb7751dd20d6f1))
+* local-cluster-service needed bumping ([#291](https://github.com/kapetacom/app-desktop-builder/issues/291)) ([dcaf478](https://github.com/kapetacom/app-desktop-builder/commit/dcaf478f5c3d0dab9028173a1e318f4af78475bb))
+* Refresh expired tokens, support latest images, improve error handling ([#287](https://github.com/kapetacom/app-desktop-builder/issues/287)) ([9e3cb94](https://github.com/kapetacom/app-desktop-builder/commit/9e3cb9450c0e78fb76c94749cc25bc9440396c29))
+* Remove shortcut for closing window ([b39d0cc](https://github.com/kapetacom/app-desktop-builder/commit/b39d0ccd878a8959c6ab30997df2998b38d00784))
+* Translate query params correctly ([#293](https://github.com/kapetacom/app-desktop-builder/issues/293)) ([498c84e](https://github.com/kapetacom/app-desktop-builder/commit/498c84e53d9bc175e5119409bffd7212038e8209))
+* update to support fullName resourceInfo ([#289](https://github.com/kapetacom/app-desktop-builder/issues/289)) ([077c141](https://github.com/kapetacom/app-desktop-builder/commit/077c141cd0a61b37e5237f51f3d7d324254245f1))
+
+
+### Features
+
+* Adds support for new Kaplang version ([47c3f25](https://github.com/kapetacom/app-desktop-builder/commit/47c3f25dfd3bb3f0123cdd88e678134bdaec0b62))
+
 # [0.64.0-beta.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.64.0-beta.3...v0.64.0-beta.4) (2024-01-23)
 
 
