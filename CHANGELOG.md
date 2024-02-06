@@ -1,3 +1,10 @@
+# [0.65.0-beta.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.65.0-beta.1...v0.65.0-beta.2) (2024-02-06)
+
+
+### Features
+
+* Add support for singleton instane operators ([#295](https://github.com/kapetacom/app-desktop-builder/issues/295)) ([30130a7](https://github.com/kapetacom/app-desktop-builder/commit/30130a7acad77d174eaeb3df3c21358445f4ef7e))
+
 # [0.65.0-beta.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.64.0...v0.65.0-beta.1) (2024-02-06)
 
 
