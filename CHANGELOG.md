@@ -1,3 +1,10 @@
+# [0.65.0-beta.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.64.0...v0.65.0-beta.1) (2024-02-06)
+
+
+### Features
+
+* Add support for multiple consumer connections and instance operators ([#294](https://github.com/kapetacom/app-desktop-builder/issues/294)) ([f4ae1ae](https://github.com/kapetacom/app-desktop-builder/commit/f4ae1aeb88e891cc63c286b1fe9de45f0a6ba127))
+
 # [0.64.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.63.0...v0.64.0) (2024-01-25)
 
 
