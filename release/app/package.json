@@ -21,7 +21,7 @@
     "dependencies": {
         "@kapeta/electron-ide-opener": "^1.1.0",
         "@kapeta/local-cluster-config": "^0.3.2",
-        "@kapeta/local-cluster-service": "^0.35.0",
+        "@kapeta/local-cluster-service": "^0.36.0",
         "@kapeta/nodejs-process": "^1.2.0"
     },
     "overrides": {
