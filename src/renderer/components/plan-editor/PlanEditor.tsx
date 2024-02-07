@@ -177,6 +177,7 @@ export const PlanEditor = withPlannerContext(
                     <DesktopReferenceResolutionHandler
                         inline={true}
                         plan={planner.plan!}
+                        planPath={planner.asset?.path}
                         planRef={props.systemId}
                         blockAssets={planner.blockAssets}
                         missingReferences={missingReferences}
