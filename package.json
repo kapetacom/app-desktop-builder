@@ -113,7 +113,7 @@
         "@kapeta/style": "^0.94.0",
         "@kapeta/ui-web-components": "^3.0.3",
         "@kapeta/ui-web-context": "^1.2.3",
-        "@kapeta/ui-web-plan-editor": "^2.1.0",
+        "@kapeta/ui-web-plan-editor": "^2.2.0",
         "@kapeta/ui-web-types": "^1.3.0",
         "@kapeta/ui-web-utils": "<2",
         "@mui/icons-material": "^5.14.0",

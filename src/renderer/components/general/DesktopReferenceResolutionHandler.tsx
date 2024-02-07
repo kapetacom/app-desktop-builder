@@ -10,6 +10,7 @@ import { BlockDefinition, Plan } from '@kapeta/schemas';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import { api } from '../../api/APIService';
 import { showFilePickerOne } from '../../utils/showFilePicker';
+import { FileSystemService } from '../../api/FileSystemService';
 
 interface Props {
     open?: boolean;
@@ -18,12 +19,14 @@ interface Props {
     planRef: string;
     blockAssets: AssetInfo<BlockDefinition>[];
     missingReferences: MissingReference[];
+    planPath?: string;
     inline?: boolean;
 }
 
 export const DesktopReferenceResolutionHandler = (props: Props) => {
     const planUri = useMemo(() => parseKapetaUri(props.planRef), [props.planRef]);
 
+    const planPath = props.planPath;
     return (
         <ReferenceResolutionHandler
             open={Boolean(props.open || props.inline)}
@@ -33,6 +36,13 @@ export const DesktopReferenceResolutionHandler = (props: Props) => {
             delayedCheck={props.inline ? 5000 : 0}
             readOnly={planUri.version !== 'local'}
             blockAssets={props.blockAssets}
+            openExternal={
+                planPath
+                    ? () => {
+                          FileSystemService.openPath(planPath);
+                      }
+                    : undefined
+            }
             assetCanBeInstalled={async (ref: string) => {
                 const uri = parseKapetaUri(ref);
                 const asset = await api.registry().getAsset(uri.fullName, uri.version);

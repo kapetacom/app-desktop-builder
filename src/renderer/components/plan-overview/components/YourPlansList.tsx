@@ -157,6 +157,7 @@ const PlanTile = ({
                     open={resolverOpen}
                     plan={plan.content}
                     planRef={plan.ref}
+                    planPath={plan.path}
                     blockAssets={planContext.blocks}
                     missingReferences={missingReferences}
                     onClose={() => setResolverOpen(false)}
