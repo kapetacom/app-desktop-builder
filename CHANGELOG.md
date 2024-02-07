@@ -1,3 +1,10 @@
+# [0.65.0-beta.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.65.0-beta.2...v0.65.0-beta.3) (2024-02-07)
+
+
+### Features
+
+* Add button to open project when resolving ([#296](https://github.com/kapetacom/app-desktop-builder/issues/296)) ([9a8ae7d](https://github.com/kapetacom/app-desktop-builder/commit/9a8ae7d606ede4d754e5507f3b60c1db5597cf52))
+
 # [0.65.0-beta.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.65.0-beta.1...v0.65.0-beta.2) (2024-02-06)
 
 
