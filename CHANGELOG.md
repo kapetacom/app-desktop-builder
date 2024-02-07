@@ -1,3 +1,10 @@
+# [0.65.0-beta.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.65.0-beta.3...v0.65.0-beta.4) (2024-02-07)
+
+
+### Bug Fixes
+
+* Consistent container naming and only http ports for containers ([5bcd0b5](https://github.com/kapetacom/app-desktop-builder/commit/5bcd0b581c5cc30bea15071864c89ab92c53e470))
+
 # [0.65.0-beta.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.65.0-beta.2...v0.65.0-beta.3) (2024-02-07)
 
 
