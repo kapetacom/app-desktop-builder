@@ -1,3 +1,10 @@
+# [0.65.0-beta.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.65.0-beta.4...v0.65.0-beta.5) (2024-02-13)
+
+
+### Bug Fixes
+
+* Make trailing "/" a valid path ([#297](https://github.com/kapetacom/app-desktop-builder/issues/297)) ([31afc27](https://github.com/kapetacom/app-desktop-builder/commit/31afc279b7fa6da906552166319d3df6d3c2ceba))
+
 # [0.65.0-beta.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.65.0-beta.3...v0.65.0-beta.4) (2024-02-07)
 
 
