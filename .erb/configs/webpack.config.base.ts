@@ -52,7 +52,7 @@ const configuration: webpack.Configuration = {
             '@kapeta/ui-web-plan-editor': Path.resolve(webpackPaths.rootPath, './node_modules/@kapeta/ui-web-plan-editor'),
             '@mui/material': Path.resolve(webpackPaths.rootPath, './node_modules/@mui/material'),
             '@mui/system': Path.resolve(webpackPaths.rootPath, './node_modules/@mui/system/esm'),
-            '@mui/utils': Path.resolve(webpackPaths.rootPath, './node_modules/@mui/utils/esm'),
+            '@mui/utils': Path.resolve(webpackPaths.rootPath, './node_modules/@mui/utils'),
             '@mui/icons-material': Path.resolve(webpackPaths.rootPath, './node_modules/@mui/icons-material/esm'),
         },
         modules: [webpackPaths.srcPath, 'node_modules'],
