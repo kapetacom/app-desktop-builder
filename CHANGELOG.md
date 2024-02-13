@@ -1,3 +1,18 @@
+# [0.65.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.64.0...v0.65.0) (2024-02-13)
+
+
+### Bug Fixes
+
+* Consistent container naming and only http ports for containers ([5bcd0b5](https://github.com/kapetacom/app-desktop-builder/commit/5bcd0b581c5cc30bea15071864c89ab92c53e470))
+* Make trailing "/" a valid path ([#297](https://github.com/kapetacom/app-desktop-builder/issues/297)) ([31afc27](https://github.com/kapetacom/app-desktop-builder/commit/31afc279b7fa6da906552166319d3df6d3c2ceba))
+
+
+### Features
+
+* Add button to open project when resolving ([#296](https://github.com/kapetacom/app-desktop-builder/issues/296)) ([9a8ae7d](https://github.com/kapetacom/app-desktop-builder/commit/9a8ae7d606ede4d754e5507f3b60c1db5597cf52))
+* Add support for multiple consumer connections and instance operators ([#294](https://github.com/kapetacom/app-desktop-builder/issues/294)) ([f4ae1ae](https://github.com/kapetacom/app-desktop-builder/commit/f4ae1aeb88e891cc63c286b1fe9de45f0a6ba127))
+* Add support for singleton instane operators ([#295](https://github.com/kapetacom/app-desktop-builder/issues/295)) ([30130a7](https://github.com/kapetacom/app-desktop-builder/commit/30130a7acad77d174eaeb3df3c21358445f4ef7e))
+
 # [0.65.0-beta.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.65.0-beta.4...v0.65.0-beta.5) (2024-02-13)
 
 
