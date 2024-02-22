@@ -141,7 +141,7 @@ jobs:
       - name: Checkout git repo
         uses: actions/checkout@v3
 
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
           # This is required for signing/notarization
           # Latest macos 12 runner bumped python from 3.11.5 to 3.12.0 which seems to break things
