@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest-m
     steps:
       - name: Checkout git repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest-m
     steps:
       - name: Checkout git repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Node and NPM
         uses: actions/setup-node@v3
@@ -69,7 +69,7 @@ jobs:
     runs-on: windows-latest-l
     steps:
       - name: Checkout git repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Node and NPM
         uses: actions/setup-node@v3
@@ -139,7 +139,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Checkout git repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - uses: actions/setup-python@v4
         with:
