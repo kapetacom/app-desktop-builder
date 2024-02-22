@@ -14,7 +14,7 @@ import { AssetInfo } from '@kapeta/ui-web-plan-editor';
 import { ConfirmProvider } from '@kapeta/ui-web-components';
 import { AssetStore } from '@kapeta/ui-web-context';
 import { Asset, SchemaKind } from '@kapeta/ui-web-types';
-import { MemoryRouter } from 'node_modules/react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 
 const defaultInfo = {
     ymlPath: '',
