@@ -1,3 +1,10 @@
+## [0.65.1-beta.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.65.0...v0.65.1-beta.1) (2024-02-22)
+
+
+### Bug Fixes
+
+* **deps:** update dependency electron to v27.3.3 ([#302](https://github.com/kapetacom/app-desktop-builder/issues/302)) ([3d2b444](https://github.com/kapetacom/app-desktop-builder/commit/3d2b444009ebc9eaa0c11b61223c13e664d2e666))
+
 # [0.65.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.64.0...v0.65.0) (2024-02-13)
 
 
