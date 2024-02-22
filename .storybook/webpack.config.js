@@ -76,5 +76,11 @@ module.exports = ({ config }) => {
     // Add support for TypeScript paths
     config.resolve.plugins = config.resolve.plugins || [];
     config.resolve.plugins.push(new TsconfigPathsPlugins());
+
+    config.resolve.alias = config.resolve.alias || {};
+    // Fix issue with multiple copies of ui-web-components from release/app dir
+    config.resolve.alias['@kapeta/ui-web-components'] = require
+        .resolve('@kapeta/ui-web-components/package.json')
+        .replace('/package.json', '');
     return config;
 };
