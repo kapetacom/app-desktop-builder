@@ -1,4 +1,5 @@
 const TsconfigPathsPlugins = require('tsconfig-paths-webpack-plugin');
+const path = require('node:path');
 
 module.exports = ({ config }) => {
     config.module.rules = [
@@ -77,14 +78,7 @@ module.exports = ({ config }) => {
     config.resolve.plugins = config.resolve.plugins || [];
     config.resolve.plugins.push(new TsconfigPathsPlugins());
 
-    config.resolve.alias = config.resolve.alias || {};
-
-    // TODO: Hacky workaround for the double node_modules in this repo
-    // The following packages have had issues when resolved to different instances of the same package
-    const forceResolutions = ['@kapeta/ui-web-components', '@mui/material'];
-    forceResolutions.forEach((pkg) => {
-        config.resolve.alias[pkg] = require.resolve(`${pkg}/package.json`).replace('/package.json', '');
-    });
+    config.resolve.modules = [path.resolve(__dirname, '..', 'node_modules'), 'node_modules'];
 
     return config;
 };
