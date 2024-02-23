@@ -1,4 +1,5 @@
 const TsconfigPathsPlugins = require('tsconfig-paths-webpack-plugin');
+const path = require('node:path');
 
 module.exports = ({ config }) => {
     config.module.rules = [
@@ -77,10 +78,7 @@ module.exports = ({ config }) => {
     config.resolve.plugins = config.resolve.plugins || [];
     config.resolve.plugins.push(new TsconfigPathsPlugins());
 
-    config.resolve.alias = config.resolve.alias || {};
-    // Fix issue with multiple copies of ui-web-components from release/app dir
-    config.resolve.alias['@kapeta/ui-web-components'] = require
-        .resolve('@kapeta/ui-web-components/package.json')
-        .replace('/package.json', '');
+    config.resolve.modules = [path.resolve(__dirname, '..', 'node_modules'), 'node_modules'];
+
     return config;
 };
