@@ -1,3 +1,16 @@
+# [0.66.0-beta.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.65.1-beta.1...v0.66.0-beta.1) (2024-02-23)
+
+
+### Bug Fixes
+
+* Bump local-cluster-service ([1608266](https://github.com/kapetacom/app-desktop-builder/commit/1608266086a5f2f530a9d8a1dc71c9667055b5f4))
+* Undo update of packages ([f2bbb43](https://github.com/kapetacom/app-desktop-builder/commit/f2bbb438bf8b9f0dd3649e7996c16a99b2c00b0b))
+
+
+### Features
+
+* Hide start/stop and inspect buttons on executable blocks ([f703f1f](https://github.com/kapetacom/app-desktop-builder/commit/f703f1ffca4bae548de1ba35187bc908190850a9))
+
 ## [0.65.1-beta.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.65.0...v0.65.1-beta.1) (2024-02-22)
 
 
