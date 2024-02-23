@@ -20,14 +20,14 @@
     },
     "dependencies": {
         "@kapeta/electron-ide-opener": "^1.1.0",
-        "@kapeta/local-cluster-config": "^0.3.2",
-        "@kapeta/local-cluster-service": "^0.36.1",
+        "@kapeta/local-cluster-config": "^0.4.0",
+        "@kapeta/local-cluster-service": "^0.37.0",
         "@kapeta/nodejs-process": "^1.2.0"
     },
     "overrides": {
-        "@kapeta/ui-web-components": "^3.0.4",
+        "@kapeta/ui-web-components": "^3.1.0",
         "@kapeta/ui-web-context": "^1.2.4",
-        "@kapeta/ui-web-plan-editor": "^2.2.1",
+        "@kapeta/ui-web-plan-editor": "^2.3.1",
         "@kapeta/ui-web-types": "^1.3.1"
     }
 }

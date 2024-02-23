@@ -4,11 +4,11 @@
  */
 
 import { PlannerActionConfig, PlannerContextData, PlannerMode } from '@kapeta/ui-web-plan-editor';
-import { ButtonStyle, showToasty, ToastType, useConfirmDelete } from '@kapeta/ui-web-components';
+import { ButtonStyle, CoreTypes, useConfirmDelete } from '@kapeta/ui-web-components';
 import { IResourceTypeConverter, ResourceRole } from '@kapeta/ui-web-types';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 import { useEffect, useMemo } from 'react';
-import { InstanceStatus, ResourceTypeProvider } from '@kapeta/ui-web-context';
+import { BlockTypeProvider, InstanceStatus, ResourceTypeProvider } from '@kapeta/ui-web-context';
 import { Connection } from '@kapeta/schemas';
 import { ActionHandlers, DataEntityType, InstanceInfo } from './types';
 import { InstanceService } from '../../api/InstanceService';
@@ -97,8 +97,17 @@ export const usePlanEditorActions = (
         return {
             block: [
                 {
-                    enabled(): boolean {
-                        return true; // planner.mode !== PlannerMode.VIEW;
+                    enabled(planner, { block }): boolean {
+                        if (!block?.kind) {
+                            return false;
+                        }
+                        const blockType = BlockTypeProvider.get(block.kind);
+                        if (blockType.definition.kind === CoreTypes.BLOCK_TYPE_EXECUTABLE.valueOf()) {
+                            return false;
+                        }
+
+                        // All other block types can be inspected
+                        return true;
                     },
                     onClick(context, { block, blockInstance }) {
                         handlers.inspect({
@@ -198,8 +207,16 @@ export const usePlanEditorActions = (
                     kapId: 'planner-block-instance-configure-button',
                 },
                 {
-                    enabled(): boolean {
-                        return true; // we can always stop/start an instance
+                    enabled(planner, { block }): boolean {
+                        if (!block?.kind) {
+                            return false;
+                        }
+                        const blockType = BlockTypeProvider.get(block.kind);
+                        if (blockType.definition.kind === CoreTypes.BLOCK_TYPE_EXECUTABLE.valueOf()) {
+                            return false;
+                        }
+                        // All other block types can be started/stopped
+                        return true;
                     },
                     async onClick(context, { blockInstance }) {
                         if (!context.uri?.id || !blockInstance?.id) {
@@ -366,8 +383,7 @@ export const usePlanEditorActions = (
                     kapId: 'planner-connection-edit-button',
                 },
                 {
-                    enabled(context, actionContext): boolean {
-                        const connection = actionContext.connection;
+                    enabled(context, { connection }): boolean {
                         if (!connection) {
                             return false;
                         }
