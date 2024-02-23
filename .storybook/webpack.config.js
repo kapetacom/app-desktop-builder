@@ -78,9 +78,13 @@ module.exports = ({ config }) => {
     config.resolve.plugins.push(new TsconfigPathsPlugins());
 
     config.resolve.alias = config.resolve.alias || {};
-    // Fix issue with multiple copies of ui-web-components from release/app dir
-    config.resolve.alias['@kapeta/ui-web-components'] = require
-        .resolve('@kapeta/ui-web-components/package.json')
-        .replace('/package.json', '');
+
+    // TODO: Hacky workaround for the double node_modules in this repo
+    // The following packages have had issues when resolved to different instances of the same package
+    const forceResolutions = ['@kapeta/ui-web-components', '@mui/material'];
+    forceResolutions.forEach((pkg) => {
+        config.resolve.alias[pkg] = require.resolve(`${pkg}/package.json`).replace('/package.json', '');
+    });
+
     return config;
 };
