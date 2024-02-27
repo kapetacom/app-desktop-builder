@@ -1,3 +1,10 @@
+# [0.66.0-beta.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.66.0-beta.1...v0.66.0-beta.2) (2024-02-27)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @sentry/electron to v4.18.0 ([#318](https://github.com/kapetacom/app-desktop-builder/issues/318)) ([507d72d](https://github.com/kapetacom/app-desktop-builder/commit/507d72d4eb7e7fe7f683401d8239f67b52437973))
+
 # [0.66.0-beta.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.65.1-beta.1...v0.66.0-beta.1) (2024-02-23)
 
 
