@@ -1,3 +1,10 @@
+# [0.66.0-beta.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.66.0-beta.2...v0.66.0-beta.3) (2024-02-27)
+
+
+### Bug Fixes
+
+* clean up dependencies for local cluster service ([#319](https://github.com/kapetacom/app-desktop-builder/issues/319)) ([a8cb5e8](https://github.com/kapetacom/app-desktop-builder/commit/a8cb5e81d79175e79cdb62ea61d48107536ae2db))
+
 # [0.66.0-beta.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.66.0-beta.1...v0.66.0-beta.2) (2024-02-27)
 
 
