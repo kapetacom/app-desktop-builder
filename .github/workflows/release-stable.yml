@@ -11,6 +11,7 @@ jobs:
         with:
           token: ${{ secrets.BOT_TOKEN }}
           ref: master
+          fetch-depth: 0
 
       - name: Semantic Release
         id: semantic_release
