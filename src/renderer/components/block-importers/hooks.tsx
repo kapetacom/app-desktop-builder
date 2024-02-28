@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
 import { useFileImporter } from '../../utils/useAssetImporter';
 import { BlockImportProvider, BlockImportResult } from './BlockImporter';
 import { DockerfileBlockImporter } from './providers/docker';

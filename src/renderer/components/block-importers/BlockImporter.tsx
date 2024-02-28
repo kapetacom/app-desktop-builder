@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
 import { KapDialog, KapFormDialog, showToasty, ToastType } from '@kapeta/ui-web-components';
 import { Button } from '@mui/material';
 import { SingleFileResult } from '../../utils/showFilePicker';

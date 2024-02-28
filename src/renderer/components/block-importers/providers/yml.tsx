@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
 import { BlockImportResult, BlockImportProvider } from '../BlockImporter';
 import { SingleFileResult } from '../../../utils/showFilePicker';
 import YAML from 'yaml';
