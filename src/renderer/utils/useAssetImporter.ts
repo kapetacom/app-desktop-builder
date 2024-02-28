@@ -3,15 +3,57 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { showFilePickerOne } from './showFilePicker';
+import { showFilePickerOne, SingleFileResult } from './showFilePicker';
 import { AssetStore } from '@kapeta/ui-web-context';
 import { showToasty, ToastType } from '@kapeta/ui-web-components';
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import YAML from 'yaml';
 import { Asset } from '@kapeta/ui-web-types';
 import { normalizeKapetaUri } from '@kapeta/nodejs-utils';
+import FileFilter = Electron.FileFilter;
 
-interface Options {
+interface FileImportOptions {
+    title?: string;
+    filters?: FileFilter[];
+}
+
+interface FileImporter {
+    importFile: () => Promise<SingleFileResult | null>;
+    loading: boolean;
+}
+
+export const useFileImporter = (opts: FileImportOptions): FileImporter => {
+    const [loading, setLoading] = useState(false);
+    const importFile = useCallback(async (): Promise<SingleFileResult | null> => {
+        setLoading(true);
+
+        const filters = opts.filters ?? [
+            {
+                name: 'Kapeta Asset',
+                extensions: ['yml'],
+            },
+        ];
+
+        const result = await showFilePickerOne({
+            title: opts.title ?? 'Select a file',
+            filters,
+        });
+
+        setLoading(false);
+
+        return result;
+    }, [opts.title, opts.filters]);
+
+    return useMemo(
+        () => ({
+            loading,
+            importFile,
+        }),
+        [loading, importFile]
+    );
+};
+
+interface AssetImportOptions {
     assetService?: AssetStore;
     allowedKinds?: string[];
 }
@@ -23,24 +65,25 @@ export interface AssetImporter {
     loading: boolean;
 }
 
-export const useAssetImporter = (opts: Options): AssetImporter => {
+export const useAssetImporter = (opts: AssetImportOptions): AssetImporter => {
+    const fileImporter = useFileImporter({
+        filters: [
+            {
+                name: 'Kapeta Asset',
+                extensions: ['yml'],
+            },
+        ],
+        title: 'Choose kapeta asset to import',
+    });
+
     const [loading, setLoading] = useState(false);
-    const importAssert = async (): Promise<AssetType[] | null> => {
+    const importAsset = useCallback(async (): Promise<AssetType[] | null> => {
         if (!opts.assetService) {
             return null;
         }
-
         setLoading(true);
 
-        const result = await showFilePickerOne({
-            title: 'Choose kapeta asset to import',
-            filters: [
-                {
-                    name: 'Kapeta Asset',
-                    extensions: ['yml'],
-                },
-            ],
-        });
+        const result = await fileImporter.importFile();
 
         if (!result) {
             setLoading(false);
@@ -104,10 +147,7 @@ export const useAssetImporter = (opts: Options): AssetImporter => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [fileImporter.importFile, opts.assetService, opts.allowedKinds]);
 
-    return {
-        loading,
-        importAsset: importAssert,
-    };
+    return useMemo(() => ({ loading, importAsset }), [loading, importAsset]);
 };

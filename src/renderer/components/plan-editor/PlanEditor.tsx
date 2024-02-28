@@ -42,6 +42,9 @@ import { usePlanUpdater } from '../../hooks/updaterHooks';
 import { PlanUpdaterModal } from './updater/PlanUpdaterModal';
 import UpdateIconPending from '../../../../assets/images/update-icon-pending.svg';
 import { AppSettingsContext } from '../../utils/AppSettingsContextSync';
+import { BlockImporter, BlockImportResult } from '../block-importers/BlockImporter';
+import { useFileImporter } from '../../utils/useAssetImporter';
+import { useBlockImporter } from '../block-importers/hooks';
 
 interface Props {
     systemId: string;
@@ -79,6 +82,7 @@ export const PlanEditor = withPlannerContext(
         const kapetaContext = useKapetaContext();
         const assetInvalidationKey = useAssetInvalidationKey(planner.blockAssets, props.resourceAssets);
 
+        const [blockImport, setBlockImport] = useState<BlockImportResult | null>(null);
         const [configInfo, setConfigInfo] = useState<ConfigureItemInfo | null>(null);
         const [inspectInfo, setInspectInfo] = useState<InspectItemInfo | null>(null);
         const [editInfo, setEditInfo] = useState<EditItemInfo | null>(null);
@@ -165,6 +169,8 @@ export const PlanEditor = withPlannerContext(
         const statusDot = getStatusDotForGroup(Object.values(planner.instanceStates || {}));
         const planUpdater = usePlanUpdater();
         const missingReferences = usePlanValidation(planner.plan, planner.blockAssets);
+        const appSettings = useContext(AppSettingsContext);
+        const importBlock = useBlockImporter();
 
         if (missingReferences.length > 0) {
             return (
@@ -185,8 +191,6 @@ export const PlanEditor = withPlannerContext(
                 </Box>
             );
         }
-
-        const appSettings = useContext(AppSettingsContext);
 
         return (
             <div className={containerClass} ref={ref} data-kap-id={'plan-editor'}>
@@ -227,6 +231,37 @@ export const PlanEditor = withPlannerContext(
                     onClosed={() => {
                         setEditInfo(null);
                     }}
+                />
+
+                <BlockImporter
+                    open={Boolean(blockImport)}
+                    onImported={(asset) => {
+                        // Make sure the block is added to the plan
+                        planner.addBlockDefinition({
+                            ref: asset.ref,
+                            content: asset.data,
+                            version: asset.version,
+                            exists: true,
+                            editable: true,
+                        });
+
+                        // Add the block instance to the plan
+                        planner.addBlockInstance({
+                            name: asset.data.metadata.title ?? parseKapetaUri(asset.ref).name,
+                            id: randomUUID(),
+                            block: {
+                                ref: asset.ref,
+                            },
+                            dimensions: {
+                                top: 50,
+                                left: 50,
+                                width: 0,
+                                height: 0,
+                            },
+                        });
+                    }}
+                    onClose={() => setBlockImport(null)}
+                    file={blockImport}
                 />
 
                 <PlannerDrawer>
@@ -297,6 +332,16 @@ export const PlanEditor = withPlannerContext(
                             <PlannerResourcesList
                                 // Invalidate the resource list on local assets change
                                 key={assetInvalidationKey}
+                                onBlockImport={async () => {
+                                    try {
+                                        const fileImport = await importBlock();
+                                        if (fileImport) {
+                                            setBlockImport(fileImport);
+                                        }
+                                    } catch (e) {
+                                        // Ignore
+                                    }
+                                }}
                                 onShowMoreAssets={() => {
                                     kapetaContext.blockHub.open(planner.asset!, (selection) => {
                                         selection.forEach((asset, i) => {
