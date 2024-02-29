@@ -7,14 +7,14 @@ import { ThemeProvider } from '@mui/material';
 
 import { kapetaLight } from '../src/renderer/Theme';
 
-import { BlockImporter } from '../src/renderer/components/block-importers/BlockImporter';
+import { BlockImporter } from '../src/renderer/components/asset-importers/BlockImporter';
 import { useAsync } from 'react-use';
-import { KapetaYMLBlockImporter } from '../src/renderer/components/block-importers/providers/yml';
+import { KapetaYMLBlockImporter } from '../src/renderer/components/asset-importers/providers/yml';
 import YAML from 'yaml';
 import { BlockTypeProvider } from '@kapeta/ui-web-context';
 import { IconType } from '@kapeta/schemas';
 import { DefaultContext } from '@kapeta/ui-web-components';
-import { DockerfileBlockImporter } from '../src/renderer/components/block-importers/providers/docker';
+import { DockerfileBlockImporter } from '../src/renderer/components/asset-importers/providers/docker';
 
 export default {
     title: 'Import Block',

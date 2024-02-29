@@ -16,6 +16,7 @@ export interface BlockImportResult {
 
 export interface BlockImportProvider {
     filename: string;
+    enabled(): boolean;
     create(handle: string, file: SingleFileResult): Promise<BlockImportResult>;
 }
 

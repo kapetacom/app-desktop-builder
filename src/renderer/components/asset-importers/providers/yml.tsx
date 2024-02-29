@@ -16,6 +16,9 @@ import { Asset } from '@kapeta/ui-web-types';
 
 export const KapetaYMLBlockImporter: BlockImportProvider = {
     filename: 'kapeta.yml',
+    enabled(): boolean {
+        return true;
+    },
     async create(handle, file): Promise<BlockImportResult> {
         const blockYml = YAML.parse(file.content) as BlockDefinition;
         if (!blockYml.kind) {

@@ -14,7 +14,9 @@ import { useKapetaContext } from '../../hooks/contextHook';
 
 export const useBlockImporter = () => {
     const context = useKapetaContext();
-    const providers: BlockImportProvider[] = useMemo(() => [KapetaYMLBlockImporter, DockerfileBlockImporter], []);
+    const providers: BlockImportProvider[] = useMemo(() => {
+        return [KapetaYMLBlockImporter, DockerfileBlockImporter].filter((provider) => provider.enabled());
+    }, []);
 
     const fileNames = useMemo(() => providers.flatMap((provider) => provider.filename), [providers]);
     const fileImporter = useFileImporter({

@@ -50,9 +50,13 @@ const getValidBlockTypes = () => {
 
 export const DockerfileBlockImporter: BlockImportProvider = {
     filename: 'Dockerfile',
+    enabled() {
+        const dockerProviderVersions = BlockTargetProvider.getVersionsFor(TARGET_KIND);
+        return dockerProviderVersions.length > 0;
+    },
     async create(handle, file): Promise<BlockImportResult> {
         const blockYml = createNewBlock();
-        const dockerProviderVersions = BlockTargetProvider.getVersionsFor('kapeta/language-target-docker');
+        const dockerProviderVersions = BlockTargetProvider.getVersionsFor(TARGET_KIND);
         const folderPath = Path.dirname(file.path);
         const ymlPath = Path.join(folderPath, 'kapeta.yml');
         const folderName = Path.basename(folderPath);

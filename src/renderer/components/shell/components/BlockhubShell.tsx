@@ -14,6 +14,7 @@ import { useLoadedPlanContext } from '../../../utils/planContextLoader';
 import { useAssetsChanged } from '../../../hooks/assetHooks';
 import { AssetInfo, AssetThumbnail, fromAsset, fromAssetDisplay } from '@kapeta/ui-web-plan-editor';
 import { AssetService } from '../../../api/AssetService';
+import { useAssetImporter } from '../../../utils/useAssetImporter';
 
 const COMMUNITY_FILTER: AssetFilter[] = [
     {
@@ -97,6 +98,9 @@ export const BlockhubShell = (props: Props) => {
     }, [kapetaContext.blockHub.visible]);
 
     const installerService = useInstallerService();
+    const assetImporter = useAssetImporter({
+        assetService: AssetService,
+    });
 
     return (
         <BlockhubModal
@@ -104,6 +108,7 @@ export const BlockhubShell = (props: Props) => {
             installerService={installerService}
             filter={assetTypeFilter}
             onFilterChange={setAssetTypeFilter}
+            onAssetImport={() => assetImporter.importAsset()}
             plan={
                 kapetaContext.blockHub.opener?.source
                     ? {

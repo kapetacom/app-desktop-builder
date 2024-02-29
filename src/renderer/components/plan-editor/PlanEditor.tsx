@@ -42,9 +42,9 @@ import { usePlanUpdater } from '../../hooks/updaterHooks';
 import { PlanUpdaterModal } from './updater/PlanUpdaterModal';
 import UpdateIconPending from '../../../../assets/images/update-icon-pending.svg';
 import { AppSettingsContext } from '../../utils/AppSettingsContextSync';
-import { BlockImporter, BlockImportResult } from '../block-importers/BlockImporter';
+import { BlockImporter, BlockImportResult } from '../asset-importers/BlockImporter';
 import { useFileImporter } from '../../utils/useAssetImporter';
-import { useBlockImporter } from '../block-importers/hooks';
+import { useBlockImporter } from '../asset-importers/hooks';
 
 interface Props {
     systemId: string;
