@@ -1,3 +1,10 @@
+# [0.66.0-beta.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.66.0-beta.4...v0.66.0-beta.5) (2024-02-29)
+
+
+### Features
+
+* Adds block importer dialog ([#322](https://github.com/kapetacom/app-desktop-builder/issues/322)) ([921cfec](https://github.com/kapetacom/app-desktop-builder/commit/921cfec8b430136a0f25df5869ed73de00d99c14))
+
 # [0.66.0-beta.4](https://github.com/kapetacom/app-desktop-builder/compare/v0.66.0-beta.3...v0.66.0-beta.4) (2024-02-28)
 
 
