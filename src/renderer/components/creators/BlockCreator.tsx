@@ -39,7 +39,9 @@ export const createNewBlock = (): BlockDefinition => {
         spec: {
             consumers: [],
             providers: [],
-            entities: [],
+            entities: {
+                types: [],
+            },
         },
     };
 };

@@ -15,16 +15,16 @@ interface Options {
     readContent?: boolean;
 }
 
-interface SingleResult {
+export interface SingleFileResult {
     path: string;
     content: string;
 }
 
-export const showFilePickerOne = async (options: Omit<Options, 'multiSelection'>): Promise<SingleResult | null> => {
+export const showFilePickerOne = async (options: Omit<Options, 'multiSelection'>): Promise<SingleFileResult | null> => {
     return (await showFilePicker({
         ...options,
         readContent: true,
-    })) as SingleResult | null;
+    })) as SingleFileResult | null;
 };
 
 export const showFilePickerMulti = async (
