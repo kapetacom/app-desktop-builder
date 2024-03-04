@@ -26,6 +26,7 @@ import DeployIcon from '../components/shell/components/icons/DeployIcon.svg';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import { useRoutingPath, PendoAccount, PendoVisitor, usePendoService } from '@kapeta/web-microfrontend/browser';
 import { AppSettingsPanel } from '../settings/AppSettingsPanel';
+import { MenuSection } from '../components/shell/types/shell';
 
 const BASE_TRACKING_URL = 'https://desktop.kapeta.com';
 
@@ -35,6 +36,40 @@ const InnerShell = (props: Props) => {
     const contexts = useKapetaContext();
     const [notifications, notificationsHandler] = useNotifications();
     useBackgroundTasks(notificationsHandler);
+
+    const menu: MenuSection[] = [
+        {
+            id: 'edit',
+            path: '/edit',
+            loading: false,
+            name: 'Edit',
+            open: false,
+            icon: <KindIcon kind="core/plan" size={24} />,
+            'data-kap-id': 'app-left-menu-edit-button',
+        },
+        {
+            id: 'deploy',
+            path: '/deployments',
+            loading: false,
+            name: 'Deploy',
+            open: false,
+            icon: <SvgIcon component={DeployIcon} width={24} height={24} />,
+            'data-kap-id': 'app-left-menu-deploy-button',
+        },
+    ];
+
+    const showMetrics = localStorage.getItem('showMetrics');
+    if (showMetrics === 'true') {
+        menu.push({
+            id: 'metrics',
+            path: '/metrics',
+            loading: false,
+            name: 'Metrics',
+            open: false,
+            icon: <SvgIcon component={BarChartIcon} width={24} height={24} />,
+            'data-kap-id': 'app-left-menu-metrics-button',
+        });
+    }
 
     return (
         <MainTabsContextProvider>
@@ -56,35 +91,7 @@ const InnerShell = (props: Props) => {
             </TopBar>
             <MainLayout
                 location={location}
-                menu={[
-                    {
-                        id: 'edit',
-                        path: '/edit',
-                        loading: false,
-                        name: 'Edit',
-                        open: false,
-                        icon: <KindIcon kind="core/plan" size={24} />,
-                        'data-kap-id': 'app-left-menu-edit-button',
-                    },
-                    {
-                        id: 'deploy',
-                        path: '/deployments',
-                        loading: false,
-                        name: 'Deploy',
-                        open: false,
-                        icon: <SvgIcon component={DeployIcon} width={24} height={24} />,
-                        'data-kap-id': 'app-left-menu-deploy-button',
-                    },
-                    {
-                        id: 'metrics',
-                        path: '/metrics',
-                        loading: false,
-                        name: 'Metrics',
-                        open: false,
-                        icon: <SvgIcon component={BarChartIcon} width={24} height={24} />,
-                        'data-kap-id': 'app-left-menu-metrics-button',
-                    },
-                ]}
+                menu={menu}
                 context={{
                     identity: contexts.profile,
                     contexts:
