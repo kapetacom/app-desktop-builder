@@ -1,3 +1,15 @@
+# [0.66.0-beta.6](https://github.com/kapetacom/app-desktop-builder/compare/v0.66.0-beta.5...v0.66.0-beta.6) (2024-03-04)
+
+
+### Bug Fixes
+
+* Hide Metrics menu with feature flag ([b703f3a](https://github.com/kapetacom/app-desktop-builder/commit/b703f3a7c1dd61ddc366113799f9052b1dd4ea28))
+
+
+### Features
+
+* Add web-metrics microfrontend to the desktop app ([7153f7f](https://github.com/kapetacom/app-desktop-builder/commit/7153f7f7cd4b460a91754dff0f8025ae56ac72fc))
+
 # [0.66.0-beta.5](https://github.com/kapetacom/app-desktop-builder/compare/v0.66.0-beta.4...v0.66.0-beta.5) (2024-02-29)
 
 
