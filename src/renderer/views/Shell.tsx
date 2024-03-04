@@ -23,6 +23,7 @@ import { NavigationButtons } from '../components/shell/NavigationButtons';
 import { Stack, Box } from '@mui/system';
 import { SvgIcon } from '@mui/material';
 import DeployIcon from '../components/shell/components/icons/DeployIcon.svg';
+import BarChartIcon from '@mui/icons-material/BarChart';
 import { useRoutingPath, PendoAccount, PendoVisitor, usePendoService } from '@kapeta/web-microfrontend/browser';
 import { AppSettingsPanel } from '../settings/AppSettingsPanel';
 
@@ -73,6 +74,15 @@ const InnerShell = (props: Props) => {
                         open: false,
                         icon: <SvgIcon component={DeployIcon} width={24} height={24} />,
                         'data-kap-id': 'app-left-menu-deploy-button',
+                    },
+                    {
+                        id: 'metrics',
+                        path: '/metrics',
+                        loading: false,
+                        name: 'Metrics',
+                        open: false,
+                        icon: <SvgIcon component={BarChartIcon} width={24} height={24} />,
+                        'data-kap-id': 'app-left-menu-metrics-button',
                     },
                 ]}
                 context={{

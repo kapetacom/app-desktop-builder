@@ -59,6 +59,7 @@ const kapetaDesktop = {
         app: getUrl('app'),
         deployments: getUrl('web-deployments'),
         settings: getUrl('web-identity-provider'),
+        metrics: getUrl('web-metrics'),
     },
     cluster_service: {
         url: ClusterConfiguration.getClusterServiceAddress(),

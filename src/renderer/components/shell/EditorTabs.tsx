@@ -17,6 +17,7 @@ import ApartmentIcon from '@mui/icons-material/Apartment';
 import CloseIcon from '@mui/icons-material/Close';
 import DeployIcon from './components/icons/DeployIcon.svg';
 import PersonIcon from '@mui/icons-material/Person';
+import BarChartIcon from '@mui/icons-material/BarChart';
 import { useRoutingPath } from '@kapeta/web-microfrontend/browser';
 import { parseKapetaUri } from '@kapeta/nodejs-utils';
 
@@ -79,6 +80,10 @@ export const EditorTabs = () => {
                                 label = tabInfo.title ?? ref;
                             }
                         }
+                    } else if (tabInfo.path.startsWith('/metrics')) {
+                        icon = <SvgIcon component={BarChartIcon} />;
+                        variant = 'metrics';
+                        label = tabInfo.title ?? 'Metrics';
                     } else if (tabInfo.path.startsWith('/settings')) {
                         variant = 'deploy';
                         label = tabInfo.title ?? 'Profile';
