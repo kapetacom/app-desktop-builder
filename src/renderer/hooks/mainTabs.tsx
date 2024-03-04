@@ -41,7 +41,10 @@ export function normalizeUrl(url: string) {
  * Returns true if the path is context-sensitive, meaning it should be scoped to a specific contextId
  */
 function isContextSensitive(path: string) {
-    return path.startsWith('/deployments') && path !== '/deployments';
+    return (
+        (path.startsWith('/deployments') && path !== '/deployments') ||
+        (path.startsWith('/metrics') && path !== '/metrics')
+    );
 }
 
 export const MainTabsContext = createContext<MainTabs>({
@@ -98,6 +101,10 @@ const createMainTabsContext = (context?: MemberIdentity): MainTabs => {
             }
 
             if (tabInfo.path.startsWith('/deployments')) {
+                return true;
+            }
+
+            if (tabInfo.path.startsWith('/metrics')) {
                 return true;
             }
 

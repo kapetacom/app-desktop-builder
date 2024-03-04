@@ -96,6 +96,20 @@ const router = createHashRouter([
                 },
             },
             {
+                path: 'metrics/*',
+                Component: () => {
+                    // iframe to web-metrics microfrontend
+
+                    let { '*': path } = useParams();
+                    while (path && path.startsWith('/')) {
+                        path = path.substr(1);
+                    }
+                    path = `metrics${path ? `/${path}` : ''}`;
+
+                    return <RemoteFrame baseUrl={window.KapetaDesktop.urls.metrics} path={path} />;
+                },
+            },
+            {
                 path: 'settings/*',
                 Component: () => {
                     let { '*': path } = useParams();

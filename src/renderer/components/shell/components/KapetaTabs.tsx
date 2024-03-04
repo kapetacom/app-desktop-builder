@@ -7,7 +7,7 @@ import { Tab, Tabs } from '@mui/material';
 import { lightTheme } from '@kapeta/style';
 import { createStyled } from '@mui/system';
 
-export type KapetaTabsType = 'deploy' | 'edit' | 'new-plan';
+export type KapetaTabsType = 'deploy' | 'metrics' | 'edit' | 'new-plan';
 /**
  * Example of a custom tab component
  */
@@ -36,6 +36,7 @@ export const KapetaTab = styled(Tab, {
                 deploy: theme.tabs.deployFill,
                 edit: theme.tabs.editFill,
                 'new-plan': theme.tabs.deployFill,
+                metrics: theme.tabs.deployFill,
             }[variant];
 
         return {
