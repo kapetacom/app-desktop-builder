@@ -1,3 +1,23 @@
+# [0.66.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.65.0...v0.66.0) (2024-03-08)
+
+
+### Bug Fixes
+
+* Bump local-cluster-service ([d25e66f](https://github.com/kapetacom/app-desktop-builder/commit/d25e66ff7f36517bbbb8a98c090b0fa13199b532))
+* Bump local-cluster-service ([1608266](https://github.com/kapetacom/app-desktop-builder/commit/1608266086a5f2f530a9d8a1dc71c9667055b5f4))
+* clean up dependencies for local cluster service ([#319](https://github.com/kapetacom/app-desktop-builder/issues/319)) ([a8cb5e8](https://github.com/kapetacom/app-desktop-builder/commit/a8cb5e81d79175e79cdb62ea61d48107536ae2db))
+* **deps:** update dependency @sentry/electron to v4.18.0 ([#318](https://github.com/kapetacom/app-desktop-builder/issues/318)) ([507d72d](https://github.com/kapetacom/app-desktop-builder/commit/507d72d4eb7e7fe7f683401d8239f67b52437973))
+* **deps:** update dependency electron to v27.3.3 ([#302](https://github.com/kapetacom/app-desktop-builder/issues/302)) ([3d2b444](https://github.com/kapetacom/app-desktop-builder/commit/3d2b444009ebc9eaa0c11b61223c13e664d2e666))
+* Hide Metrics menu with feature flag ([b703f3a](https://github.com/kapetacom/app-desktop-builder/commit/b703f3a7c1dd61ddc366113799f9052b1dd4ea28))
+* Undo update of packages ([f2bbb43](https://github.com/kapetacom/app-desktop-builder/commit/f2bbb438bf8b9f0dd3649e7996c16a99b2c00b0b))
+
+
+### Features
+
+* Add web-metrics microfrontend to the desktop app ([7153f7f](https://github.com/kapetacom/app-desktop-builder/commit/7153f7f7cd4b460a91754dff0f8025ae56ac72fc))
+* Adds block importer dialog ([#322](https://github.com/kapetacom/app-desktop-builder/issues/322)) ([921cfec](https://github.com/kapetacom/app-desktop-builder/commit/921cfec8b430136a0f25df5869ed73de00d99c14))
+* Hide start/stop and inspect buttons on executable blocks ([f703f1f](https://github.com/kapetacom/app-desktop-builder/commit/f703f1ffca4bae548de1ba35187bc908190850a9))
+
 # [0.66.0-beta.6](https://github.com/kapetacom/app-desktop-builder/compare/v0.66.0-beta.5...v0.66.0-beta.6) (2024-03-04)
 
 
