@@ -92,7 +92,7 @@
         "fix-path": "^4.0.0",
         "gunzip-maybe": "^1.4.2",
         "hazardous": "^0.3.0",
-        "monaco-editor": "^0.44.0",
+        "monaco-editor": "^0.47.0",
         "which": "^3.0.0",
         "xterm": "^5.3.0"
     },
