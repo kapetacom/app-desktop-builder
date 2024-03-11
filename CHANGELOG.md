@@ -1,3 +1,10 @@
+## [0.66.1-beta.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.66.0...v0.66.1-beta.1) (2024-03-11)
+
+
+### Bug Fixes
+
+* Issues when running docker-based blocks ([2cfe729](https://github.com/kapetacom/app-desktop-builder/commit/2cfe7299af63ee43b5e0097663c476a0ae60b484))
+
 # [0.66.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.65.0...v0.66.0) (2024-03-08)
 
 
