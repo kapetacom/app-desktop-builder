@@ -110,43 +110,7 @@ export const MainLayout = (props: Props) => {
                             </SidebarListItemButton>
                         </SidebarListItem>
                     </SidebarList>
-                    <Box
-                        sx={{
-                            mt: 'auto',
-                            height: '96px',
-                            ml: drawerIsOpen ? '0px' : '6px',
-                            transition: (theme) =>
-                                theme.transitions.create(
-                                    'margin-left',
-                                    drawerIsOpen
-                                        ? {
-                                              easing: theme.transitions.easing.sharp,
-                                              duration: theme.transitions.duration.enteringScreen,
-                                          }
-                                        : {
-                                              easing: theme.transitions.easing.sharp,
-                                              duration: theme.transitions.duration.leavingScreen,
-                                          }
-                                ),
-                        }}
-                    >
-                        <Box
-                            sx={{
-                                width: '96px',
-                                transform: 'rotate(-90deg) translateX(-100%)',
-                                transformOrigin: 'top left',
-                            }}
-                        >
-                            <Button
-                                variant="outlined"
-                                color="inherit"
-                                endIcon={<HelpOutlineIcon fontSize="inherit" />}
-                                data-kap-id="app-left-menu-beta-button"
-                            >
-                                BETA
-                            </Button>
-                        </Box>
-                    </Box>
+                    
                     <IconButton
                         sx={{
                             position: 'relative',
