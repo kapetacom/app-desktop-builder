@@ -1,3 +1,10 @@
+## [0.66.1-beta.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.66.1-beta.2...v0.66.1-beta.3) (2024-03-15)
+
+
+### Bug Fixes
+
+* add resource name tooltips on overflow ([#328](https://github.com/kapetacom/app-desktop-builder/issues/328)) ([b2a5f89](https://github.com/kapetacom/app-desktop-builder/commit/b2a5f89f9ebd5ae1df21fa41ce7ed99c7084e331))
+
 ## [0.66.1-beta.2](https://github.com/kapetacom/app-desktop-builder/compare/v0.66.1-beta.1...v0.66.1-beta.2) (2024-03-14)
 
 
