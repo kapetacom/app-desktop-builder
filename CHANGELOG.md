@@ -1,3 +1,7 @@
+## [1.0.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.66.0...v0.66.1) (2024-03-19)
+
+Promote to stable release
+
 ## [0.66.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.66.0...v0.66.1) (2024-03-19)
 
 
