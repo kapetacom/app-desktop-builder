@@ -1,3 +1,12 @@
+## [0.66.1](https://github.com/kapetacom/app-desktop-builder/compare/v0.66.0...v0.66.1) (2024-03-19)
+
+
+### Bug Fixes
+
+* add resource name tooltips on overflow ([#328](https://github.com/kapetacom/app-desktop-builder/issues/328)) ([b2a5f89](https://github.com/kapetacom/app-desktop-builder/commit/b2a5f89f9ebd5ae1df21fa41ce7ed99c7084e331))
+* Issues when running docker-based blocks ([2cfe729](https://github.com/kapetacom/app-desktop-builder/commit/2cfe7299af63ee43b5e0097663c476a0ae60b484))
+* remove beta label from sidebar [CORE-2276] ([#327](https://github.com/kapetacom/app-desktop-builder/issues/327)) ([b79b202](https://github.com/kapetacom/app-desktop-builder/commit/b79b202d0b6d1831c32c4c4562c434fe613ec6b1))
+
 ## [0.66.1-beta.3](https://github.com/kapetacom/app-desktop-builder/compare/v0.66.1-beta.2...v0.66.1-beta.3) (2024-03-15)
 
 
