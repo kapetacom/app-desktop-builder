@@ -105,6 +105,12 @@ export const DraftPlanView = (props: {
                     plan={props.plan}
                     asset={planAsset}
                     blockAssets={blockAssets}
+                    initialZoomPanView={{
+                        autoFit: true,
+                        view: 'center',
+                    }}
+                    showZoomPanControls
+                    showPixelGrid
                 />
             )}
         </Box>
