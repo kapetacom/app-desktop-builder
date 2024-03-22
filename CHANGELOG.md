@@ -1,3 +1,10 @@
+## [1.0.1-beta.1](https://github.com/kapetacom/app-desktop-builder/compare/v1.0.0...v1.0.1-beta.1) (2024-03-22)
+
+
+### Bug Fixes
+
+* Make AI planner use Auto fit ([4e27c3c](https://github.com/kapetacom/app-desktop-builder/commit/4e27c3c0d505d29d114a73953af25d635b2b9580))
+
 ## [1.0.0](https://github.com/kapetacom/app-desktop-builder/compare/v0.66.0...v0.66.1) (2024-03-19)
 
 Promote to stable release
